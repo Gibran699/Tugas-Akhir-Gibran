@@ -20,5 +20,5 @@ Route::get('login', function () {
     return view('auth.login');
 })->name('login');
 Route::get('/layout-desain', function () {
-    return view('struktur_umur.agama.kelompok_umur_index');
-})->name('layout-desain');
+    return view('struktur_umur.kepala_keluarga.status_kawin_kelompok_umur_index');
+})->name('layout-desaind');

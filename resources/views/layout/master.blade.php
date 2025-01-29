@@ -25,6 +25,8 @@
     <link href="{{ asset('vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet"
     type="text/css" />
+    <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet"
+    type="text/css" />
     <link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     {{-- global style css --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />

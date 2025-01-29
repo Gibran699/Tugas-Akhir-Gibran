@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Agama</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Golongan Darah</a></li>
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Kelompok Umur</a></li>
             </ol>
         </div>
@@ -42,42 +42,64 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Agama - Kelompok Umur <span id="tahunSemester">I 2025</span></h4>
+                        <h4 class="card-title">Golongan Darah - Kelompok Umur <span id="tahunSemester">I 2025</span></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            @php
+                                $bloodTypes = [
+                                    'A (LK)',
+                                    'A (PR)',
+                                    'A (JML)',
+                                    'A- (LK)',
+                                    'A- (PR)',
+                                    'A- (JML)',
+                                    'A+ (LK)',
+                                    'A+ (PR)',
+                                    'A+ (JML)',
+                                    'B (LK)',
+                                    'B (PR)',
+                                    'B (JML)',
+                                    'B- (LK)',
+                                    'B- (PR)',
+                                    'B- (JML)',
+                                    'B+ (LK)',
+                                    'B+ (PR)',
+                                    'B+ (JML)',
+                                    'AB (LK)',
+                                    'AB (PR)',
+                                    'AB (JML)',
+                                    'AB- (LK)',
+                                    'AB- (PR)',
+                                    'AB- (JML)',
+                                    'AB+ (LK)',
+                                    'AB+ (PR)',
+                                    'AB+ (JML)',
+                                    'O (LK)',
+                                    'O (PR)',
+                                    'O (JML)',
+                                    'O- (LK)',
+                                    'O- (PR)',
+                                    'O- (JML)',
+                                    'O+ (LK)',
+                                    'O+ (PR)',
+                                    'O+ (JML)',
+                                    'TIDAK TAHU (LK)',
+                                    'TIDAK TAHU (PR)',
+                                    'TIDAK TAHU (JML)',
+                                ];
+                            @endphp
                             <table id="table" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Kelurahan</th>
-                                        <th>Kelompok umur</th>
-                                        <th>Islam LK</th>
-                                        <th>Islam PR</th>
-                                        <th>Islam JML</th>
-                                        <th>Katholik LK</th>
-                                        <th>Katholik PR</th>
-                                        <th>Katholik JML</th>
-                                        <th>Kristen LK</th>
-                                        <th>Kristen PR</th>
-                                        <th>Kristen JML</th>
-                                        <th>Hindu LK</th>
-                                        <th>Hindu PR</th>
-                                        <th>Hindu JML</th>
-                                        <th>Budha LK</th>
-                                        <th>Budha PR</th>
-                                        <th>Budha JML</th>
-                                        <th>Konghucu LK</th>
-                                        <th>Konghucu PR</th>
-                                        <th>Konghucu JML</th>
-                                        <th>Kepercayaan LK</th>
-                                        <th>Kepercayaan PR</th>
-                                        <th>Kepercayaan JML</th>
+                                        <th>Kelompok Umur</th>
+                                        @foreach ($bloodTypes as $item)
+                                            <th>{{$item}}</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
-                                <tbody>
-
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -86,8 +108,4 @@
         </div>
     </div>
     @include('elements.data_table')
-    <script>
-        $("#umur").select2();
-        selectAge()
-    </script>
 @endsection
