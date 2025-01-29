@@ -1,0 +1,59 @@
+<!--**********************************
+ Sidebar start
+***********************************-->
+<div class="deznav">
+    <div class="deznav-scroll">
+        <div class="main-profile">
+            <div class="image-bx">
+                <img src="images/Untitled-1.jpg" alt="">
+                <a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i></a>
+            </div>
+            <h5 class="name"><span class="font-w400">Hello,</span> Marquez</h5>
+            <p class="email">marquezzzz@mail.com</p>
+        </div>
+        <ul class="metismenu" id="menu">
+            <li class="nav-label first">Main Menu</li>
+            <li>
+                <a class="ai-icon" href="#" aria-expanded="false">
+                    <i class="flaticon-144-layout"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li><a href="#1" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".pelayanan">
+                    <i class="glyph-icon flaticon-381-archive"></i>
+                    <span class="nav-text">Pelayanan</span>
+                </a>
+            </li>
+            <li><a href="#2" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".agregat-dkb">
+                    <i class="glyph-icon flaticon-381-database"></i>
+                    <span class="nav-text">Agregat DKB</span>
+                </a>
+            </li>
+            <li><a href="#3" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".kepemilikan-dkb">
+                    <i class="glyph-icon flaticon-381-bookmark-1"></i>
+                    <span class="nav-text">Kepemilikan</span>
+                </a>
+            </li>
+            <li><a href="#5" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".umur-dkb">
+                    <i class="glyph-icon flaticon-381-user-8"></i>
+                    <span class="nav-text">Struktur Umur</span>
+                </a>
+            </li>
+            <li class="nav-label">Web Service</li>
+            <li><a href="#6" class="ai-icon" aria-expanded="false">
+                    <i class="glyph-icon flaticon-381-internet"></i>
+                    <span class="nav-text">API</span>
+                </a>
+            </li>
+            <li class="nav-label">Konfigurasi</li>
+            <li><a href="#7" class="ai-icon" aria-expanded="false">
+				<i class="glyph-icon flaticon-381-settings-7"></i>
+				<span class="nav-text">Pengaturan</span>
+			</a>
+		</li>
+        </ul>
+    </div>
+</div>
+<!--**********************************
+ Sidebar end
+***********************************-->
