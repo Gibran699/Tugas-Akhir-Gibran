@@ -20,5 +20,5 @@ Route::get('login', function () {
     return view('auth.login');
 })->name('login');
 Route::get('/layout-desain', function () {
-    return view('struktur_umur.penduduk.status_kawin_umur_tunggal_index');
+    return view('kepemilikan.kia');
 })->name('layout-desaind');

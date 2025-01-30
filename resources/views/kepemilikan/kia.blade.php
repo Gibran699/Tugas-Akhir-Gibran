@@ -4,7 +4,7 @@
         <div class="row page-titles">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Akta Kelahiran Semua Umur</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">KIA</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -42,62 +42,50 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Akta Kelahiran Semua Umur <span id="tahunSemester">I
+                        <h4 class="card-title">Kepemilikan - KIA <span id="tahunSemester">I
                                 2025</span></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             @php
                                 $categories = [
-                                    'WAJIB AKTA(AWAL - LK)',
-                                    'WAJIB AKTA(AWAL-PR)',
-                                    'WAJIB AKTA(AWAL-JML)',
-                                    'MEMILIKI(AWAL-LK)',
-                                    'MEMILIKI(AWAL-PR)',
-                                    'MEMILIKI(AWAL-JML)',
-                                    'BELUM MEMILIKI(AWAL-LK)',
-                                    'BELUM MEMILIKI(AWAL-PR)',
-                                    'BELUM MEMILIKI(AW AL-LK)',
-                                    'BELUM MEMILIKI(AWAL-PR)',
-                                    'BELUM MEMILIKI(AWAL-JML)',
-                                    'PERSEN (AWAL)(%)',
-                                    'USIA LEBIH DARI TARGET(LK)',
-                                    'USIA LEBIH DARI TARGET(PR)',
-                                    'USIA LEBIH DARI TARGET(JML)',
+                                    'JUMLAH AWAL(LK)',
+                                    'JUMLAH AWAL(PR)',
+                                    'JUMLAH AWAL(JML)',
+                                    'MEMILIKI AWAL(LK)',
+                                    'MEMILIKI AWAL(PR)',
+                                    'MEMILIKI AWAL(JML)',
+                                    'BELUM MEMILIKI AWAL(LK)',
+                                    'BELUM MEMILIKI AWAL(PR)',
+                                    'BELUM MEMILIKI AWAL(JML)',
+                                    'PERSEN AWAL(%)',
+                                    'USIA LEBIH TARGET(LK)',
+                                    'USIA LEBIH TARGET(PR)',
+                                    'USIA LEBIH TARGET(JML)',
                                     'MENINGGAL(LK)',
                                     'MENINGGAL(PR)',
                                     'MENINGGAL(JML)',
                                     'NONAKTIF(LK)',
                                     'NONAKTIF(PR)',
                                     'NONAKTIF(JML)',
-                                    'PINDAH(LK)',
-                                    'PINDAH(PR)',
-                                    'PINDAH(JML)',
-                                    'DATANG(LK)',
-                                    'DATANG(PR)',
-                                    'DATANG(JML)',
-                                    'Hapus OPERATOR(LK)',
-                                    'Hapus OPERATOR(PR)',
-                                    'Hapus OPERATOR(JML)',
-                                    'TERBIT AKTA BARU(DALAM DKB - LK)',
-                                    'TERBIT AKTA BARU(DALAM DKB - PR)',
-                                    'TERBIT AKTA BARU(DALAM DKB - JML)',
-                                    'TERBIT AKTA BARU(LUAR DKB - LK)',
-                                    'TERBIT AKTA BARU(LUAR DKB - PR)',
-                                    'TERBIT AKTA BARU(LUAR DKB - JML)',
-                                    'WAJIB AKTA(DINAMIS - LK)',
-                                    'WAJIB AKTA(DINAMIS - PR)',
-                                    'WAJIB AKTA(DINAMIS - JML)',
-                                    'MEMILIKI(DINAMIS - LK)',
-                                    'MEMILIKI(DINAMIS - PR)',
-                                    'MEMILIKI(DINAMIS - JML)',
-                                    'BELUM MEMILIKI(DINAMIS - LK)',
-                                    'BELUM MEMILIKI(DINAMIS - PR)',
-                                    'BELUM MEMILIKI(DINAMIS - JML)',
-                                    'PERSEN (DINAMIS)(%)',
+                                    'MEMILIKI DALAM DKB(LK)',
+                                    'MEMILIKI DALAM DKB(PR)',
+                                    'MEMILIKI DALAM DKB(JML)',
+                                    'MEMILIKI LUAR DKB(LK)',
+                                    'MEMILIKI LUAR DKB(PR)',
+                                    'MEMILIKI LUAR DKB(JML)',
+                                    'JUMLAH DINAMIS(LK)',
+                                    'JUMLAH DINAMIS(PR)',
+                                    'JUMLAH DINAMIS(TTL)',
+                                    'MEMILIKI DINAMIS(LK)',
+                                    'MEMILIKI DINAMIS(PR)',
+                                    'MEMILIKI DINAMIS(JML)',
+                                    'BELUM MEMILIKI DINAMIS(LK)',
+                                    'BELUM MEMILIKI DINAMIS(PR)',
+                                    'BELUM MEMILIKI DINAMIS(JML)',
+                                    'PERSEN DINAMIS(%)',
                                     'PENAMBAHAN(LK)',
                                     'PENAMBAHAN(PR)',
-                                    'PENAMBAHAN(JML)',
                                 ];
                             @endphp
                             <table id="table" class="display" style="min-width: 845px">
@@ -106,7 +94,7 @@
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
                                         @foreach ($categories as $item)
-                                            <th>{{$item}}</th>
+                                            <th>{{ $item }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
