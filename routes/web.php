@@ -20,5 +20,5 @@ Route::get('login', function () {
     return view('auth.login');
 })->name('login');
 Route::get('/layout-desain', function () {
-    return view('kepemilikan.kia');
+    return view('kepemilikan.akta_kawin_agama');
 })->name('layout-desaind');

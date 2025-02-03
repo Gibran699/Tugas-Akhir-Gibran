@@ -28,13 +28,12 @@
     <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet"
     type="text/css" />
     <link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('css/jquery.localizationTool.css') }}" rel="stylesheet">
     {{-- global style css --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
     {{-- package js --}}
     {{-- jquery --}}
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/chart.js/Chart.bundle.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/peity/jquery.peity.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/apexchart/apexchart.js') }}" type="text/javascript"></script>
@@ -162,6 +161,9 @@
     <!--**********************************
         Scripts
     ***********************************-->
+    <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
+    
     <script src="{{ asset('js/plugins-init/select2-init.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('js/custom.js') }}" type="text/javascript"></script>
