@@ -186,6 +186,32 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="list-pendidikan">
+                                                <h4 class="mb-4">Pendidikan</h4>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <button type="button"
+                                                            class="btn btn-lg btn-outline-primary mb-2"
+                                                            style="width: 250px;">Jenis Kelamin <span
+                                                                class="btn-icon-end"><i
+                                                                    class="fa fa-folder-open"></i></span></button>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <button type="button"
+                                                            class="btn btn-lg btn-outline-primary mb-2"
+                                                            style="width: 250px;">Pekerjaan <span
+                                                                class="btn-icon-end"><i
+                                                                    class="fa fa-folder-open"></i></span></button>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <button type="button"
+                                                            class="btn btn-lg btn-outline-primary mb-2"
+                                                            style="width: 250px;">Gol. Darah<span
+                                                                class="btn-icon-end"><i
+                                                                    class="fa fa-folder-open"></i></span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="list-disabilitas">
                                                 <h4 class="mb-4">Disabilitas</h4>
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -205,33 +231,7 @@
                                                     <div class="col-sm-4">
                                                         <button type="button"
                                                             class="btn btn-lg btn-outline-primary mb-2"
-                                                            style="width: 250px;">Pendidikan<span
-                                                                class="btn-icon-end"><i
-                                                                    class="fa fa-folder-open"></i></span></button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="list-disabilitas">
-                                                <h4 class="mb-4">Pendidikan</h4>
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <button type="button"
-                                                            class="btn btn-lg btn-outline-primary mb-2"
-                                                            style="width: 250px;">Gol. Darah<span
-                                                                class="btn-icon-end"><i
-                                                                    class="fa fa-folder-open"></i></span></button>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <button type="button"
-                                                            class="btn btn-lg btn-outline-primary mb-2"
-                                                            style="width: 250px;">Jenis Kelamin <span
-                                                                class="btn-icon-end"><i
-                                                                    class="fa fa-folder-open"></i></span></button>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <button type="button"
-                                                            class="btn btn-lg btn-outline-primary mb-2"
-                                                            style="width: 250px;">Pekerjaan <span
+                                                            style="width: 250px;">Pendidikan <span
                                                                 class="btn-icon-end"><i
                                                                     class="fa fa-folder-open"></i></span></button>
                                                     </div>

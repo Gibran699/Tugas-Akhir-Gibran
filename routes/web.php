@@ -20,5 +20,5 @@ Route::get('login', function () {
     return view('auth.login');
 })->name('login');
 Route::get('/layout-desain', function () {
-    return view('agregat_dkb.penduduk.hubungan_keluarga_index');
+    return view('agregat_dkb.disabilitas.pekerjaan_index');
 })->name('layout-desaind');
