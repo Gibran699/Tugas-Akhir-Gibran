@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Kartu Keluarga</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Pendidikan</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Jenis Kelamin</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -16,14 +16,14 @@
                     <div class="basic-form">
                         <form>
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
                                         <option value="" disabled selected>--PILIH Semester--</option>
                                         <option value="1">I</option>
                                         <option value="2">II</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <select name="tahun" id="tahun" class="form-control default-select">
                                     </select>
                                 </div>
@@ -42,37 +42,30 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Kartu Keluarga <span id="tahunSemester">I
-                                2025</span></h4>
+                        <h4 class="card-title">Pendidikan - Jenis Kelamin<span id="tahunSemester">I 2025</span>
+                        </h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             @php
-                                $categories = [
-                                    'KK(LK)',
-                                    'KK(PR)',
-                                    'KK(JML)',
-                                    'MEMILIKI(LK)',
-                                    'MEMILIKI(PR)',
-                                    'MEMILIKI(JML)',
-                                    'BELUM MEMILIKI(LK)',
-                                    'BELUM MEMILIKI(PR)',
-                                    'BELUM MEMILIKI(JML)',
+                                $disabilities = [
+                                    
                                 ];
                             @endphp
                             <table id="table" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
-                                        <th>KECAMATAN</th>
-                                        <th>KELURAHAN</th>
-                                        @foreach ($categories as $item)
-                                            <th>{{ $item }}</th>
+                                        <th>Kecamatan</th>
+                                        <th>Kelurahan</th>
+                                        <th>Umur</th>
+                                        @foreach ($disabilities as $item)
+                                            <th>{{$item}}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

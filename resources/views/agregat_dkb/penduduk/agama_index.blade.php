@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Kartu Keluarga</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Agregat Penduduk</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Penduduk - Agama</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -42,37 +42,42 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Kartu Keluarga <span id="tahunSemester">I
+                        <h4 class="card-title">Penduduk - Agama <span id="tahunSemester">I
                                 2025</span></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            @php
-                                $categories = [
-                                    'KK(LK)',
-                                    'KK(PR)',
-                                    'KK(JML)',
-                                    'MEMILIKI(LK)',
-                                    'MEMILIKI(PR)',
-                                    'MEMILIKI(JML)',
-                                    'BELUM MEMILIKI(LK)',
-                                    'BELUM MEMILIKI(PR)',
-                                    'BELUM MEMILIKI(JML)',
-                                ];
-                            @endphp
                             <table id="table" class="display" style="min-width: 845px">
-                                <thead>
-                                    <tr>
-                                        <th>KECAMATAN</th>
-                                        <th>KELURAHAN</th>
-                                        @foreach ($categories as $item)
-                                            <th>{{ $item }}</th>
-                                        @endforeach
+                                <th class="text-uppercase"ead>
+                                    <tr class="text-uppercase">
+                                        <th class="text-uppercase">KECAMATAN</th>
+                                        <th class="text-uppercase">KELURAHAN</th>
+                                        <th class="text-uppercase" class="text-uppercase">Islam LK</th>
+                                        <th class="text-uppercase">Islam PR</th>
+                                        <th class="text-uppercase">Islam JML</th>
+                                        <th class="text-uppercase">Katholik LK</th>
+                                        <th class="text-uppercase">Katholik PR</th>
+                                        <th class="text-uppercase">Katholik JML</th>
+                                        <th class="text-uppercase">Kristen LK</th>
+                                        <th class="text-uppercase">Kristen PR</th>
+                                        <th class="text-uppercase">Kristen JML</th>
+                                        <th class="text-uppercase">Hindu LK</th>
+                                        <th class="text-uppercase">Hindu PR</th>
+                                        <th class="text-uppercase">Hindu JML</th>
+                                        <th class="text-uppercase">Budha LK</th>
+                                        <th class="text-uppercase">Budha PR</th>
+                                        <th class="text-uppercase">Budha JML</th>
+                                        <th class="text-uppercase">Konghucu LK</th>
+                                        <th class="text-uppercase">Konghucu PR</th>
+                                        <th class="text-uppercase">Konghucu JML</th>
+                                        <th class="text-uppercase">Kepercayaan LK</th>
+                                        <th class="text-uppercase">Kepercayaan PR</th>
+                                        <th class="text-uppercase">Kepercayaan JML</th>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Kartu Keluarga</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Agregat Penduduk</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Penduduk - Golongan Darah</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -42,22 +42,52 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Kartu Keluarga <span id="tahunSemester">I
+                        <h4 class="card-title"> Penduduk - Golongan Darah <span id="tahunSemester">I
                                 2025</span></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             @php
-                                $categories = [
-                                    'KK(LK)',
-                                    'KK(PR)',
-                                    'KK(JML)',
-                                    'MEMILIKI(LK)',
-                                    'MEMILIKI(PR)',
-                                    'MEMILIKI(JML)',
-                                    'BELUM MEMILIKI(LK)',
-                                    'BELUM MEMILIKI(PR)',
-                                    'BELUM MEMILIKI(JML)',
+                                $bloodTypes = [
+                                    'A (LK)',
+                                    'A (PR)',
+                                    'A (JML)',
+                                    'A- (LK)',
+                                    'A- (PR)',
+                                    'A- (JML)',
+                                    'A+ (LK)',
+                                    'A+ (PR)',
+                                    'A+ (JML)',
+                                    'B (LK)',
+                                    'B (PR)',
+                                    'B (JML)',
+                                    'B- (LK)',
+                                    'B- (PR)',
+                                    'B- (JML)',
+                                    'B+ (LK)',
+                                    'B+ (PR)',
+                                    'B+ (JML)',
+                                    'AB (LK)',
+                                    'AB (PR)',
+                                    'AB (JML)',
+                                    'AB- (LK)',
+                                    'AB- (PR)',
+                                    'AB- (JML)',
+                                    'AB+ (LK)',
+                                    'AB+ (PR)',
+                                    'AB+ (JML)',
+                                    'O (LK)',
+                                    'O (PR)',
+                                    'O (JML)',
+                                    'O- (LK)',
+                                    'O- (PR)',
+                                    'O- (JML)',
+                                    'O+ (LK)',
+                                    'O+ (PR)',
+                                    'O+ (JML)',
+                                    'TIDAK TAHU (LK)',
+                                    'TIDAK TAHU (PR)',
+                                    'TIDAK TAHU (JML)',
                                 ];
                             @endphp
                             <table id="table" class="display" style="min-width: 845px">
@@ -65,14 +95,14 @@
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
-                                        @foreach ($categories as $item)
-                                            <th>{{ $item }}</th>
+                                        @foreach ($bloodTypes as $item)
+                                            <th>{{$item}}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

@@ -43,7 +43,6 @@ function dataTableBasic() {
 } (jQuery)
 
 function selectAge() {
-    $("#umur").select2();
     const $umurSelect = $('#umur');
 
     for (let i = 0; i <= 125; i++) {

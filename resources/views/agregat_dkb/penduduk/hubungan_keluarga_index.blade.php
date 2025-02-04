@@ -3,8 +3,8 @@
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Kartu Keluarga</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Agregat Penduduk</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Penduduk - Hubungan Keluarga</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -42,22 +42,43 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Kartu Keluarga <span id="tahunSemester">I
+                        <h4 class="card-title"> Penduduk - Hubungan Keluarga <span id="tahunSemester">I
                                 2025</span></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             @php
-                                $categories = [
-                                    'KK(LK)',
-                                    'KK(PR)',
-                                    'KK(JML)',
-                                    'MEMILIKI(LK)',
-                                    'MEMILIKI(PR)',
-                                    'MEMILIKI(JML)',
-                                    'BELUM MEMILIKI(LK)',
-                                    'BELUM MEMILIKI(PR)',
-                                    'BELUM MEMILIKI(JML)',
+                                $educationalStatuses = [
+                                    'TIDAK/BLM SEKOLAH L',
+                                    'TIDAK/BLM SEKOLAH P',
+                                    'TIDAK/BLM SEKOLAH JML',
+                                    'BELUM TAMAT SD/SEDERAJAT L',
+                                    'BELUM TAMAT SD/SEDERAJAT P',
+                                    'BELUM TAMAT SD/SEDERAJAT JML',
+                                    'TAMAT SD/SEDERAJAT L',
+                                    'TAMAT SD/SEDERAJAT P',
+                                    'TAMAT SD/SEDERAJAT JML',
+                                    'SLTP/SEDERAJAT L',
+                                    'SLTP/SEDERAJAT P',
+                                    'SLTP/SEDERAJAT JML',
+                                    'SLTA/SEDERAJAT L',
+                                    'SLTA/SEDERAJAT P',
+                                    'SLTA/SEDERAJAT JML',
+                                    'DIPLOMA I/II L',
+                                    'DIPLOMA I/II P',
+                                    'DIPLOMA I/II JML',
+                                    'AKADEMI/DIPL.III/S. MUDA L',
+                                    'AKADEMI/DIPL.III/S.MUDA P',
+                                    'AKADEMI/DIPL.III/S.MUDA JML',
+                                    'DIPLOMA IV/STRATA I L',
+                                    'DIPLOMA IV/STRATA I P',
+                                    'DIPLOMA IV/STRATA I JML',
+                                    'STRATA-II L',
+                                    'STRATA-II P',
+                                    'STRATA-II JML',
+                                    'STRATA-III L',
+                                    'STRATA-III P',
+                                    'STRATA-III JML',
                                 ];
                             @endphp
                             <table id="table" class="display" style="min-width: 845px">
@@ -65,14 +86,14 @@
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
-                                        @foreach ($categories as $item)
+                                        @foreach ($educationalStatuses as $item)
                                             <th>{{ $item }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
                             </table>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
