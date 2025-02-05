@@ -16,16 +16,16 @@ class Akta_Cerai extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'uuid','kode_wilayah',
-        'MUSLIM(JML)',
-        'NON MUSLIM(JML)',
-        'STATUS CERAI(LK)',
-        'STATUS CERAI(PR)',
-        'STATUS CERAI(JML)',
-        'MEMILIKI AKTA CERAI(LK)',
-        'MEMILIKI AKTA CERAI(PR)',
-        'MEMILIKI AKTA CERAI(JML)',
-        'BELUM MEMILIKI AKTA CERAI(JML)',
-        'PERSEN (MEMILIKI)(%)',
+        'MUSLIM_JML',
+        'NON_MUSLIM_JML',
+        'STATUS_CERAI_LK',
+        'STATUS_CERAI_PR',
+        'STATUS_CERAI_JML',
+        'MEMILIKI_AKTA_CERAI_LK',
+        'MEMILIKI_AKTA_CERAI_PR',
+        'MEMILIKI_AKTA_CERAI_JML',
+        'BELUM_MEMILIKI_AKTA_CERAI_JML',
+        'PERSEN_MEMILIKI',
         'semester','tahun'
     ];
 }
