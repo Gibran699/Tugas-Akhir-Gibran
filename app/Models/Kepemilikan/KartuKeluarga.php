@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Kartu_Keluarga extends Model
+class KartuKeluarga extends Model
 {
     use HasFactory,SoftDeletes;
     public $table = 'kartu_keluarga';

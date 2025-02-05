@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Akta_Kawin_Agama extends Model
+class AktaKawinAgama extends Model
 {
     use HasFactory,SoftDeletes;
     public $table = 'akta_kawin_agama';

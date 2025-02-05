@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Akta_Kelahiran extends Model
+class AktaKelahiran extends Model
 {
     use HasFactory,SoftDeletes;
     public $table = 'akta_kelahiran';
@@ -16,7 +16,7 @@ class Akta_Kelahiran extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
+        'uuid','kode_wilayah','keterangan',
         'WAJIB_AKTA_AWAL_LK',
         'WAJIB_AKTA_AWAL_PR',
         'WAJIB_AKTA_AWAL_JML',
