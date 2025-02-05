@@ -48,11 +48,11 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="table" class="display" style="min-width: 845px">
-                                <th class="text-uppercase"ead>
-                                    <tr class="text-uppercase">
+                                <thead>
+                                    <tr>
                                         <th class="text-uppercase">KECAMATAN</th>
                                         <th class="text-uppercase">KELURAHAN</th>
-                                        <th class="text-uppercase" class="text-uppercase">Islam LK</th>
+                                        <th class="text-uppercase">Islam LK</th>
                                         <th class="text-uppercase">Islam PR</th>
                                         <th class="text-uppercase">Islam JML</th>
                                         <th class="text-uppercase">Katholik LK</th>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,4 @@ Route::get('login', function () {
 Route::get('/layout-desain', function () {
     return view('agregat_dkb.disabilitas.pekerjaan_index');
 })->name('layout-desaind');
+Route::get('{codeView}/index-rumah-data',[MainController::class,'index'])->name('index_rumah_data');

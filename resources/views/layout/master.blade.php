@@ -28,7 +28,6 @@
     <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet"
     type="text/css" />
     <link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('css/jquery.localizationTool.css') }}" rel="stylesheet">
     {{-- global style css --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
     {{-- package js --}}

@@ -4,7 +4,7 @@
         <div class="row page-titles">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active"><a href="javascript:void(0)">Kepemilikan</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Akta Kelahiran Semua Umur</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Akta Kelahiran</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-lg-6">
@@ -16,15 +16,24 @@
                     <div class="basic-form">
                         <form>
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
-                                        <option value="" disabled selected>--PILIH Semester--</option>
+                                        <option value="" disabled selected>--PILIH SEMESTER--</option>
                                         <option value="1">I</option>
                                         <option value="2">II</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <select name="tahun" id="tahun" class="form-control default-select">
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <select name="kategori" id="kategori" class="form-control default-select">
+                                        <option value="" disabled selected>--PILIH KATEGORI--</option>
+                                        <option value="1">SEMUA USIA</option>
+                                        <option value="2">0-1</option>
+                                        <option value="2">0-5</option>
+                                        <option value="2">0-18</option>
                                     </select>
                                 </div>
                             </div>
@@ -42,7 +51,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Akta Kelahiran Semua Umur <span id="tahunSemester">I
+                        <h4 class="card-title">Kepemilikan - Akta Kelahiran<span id="tahunSemester">I
                                 2025</span></h4>
                     </div>
                     <div class="card-body">
