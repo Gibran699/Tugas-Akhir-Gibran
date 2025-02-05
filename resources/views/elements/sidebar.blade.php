@@ -46,7 +46,7 @@
                 </a>
             </li>
             <li class="nav-label">Konfigurasi</li>
-            <li><a href="#7" class="ai-icon" aria-expanded="false">
+            <li><a href="#7" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".pengaturan-dkb">
 				<i class="glyph-icon flaticon-381-settings-7"></i>
 				<span class="nav-text">Pengaturan</span>
 			</a>

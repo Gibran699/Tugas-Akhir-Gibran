@@ -702,3 +702,70 @@
         </div>
     </div>
 </div>
+{{-- pengaturan --}}
+<div class="modal fade pengaturan-dkb" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Data Kepemilikan Dokumen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'qhihTlpdZ1']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-381-user"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">User</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'IoCU7M9OL8']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-381-networking"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Role</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'IxmdS85aaN']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-381-key"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Permission</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
