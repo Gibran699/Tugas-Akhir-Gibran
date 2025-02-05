@@ -8,8 +8,10 @@
     <title>Rumah Data 2.0 Kota Samarinda - Login</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
+
 </head>
 
 <body class="vh-100">
@@ -36,19 +38,22 @@
                                     <form id="loginForm" method="POST" action="{{ route('action_login') }}">
                                         <div class="form-group">
                                             <label class="mb-1"><strong>Email</strong></label>
-                                            <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan Email" required>
+                                            <input type="email" id="email" name="email" class="form-control"
+                                                placeholder="Masukkan Email" required>
                                         </div>
                                         <div class="form-group">
                                             <label class="mb-1"><strong>Password</strong></label>
-                                            <input type="password" id="password" name="password" class="form-control" required>
+                                            <input type="password" id="password" name="password" class="form-control"
+                                                required>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign Me In</button>
+                                            <button type="submit" class="btn btn-primary btn-block">Login</button>
                                         </div>
                                     </form>
-                                    <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="{{ url('/page-register') }}">Sign up</a></p>
-                                    </div>
+                                    {{-- <div class="new-account mt-3">
+                                        <p>Don't have an account? <a class="text-primary"
+                                                href="{{ url('/page-register') }}">Sign up</a></p>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -58,53 +63,7 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function () {
-            $('#loginForm').on('submit', function (e) {
-                e.preventDefault();
-
-                let email = $('#email').val();
-                let password = $('#password').val();
-                let csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        email: email,
-                        password: password
-                    },
-                    beforeSend: function () {
-                        Swal.fire({
-                            title: 'Processing...',
-                            text: 'Please wait',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                    },
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Login Successful',
-                            text: response.message || 'Welcome!',
-                        }).then(() => {
-                            window.location.href = response.redirect || '/home';
-                        });
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Login Failed',
-                            text: xhr.responseJSON?.message || 'Invalid credentials, please try again.',
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="{{asset('js/auth/login.js')}}" type="text/javascript"></script>
 
     <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
