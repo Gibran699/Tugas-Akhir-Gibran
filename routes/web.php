@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('login', function () {
     return view('auth.login');
 })->name('login');
+Route::post('login',[\App\Http\Controllers\Auth\MainController::class,'login'])->name('action_login');
 Route::get('/layout-desain', function () {
     return view('agregat_dkb.disabilitas.pekerjaan_index');
 })->name('layout-desaind');
