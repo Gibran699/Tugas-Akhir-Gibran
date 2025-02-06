@@ -16,7 +16,7 @@ class UmurTunggal extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'uuid','kode_wilayah',
-        'Umur',
+        'umur',
         'Disabiltas_Fisik_LK',
         'Disabiltas_Fisik_PR',
         'Disabiltas_Fisik_JML',

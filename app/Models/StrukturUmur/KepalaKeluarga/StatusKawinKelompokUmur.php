@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class StatusKawinKelompokUmur extends Model
 {
     use HasFactory,SoftDeletes;
-    public $table = 'kelompok_umur_status_kawin_kepala_keluarga';
+    public $table = 'status_kawin_kelompok_umur_kepala_keluarga';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';

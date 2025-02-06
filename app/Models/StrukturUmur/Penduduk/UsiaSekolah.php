@@ -17,8 +17,8 @@ class UsiaSekolah extends Model
     protected $fillable = [
         'uuid','kode_wilayah',
         'USIA_SD_SEDERAJAT',
-        'USIA_SLT_SEDERAJAT',
-        'USIA_SLT_SEDERAJAT',
+        'USIA_SLTP_SEDERAJAT',
+        'USIA_SLTA_SEDERAJAT',
         'USIA_PERGURUAN_TINGGI',
         'semester','tahun'
     ];

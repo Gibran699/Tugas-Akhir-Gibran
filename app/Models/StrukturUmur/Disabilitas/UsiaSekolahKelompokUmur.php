@@ -14,7 +14,7 @@ class UsiaSekolahKelompokUmur extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
-    public $fillable = [
+    protected $fillable = [
         'uuid','kode_wilayah',
         'FISIK_U4_6TH_LK',
         'FISIK_U4_6TH_PR',
