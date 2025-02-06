@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class DataPengguna extends Model
 {
     use HasFactory,HasUuids,SoftDeletes;
-    public $table = 'kelompok_umur_agama';
+    public $table = 'data_pengguna';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
