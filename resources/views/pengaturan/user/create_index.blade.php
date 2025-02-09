@@ -16,18 +16,36 @@
                 <div class="card-body">
                     <button class="btn btn-primary" onclick="openModal('user')">Tambah user</button>
                     <div class="table-responsive mt-3">
-                        <table id="userTable" class="table table-striped">
-                            <thead>
+                        <table id="table" class="table table-bordered">
+                            <thead class="thead-primary">
                                 <tr>
-                                    <th><input type="checkbox" id="selectAll"></th>
-                                    <th>ID</th>
-                                    <th>Nama user</th>
-                                    <th>Deskripsi</th>
-                                    <th>Aksi</th>
+                                    <th>No</th>
+                                    <th>NIK</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Data user -->
+                                @php
+                                    $no = 1;
+                                @endphp
+                                @foreach ($data as $item)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $item->nik }}</td>
+                                        <td>{{ $item->nama }}</td>
+                                        <td>{{ $item->contact }}</td>
+                                        <td>{{ $item->email }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger deleteUser"
+                                                data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-warning editUser" data-id="{{ $item->id }}"><i
+                                                    class="fas fa-pencil-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -46,13 +64,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formUserCreate" action="{{ route('user_store') }}" method="post">
-                        @csrf
-                    {{-- {!! Form::open([
-                        'method' => 'post',
-                        'route' => 'user_store',
+                    {!! Form::open([
+                        'method' => 'POST',
+                        'route' => 'user.store',
                         'id' => 'formUserCreate',
-                    ]) !!} --}}
+                    ]) !!}
                     <div class="form-group">
                         <label for="name">Nama</label>
                         <input type="text" class="form-control" id="name" name="name" required>
@@ -92,92 +108,80 @@
                                 <option value=""></option>
                             </select>
                         </div> --}}
-                    {{-- <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button> --}}
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+
+                        <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button>
                     </div>
-                    
-                    {{-- {!! Form::close() !!} --}}
-                    </form>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
     </div>
+    {{-- modal edit user --}}
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {!! Form::open([
+                        'method' => 'POST',
+                        // 'route' => ['user.update',],
+                        'id' => 'formUserEdit'
+                    ]) !!}
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" class="form-control" id="nameEdit" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">NIK</label>
+                        <input type="number" class="form-control" id="nikEdit" name="nik">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Email</label>
+                        <input type="email" class="form-control" id="emailEdit" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">No.Telp</label>
+                        <input type="number" class="form-control" id="contactEdit" name="contact">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Jenis Instasi</label>
+                        <select name="instansi" id="instansiEdit" class="form-control">
+                            <option disabled>--Pilihan Instasi--</option>
+                            <option value="1">OPD Pemerintah</option>
+                            <option value="2">OPD Kecamatan</option>
+                            <option value="3">OPD Kelurahan</option>
+                            <option value="4">BUMD</option>
+                            <option value="5">Lembaga Penegak Hukum</option>
+                            <option value="7">Lembaga Pemerintah Non-Kementerian</option>
+                            <option value="8">Mahasiswa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Nama Instasi</label>
+                        <input type="text" class="form-control" id="namaInstansiEdit" name="nama_instansi" required>
+                    </div>
+                    {{-- <div class="form-group">
+                            <label for="name">Role</label>
+                            <select name="role" id="role" class="form-control">
+                                <option value=""></option>
+                            </select>
+                        </div> --}}
+                    <div class="form-actions">
 
-    <script>
-        document.getElementById('selectAll').addEventListener('click', function(event) {
-            let checkboxes = document.querySelectorAll('#permissionTable tbody input[type="checkbox"]');
-            checkboxes.forEach(checkbox => checkbox.checked = event.target.checked);
-        });
-
-        function openModal() {
-            $('#crudModal').modal('show');
-        }
-    </script>
+                        <button type="button" class="btn btn-primary mt-3" id="saveEditUser">Simpan</button>
+                        {{-- <button type="submit" class="btn btn-primary mt-3">Simpan</button> --}}
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="{{ asset('js/global_func.js') }}"></script>
-    <script>
-        dataTableBasic();
-        document.getElementById('saveUser').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the form from submitting immediately
-
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Anda akan menyimpan data user ini!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Simpan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    store(); // Call the store function when confirmed
-                }
-            });
-        });
-
-        function store() {
-            var formData = new FormData(document.getElementById('formUserCreate'));
-            $.ajax({
-                url: $('#formUserCreate').attr('action'),
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function() {
-                    Swal.fire({
-                        title: 'Processing...',
-                        text: 'Harap Tunggu',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                },
-                success: function(response) {
-                    Swal.fire({
-                        type: 'success',
-                        title: 'Berhasil',
-                        text: response.message || 'User berhasil ditambahkan!',
-                    }).then(() => {
-                        location.reload();
-                    });
-                },
-                error: function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
-
-                    if (xhr.status === 409) {
-                        errorMessage = xhr.responseJSON?.data;
-                    } else if (xhr.status === 500) {
-                        errorMessage = xhr.responseJSON?.data;
-                    }
-                    Swal.fire({
-                        type: 'error',
-                        title: 'Gagal',
-                        text: errorMessage,
-                    });
-                }
-            });
-        }
-    </script>
+    <script src="{{asset('js/system/user.js')}}"></script>
 @endsection

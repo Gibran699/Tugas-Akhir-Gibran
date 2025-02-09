@@ -15,7 +15,7 @@ class DataPengguna extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
-    protected $fillabel =[
+    protected $fillable =[
         'nik','nama','contact','instansi','nama_instansi','user_id'
     ];
 }

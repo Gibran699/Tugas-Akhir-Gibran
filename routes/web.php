@@ -26,7 +26,9 @@ Route::post('login',[\App\Http\Controllers\Auth\MainController::class,'login'])-
         return view('welcome');
     });
     Route::get('{codeView}/index-rumah-data',[MainController::class,'index'])->name('index_rumah_data');
-    Route::post('/store/user',[UserController::class,'store'])->name('user_store');
+    // Route::post('/store/user',[UserController::class,'store'])->name('user_store');
+    Route::resource('user', UserController::class);
+
 // });
 
 Route::get('/layout-desain', function () {
