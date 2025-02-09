@@ -99,7 +99,7 @@ class UserController extends Controller
 
     function update(Request $request, $id)
     {
-        // try {
+        try {
             $user = User::findOrFail($id);
             $dataPengguna = DataPengguna::where('user_id', $id)->firstOrFail();
 
@@ -139,12 +139,12 @@ class UserController extends Controller
 
             DB::commit();
             return response()->json(['message' => 'Berhasil mengubah data'], 200);
-        // } catch (ModelNotFoundException $e) {
-        //     return response()->json(['message' => 'Data tidak ditemukan'], 404);
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return response()->json(['message' => 'Proses gagal'], 500);
-        // }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['message' => 'Proses gagal'], 500);
+        }
     }
     function edit($id){
         $data = User::join('data_pengguna', 'users.id', '=', 'data_pengguna.user_id')
