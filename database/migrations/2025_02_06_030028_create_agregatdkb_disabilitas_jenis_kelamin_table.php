@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jenis_kelamin_disabilitas', function (Blueprint $table) {
+            $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
             $table->string('Kelompok_Umur');

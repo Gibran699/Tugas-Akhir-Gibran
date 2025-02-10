@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('golongan_darah_penduduk', function (Blueprint $table) {
+            $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah', 50);
             $table->integer('A_LK');
