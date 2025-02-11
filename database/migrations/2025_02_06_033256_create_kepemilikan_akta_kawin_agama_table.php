@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('akta_kawin_agama', function (Blueprint $table) {
-            $$table->id();
+            $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
             $table->integer('ISLAM_MEMILIKI_LK');
