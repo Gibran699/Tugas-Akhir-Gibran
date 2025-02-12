@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\MainController as AuthMainController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\UserController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
@@ -29,8 +30,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('{codeView}/index-rumah-data',[MainController::class,'index'])->name('index_rumah_data');
     // Route::post('/store/user',[UserController::class,'store'])->name('user_store');
     Route::resource('user', UserController::class);
+    Route::resource('role', RoleController::class);
+    Route::post('syncPermissionRole/{id}',[RoleController::class,'syncPermission'])->name('sync_permission_role');
     Route::post('logout',[AuthMainController::class,'logout'])->name('logout');
-
 });
 
 Route::get('/layout-desain', function () {

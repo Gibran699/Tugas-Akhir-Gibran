@@ -128,7 +128,7 @@ function store() {
     });
 }
 function deleteData(userId) {
-    const deleteUrl = `{{ route('user.destroy', ':id') }}`.replace(':id', userId); // Replace with user ID
+    const deleteUrl = `user/:id`.replace(':id', userId); // Replace with user ID
     $.ajax({
         url: deleteUrl,
         type: 'DELETE',

@@ -82,11 +82,8 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $user = User::findOrFail($id);
-            DataPengguna::where('user_id', $id)->delete();
             $user->delete();
-
             DB::commit();
             return response()->json(['message' => 'Berhasil menghapus data'], 200);
         } catch (ModelNotFoundException $e) {

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('umur_tunggal_golongan_darah', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('kode_wilayah', 50);
+            $table->string('kode_wilayah', 36);
             $table->integer('A_LK');
             $table->integer('A_PR');
             $table->integer('A_JML');
