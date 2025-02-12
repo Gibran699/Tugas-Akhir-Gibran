@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('status_kawin_kelompok_umur_penduduk', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah', 50);
 
