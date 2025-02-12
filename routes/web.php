@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\MainController as AuthMainController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\System\MainController as SystemMainController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\UserController;
 use Illuminate\Routing\RouteGroup;
@@ -27,11 +28,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
+    //layout view side bar
     Route::get('{codeView}/index-rumah-data',[MainController::class,'index'])->name('index_rumah_data');
-    // Route::post('/store/user',[UserController::class,'store'])->name('user_store');
+    //system import
+    Route::get('/form-import', function () {
+        return view('pengaturan.import_data.form_input');
+    });
+    Route::post('system/import-data',[SystemMainController::class,'importData'])->name('import_data');
+    //management user
     Route::resource('user', UserController::class);
     Route::resource('role', RoleController::class);
-    Route::post('syncPermissionRole/{id}',[RoleController::class,'syncPermission'])->name('sync_permission_role');
+    //auth
     Route::post('logout',[AuthMainController::class,'logout'])->name('logout');
 });
 
