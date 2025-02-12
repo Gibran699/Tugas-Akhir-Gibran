@@ -702,28 +702,27 @@
         </div>
     </div>
 </div>
-{{-- pengaturan --}}
+{{-- Pengaturan --}}
 <div class="modal fade pengaturan-dkb" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Data Kepemilikan Dokumen</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Data Pengaturan</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal">
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
-                        <a href="{{ route('user.index') }}">
-                            <div class="widget-stat card bg-primary">
+                        <a href="{{ route('user.index') }}" class="hover-effect click-effect">
+                            <div class="widget-stat card pastel-green text-light shadow-lg">
                                 <div class="card-body p-4">
                                     <div class="media">
                                         <span class="me-3">
-                                            <i class="flaticon-381-user"></i>
+                                            <i class="flaticon-381-user fs-3"></i>
                                         </span>
-                                        <div class="media-body text-white text-right">
+                                        <div class="media-body text-end">
                                             <p class="mb-1">User</p>
-                                            {{-- <h3 class="text-white">$76</h3> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -731,16 +730,15 @@
                         </a>
                     </div>
                     <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
-                        <a href="{{ route('role.index') }}">
-                            <div class="widget-stat card bg-primary">
+                        <a href="{{ route('role.index') }}" class="hover-effect click-effect">
+                            <div class="widget-stat card pastel-blue text-light shadow-lg">
                                 <div class="card-body p-4">
                                     <div class="media">
                                         <span class="me-3">
-                                            <i class="flaticon-381-networking"></i>
+                                            <i class="flaticon-381-networking fs-3"></i>
                                         </span>
-                                        <div class="media-body text-white text-right">
+                                        <div class="media-body text-end">
                                             <p class="mb-1">Role</p>
-                                            {{-- <h3 class="text-white">$76</h3> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -748,16 +746,15 @@
                         </a>
                     </div>
                     <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
-                        <a href="{{ route('index_rumah_data', ['codeView' => 'IxmdS85aaN']) }}">
-                            <div class="widget-stat card bg-primary">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'IxmdS85aaN']) }}" class="hover-effect click-effect">
+                            <div class="widget-stat card pastel-pink text-light shadow-lg">
                                 <div class="card-body p-4">
                                     <div class="media">
                                         <span class="me-3">
-                                            <i class="flaticon-381-key"></i>
+                                            <i class="flaticon-381-map-1 fs-3"></i>
                                         </span>
-                                        <div class="media-body text-white text-right">
-                                            <p class="mb-1">Permission</p>
-                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        <div class="media-body text-end">
+                                            <p class="mb-1">Wilayah Kelurahan</p>
                                         </div>
                                     </div>
                                 </div>
@@ -769,3 +766,11 @@
         </div>
     </div>
 </div>
+
+<style>
+    .pastel-green { background-color: #727D73; }
+    .pastel-blue { background-color: #AAB99A; }
+    .pastel-pink { background-color: #3E7B27; }
+</style>
+
+

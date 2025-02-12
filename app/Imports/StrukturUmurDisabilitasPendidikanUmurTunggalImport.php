@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Imports;
+
+use App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Str;
+
+class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, WithHeadingRow
+{
+    protected $tahun;
+    protected $semester;
+
+    public function __construct($tahun, $semester)
+    {
+        $this->tahun = $tahun;
+        $this->semester = $semester;
+    }
+
+    public function model(array $row)
+    {
+        $data = [
+            'uuid' => Str::uuid(),
+            'semester' => $this->semester,
+            'tahun' => $this->tahun,
+            'kode_wilayah' => $row['kode_wilayah'],
+        ];
+
+        // Daftar kolom yang ada di model
+        $kolom = [
+        'FISIK_TIDAK_BLM_SEKOLAH_L',
+        'FISIK_TIDAK_BLM_SEKOLAH_P',
+        'FISIK_TIDAK_BLM_SEKOLAH',
+        'FISIK_BELUM_TAMAT_SD_SEDERAJAT_L',
+        'FISIK_BELUM_TAMAT_SD_SEDERAJAT_P',
+        'FISIK_BELUM_TAMAT_SD_SEDERAJAT',
+        'FISIK_TAMAT_SD_SEDERAJAT_L',
+        'FISIK_TAMAT_SD_SEDERAJAT_P',
+        'FISIK_TAMAT_SD_SEDERAJAT',
+        'FISIK_SLTP_SEDERAJAT_L',
+        'FISIK_SLTP_SEDERAJAT_P',
+        'FISIK_SLTP_SEDERAJAT',
+        'FISIK_SLTA_SEDERAJAT_L',
+        'FISIK_SLTA_SEDERAJAT_P',
+        'FISIK_SLTA_SEDERAJAT',
+        'FISIK_DIPLOMA_I_II_L',
+        'FISIK_DIPLOMA_I_II_P',
+        'FISIK_DIPLOMA_I_II',
+        'FISIK_AKADEMI_DIPLOMA_III_S_MUDA_L',
+        'FISIK_AKADEMI_DIPLOMA_III_S_MUDA_P',
+        'FISIK_AKADEMI_DIPLOMA_III_S_MUDA',
+        'FISIK_DIPLOMA_IV_STRATA_I_L',
+        'FISIK_DIPLOMA_IV_STRATA_I_P',
+        'FISIK_DIPLOMA_IV_STRATA_I',
+        'FISIK_STRATA_II_L',
+        'FISIK_STRATA_II_P',
+        'FISIK_STRATA_II',
+        'FISIK_STRATA_III_L',
+        'FISIK_STRATA_III_P',
+        'FISIK_STRATA_III',
+        'NETRA_BUTA_TIDAK_BLM_SEKOLAH_L',
+        'NETRA_BUTA_TIDAK_BLM_SEKOLAH_P',
+        'NETRA_BUTA_TIDAK_BLM_SEKOLAH',
+        'NETRA_BUTA_BELUM_TAMAT_SD_SEDERAJAT_L',
+        'NETRA_BUTA_BELUM_TAMAT_SD_SEDERAJAT_P',
+        'NETRA_BUTA_BELUM_TAMAT_SD_SEDERAJAT',
+        'NETRA_BUTA_TAMAT_SD_SEDERAJAT_L',
+        'NETRA_BUTA_TAMAT_SD_SEDERAJAT_P',
+        'NETRA_BUTA_TAMAT_SD_SEDERAJAT',
+        'NETRA_BUTA_SLTP_SEDERAJAT_L',
+        'NETRA_BUTA_SLTP_SEDERAJAT_P',
+        'NETRA_BUTA_SLTP_SEDERAJAT',
+        'NETRA_BUTA_SLTA_SEDERAJAT_L',
+        'NETRA_BUTA_SLTA_SEDERAJAT_P',
+        'NETRA_BUTA_SLTA_SEDERAJAT',
+        'NETRA_BUTA_DIPLOMA_I_II_L',
+        'NETRA_BUTA_DIPLOMA_I_II_P',
+        'NETRA_BUTA_DIPLOMA_I_II',
+        'NETRA_BUTA_AKADEMI_DIPLOMA_III_S_MUDA_L',
+        'NETRA_BUTA_AKADEMI_DIPLOMA_III_S_MUDA_P',
+        'NETRA_BUTA_AKADEMI_DIPLOMA_III_S_MUDA',
+        'NETRA_BUTA_DIPLOMA_IV_STRATA_I_L',
+        'NETRA_BUTA_DIPLOMA_IV_STRATA_I_P',
+        'NETRA_BUTA_DIPLOMA_IV_STRATA_I',
+        'NETRA_BUTA_STRATA_II_L',
+        'NETRA_BUTA_STRATA_II_P',
+        'NETRA_BUTA_STRATA_II',
+        'NETRA_BUTA_STRATA_III_L',
+        'NETRA_BUTA_STRATA_III_P',
+        'NETRA_BUTA_STRATA_III',
+        'RUNGU_WICARA_TIDAK_BLM_SEKOLAH_L',
+        'RUNGU_WICARA_TIDAK_BLM_SEKOLAH_P',
+        'RUNGU_WICARA_TIDAK_BLM_SEKOLAH',
+        'RUNGU_WICARA_BELUM_TAMAT_SD_SEDERAJAT_L',
+        'RUNGU_WICARA_BELUM_TAMAT_SD_SEDERAJAT_P',
+        'RUNGU_WICARA_BELUM_TAMAT_SD_SEDERAJAT',
+        'RUNGU_WICARA_TAMAT_SD_SEDERAJAT_L',
+        'RUNGU_WICARA_TAMAT_SD_SEDERAJAT_P',
+        'RUNGU_WICARA_TAMAT_SD_SEDERAJAT',
+        'RUNGU_WICARA_SLTP_SEDERAJAT_L',
+        'RUNGU_WICARA_SLTP_SEDERAJAT_P',
+        'RUNGU_WICARA_SLTP_SEDERAJAT',
+        'RUNGU_WICARA_SLTA_SEDERAJAT_L',
+        'RUNGU_WICARA_SLTA_SEDERAJAT_P',
+        'RUNGU_WICARA_SLTA_SEDERAJAT',
+        'RUNGU_WICARA_DIPLOMA_I_II_L',
+        'RUNGU_WICARA_DIPLOMA_I_II_P',
+        'RUNGU_WICARA_DIPLOMA_I_II',
+        'RUNGU_WICARA_AKADEMI_DIPLOMA_III_S_MUDA_L',
+        'RUNGU_WICARA_AKADEMI_DIPLOMA_III_S_MUDA_P',
+        'RUNGU_WICARA_AKADEMI_DIPLOMA_III_S_MUDA',
+        'RUNGU_WICARA_DIPLOMA_IV_STRATA_I_L',
+        'RUNGU_WICARA_DIPLOMA_IV_STRATA_I_P',
+        'RUNGU_WICARA_DIPLOMA_IV_STRATA_I',
+        'RUNGU_WICARA_STRATA_II_L',
+        'RUNGU_WICARA_STRATA_II_P',
+        'RUNGU_WICARA_STRATA_II',
+        'RUNGU_WICARA_STRATA_III_L',
+        'RUNGU_WICARA_STRATA_III_P',
+        'RUNGU_WICARA_STRATA_III',
+        'LAINNYA_TIDAK_BLM_SEKOLAH_L',
+        'LAINNYA_TIDAK_BLM_SEKOLAH_P',
+        'LAINNYA_TIDAK_BLM_SEKOLAH',
+        'LAINNYA_BELUM_TAMAT_SD_SEDERAJAT_L',
+        'LAINNYA_BELUM_TAMAT_SD_SEDERAJAT_P',
+        'LAINNYA_BELUM_TAMAT_SD_SEDERAJAT',
+        'LAINNYA_TAMAT_SD_SEDERAJAT_L',
+        'LAINNYA_TAMAT_SD_SEDERAJAT_P',
+        'LAINNYA_TAMAT_SD_SEDERAJAT',
+        'LAINNYA_SLTP_SEDERAJAT_L',
+        'LAINNYA_SLTP_SEDERAJAT_P',
+        'LAINNYA_SLTP_SEDERAJAT',
+        'LAINNYA_SLTA_SEDERAJAT_L',
+        'LAINNYA_SLTA_SEDERAJAT_P',
+        'LAINNYA_SLTA_SEDERAJAT',
+        'LAINNYA_DIPLOMA_I_II_L',
+        'LAINNYA_DIPLOMA_I_II_P',
+        'LAINNYA_DIPLOMA_I_II',
+        'LAINNYA_AKADEMI_DIPLOMA_III_S_MUDA_L',
+        'LAINNYA_AKADEMI_DIPLOMA_III_S_MUDA_P',
+        'LAINNYA_AKADEMI_DIPLOMA_III_S_MUDA',
+        'LAINNYA_DIPLOMA_IV_STRATA_I_L',
+        'LAINNYA_DIPLOMA_IV_STRATA_I_P',
+        'LAINNYA_DIPLOMA_IV_STRATA_I',
+        'LAINNYA_STRATA_II_L',
+        'LAINNYA_STRATA_II_P',
+        'LAINNYA_STRATA_II',
+        'LAINNYA_STRATA_III_L',
+        'LAINNYA_STRATA_III_P',
+        'LAINNYA_STRATA_III',
+        ];
+
+        // Mengisi data secara otomatis menggunakan foreach
+        foreach ($kolom as $kol) {
+            if (isset($row[$kol])) {
+                $data[$kol] = $row[$kol];
+            }
+        }
+
+        return new PendidikanUmurTunggal($data);
+    }
+}
