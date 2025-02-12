@@ -22,12 +22,12 @@
                             'files' => true,
                         ]) !!}
                         <div class="row">
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="form-label">Tahun</label>
                                 <select name="tahun" id="tahun" class="form-control default-select">
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="form-label">Semester</label>
                                 <select name="semester" id="semester" class="form-control default-select">
                                     <option value="" disabled selected>--PILIH Semester--</option>
@@ -35,9 +35,13 @@
                                     <option value="2">II</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="form-label">File Excel</label>
                                 <input type="file" name="file" id="file" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="form-label">Pilih Data Import</label>
+                                <select name="keterangan_file" id="keteranganFile" class="form-control"></select>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">
