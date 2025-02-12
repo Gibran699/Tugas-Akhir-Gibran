@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
-            $table->varchar('keterangan');
+            $table->text('keterangan');
             $table->integer('WAJIB_AKTA_AWAL_LK');
             $table->integer('WAJIB_AKTA_AWAL_PR');
             $table->integer('WAJIB_AKTA_AWAL_JML');

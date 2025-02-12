@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('usia_sekolah_kelompok_umur_disabilitas', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->primary();
+            $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
 
             $categories = ['FISIK', 'NETRA_BUTA', 'RUNGU_WICARA', 'MENTAL_JIWA', 'FISIK_MENTAL', 'LAINNYA'];
