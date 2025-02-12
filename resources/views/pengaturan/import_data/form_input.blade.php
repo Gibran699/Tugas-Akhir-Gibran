@@ -18,7 +18,8 @@
                         {!! Form::open([
                             'id' => 'formImport',
                             'method' => 'POST',
-                            'route' => 'import_data'
+                            'route' => 'import_data',
+                            'files' => true,
                         ]) !!}
                         <div class="row">
                             <div class="mb-3 col-md-4">

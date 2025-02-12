@@ -16,19 +16,31 @@ class MainController extends Controller
         $request->validate([
             'semester' => 'required|integer',
             'tahun' => 'required|integer',
-            'file' => 'required|file|mimes:xlsx,xls,csv'
+            'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
+    
         $file = $request->file('file');
         $tahun = $request->input('tahun');
         $semester = $request->input('semester');
+    
         try {
             DB::beginTransaction();
-            Excel::import(new PendudukJenisKelaminImport($tahun,$semester),$file);
-            return response()->json('import berhasil', 200);
+    
+            // Explicitly specify the file type
+            $fileType = \Maatwebsite\Excel\Excel::XLSX; // Default to XLSX
+            if ($file->getClientOriginalExtension() === 'xls') {
+                $fileType = \Maatwebsite\Excel\Excel::XLS;
+            } elseif ($file->getClientOriginalExtension() === 'csv') {
+                $fileType = \Maatwebsite\Excel\Excel::CSV;
+            }
+    
+            Excel::import(new PendudukJenisKelaminImport($tahun, $semester), $file, null, $fileType);
+    
             DB::commit();
-        } catch (Exception $e) {
+            return response()->json('Import berhasil', 200);
+        } catch (\Exception $e) {
             DB::rollback();
-            return response()->json('proses gagal', 500);
+            return response()->json('Proses gagal: ' . $e->getMessage(), 500);
         }
     }
 }
