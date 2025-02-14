@@ -12,22 +12,6 @@ class StrukturUmurKepalaKeluargaStatusKawinImport implements ToModel, WithHeadin
     protected $tahun;
     protected $semester;
 
-
-    protected $ageRanges = [
-        '00_04', '05_09', '10_14', '15_19', '20_24',
-        '25_29', '30_34', '35_39', '40_44', '45_49',
-        '50_54', '55_59', '60_64', '65_69', '70_74',
-        'LEBIH_75'
-    ];
-
-
-    protected $marriageStatus = [
-        'BELUM_KAWIN', 'KAWIN', 'CERAI_HIDUP', 'CERAI_MATI'
-    ];
-
-    // Definisikan jenis kelamin
-    protected $genders = ['LK', 'PR'];
-
     public function __construct($tahun, $semester)
     {
         $this->tahun = $tahun;
@@ -36,24 +20,140 @@ class StrukturUmurKepalaKeluargaStatusKawinImport implements ToModel, WithHeadin
 
     public function model(array $row)
     {
-
-        $data = [
+        return new StatusKawinKelompokUmur([
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-        ];
+            '00_04_BELUM_KAWIN_LK' => $row['00_04_BELUM_KAWIN_LK'],
+            '00_04_BELUM_KAWIN_PR' => $row['00_04_BELUM_KAWIN_PR'],
+            '00_04_KAWIN_LK' => $row['00_04_KAWIN_LK'],
+            '00_04_KAWIN_PR' => $row['00_04_KAWIN_PR'],
+            '00_04_CERAI_HIDUP_LK' => $row['00_04_CERAI_HIDUP_LK'],
+            '00_04_CERAI_HIDUP_PR' => $row['00_04_CERAI_HIDUP_PR'],
+            '00_04_CERAI_MATI_LK' => $row['00_04_CERAI_MATI_LK'],
+            '00_04_CERAI_MATI_PR' => $row['00_04_CERAI_MATI_PR'],
+            '05_09_BELUM_KAWIN_LK' => $row['05_09_BELUM_KAWIN_LK'],
+            '05_09_BELUM_KAWIN_PR' => $row['05_09_BELUM_KAWIN_PR'],
+            '05_09_KAWIN_LK' => $row['05_09_KAWIN_LK'],
+            '05_09_KAWIN_PR' => $row['05_09_KAWIN_PR'],
+            '05_09_CERAI_HIDUP_LK' => $row['05_09_CERAI_HIDUP_LK'],
+            '05_09_CERAI_HIDUP_PR' => $row['05_09_CERAI_HIDUP_PR'],
+            '05_09_CERAI_MATI_LK' => $row['05_09_CERAI_MATI_LK'],
+            '05_09_CERAI_MATI_PR' => $row['05_09_CERAI_MATI_PR'],
+            '10_14_BELUM_KAWIN_LK' => $row['10_14_BELUM_KAWIN_LK'],
+            '10_14_BELUM_KAWIN_PR' => $row['10_14_BELUM_KAWIN_PR'],
+            '10_14_KAWIN_LK' => $row['10_14_KAWIN_LK'],
+            '10_14_KAWIN_PR' => $row['10_14_KAWIN_PR'],
+            '10_14_CERAI_HIDUP_LK' => $row['10_14_CERAI_HIDUP_LK'],
+            '10_14_CERAI_HIDUP_PR' => $row['10_14_CERAI_HIDUP_PR'],
+            '10_14_CERAI_MATI_LK' => $row['10_14_CERAI_MATI_LK'],
+            '10_14_CERAI_MATI_PR' => $row['10_14_CERAI_MATI_PR'],
+            '15_19_BELUM_KAWIN_LK' => $row['15_19_BELUM_KAWIN_LK'],
+            '15_19_BELUM_KAWIN_PR' => $row['15_19_BELUM_KAWIN_PR'],
+            '15_19_KAWIN_LK' => $row['15_19_KAWIN_LK'],
+            '15_19_KAWIN_PR' => $row['15_19_KAWIN_PR'],
+            '15_19_CERAI_HIDUP_LK' => $row['15_19_CERAI_HIDUP_LK'],
+            '15_19_CERAI_HIDUP_PR' => $row['15_19_CERAI_HIDUP_PR'],
+            '15_19_CERAI_MATI_LK' => $row['15_19_CERAI_MATI_LK'],
+            '15_19_CERAI_MATI_PR' => $row['15_19_CERAI_MATI_PR'],
+            '20_24_BELUM_KAWIN_LK' => $row['20_24_BELUM_KAWIN_LK'],
+            '20_24_BELUM_KAWIN_PR' => $row['20_24_BELUM_KAWIN_PR'],
+            '20_24_KAWIN_LK' => $row['20_24_KAWIN_LK'],
+            '20_24_KAWIN_PR' => $row['20_24_KAWIN_PR'],
+            '20_24_CERAI_HIDUP_LK' => $row['20_24_CERAI_HIDUP_LK'],
+            '20_24_CERAI_HIDUP_PR' => $row['20_24_CERAI_HIDUP_PR'],
+            '20_24_CERAI_MATI_LK' => $row['20_24_CERAI_MATI_LK'],
+            '20_24_CERAI_MATI_PR' => $row['20_24_CERAI_MATI_PR'],
+            '25_29_BELUM_KAWIN_LK' => $row['25_29_BELUM_KAWIN_LK'],
+            '25_29_BELUM_KAWIN_PR' => $row['25_29_BELUM_KAWIN_PR'],
+            '25_29_KAWIN_LK' => $row['25_29_KAWIN_LK'],
+            '25_29_KAWIN_PR' => $row['25_29_KAWIN_PR'],
+            '25_29_CERAI_HIDUP_LK' => $row['25_29_CERAI_HIDUP_LK'],
+            '25_29_CERAI_HIDUP_PR' => $row['25_29_CERAI_HIDUP_PR'],
+            '25_29_CERAI_MATI_LK' => $row['25_29_CERAI_MATI_LK'],
+            '25_29_CERAI_MATI_PR' => $row['25_29_CERAI_MATI_PR'],
+            '30_34_BELUM_KAWIN_LK' => $row['30_34_BELUM_KAWIN_LK'],
+            '30_34_BELUM_KAWIN_PR' => $row['30_34_BELUM_KAWIN_PR'],
+            '30_34_KAWIN_LK' => $row['30_34_KAWIN_LK'],
+            '30_34_KAWIN_PR' => $row['30_34_KAWIN_PR'],
+            '30_34_CERAI_HIDUP_LK' => $row['30_34_CERAI_HIDUP_LK'],
+            '30_34_CERAI_HIDUP_PR' => $row['30_34_CERAI_HIDUP_PR'],
+            '30_34_CERAI_MATI_LK' => $row['30_34_CERAI_MATI_LK'],
+            '30_34_CERAI_MATI_PR' => $row['30_34_CERAI_MATI_PR'],
+            '35_39_BELUM_KAWIN_LK' => $row['35_39_BELUM_KAWIN_LK'],
+            '35_39_BELUM_KAWIN_PR' => $row['35_39_BELUM_KAWIN_PR'],
+            '35_39_KAWIN_LK' => $row['35_39_KAWIN_LK'],
+            '35_39_KAWIN_PR' => $row['35_39_KAWIN_PR'],
+            '35_39_CERAI_HIDUP_LK' => $row['35_39_CERAI_HIDUP_LK'],
+            '35_39_CERAI_HIDUP_PR' => $row['35_39_CERAI_HIDUP_PR'],
+            '35_39_CERAI_MATI_LK' => $row['35_39_CERAI_MATI_LK'],
+            '35_39_CERAI_MATI_PR' => $row['35_39_CERAI_MATI_PR'],
+            '40_44_BELUM_KAWIN_LK' => $row['40_44_BELUM_KAWIN_LK'],
+            '40_44_BELUM_KAWIN_PR' => $row['40_44_BELUM_KAWIN_PR'],
+            '40_44_KAWIN_LK' => $row['40_44_KAWIN_LK'],
+            '40_44_KAWIN_PR' => $row['40_44_KAWIN_PR'],
+            '40_44_CERAI_HIDUP_LK' => $row['40_44_CERAI_HIDUP_LK'],
+            '40_44_CERAI_HIDUP_PR' => $row['40_44_CERAI_HIDUP_PR'],
+            '40_44_CERAI_MATI_LK' => $row['40_44_CERAI_MATI_LK'],
+            '40_44_CERAI_MATI_PR' => $row['40_44_CERAI_MATI_PR'],
+            '45_49_BELUM_KAWIN_LK' => $row['45_49_BELUM_KAWIN_LK'],
+            '45_49_BELUM_KAWIN_PR' => $row['45_49_BELUM_KAWIN_PR'],
+            '45_49_KAWIN_LK' => $row['45_49_KAWIN_LK'],
+            '45_49_KAWIN_PR' => $row['45_49_KAWIN_PR'],
+            '45_49_CERAI_HIDUP_LK' => $row['45_49_CERAI_HIDUP_LK'],
+            '45_49_CERAI_HIDUP_PR' => $row['45_49_CERAI_HIDUP_PR'],
+            '45_49_CERAI_MATI_LK' => $row['45_49_CERAI_MATI_LK'],
+            '45_49_CERAI_MATI_PR' => $row['45_49_CERAI_MATI_PR'],
+            '50_54_BELUM_KAWIN_LK' => $row['50_54_BELUM_KAWIN_LK'],
+            '50_54_BELUM_KAWIN_PR' => $row['50_54_BELUM_KAWIN_PR'],
+            '50_54_KAWIN_LK' => $row['50_54_KAWIN_LK'],
+            '50_54_KAWIN_PR' => $row['50_54_KAWIN_PR'],
+            '50_54_CERAI_HIDUP_LK' => $row['50_54_CERAI_HIDUP_LK'],
+            '50_54_CERAI_HIDUP_PR' => $row['50_54_CERAI_HIDUP_PR'],
+            '50_54_CERAI_MATI_LK' => $row['50_54_CERAI_MATI_LK'],
+            '50_54_CERAI_MATI_PR' => $row['50_54_CERAI_MATI_PR'],
+            '55_59_BELUM_KAWIN_LK' => $row['55_59_BELUM_KAWIN_LK'],
+            '55_59_BELUM_KAWIN_PR' => $row['55_59_BELUM_KAWIN_PR'],
+            '55_59_KAWIN_LK' => $row['55_59_KAWIN_LK'],
+            '55_59_KAWIN_PR' => $row['55_59_KAWIN_PR'],
+            '55_59_CERAI_HIDUP_LK' => $row['55_59_CERAI_HIDUP_LK'],
+            '55_59_CERAI_HIDUP_PR' => $row['55_59_CERAI_HIDUP_PR'],
+            '55_59_CERAI_MATI_LK' => $row['55_59_CERAI_MATI_LK'],
+            '55_59_CERAI_MATI_PR' => $row['55_59_CERAI_MATI_PR'],
+            '60_64_BELUM_KAWIN_LK' => $row['60_64_BELUM_KAWIN_LK'],
+            '60_64_BELUM_KAWIN_PR' => $row['60_64_BELUM_KAWIN_PR'],
+            '60_64_KAWIN_LK' => $row['60_64_KAWIN_LK'],
+            '60_64_KAWIN_PR' => $row['60_64_KAWIN_PR'],
+            '60_64_CERAI_HIDUP_LK' => $row['60_64_CERAI_HIDUP_LK'],
+            '60_64_CERAI_HIDUP_PR' => $row['60_64_CERAI_HIDUP_PR'],
+            '60_64_CERAI_MATI_LK' => $row['60_64_CERAI_MATI_LK'],
+            '60_64_CERAI_MATI_PR' => $row['60_64_CERAI_MATI_PR'],
+            '65_69_BELUM_KAWIN_LK' => $row['65_69_BELUM_KAWIN_LK'],
+            '65_69_BELUM_KAWIN_PR' => $row['65_69_BELUM_KAWIN_PR'],
+            '65_69_KAWIN_LK' => $row['65_69_KAWIN_LK'],
+            '65_69_KAWIN_PR' => $row['65_69_KAWIN_PR'],
+            '65_69_CERAI_HIDUP_LK' => $row['65_69_CERAI_HIDUP_LK'],
+            '65_69_CERAI_HIDUP_PR' => $row['65_69_CERAI_HIDUP_PR'],
+            '65_69_CERAI_MATI_LK' => $row['65_69_CERAI_MATI_LK'],
+            '65_69_CERAI_MATI_PR' => $row['65_69_CERAI_MATI_PR'],
+            '70_74_BELUM_KAWIN_LK' => $row['70_74_BELUM_KAWIN_LK'],
+            '70_74_BELUM_KAWIN_PR' => $row['70_74_BELUM_KAWIN_PR'],
+            '70_74_KAWIN_LK' => $row['70_74_KAWIN_LK'],
+            '70_74_KAWIN_PR' => $row['70_74_KAWIN_PR'],
+            '70_74_CERAI_HIDUP_LK' => $row['70_74_CERAI_HIDUP_LK'],
+            '70_74_CERAI_HIDUP_PR' => $row['70_74_CERAI_HIDUP_PR'],
+            '70_74_CERAI_MATI_LK' => $row['70_74_CERAI_MATI_LK'],
+            '70_74_CERAI_MATI_PR' => $row['70_74_CERAI_MATI_PR'],
+            'LEBIH_75_BELUM_KAWIN_LK' => $row['LEBIH_75_BELUM_KAWIN_LK'],
+            'LEBIH_75_BELUM_KAWIN_PR' => $row['LEBIH_75_BELUM_KAWIN_PR'],
+            'LEBIH_75_KAWIN_LK' => $row['LEBIH_75_KAWIN_LK'],
+            'LEBIH_75_KAWIN_PR' => $row['LEBIH_75_KAWIN_PR'],
+            'LEBIH_75_CERAI_HIDUP_LK' => $row['LEBIH_75_CERAI_HIDUP_LK'],
+            'LEBIH_75_CERAI_HIDUP_PR' => $row['LEBIH_75_CERAI_HIDUP_PR'],
+            'LEBIH_75_CERAI_MATI_LK' => $row['LEBIH_75_CERAI_MATI_LK'],
+            'LEBIH_75_CERAI_MATI_PR' => $row['LEBIH_75_CERAI_MATI_PR'],
+        ]);
 
-
-        foreach ($this->ageRanges as $age) {
-            foreach ($this->marriageStatus as $status) {
-                foreach ($this->genders as $gender) {
-                    $fieldName = "{$age}_{$status}_{$gender}";
-                    $data[$fieldName] = $row[$fieldName];
-                }
-            }
-        }
-
-        return new StatusKawinKelompokUmur($data);
     }
 }
