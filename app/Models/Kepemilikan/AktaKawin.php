@@ -18,17 +18,18 @@ class AktaKawin extends Model
     protected $fillable = [
         'uuid',
         'kode_wilayah',
-        'MUSLIM_JML',
-        'NON_MUSLIM_JML',
-        'STATUS_KAWIN_LK',
-        'STATUS_KAWIN_PR',
-        'STATUS_KAWIN_JML',
-        'MEMILIKI_AKTA_KAWIN_LK',
-        'MEMILIKI_AKTA_KAWIN_PR',
-        'MEMILIKI_AKTA_KAWIN_JML',
-        'BELUM_MEMILIKI_AKTA_KAWIN_JML',
-        'PERSEN_MEMILIKI',
+        'muslim_jml',
+        'non_muslim_jml',
+        'status_kawin_lk',
+        'status_kawin_pr',
+        'status_kawin_jml',
+        'memiliki_akta_kawin_lk',
+        'memiliki_akta_kawin_pr',
+        'memiliki_akta_kawin_jml',
+        'belum_memiliki_akta_kawin_jml',
+        'persen_memiliki',
         'semester',
         'tahun'
     ];
+    
 }

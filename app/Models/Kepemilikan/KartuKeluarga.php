@@ -18,16 +18,17 @@ class KartuKeluarga extends Model
     protected $fillable = [
         'uuid',
         'kode_wilayah',
-        'KK_LK',
-        'KK_PR',
-        'KK_JML',
-        'MEMILIKI_LK',
-        'MEMILIKI_PR',
-        'MEMILIKI_JML',
-        'BELUM_MEMILIKI_LK',
-        'BELUM_MEMILIKI_PR',
-        'BELUM_MEMILIKI_JML',
+        'kk_lk',
+        'kk_pr',
+        'kk_jml',
+        'memiliki_lk',
+        'memiliki_pr',
+        'memiliki_jml',
+        'belum_memiliki_lk',
+        'belum_memiliki_pr',
+        'belum_memiliki_jml',
         'semester',
-        'tahun'
+        'tahun',
     ];
+    
 }

@@ -15,16 +15,17 @@ class StatusKawinUmurTunggal extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
+        'uuid', 'kode_wilayah',
         'umur',
-        'BELUM_KAWIN_LK',
-        'BELUM_KAWIN_PR',
-        'KAWIN_LK',
-        'KAWIN_PR',
-        'CERAI_HIDUP_LK',
-        'CERAI_HIDUP_PR',
-        'CERAI_MATI_LK',
-        'CERAI_MATI_PR',
-        'semester','tahun'
+        'belum_kawin_lk',
+        'belum_kawin_pr',
+        'kawin_lk',
+        'kawin_pr',
+        'cerai_hidup_lk',
+        'cerai_hidup_pr',
+        'cerai_mati_lk',
+        'cerai_mati_pr',
+        'semester', 'tahun'
     ];
+    
 }

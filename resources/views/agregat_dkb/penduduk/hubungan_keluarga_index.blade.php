@@ -48,45 +48,49 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             @php
-                                $educationalStatuses = [
-                                    'TIDAK/BLM SEKOLAH L',
-                                    'TIDAK/BLM SEKOLAH P',
-                                    'TIDAK/BLM SEKOLAH JML',
-                                    'BELUM TAMAT SD/SEDERAJAT L',
-                                    'BELUM TAMAT SD/SEDERAJAT P',
-                                    'BELUM TAMAT SD/SEDERAJAT JML',
-                                    'TAMAT SD/SEDERAJAT L',
-                                    'TAMAT SD/SEDERAJAT P',
-                                    'TAMAT SD/SEDERAJAT JML',
-                                    'SLTP/SEDERAJAT L',
-                                    'SLTP/SEDERAJAT P',
-                                    'SLTP/SEDERAJAT JML',
-                                    'SLTA/SEDERAJAT L',
-                                    'SLTA/SEDERAJAT P',
-                                    'SLTA/SEDERAJAT JML',
-                                    'DIPLOMA I/II L',
-                                    'DIPLOMA I/II P',
-                                    'DIPLOMA I/II JML',
-                                    'AKADEMI/DIPL.III/S. MUDA L',
-                                    'AKADEMI/DIPL.III/S.MUDA P',
-                                    'AKADEMI/DIPL.III/S.MUDA JML',
-                                    'DIPLOMA IV/STRATA I L',
-                                    'DIPLOMA IV/STRATA I P',
-                                    'DIPLOMA IV/STRATA I JML',
-                                    'STRATA-II L',
-                                    'STRATA-II P',
-                                    'STRATA-II JML',
-                                    'STRATA-III L',
-                                    'STRATA-III P',
-                                    'STRATA-III JML',
+                                $data = [
+                                    'KEPALA_KELUARGA_L',
+                                    'KEPALA_KELUARGA_P',
+                                    'KEPALA_KELUARGA_JML',
+                                    'SUAMI_L',
+                                    'SUAMI_P',
+                                    'SUAMI_JML',
+                                    'ISTERI_L',
+                                    'ISTERI_P',
+                                    'ISTERI_JML',
+                                    'ANAK_L',
+                                    'ANAK_P',
+                                    'ANAK_JML',
+                                    'MENANTU_L',
+                                    'MENANTU_P',
+                                    'MENANTU_JML',
+                                    'CUCU_L',
+                                    'CUCU_P',
+                                    'CUCU_JML',
+                                    'ORANG_TUA_L',
+                                    'ORANG_TUA_P',
+                                    'ORANG_TUA_JML',
+                                    'MERTUA_L',
+                                    'MERTUA_P',
+                                    'MERTUA_JML',
+                                    'FAMILI_LAIN_L',
+                                    'FAMILI_LAIN_P',
+                                    'FAMILI_LAIN_JML',
+                                    'PEMBANTU_L',
+                                    'PEMBANTU_P',
+                                    'PEMBANTU_JML',
+                                    'LAINNYA_L',
+                                    'LAINNYA_P',
+                                    'LAINNYA_JML',
                                 ];
+
                             @endphp
                             <table id="table" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
-                                        @foreach ($educationalStatuses as $item)
+                                        @foreach ($data as $item)
                                             <th>{{ $item }}</th>
                                         @endforeach
                                     </tr>

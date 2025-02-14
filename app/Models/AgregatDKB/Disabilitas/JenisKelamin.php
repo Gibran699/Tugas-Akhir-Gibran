@@ -16,26 +16,27 @@ class JenisKelamin extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'Kelompok_Umur',
-        'Disabiltas_Fisik_LK',
-        'Disabiltas_Fisik_PR',
-        'Disabiltas_Fisik_JML',
-        'Disabiltas_Netra_Buta_LK',
-        'Disabiltas_Netra_Buta_PR',
-        'Disabiltas_Netra_Buta_JML',
-        'Disabiltas_Rungu_Wicara_LK',
-        'Disabiltas_Rungu_Wicara_PR',
-        'Disabiltas_Rungu_Wicara_JML',
-        'Disabiltas_Mental_Jiwa_LK',
-        'Disabiltas_Mental_Jiwa_PR',
-        'Disabiltas_Mental_Jiwa_JML',
-        'Disabiltas_Fisik_Mental_LK',
-        'Disabiltas_Fisik_Mental_PR',
-        'Disabiltas_Fisik_Mental_JML',
-        'Disabiltas_Lainya_LK',
-        'Disabiltas_Lainya_PR',
-        'Disabiltas_Lainya_JML',
-        'semester','tahun'
+        'uuid', 'kode_wilayah',
+        'kelompok_umur',
+        'disabiltas_fisik_lk',
+        'disabiltas_fisik_pr',
+        'disabiltas_fisik_jml',
+        'disabiltas_netra_buta_lk',
+        'disabiltas_netra_buta_pr',
+        'disabiltas_netra_buta_jml',
+        'disabiltas_rungu_wicara_lk',
+        'disabiltas_rungu_wicara_pr',
+        'disabiltas_rungu_wicara_jml',
+        'disabiltas_mental_jiwa_lk',
+        'disabiltas_mental_jiwa_pr',
+        'disabiltas_mental_jiwa_jml',
+        'disabiltas_fisik_mental_lk',
+        'disabiltas_fisik_mental_pr',
+        'disabiltas_fisik_mental_jml',
+        'disabiltas_lainya_lk',
+        'disabiltas_lainya_pr',
+        'disabiltas_lainya_jml',
+        'semester', 'tahun'
     ];
+    
 }

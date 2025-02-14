@@ -15,15 +15,15 @@ class StatusKawin extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'Belum_Kawin_LK',
-        'Belum_Kawin_PR',
-        'Kawin_LK',
-        'Kawin_PR',
-        'Cerai_Hidup_LK',
-        'Cerai_Hidup_PR',
-        'Cerai_Mati_LK',
-        'Cerai_Mati_PR',
-        'semester','tahun',
+        'uuid', 'kode_wilayah',
+        'belum_kawin_lk',
+        'belum_kawin_pr',
+        'kawin_lk',
+        'kawin_pr',
+        'cerai_hidup_lk',
+        'cerai_hidup_pr',
+        'cerai_mati_lk',
+        'cerai_mati_pr',
+        'semester', 'tahun',
     ];
 }

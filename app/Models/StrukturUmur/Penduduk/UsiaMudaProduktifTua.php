@@ -15,10 +15,10 @@ class UsiaMudaProduktifTua extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'USIA_MUDA',
-        'USIA_PRODUKTIF',
-        'USIA_TUA',
-        'semester','tahun'
+        'uuid', 'kode_wilayah',
+        'usia_muda',
+        'usia_produktif',
+        'usia_tua',
+        'semester', 'tahun',
     ];
 }

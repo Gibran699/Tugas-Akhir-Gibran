@@ -15,11 +15,11 @@ class UsiaSekolah extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'USIA_SD_SEDERAJAT',
-        'USIA_SLTP_SEDERAJAT',
-        'USIA_SLTA_SEDERAJAT',
-        'USIA_PERGURUAN_TINGGI',
-        'semester','tahun'
+        'uuid', 'kode_wilayah',
+        'usia_sd_sederajat',
+        'usia_sltp_sederajat',
+        'usia_slta_sederajat',
+        'usia_perguruan_tinggi',
+        'semester', 'tahun',
     ];
 }

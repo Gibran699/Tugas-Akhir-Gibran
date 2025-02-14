@@ -8,36 +8,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KelompokUmur extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'kelompok_umur_disabilitas';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'Kelompok_umur',
-        'Islam_LK',
-        'Islam_PR',
-        'Islam_JML',
-        'Katholik_LK',
-        'Katholik_PR',
-        'Katholik_JML',
-        'Kristen_LK',
-        'Kristen_PR',
-        'Kristen_JML',
-        'Hindu_LK',
-        'Hindu_PR',
-        'Hindu_JML',
-        'Budha_LK',
-        'Budha_PR',
-        'Budha_JML',
-        'Konghucu_LK',
-        'Konghucu_PR',
-        'Konghucu_JML',
-        'Kepercayaan_LK',
-        'Kepercayaan_PR',
-        'Kepercayaan_JML',
-        'semester','tahun'
+        'uuid',
+        'kode_wilayah',
+        'kelompok_umur',
+        'disabilitas_fisik_lk',
+        'disabilitas_fisik_pr',
+        'disabilitas_fisik_jml',
+        'disabilitas_netra_buta_lk',
+        'disabilitas_netra_buta_pr',
+        'disabilitas_netra_buta_jml',
+        'disabilitas_rungu_wicara_lk',
+        'disabilitas_rungu_wicara_pr',
+        'disabilitas_rungu_wicara_jml',
+        'disabilitas_mental_jiwa_lk',
+        'disabilitas_mental_jiwa_pr',
+        'disabilitas_mental_jiwa_jml',
+        'disabilitas_fisik_mental_lk',
+        'disabilitas_fisik_mental_pr',
+        'disabilitas_fisik_mental_jml',
+        'disabilitas_lainnya_lk',
+        'disabilitas_lainnya_pr',
+        'disabilitas_lainnya_jml',
+        'semester',
+        'tahun',
     ];
 }

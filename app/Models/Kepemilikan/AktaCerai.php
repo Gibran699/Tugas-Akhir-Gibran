@@ -15,17 +15,18 @@ class AktaCerai extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
-        'MUSLIM_JML',
-        'NON_MUSLIM_JML',
-        'STATUS_CERAI_LK',
-        'STATUS_CERAI_PR',
-        'STATUS_CERAI_JML',
-        'MEMILIKI_AKTA_CERAI_LK',
-        'MEMILIKI_AKTA_CERAI_PR',
-        'MEMILIKI_AKTA_CERAI_JML',
-        'BELUM_MEMILIKI_AKTA_CERAI_JML',
-        'PERSEN_MEMILIKI',
-        'semester','tahun'
+        'uuid', 'kode_wilayah',
+        'muslim_jml',
+        'non_muslim_jml',
+        'status_cerai_lk',
+        'status_cerai_pr',
+        'status_cerai_jml',
+        'memiliki_akta_cerai_lk',
+        'memiliki_akta_cerai_pr',
+        'memiliki_akta_cerai_jml',
+        'belum_memiliki_akta_cerai_jml',
+        'persen_memiliki',
+        'semester', 'tahun'
     ];
+    
 }
