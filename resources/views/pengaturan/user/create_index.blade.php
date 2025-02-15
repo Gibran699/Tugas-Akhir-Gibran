@@ -102,12 +102,15 @@
                         <label for="name">Nama Instasi</label>
                         <input type="text" class="form-control" id="nama_instansi" name="nama_instansi" required>
                     </div>
-                    {{-- <div class="form-group">
-                            <label for="name">Role</label>
-                            <select name="role" id="role" class="form-control">
-                                <option value=""></option>
-                            </select>
-                        </div> --}}
+                    <div class="form-group">
+                        <label for="name">Role</label>
+                        <select name="role" id="role" class="form-control">
+                            <option value="" selected disabled>--Pilih Role--</option>
+                            @foreach ($role as $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-actions">
 
                         <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button>
@@ -131,7 +134,7 @@
                     {!! Form::open([
                         'method' => 'POST',
                         // 'route' => ['user.update',],
-                        'id' => 'formUserEdit'
+                        'id' => 'formUserEdit',
                     ]) !!}
                     <div class="form-group">
                         <label for="name">Nama</label>
@@ -166,12 +169,15 @@
                         <label for="name">Nama Instasi</label>
                         <input type="text" class="form-control" id="namaInstansiEdit" name="nama_instansi" required>
                     </div>
-                    {{-- <div class="form-group">
-                            <label for="name">Role</label>
-                            <select name="role" id="role" class="form-control">
-                                <option value=""></option>
-                            </select>
-                        </div> --}}
+                    <div class="form-group">
+                        <label for="name">Role</label>
+                        <select name="role" id="roleEdit" class="form-control">
+                            <option value="" disabled>--Pilih Role--</option>
+                            @foreach ($role as $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-actions">
 
                         <button type="button" class="btn btn-primary mt-3" id="saveEditUser">Simpan</button>
@@ -183,5 +189,5 @@
         </div>
     </div>
     <script src="{{ asset('js/global_func.js') }}"></script>
-    <script src="{{asset('js/system/user.js')}}"></script>
+    <script src="{{ asset('js/system/user.js') }}"></script>
 @endsection

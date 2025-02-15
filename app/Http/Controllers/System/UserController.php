@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataPengguna;
+use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -57,7 +58,7 @@ class UserController extends Controller
             ]);
 
             // Assign role if needed
-            // $user->assignRole($request->role);
+            $user->assignRole($request->role);
             DB::commit();
             return response()->json(['message' => 'Berhasil membuat user'], 200);
         } catch (Exception $e) {
@@ -76,7 +77,8 @@ class UserController extends Controller
                 'users.id'
             )->orderBy('data_pengguna.nama', 'asc')
             ->get();
-        return view('pengaturan.user.create_index', compact('data'));
+        $role = Role::select('name')->orderBy('name', 'asc')->get();
+        return view('pengaturan.user.create_index', compact('data','role'));
     }
     function destroy($id)
     {
@@ -133,7 +135,7 @@ class UserController extends Controller
                 'instansi' => $request->instansi,
                 'nama_instansi' => $request->nama_instansi,
             ]);
-
+            $user->assignRole($request->role);
             DB::commit();
             return response()->json(['message' => 'Berhasil mengubah data'], 200);
         } catch (ModelNotFoundException $e) {
@@ -143,7 +145,8 @@ class UserController extends Controller
             return response()->json(['message' => 'Proses gagal'], 500);
         }
     }
-    function edit($id){
+    function edit($id)
+    {
         $data = User::join('data_pengguna', 'users.id', '=', 'data_pengguna.user_id')
             ->select(
                 'users.id',
@@ -152,9 +155,15 @@ class UserController extends Controller
                 'data_pengguna.contact',
                 'users.email',
                 'data_pengguna.instansi',
-                'data_pengguna.nama_instansi',)
-            ->where('users.id',$id)
+                'data_pengguna.nama_instansi',
+            )
+            ->where('users.id', $id)
             ->first();
+        // Get the role names for the user
+        $roleNames = $data->getRoleNames();
+
+        // Add the role names to the data array
+        $data->role_names = $roleNames->first();
         return response()->json($data, 200);
     }
 }

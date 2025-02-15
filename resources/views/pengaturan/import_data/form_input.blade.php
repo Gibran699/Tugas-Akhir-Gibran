@@ -41,11 +41,20 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="form-label">Pilih Data Import</label>
-                                <select name="keterangan_file" id="keteranganFile" class="form-control"></select>
+                                <select name="keterangan_file" id="keteranganFile" required>
+                                    <option value="" disabled selected>--PILIHAN DATA--</option>
+                                    @foreach (config('dataArray.listFileImport') as $key => $value)
+                                        <option value="{{ $key }}">
+                                            {{ str_replace(['App\Imports\\', 'Import'], '', $value) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="d-flex justify-content-end">
+                                {{-- <button type="button" class="btn btn-primary" id="submitImport">
+                                    <i class="fa fa-file-import"></i> Import
+                                </button> --}}
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-list"></i> Import
+                                    <i class="fa fa-file-import"></i> Import
                                 </button>
                             </div>
                         </div>
@@ -57,6 +66,11 @@
     </div>
     <script src="{{ asset('js/global_func.js') }}"></script>
     <script>
+        // Generate options untuk tahun
         generateYearOptions('tahun');
+
+        // Inisialisasi Select2 pada elemen dengan ID 'keteranganFile'
+        $("#keteranganFile").select2();
     </script>
+    <script src="{{ asset('js/system/import_data.js') }}"></script>
 @endsection

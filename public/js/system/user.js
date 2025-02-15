@@ -223,6 +223,7 @@ function fetchDataUserId(userId) {
             $('#emailEdit').val(data.email);
             $('#contactEdit').val(data.contact);
             $('#instansiEdit').val(data.instansi).change();
+            $('#roleEdit').val(data.role_names).change();
             $('#namaInstansiEdit').val(data.nama_instansi);
             $('#formUserEdit ').attr('action', '/user/' + data.id);
         },

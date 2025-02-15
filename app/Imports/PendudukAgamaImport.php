@@ -24,7 +24,7 @@ class PendudukAgamaImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'Islam_LK' => $row['Islam_LK'],
+            'Islam_LK' => $row['islam_lk'],
             'Islam_PR' => $row['Islam_PR'],
             'Islam_JML' => $row['Islam_JML'],
             'Katholik_LK' => $row['Katholik_LK'],

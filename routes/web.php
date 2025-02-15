@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('role', RoleController::class);
     //auth
     Route::post('logout',[AuthMainController::class,'logout'])->name('logout');
+    Route::post('change-password',[AuthMainController::class,'changePassword'])->name('change_password');
 });
 
 Route::get('/layout-desain', function () {
