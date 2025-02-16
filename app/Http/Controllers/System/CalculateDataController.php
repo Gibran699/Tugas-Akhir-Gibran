@@ -42,7 +42,7 @@ class CalculateDataController extends Controller
             ->where('jenis_kelamin_penduduk.tahun', $request['tahun'])
             ->groupBy('mstr_kecamatan.kode','mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
-            ->first();
+            ->get();
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
