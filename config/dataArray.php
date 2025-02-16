@@ -80,5 +80,8 @@ return [
         '36' => 'App\Models\StrukturUmur\Penduduk\UmurTunggal',
         '37' => 'App\Models\StrukturUmur\Penduduk\UsiaMudaProduktif',
         '38' => 'App\Models\StrukturUmur\Penduduk\UsiaSekolah',
+    ],
+    'listCalculateDataFunction' => [
+        'CV8V59hUCF' => 'dataPendudukJenisKelamin', 
     ]
 ];

@@ -16,7 +16,7 @@
                 <div class="card-body">
                     {{-- <button class="btn btn-success mb-3" onclick="openModal('wilayah_kelurahan')">Tambah</button> --}}
                     <div class="table-responsive">
-                        <table id="wilayah_kelurahanTable" class="table table-bordered table-hover table-striped">
+                        <table id="wilayahKelurahanTable" class="table table-bordered table-hover table-striped">
                             <thead class="table-dark">
                                 <tr>
                                     <th class="text-center">Kode Wilayah</th>
@@ -32,7 +32,61 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
 
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                // Fetch data from the endpoint
+                $.ajax({
+                    url: "/json/wilayah-kelurahan",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        // Map the response to the dataSet format
+                        let dataSet = response.data.map(item => [item.kode, item.nama]);
 
+                        // Initialize DataTable
+                        let table = $('#wilayahKelurahanTable').DataTable({
+                            data: dataSet,
+                            columns: [{
+                                    title: "Kode Wilayah"
+                                },
+                                {
+                                    title: "Nama Kelurahan"
+                                }
+                            ],
+                            createdRow: function(row, data, index) {
+                                $(row).addClass('selected');
+                            },
+                            language: {
+                                paginate: {
+                                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                                }
+                            }
+                        });
+
+                        // Add row click event
+                        table.on('click', 'tbody tr', function() {
+                            var $row = table.row(this).nodes().to$();
+                            var hasClass = $row.hasClass('selected');
+                            if (hasClass) {
+                                $row.removeClass('selected');
+                            } else {
+                                $row.addClass('selected');
+                            }
+                        });
+
+                        // Remove 'selected' class from all rows initially
+                        table.rows().every(function() {
+                            this.nodes().to$().removeClass('selected');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            });
+        })(jQuery);
+    </script>
 @endsection

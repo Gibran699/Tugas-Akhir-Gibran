@@ -12,6 +12,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MainController extends Controller
 {   
+    protected $calculateDateFunction;
+    public function __construct(CalculateDataController $calculateDateFunction)
+    {
+        $this->calculateDateFunction = $calculateDateFunction;
+    }
+    // import data excel 
     function importData(Request $request) {
         $listFileImport = config('dataArray.listFileImport');
         $listFileModel = config('dataArray.listFileModel');
@@ -52,5 +58,14 @@ class MainController extends Controller
             DB::rollback();
             return response()->json('Proses gagal: ' . $e->getMessage(), 500);
         }
+    }
+    function searchData(Request $request,$jenisData) {
+        $listCalculateDataFunction = config('dataArray.listCalculateDataFunction');
+        if (isset($listCalculateDataFunction[$jenisData])) {
+            $listCalculateDataFunction = $listCalculateDataFunction[$jenisData];
+            return $this->calculateDateFunction->$listCalculateDataFunction($request);
+        }
+        return response()->json(['error' => 'Invalid data type'], 400);
+        
     }
 }

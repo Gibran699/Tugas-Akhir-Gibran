@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Auth\MainController as AuthMainController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\System\CalculateDataController;
 use App\Http\Controllers\System\MainController as SystemMainController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\UserController;
+use App\Http\Controllers\System\WilayahController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -41,8 +43,13 @@ Route::middleware(['auth'])->group(function () {
     //auth
     Route::post('logout',[AuthMainController::class,'logout'])->name('logout');
     Route::post('change-password',[AuthMainController::class,'changePassword'])->name('change_password');
+    //wilayah kelurahan
+    Route::get('json/wilayah-kelurahan',[WilayahController::class,'indexKelurahan']);
+
+    //search master data
+    Route::post('json/search-data/{jenisData}',[SystemMainController::class,'searchData'])->name('search_data');
 });
 
-Route::get('/layout-desain', function () {
-    return view('agregat_dkb.disabilitas.pekerjaan_index');
-})->name('layout-desaind');
+
+
+Route::get('test_function_calculate', [CalculateDataController::class,'dataPendudukJenisKelamin']);
