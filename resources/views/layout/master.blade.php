@@ -17,7 +17,7 @@
     <title>Rumah Data 2.0 Kota Samarinda</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
-    
+
 
     {{-- page level css --}}
     <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -162,7 +162,7 @@
     ***********************************-->
     <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
-    
+
     {{-- <script src="{{ asset('js/plugins-init/select2-init.js') }}" type="text/javascript"></script> --}}
 
     <script src="{{ asset('js/custom.js') }}" type="text/javascript"></script>
