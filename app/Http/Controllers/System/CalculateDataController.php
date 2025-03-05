@@ -16,6 +16,10 @@ use App\Models\AgregatDKB\Penduduk\Pekerjaan as PendudukPekerjaan;
 use App\Models\AgregatDKB\StatusKawin\Agama as StatusKawinPendudukAgama;
 use App\Models\AgregatDKB\StatusKawin\JenisKelamin as StatusKawinPendudukJenisKelamin;
 use App\Models\AgregatDKB\StatusKawin\Pekerjaan as StatusKawinPendudukPekerjaan;
+use App\Models\AgregatDKB\Pendidikan\JenisKelamin as PendidikanPendudukJenisKelamin;
+use App\Models\AgregatDKB\Pendidikan\GolonganDarah as PendidikanPendudukJGolonganDarah;
+
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -2004,5 +2008,215 @@ class CalculateDataController extends Controller
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+    }
+    // calculate data DKB Pendidikan
+    public function dataPendidikanPendudukJenisKelamin($request)
+    {
+        $dataPerkelurahan = PendidikanPendudukJenisKelamin::select([
+            'jenis_kelamin_pendidikan.*',
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'jenis_kelamin_pendidikan.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->where('jenis_kelamin_pendidikan.semester', $request['semester'])
+            ->where('jenis_kelamin_pendidikan.tahun', $request['tahun'])
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan = PendidikanPendudukJenisKelamin::select(
+            DB::raw('SUM(tidak_blm_sekolah_l) as total_tidak_blm_sekolah_l'),
+            DB::raw('SUM(tidak_blm_sekolah_p) as total_tidak_blm_sekolah_p'),
+            DB::raw('SUM(tidak_blm_sekolah_jml) as total_tidak_blm_sekolah_jml'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_l) as total_belum_tamat_sd_sederajat_l'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_p) as total_belum_tamat_sd_sederajat_p'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_jml) as total_belum_tamat_sd_sederajat_jml'),
+            DB::raw('SUM(tamat_sd_sederajat_l) as total_tamat_sd_sederajat_l'),
+            DB::raw('SUM(tamat_sd_sederajat_p) as total_tamat_sd_sederajat_p'),
+            DB::raw('SUM(tamat_sd_sederajat_jml) as total_tamat_sd_sederajat_jml'),
+            DB::raw('SUM(sltp_sederajat_l) as total_sltp_sederajat_l'),
+            DB::raw('SUM(sltp_sederajat_p) as total_sltp_sederajat_p'),
+            DB::raw('SUM(sltp_sederajat_jml) as total_sltp_sederajat_jml'),
+            DB::raw('SUM(slta_sederajat_l) as total_slta_sederajat_l'),
+            DB::raw('SUM(slta_sederajat_p) as total_slta_sederajat_p'),
+            DB::raw('SUM(slta_sederajat_jml) as total_slta_sederajat_jml'),
+            DB::raw('SUM(diploma_i_ii_l) as total_diploma_i_ii_l'),
+            DB::raw('SUM(diploma_i_ii_p) as total_diploma_i_ii_p'),
+            DB::raw('SUM(diploma_i_ii_jml) as total_diploma_i_ii_jml'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_l) as total_akademi_dipl_iii_s_muda_l'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_p) as total_akademi_dipl_iii_s_muda_p'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_jml) as total_akademi_dipl_iii_s_muda_jml'),
+            DB::raw('SUM(diploma_iv_strata_i_l) as total_diploma_iv_strata_i_l'),
+            DB::raw('SUM(diploma_iv_strata_i_p) as total_diploma_iv_strata_i_p'),
+            DB::raw('SUM(diploma_iv_strata_i_jml) as total_diploma_iv_strata_i_jml'),
+            DB::raw('SUM(strata_ii_l) as total_strata_ii_l'),
+            DB::raw('SUM(strata_ii_p) as total_strata_ii_p'),
+            DB::raw('SUM(strata_ii_jml) as total_strata_ii_jml'),
+            DB::raw('SUM(strata_iii_l) as total_strata_iii_l'),
+            DB::raw('SUM(strata_iii_p) as total_strata_iii_p'),
+            DB::raw('SUM(strata_iii_jml) as total_strata_iii_jml')
+        )->where('semester', $request['semester'])
+            ->where('tahun', $request['tahun'])
+            ->first();
+        $dataPerkecamatan = PendidikanPendudukJenisKelamin::select([
+            DB::raw('SUM(tidak_blm_sekolah_l) as total_tidak_blm_sekolah_l'),
+            DB::raw('SUM(tidak_blm_sekolah_p) as total_tidak_blm_sekolah_p'),
+            DB::raw('SUM(tidak_blm_sekolah_jml) as total_tidak_blm_sekolah_jml'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_l) as total_belum_tamat_sd_sederajat_l'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_p) as total_belum_tamat_sd_sederajat_p'),
+            DB::raw('SUM(belum_tamat_sd_sederajat_jml) as total_belum_tamat_sd_sederajat_jml'),
+            DB::raw('SUM(tamat_sd_sederajat_l) as total_tamat_sd_sederajat_l'),
+            DB::raw('SUM(tamat_sd_sederajat_p) as total_tamat_sd_sederajat_p'),
+            DB::raw('SUM(tamat_sd_sederajat_jml) as total_tamat_sd_sederajat_jml'),
+            DB::raw('SUM(sltp_sederajat_l) as total_sltp_sederajat_l'),
+            DB::raw('SUM(sltp_sederajat_p) as total_sltp_sederajat_p'),
+            DB::raw('SUM(sltp_sederajat_jml) as total_sltp_sederajat_jml'),
+            DB::raw('SUM(slta_sederajat_l) as total_slta_sederajat_l'),
+            DB::raw('SUM(slta_sederajat_p) as total_slta_sederajat_p'),
+            DB::raw('SUM(slta_sederajat_jml) as total_slta_sederajat_jml'),
+            DB::raw('SUM(diploma_i_ii_l) as total_diploma_i_ii_l'),
+            DB::raw('SUM(diploma_i_ii_p) as total_diploma_i_ii_p'),
+            DB::raw('SUM(diploma_i_ii_jml) as total_diploma_i_ii_jml'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_l) as total_akademi_dipl_iii_s_muda_l'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_p) as total_akademi_dipl_iii_s_muda_p'),
+            DB::raw('SUM(akademi_dipl_iii_s_muda_jml) as total_akademi_dipl_iii_s_muda_jml'),
+            DB::raw('SUM(diploma_iv_strata_i_l) as total_diploma_iv_strata_i_l'),
+            DB::raw('SUM(diploma_iv_strata_i_p) as total_diploma_iv_strata_i_p'),
+            DB::raw('SUM(diploma_iv_strata_i_jml) as total_diploma_iv_strata_i_jml'),
+            DB::raw('SUM(strata_ii_l) as total_strata_ii_l'),
+            DB::raw('SUM(strata_ii_p) as total_strata_ii_p'),
+            DB::raw('SUM(strata_ii_jml) as total_strata_ii_jml'),
+            DB::raw('SUM(strata_iii_l) as total_strata_iii_l'),
+            DB::raw('SUM(strata_iii_p) as total_strata_iii_p'),
+            DB::raw('SUM(strata_iii_jml) as total_strata_iii_jml'),
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'jenis_kelamin_pendidikan.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->where('jenis_kelamin_pendidikan.semester', $request['semester'])
+            ->where('jenis_kelamin_pendidikan.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+    }
+    public function dataPendidikanPekerjaan($request) {
+        //belum ada model, migrate dan import
+    }
+    public function  dataPendidikanGolonganDarah($request)
+    {
+        $dataPerkelurahan = PendidikanPendudukJGolonganDarah::select([
+            'golongan_darah_pendidikan.*',
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'golongan_darah_pendidikan.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->where('golongan_darah_pendidikan.semester', $request['semester'])
+            ->where('golongan_darah_pendidikan.tahun', $request['tahun'])
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan = PendidikanPendudukJGolonganDarah::select(
+            DB::raw('SUM(a_lk) as a_lk'),
+            DB::raw('SUM(a_pr) as a_pr'),
+            DB::raw('SUM(a_jml) as a_jml'),
+            DB::raw('SUM(a_m_lk) as a_m_lk'),
+            DB::raw('SUM(a_m_pr) as a_m_pr'),
+            DB::raw('SUM(a_m_jml) as a_m_jml'),
+            DB::raw('SUM(a_p_lk) as a_p_lk'),
+            DB::raw('SUM(a_p_pr) as a_p_pr'),
+            DB::raw('SUM(a_p_jml) as a_p_jml'),
+            DB::raw('SUM(b_lk) as b_lk'),
+            DB::raw('SUM(b_pr) as b_pr'),
+            DB::raw('SUM(b_jml) as b_jml'),
+            DB::raw('SUM(b_m_lk) as b_m_lk'),
+            DB::raw('SUM(b_m_pr) as b_m_pr'),
+            DB::raw('SUM(b_m_jml) as b_m_jml'),
+            DB::raw('SUM(b_p_lk) as b_p_lk'),
+            DB::raw('SUM(b_p_pr) as b_p_pr'),
+            DB::raw('SUM(b_p_jml) as b_p_jml'),
+            DB::raw('SUM(ab_lk) as ab_lk'),
+            DB::raw('SUM(ab_pr) as ab_pr'),
+            DB::raw('SUM(ab_jml) as ab_jml'),
+            DB::raw('SUM(ab_m_lk) as ab_m_lk'),
+            DB::raw('SUM(ab_m_pr) as ab_m_pr'),
+            DB::raw('SUM(ab_m_jml) as ab_m_jml'),
+            DB::raw('SUM(ab_p_lk) as ab_p_lk'),
+            DB::raw('SUM(ab_p_pr) as ab_p_pr'),
+            DB::raw('SUM(ab_p_jml) as ab_p_jml'),
+            DB::raw('SUM(o_lk) as o_lk'),
+            DB::raw('SUM(o_pr) as o_pr'),
+            DB::raw('SUM(o_jml) as o_jml'),
+            DB::raw('SUM(o_m_lk) as o_m_lk'),
+            DB::raw('SUM(o_m_pr) as o_m_pr'),
+            DB::raw('SUM(o_m_jml) as o_m_jml'),
+            DB::raw('SUM(o_p_lk) as o_p_lk'),
+            DB::raw('SUM(o_p_pr) as o_p_pr'),
+            DB::raw('SUM(o_p_jml) as o_p_jml'),
+            DB::raw('SUM(tidak_tahu_lk) as tidak_tahu_lk'),
+            DB::raw('SUM(tidak_tahu_pr) as tidak_tahu_pr'),
+            DB::raw('SUM(tidak_tahu_jml) as tidak_tahu_jml'),
+        )->where('semester', $request['semester'])
+            ->where('tahun', $request['tahun'])
+            ->first();
+        $dataPerkecamatan = PendidikanPendudukJGolonganDarah::select([
+            DB::raw('SUM(a_lk) as a_lk'),
+            DB::raw('SUM(a_pr) as a_pr'),
+            DB::raw('SUM(a_jml) as a_jml'),
+            DB::raw('SUM(a_m_lk) as a_m_lk'),
+            DB::raw('SUM(a_m_pr) as a_m_pr'),
+            DB::raw('SUM(a_m_jml) as a_m_jml'),
+            DB::raw('SUM(a_p_lk) as a_p_lk'),
+            DB::raw('SUM(a_p_pr) as a_p_pr'),
+            DB::raw('SUM(a_p_jml) as a_p_jml'),
+            DB::raw('SUM(b_lk) as b_lk'),
+            DB::raw('SUM(b_pr) as b_pr'),
+            DB::raw('SUM(b_jml) as b_jml'),
+            DB::raw('SUM(b_m_lk) as b_m_lk'),
+            DB::raw('SUM(b_m_pr) as b_m_pr'),
+            DB::raw('SUM(b_m_jml) as b_m_jml'),
+            DB::raw('SUM(b_p_lk) as b_p_lk'),
+            DB::raw('SUM(b_p_pr) as b_p_pr'),
+            DB::raw('SUM(b_p_jml) as b_p_jml'),
+            DB::raw('SUM(ab_lk) as ab_lk'),
+            DB::raw('SUM(ab_pr) as ab_pr'),
+            DB::raw('SUM(ab_jml) as ab_jml'),
+            DB::raw('SUM(ab_m_lk) as ab_m_lk'),
+            DB::raw('SUM(ab_m_pr) as ab_m_pr'),
+            DB::raw('SUM(ab_m_jml) as ab_m_jml'),
+            DB::raw('SUM(ab_p_lk) as ab_p_lk'),
+            DB::raw('SUM(ab_p_pr) as ab_p_pr'),
+            DB::raw('SUM(ab_p_jml) as ab_p_jml'),
+            DB::raw('SUM(o_lk) as o_lk'),
+            DB::raw('SUM(o_pr) as o_pr'),
+            DB::raw('SUM(o_jml) as o_jml'),
+            DB::raw('SUM(o_m_lk) as o_m_lk'),
+            DB::raw('SUM(o_m_pr) as o_m_pr'),
+            DB::raw('SUM(o_m_jml) as o_m_jml'),
+            DB::raw('SUM(o_p_lk) as o_p_lk'),
+            DB::raw('SUM(o_p_pr) as o_p_pr'),
+            DB::raw('SUM(o_p_jml) as o_p_jml'),
+            DB::raw('SUM(tidak_tahu_lk) as tidak_tahu_lk'),
+            DB::raw('SUM(tidak_tahu_pr) as tidak_tahu_pr'),
+            DB::raw('SUM(tidak_tahu_jml) as tidak_tahu_jml'),
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'golongan_darah_pendidikan.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->where('golongan_darah_pendidikan.semester', $request['semester'])
+            ->where('golongan_darah_pendidikan.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->first();
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+    }
+    // calculate data DKB Golonga darah
+    public function dataGolonganDarahJenisKelamin($request){
+        
     }
 }

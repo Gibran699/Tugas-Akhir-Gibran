@@ -15,7 +15,7 @@ class GolonganDarah extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid', 'kode_wilayah','keterangan',
         'a_lk', 'a_pr', 'a_jml',
         'a_m_lk', 'a_m_pr', 'a_m_jml',
         'a_p_lk', 'a_p_pr', 'a_p_jml',

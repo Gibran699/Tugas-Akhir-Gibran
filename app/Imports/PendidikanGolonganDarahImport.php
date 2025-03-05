@@ -24,6 +24,7 @@ class PendidikanGolonganDarahImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
+            'keterangan' => $row['keterangan'],
             'A_LK' => $row['A_LK'],
             'A_PR' => $row['A_PR'],
             'A_JML' => $row['A_JML'],
