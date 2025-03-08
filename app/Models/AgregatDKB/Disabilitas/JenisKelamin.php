@@ -17,7 +17,6 @@ class JenisKelamin extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'uuid', 'kode_wilayah',
-        'kelompok_umur',
         'disabiltas_fisik_lk',
         'disabiltas_fisik_pr',
         'disabiltas_fisik_jml',

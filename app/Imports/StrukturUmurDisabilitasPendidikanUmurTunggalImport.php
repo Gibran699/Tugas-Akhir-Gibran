@@ -25,6 +25,7 @@ class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, Wit
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
+            'umur' => $row['umur'],
             'FISIK_TIDAK_BLM_SEKOLAH_L' => $row['FISIK_TIDAK_BLM_SEKOLAH_L'],
             'FISIK_TIDAK_BLM_SEKOLAH_P' => $row['FISIK_TIDAK_BLM_SEKOLAH_P'],
             'FISIK_TIDAK_BLM_SEKOLAH' => $row['FISIK_TIDAK_BLM_SEKOLAH'],

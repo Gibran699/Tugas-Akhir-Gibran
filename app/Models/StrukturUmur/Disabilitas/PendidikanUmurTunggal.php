@@ -17,6 +17,7 @@ class PendidikanUmurTunggal extends Model
     protected $fillable = [
         'uuid',
         'kode_wilayah',
+        'umur',
         'fisik_tidak_blm_sekolah_l',
         'fisik_tidak_blm_sekolah_p',
         'fisik_tidak_blm_sekolah',

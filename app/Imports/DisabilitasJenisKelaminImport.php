@@ -26,7 +26,6 @@ class DisabilitasJenisKelaminImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'Kelompok_Umur' => $row['Kelompok_Umur'],
             'Disabiltas_Fisik_LK' => $row['Disabiltas_Fisik_LK'],
             'Disabiltas_Fisik_PR' => $row['Disabiltas_Fisik_PR'],
             'Disabiltas_Fisik_JML' => $row['Disabiltas_Fisik_JML'],

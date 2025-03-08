@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
-            $table->string('kelompok_umur');
             $table->bigInteger('disabiltas_fisik_lk');
             $table->bigInteger('disabiltas_fisik_pr');
             $table->bigInteger('disabiltas_fisik_jml');

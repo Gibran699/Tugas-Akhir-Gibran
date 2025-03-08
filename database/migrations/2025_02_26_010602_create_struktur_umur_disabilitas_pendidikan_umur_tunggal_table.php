@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
+            $table->string('umur');
 
             $categories = ['fisik', 'netra_buta', 'rungu_wicara', 'lainnya'];
             $education_levels = [

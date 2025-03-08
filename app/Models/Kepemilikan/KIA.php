@@ -4,6 +4,7 @@ namespace App\Models\Kepemilikan;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KIA extends Model
 {
@@ -53,6 +54,7 @@ class KIA extends Model
         'persen_dinamis',
         'penambahan_lk',
         'penambahan_pr',
+        'penambahan_jml',
         'semester',
         'tahun',
     ];

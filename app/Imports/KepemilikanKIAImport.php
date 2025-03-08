@@ -61,6 +61,7 @@ class KepemilikanKIAImport implements ToModel, WithHeadingRow
             'PERSEN_DINAMIS' => $row['PERSEN_DINAMIS'],
             'PENAMBAHAN_LK' => $row['PENAMBAHAN_LK'],
             'PENAMBAHAN_PR' => $row['PENAMBAHAN_PR'],
+            'penambahan_jml' => $row['penambahan_jml'],
         ]);
     }
 }

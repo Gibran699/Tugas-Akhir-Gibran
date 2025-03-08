@@ -52,6 +52,7 @@ return new class extends Migration
             $table->bigInteger('persen_dinamis');
             $table->bigInteger('penambahan_lk');
             $table->bigInteger('penambahan_pr');
+            $table->bigInteger('penambahan_jml');
             $table->integer('semester');
             $table->integer('tahun');
             $table->timestamps();
