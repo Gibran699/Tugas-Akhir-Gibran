@@ -26,10 +26,10 @@ class StrukturUmurPendudukUsiaSekolahImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'USIA_SD_SEDERAJAT' => $row['USIA_SD_SEDERAJAT'],
-            'USIA_SLTP_SEDERAJAT' => $row['USIA_SLTP_SEDERAJAT'],
-            'USIA_SLTA_SEDERAJAT' => $row['USIA_SLTA_SEDERAJAT'],
-            'USIA_PERGURUAN_TINGGI' => $row['USIA_PERGURUAN_TINGGI'],
+            'usia_sd_sederajat' => $row['usia_sd_sederajat'],
+            'usia_sltp_sederajat' => $row['usia_sltp_sederajat'],
+            'usia_slta_sederajat' => $row['usia_slta_sederajat'],
+            'usia_perguruan_tinggi' => $row['usia_perguruan_tinggi'],
         ]);
     }
 }

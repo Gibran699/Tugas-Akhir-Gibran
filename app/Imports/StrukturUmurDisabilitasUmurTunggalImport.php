@@ -20,30 +20,17 @@ class StrukturUmurDisabilitasUmurTunggalImport implements ToModel, WithHeadingRo
 
     public function model(array $row)
     {
+        $categoryDisabilities = config('dataArray.categoryDisabilities');
         return new UmurTunggal([
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'umur' => $row['umur'],
-            'Disabiltas_Fisik_LK' => $row['Disabiltas_Fisik_LK'],
-            'Disabiltas_Fisik_PR' => $row['Disabiltas_Fisik_PR'],
-            'Disabiltas_Fisik_JML' => $row['Disabiltas_Fisik_JML'],
-            'Disabiltas_Netra_Buta_LK' => $row['Disabiltas_Netra_Buta_LK'],
-            'Disabiltas_Netra_Buta_PR' => $row['Disabiltas_Netra_Buta_PR'],
-            'Disabiltas_Netra_Buta_JML' => $row['Disabiltas_Netra_Buta_JML'],
-            'Disabiltas_Rungu_Wicara_LK' => $row['Disabiltas_Rungu_Wicara_LK'],
-            'Disabiltas_Rungu_Wicara_PR' => $row['Disabiltas_Rungu_Wicara_PR'],
-            'Disabiltas_Rungu_Wicara_JML' => $row['Disabiltas_Rungu_Wicara_JML'],
-            'Disabiltas_Mental_Jiwa_LK' => $row['Disabiltas_Mental_Jiwa_LK'],
-            'Disabiltas_Mental_Jiwa_PR' => $row['Disabiltas_Mental_Jiwa_PR'],
-            'Disabiltas_Mental_Jiwa_JML' => $row['Disabiltas_Mental_Jiwa_JML'],
-            'Disabiltas_Fisik_Mental_LK' => $row['Disabiltas_Fisik_Mental_LK'],
-            'Disabiltas_Fisik_Mental_PR' => $row['Disabiltas_Fisik_Mental_PR'],
-            'Disabiltas_Fisik_Mental_JML' => $row['Disabiltas_Fisik_Mental_JML'],
-            'Disabiltas_Lainya_LK' => $row['Disabiltas_Lainya_LK'],
-            'Disabiltas_Lainya_PR' => $row['Disabiltas_Lainya_PR'],
-            'Disabiltas_Lainya_JML' => $row['Disabiltas_Lainya_JML'],
+            'umur' => $row['umur']
         ]);
+        foreach ($categoryDisabilities as $key) {
+            $data[$key] = $row[$key] ?? null;
+        }
+        return new UmurTunggal($data);
     }
 }

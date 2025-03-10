@@ -19,32 +19,16 @@ class PendudukAgamaImport implements ToModel, WithHeadingRow
     }
     public function model(array $row)
     {
+        $categoryReligios = config('dataArray.categoryReligios');
         return new Agama([
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
-            'kode_wilayah' => $row['kode_wilayah'],
-            'Islam_LK' => $row['islam_lk'],
-            'Islam_PR' => $row['Islam_PR'],
-            'Islam_JML' => $row['Islam_JML'],
-            'Katholik_LK' => $row['Katholik_LK'],
-            'Katholik_PR' => $row['Katholik_PR'],
-            'Katholik_JML' => $row['Katholik_JML'],
-            'Kristen_LK' => $row['Kristen_LK'],
-            'Kristen_PR' => $row['Kristen_PR'],
-            'Kristen_JML' => $row['Kristen_JML'],
-            'Hindu_LK' => $row['Hindu_LK'],
-            'Hindu_PR' => $row['Hindu_PR'],
-            'Hindu_JML' => $row['Hindu_JML'],
-            'Budha_LK' => $row['Budha_LK'],
-            'Budha_PR' => $row['Budha_PR'],
-            'Budha_JML' => $row['Budha_JML'],
-            'Konghucu_LK' => $row['Konghucu_LK'],
-            'Konghucu_PR' => $row['Konghucu_PR'],
-            'Konghucu_JML' => $row['Konghucu_JML'],
-            'Kepercayaan_LK' => $row['Kepercayaan_LK'],
-            'Kepercayaan_PR' => $row['Kepercayaan_PR'],
-            'Kepercayaan_JML' => $row['Kepercayaan_JML'],
+            'kode_wilayah' => $row['kode_wilayah']
         ]);
+        foreach ($categoryReligios as $key) {
+            $data[$key] = $row[$key] ?? null;
+        }
+        return new Agama($data);
     }
 }

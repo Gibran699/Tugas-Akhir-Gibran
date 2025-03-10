@@ -24,14 +24,14 @@ class StrukturUmurPendudukStatusKawinUmurTunggalImport implements ToModel, WithH
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'BELUM_KAWIN_LK' => $row['BELUM_KAWIN_LK'],
-            'BELUM_KAWIN_PR' => $row['BELUM_KAWIN_PR'],
-            'KAWIN_LK' => $row['KAWIN_LK'],
-            'KAWIN_PR' => $row['KAWIN_PR'],
-            'CERAI_HIDUP_LK' => $row['CERAI_HIDUP_LK'],
-            'CERAI_HIDUP_PR' => $row['CERAI_HIDUP_PR'],
-            'CERAI_MATI_LK' => $row['CERAI_MATI_LK'],
-            'CERAI_MATI_PR' => $row['CERAI_MATI_PR'],
+            'belum_kawin_lk' => $row['belum_kawin_lk'],
+            'belum_kawin_pr' => $row['belum_kawin_pr'],
+            'kawin_lk' => $row['kawin_lk'],
+            'kawin_pr' => $row['kawin_pr'],
+            'cerai_hidup_lk' => $row['cerai_hidup_lk'],
+            'cerai_hidup_pr' => $row['cerai_hidup_pr'],
+            'cerai_mati_lk' => $row['cerai_mati_lk'],
+            'cerai_mati_pr' => $row['cerai_mati_pr'],
         ]);
     }
 }

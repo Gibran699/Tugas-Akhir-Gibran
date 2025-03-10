@@ -24,9 +24,9 @@ class StrukturUmurPendudukUsiaMudaProduktifImport implements ToModel, WithHeadin
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'USIA_MUDA' => $row['USIA_MUDA'],
-            'USIA_PRODUKTIF' => $row['USIA_PRODUKTIF'],
-            'USIA_TUA' => $row['USIA_TUA'],
+            'usia_muda' => $row['usia_muda'],
+            'usia_produktif' => $row['usia_produktif'],
+            'usia_tua' => $row['usia_tua'],
         ]);
     }
 }
