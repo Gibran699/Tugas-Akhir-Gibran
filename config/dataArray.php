@@ -83,6 +83,7 @@ return [
     ],
     'listCalculateDataFunction' => [
         'CV8V59hUCF' => 'dataPendudukJenisKelamin',
+        'MupFCfSa6a' => 'dataPendudukAgama'
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_blm_sekolah_l',

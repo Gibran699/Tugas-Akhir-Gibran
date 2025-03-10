@@ -19,14 +19,14 @@ class PendudukAgamaImport implements ToModel, WithHeadingRow
     }
     public function model(array $row)
     {
-        $categoryReligios = config('dataArray.categoryReligios');
-        return new Agama([
+        $categoryReligious = config('dataArray.categoryReligious');
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
-            'kode_wilayah' => $row['kode_wilayah']
-        ]);
-        foreach ($categoryReligios as $key) {
+            'kode_wilayah' => $row['kode_wilayah'],
+        ];
+        foreach ($categoryReligious as $key) {
             $data[$key] = $row[$key] ?? null;
         }
         return new Agama($data);

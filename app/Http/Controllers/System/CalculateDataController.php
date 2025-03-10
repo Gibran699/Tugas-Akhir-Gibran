@@ -87,10 +87,14 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataPendudukAgama($request)
     {
@@ -160,11 +164,15 @@ class CalculateDataController extends Controller
             ->where('agama_penduduk.tahun', $request['tahun'])
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
-            ->first();
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataPendudukGoldar($request)
     {
