@@ -15,36 +15,11 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah', 50);
-            $table->bigInteger('tidak_blm_sekolah_l');
-            $table->bigInteger('tidak_blm_sekolah_p');
-            $table->bigInteger('tidak_blm_sekolah_jml');
-            $table->bigInteger('belum_tamat_sd_sederajat_l');
-            $table->bigInteger('belum_tamat_sd_sederajat_p');
-            $table->bigInteger('belum_tamat_sd_sederajat_jml');
-            $table->bigInteger('tamat_sd_sederajat_l');
-            $table->bigInteger('tamat_sd_sederajat_p');
-            $table->bigInteger('tamat_sd_sederajat_jml');
-            $table->bigInteger('sltp_sederajat_l');
-            $table->bigInteger('sltp_sederajat_p');
-            $table->bigInteger('sltp_sederajat_jml');
-            $table->bigInteger('slta_sederajat_l');
-            $table->bigInteger('slta_sederajat_p');
-            $table->bigInteger('slta_sederajat_jml');
-            $table->bigInteger('diploma_i_ii_l');
-            $table->bigInteger('diploma_i_ii_p');
-            $table->bigInteger('diploma_i_ii_jml');
-            $table->bigInteger('akademi_dipl_iii_s_muda_l');
-            $table->bigInteger('akademi_dipl_iii_s_muda_p');
-            $table->bigInteger('akademi_dipl_iii_s_muda_jml');
-            $table->bigInteger('diploma_iv_strata_i_l');
-            $table->bigInteger('diploma_iv_strata_i_p');
-            $table->bigInteger('diploma_iv_strata_i_jml');
-            $table->bigInteger('strata_ii_l');
-            $table->bigInteger('strata_ii_p');
-            $table->bigInteger('strata_ii_jml');
-            $table->bigInteger('strata_iii_l');
-            $table->bigInteger('strata_iii_p');
-            $table->bigInteger('strata_iii_jml');
+            
+            $relationshipFamily = config('dataArray.categoryRelationshipFamily');
+            foreach ($relationshipFamily as $key) {
+                $table->bigInteger($key);
+            }
             $table->integer('semester');
             $table->integer('tahun');
             $table->softDeletes();

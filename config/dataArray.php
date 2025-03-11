@@ -83,7 +83,10 @@ return [
     ],
     'listCalculateDataFunction' => [
         'CV8V59hUCF' => 'dataPendudukJenisKelamin',
-        'MupFCfSa6a' => 'dataPendudukAgama'
+        'MupFCfSa6a' => 'dataPendudukAgama',
+        'aPH7zF09S1' => 'dataPendudukGoldar',
+        'bfl4aaeCTi' => 'dataPendudukHubKel',
+        'fFKZKP7AnA' => 'dataPendudukPekerjaan',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_blm_sekolah_l',
@@ -615,8 +618,8 @@ return [
         'wakil_presiden_p',
         'anggota_mahkamah_konstitusi_l',
         'anggota_mahkamah_konstitusi_p',
-        'anggota_kabinet_kementrian_l',
-        'anggota_kabinet_kementrian_p',
+        'anggota_kabinet_kementerian_l',
+        'anggota_kabinet_kementerian_p',
         'duta_besar_l',
         'duta_besar_p',
         'gubernur_l',
@@ -691,8 +694,8 @@ return [
         'artis_p',
         'atlit_l',
         'atlit_p',
-        'cheff_l',
-        'cheff_p',
+        'chef_l',
+        'chef_p',
         'manajer_l',
         'manajer_p',
         'tenaga_tata_usaha_l',
