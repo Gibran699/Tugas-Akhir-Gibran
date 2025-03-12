@@ -1,5 +1,8 @@
 @extends('layout.master')
 @section('content')
+@php
+    $religoius = config('dataArray.categoryReligious');
+@endphp
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
@@ -14,7 +17,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        {!! Form::open([
+                            'id' => 'formSearchStatusKawinAgama',
+                            'method' => 'post',
+                            'route' => ['search_data', '2XSDKgCQJH'],
+                        ]) !!}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
@@ -28,12 +35,17 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end">
+                            {{-- <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
+                            </div> --}}
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-primary" id="submitSearch">
+                                    <i class="fa fa-list"></i> Tampilkan
+                                </button>
                             </div>
-                        </form>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -42,38 +54,66 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Status Kawin - Agama <span id="tahunSemester">I
-                                2025</span></h4>
+                        <h4 class="card-title" id="tahunSemester"></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="table" class="display" style="min-width: 845px">
+                            <table class="display table table-striped" id="tableSum">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Agama</th>
+                                        <th class="text-uppercase">Keterangan</th>
+                                        <th class="text-uppercase">Laki-Laki</th>
+                                        <th class="text-uppercase">Perempuan</th>
+                                        <th class="text-uppercase">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkecamatan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKecamatan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">KECAMATAN</th>
+                                        <th class="text-uppercase">STATUS KAWIN</th>
+                                        @foreach ($religoius as $item)
+                                        <th class="text-uppercase">{{$item}}</th> 
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkelurahan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKelurahan" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase">KECAMATAN</th>
                                         <th class="text-uppercase">KELURAHAN</th>
-                                        <th class="text-uppercase">Status Kawin</th>
-                                        <th class="text-uppercase">Islam LK</th>
-                                        <th class="text-uppercase">Islam PR</th>
-                                        <th class="text-uppercase">Islam JML</th>
-                                        <th class="text-uppercase">Katholik LK</th>
-                                        <th class="text-uppercase">Katholik PR</th>
-                                        <th class="text-uppercase">Katholik JML</th>
-                                        <th class="text-uppercase">Kristen LK</th>
-                                        <th class="text-uppercase">Kristen PR</th>
-                                        <th class="text-uppercase">Kristen JML</th>
-                                        <th class="text-uppercase">Hindu LK</th>
-                                        <th class="text-uppercase">Hindu PR</th>
-                                        <th class="text-uppercase">Hindu JML</th>
-                                        <th class="text-uppercase">Budha LK</th>
-                                        <th class="text-uppercase">Budha PR</th>
-                                        <th class="text-uppercase">Budha JML</th>
-                                        <th class="text-uppercase">Konghucu LK</th>
-                                        <th class="text-uppercase">Konghucu PR</th>
-                                        <th class="text-uppercase">Konghucu JML</th>
-                                        <th class="text-uppercase">Kepercayaan LK</th>
-                                        <th class="text-uppercase">Kepercayaan PR</th>
-                                        <th class="text-uppercase">Kepercayaan JML</th>
+                                        <th class="text-uppercase">STATUS KAWIN</th>
+                                        @foreach ($religoius as $item)
+                                        <th class="text-uppercase">{{$item}}</th> 
+                                        @endforeach
                                     </tr>
                                 </thead>
                             </table>
@@ -83,5 +123,9 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
+    <script src="{{ asset('js/global_func.js') }}"></script>
+    <script>
+        generateYearOptions('tahun');
+    </script>
+    <script src="{{asset('js/index/agregat_dkb/status_kawin/agama.js')}}"></script>
 @endsection

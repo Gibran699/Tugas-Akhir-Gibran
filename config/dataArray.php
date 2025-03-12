@@ -40,6 +40,10 @@ return [
         '36' => 'App\Imports\StrukturUmurPendudukUmurTunggalImport',
         '37' => 'App\Imports\StrukturUmurPendudukUsiaMudaProduktifImport',
         '38' => 'App\Imports\StrukturUmurPendudukUsiaSekolahImport',
+        '39' => 'App\Imports\StatusKawinPendudukAgamaImport',
+        '40' => 'App\Imports\StatusKawinPendudukJenisKelaminImport',
+        '41' => 'App\Imports\StatusKawinPendudukPekerjaanImport',
+
     ],
     'listFileModel' => [
         '1' => 'App\Models\AgregatDKB\Disabilitas\JenisKelamin',
@@ -80,6 +84,9 @@ return [
         '36' => 'App\Models\StrukturUmur\Penduduk\UmurTunggal',
         '37' => 'App\Models\StrukturUmur\Penduduk\UsiaMudaProduktif',
         '38' => 'App\Models\StrukturUmur\Penduduk\UsiaSekolah',
+        '39' => 'App\Models\AgregatDKB\StatusKawin\Agama',
+        '40' => 'App\Models\AgregatDKB\StatusKawin\JenisKelamin',
+        '41' => 'App\Models\AgregatDKB\StatusKawin\Pekerjaan',
     ],
     'listCalculateDataFunction' => [
         'CV8V59hUCF' => 'dataPendudukJenisKelamin',
@@ -88,6 +95,11 @@ return [
         'bfl4aaeCTi' => 'dataPendudukHubKel',
         'fFKZKP7AnA' => 'dataPendudukPekerjaan',
         'nYtZCUxdr6' =>  'dataKepalaKeluargaAgama',
+        'MNJiVyMrxR' =>  'dataKepalaKeluargaJenisKelamin',
+        'gblPf8pfSp' =>  'dataKepalaKeluargaPendidikan',
+        'aQIpF1uiEO' =>  'dataKepalaKeluargaPekerjaan',
+        'ZvGL0vPJLC' =>  'dataKelapaKeluargaStatusKawin',
+        '2XSDKgCQJH' =>  'dataStatusKawinAgama',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_blm_sekolah_l',
@@ -503,14 +515,14 @@ return [
         'lebih_75_cerai_mati_pr',
     ],
     'categoryMarriageStatus' => [
-        'belum_kawin_lk',
-        'belum_kawin_pr',
         'kawin_lk',
         'kawin_pr',
+        'belum_kawin_lk',
+        'belum_kawin_pr',
         'cerai_hidup_lk',
         'cerai_hidup_pr',
         'cerai_mati_lk',
-        'cerai_mati_pr',
+        'cerai_mati_pr'
     ],
     'categoryJob' =>[
         'belum_tidak_bekerja_l',
