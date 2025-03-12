@@ -296,7 +296,8 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $categoryJob),['mstr_kecamatan.nama as kecamatan_nama']
+                }, $categoryJob),
+                ['mstr_kecamatan.nama as kecamatan_nama']
             )
         )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'pekerjaan_penduduk.kode_wilayah')
@@ -306,10 +307,10 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-            ];
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
@@ -318,6 +319,7 @@ class CalculateDataController extends Controller
     // calculate data DKB kepala keluarga
     public function dataKepalaKeluargaAgama($request)
     {
+        $categoryReligious = config('dataArray.categoryReligious');
         $dataPerkelurahan = KepalaKeluargaAgama::select([
             'agama_kepala_keluarga.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -330,65 +332,37 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepalaKeluargaAgama::select(
-            DB::raw('SUM(islam_lk) as islam_lk'),
-            DB::raw('SUM(islam_pr) as islam_pr'),
-            DB::raw('SUM(islam_jml) as islam_jml'),
-            DB::raw('SUM(katholik_lk) as katholik_lk'),
-            DB::raw('SUM(katholik_pr) as katholik_pr'),
-            DB::raw('SUM(katholik_jml) as katholik_jml'),
-            DB::raw('SUM(kristen_lk) as kristen_lk'),
-            DB::raw('SUM(kristen_pr) as kristen_pr'),
-            DB::raw('SUM(kristen_jml) as kristen_jml'),
-            DB::raw('SUM(hindu_lk) as hindu_lk'),
-            DB::raw('SUM(hindu_pr) as hindu_pr'),
-            DB::raw('SUM(hindu_jml) as hindu_jml'),
-            DB::raw('SUM(budha_lk) as budha_lk'),
-            DB::raw('SUM(budha_pr) as budha_pr'),
-            DB::raw('SUM(budha_jml) as budha_jml'),
-            DB::raw('SUM(konghucu_lk) as konghucu_lk'),
-            DB::raw('SUM(konghucu_pr) as konghucu_pr'),
-            DB::raw('SUM(konghucu_jml) as konghucu_jml'),
-            DB::raw('SUM(kepercayaan_lk) as kepercayaan_lk'),
-            DB::raw('SUM(kepercayaan_pr) as kepercayaan_pr'),
-            DB::raw('SUM(kepercayaan_jml) as kepercayaan_jml'),
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $categoryReligious)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
             ->first();
-        $dataPerkecamatan = KepalaKeluargaAgama::select([
-            DB::raw('SUM(islam_lk) as islam_lk'),
-            DB::raw('SUM(islam_pr) as islam_pr'),
-            DB::raw('SUM(islam_jml) as islam_jml'),
-            DB::raw('SUM(katholik_lk) as katholik_lk'),
-            DB::raw('SUM(katholik_pr) as katholik_pr'),
-            DB::raw('SUM(katholik_jml) as katholik_jml'),
-            DB::raw('SUM(kristen_lk) as kristen_lk'),
-            DB::raw('SUM(kristen_pr) as kristen_pr'),
-            DB::raw('SUM(kristen_jml) as kristen_jml'),
-            DB::raw('SUM(hindu_lk) as hindu_lk'),
-            DB::raw('SUM(hindu_pr) as hindu_pr'),
-            DB::raw('SUM(hindu_jml) as hindu_jml'),
-            DB::raw('SUM(budha_lk) as budha_lk'),
-            DB::raw('SUM(budha_pr) as budha_pr'),
-            DB::raw('SUM(budha_jml) as budha_jml'),
-            DB::raw('SUM(konghucu_lk) as konghucu_lk'),
-            DB::raw('SUM(konghucu_pr) as konghucu_pr'),
-            DB::raw('SUM(konghucu_jml) as konghucu_jml'),
-            DB::raw('SUM(kepercayaan_lk) as kepercayaan_lk'),
-            DB::raw('SUM(kepercayaan_pr) as kepercayaan_pr'),
-            DB::raw('SUM(kepercayaan_jml) as kepercayaan_jml'),
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $dataPerkecamatan = KepalaKeluargaAgama::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $categoryReligious),
+                ['mstr_kecamatan.nama as kecamatan_nama']
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'agama_kepala_keluarga.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('agama_kepala_keluarga.semester', $request['semester'])
             ->where('agama_kepala_keluarga.tahun', $request['tahun'])
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
-            ->first();
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepalaKeluargaJenisKelamin($request)
     {

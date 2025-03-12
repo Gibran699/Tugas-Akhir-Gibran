@@ -21,12 +21,12 @@ class PendudukHubunganKeluargaImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryRelationshipFamily = config('dataArray.categoryRelationshipFamily');
-        return new HubunganKeluarga([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah']
-        ]);
+        ];
         foreach ($categoryRelationshipFamily as $key) {
             $data[$key] = $row[$key] ?? null;
         }

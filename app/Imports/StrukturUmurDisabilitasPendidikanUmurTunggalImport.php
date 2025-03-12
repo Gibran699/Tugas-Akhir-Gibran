@@ -21,13 +21,13 @@ class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, Wit
     public function model(array $row)
     {
         $categoryDisabilities = config('dataArray.categoryDisabilities');
-        return new PendidikanUmurTunggal([
+        $data =[
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
             'umur' => $row['umur'],
-        ]);
+        ];
         foreach ($categoryDisabilities as $key) {
             $data[$key] = $row[$key] ?? null;
         }

@@ -21,12 +21,12 @@ class StrukturUmurDisabilitasUsiaSekolahKelompokUmurImport implements ToModel, W
     public function model(array $row)
     {
         $categoryAgeSchollDisabilities = config('dataArray.categoryAgeSchollDisabilities');
-        return new UsiaSekolahKelompokUmur([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah']
-        ]);
+        ];
         foreach ($categoryAgeSchollDisabilities as $key) {
             $data[$key] = $row[$key] ?? null;
         }

@@ -21,13 +21,13 @@ class DisabilitasPendidikanImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $cetegoryEducation = config('dataArray.categoryEducation');
-        return new Pendidikan([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
             'keterangan' => $row['keterangan'],
-        ]);
+        ];
         foreach ($cetegoryEducation as $key) {
             $data[$key] = $row[$key] ?? null;
         }

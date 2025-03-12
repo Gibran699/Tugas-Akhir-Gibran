@@ -20,13 +20,13 @@ class KepemilikanAktaKelahiranImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryAktaKelahiranOwnerShip = config('dataArray.categoryAktaKelahiranOwnerShip');
-        return new AktaKelahiran([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
             'keterangan' => $row['keterangan'],
-        ]);
+        ];
         foreach ($categoryAktaKelahiranOwnerShip as $key) {
             $data[$key] = $row[$key] ?? null;
         }

@@ -21,12 +21,12 @@ class StrukturUmurGolonganDarahUmurTunggalImport implements ToModel, WithHeading
     public function model(array $row)
     {
         $categoryBlood = config('dataArray.categoryBlood');
-        return new UmurTunggal([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah']
-        ]);
+        ];
         foreach ($categoryBlood as $key) {
             $data[$key] = $row[$key] ?? null;
         }

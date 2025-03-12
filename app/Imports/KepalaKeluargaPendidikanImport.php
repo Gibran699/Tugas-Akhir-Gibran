@@ -21,12 +21,12 @@ class KepalaKeluargaPendidikanImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryEducation = config('dataArray.categoryEducation');
-        return new Pendidikan([
+        $data =[
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-        ]);
+        ];
         foreach ($categoryEducation as $key) {
             $data[$key] = $row[$key] ?? null;
         }

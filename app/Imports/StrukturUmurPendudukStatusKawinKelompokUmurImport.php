@@ -22,12 +22,12 @@ class StrukturUmurPendudukStatusKawinKelompokUmurImport implements ToModel, With
     public function model(array $row)
     {
         $categoryAgeGroupMarriageStatus = config('dataArray.categoryAgeGroupMarriageStatus');
-        return new StatusKawinKelompokUmur([
+        $data =[
             'uuid' => Str::uuid(),
             'tahun' => $this->tahun,
             'semester' => $this->semester,
             'kode_wilayah' => $row['kode_wilayah']
-        ]);
+        ];
         foreach ($categoryAgeGroupMarriageStatus as $key) {
             $data[$key] = $row[$key] ?? null;
         }

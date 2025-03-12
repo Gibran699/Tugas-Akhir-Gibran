@@ -21,9 +21,9 @@ return new class extends Migration
             $table->bigInteger('kristen_lk');
             $table->bigInteger('kristen_pr');
             $table->bigInteger('kristen_jml');
-            $table->bigInteger('katolik_lk');
-            $table->bigInteger('katolik_pr');
-            $table->bigInteger('katolik_jml');
+            $table->bigInteger('katholik_lk');
+            $table->bigInteger('katholik_pr');
+            $table->bigInteger('katholik_jml');
             $table->bigInteger('hindu_lk');
             $table->bigInteger('hindu_pr');
             $table->bigInteger('hindu_jml');

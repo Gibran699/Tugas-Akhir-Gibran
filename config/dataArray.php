@@ -87,6 +87,7 @@ return [
         'aPH7zF09S1' => 'dataPendudukGoldar',
         'bfl4aaeCTi' => 'dataPendudukHubKel',
         'fFKZKP7AnA' => 'dataPendudukPekerjaan',
+        'nYtZCUxdr6' =>  'dataKepalaKeluargaAgama',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_blm_sekolah_l',

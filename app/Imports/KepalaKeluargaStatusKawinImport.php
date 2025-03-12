@@ -20,12 +20,12 @@ class KepalaKeluargaStatusKawinImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryMarriageStatus = config('dataArray.categoryMarriageStatus');
-        return new StatusKawin([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-        ]);
+        ];
         foreach ($categoryMarriageStatus as $key) {
             $data[$key] = $row[$key] ?? null;
         }

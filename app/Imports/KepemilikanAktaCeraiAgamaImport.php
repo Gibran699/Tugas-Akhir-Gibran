@@ -21,12 +21,12 @@ class KepemilikanAktaCeraiAgamaImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         $categoryReligiosOwnerShip = config('dataArray.categoryReligiosOwnerShip');
-        return new AktaCeraiAgama([
+        $data =[
             'uuid' => Str::uuid(),
             'kode_wilayah' => $row['kode_wilayah'],
             'semester' => $this->semester,
             'tahun' => $this->tahun,
-        ]);
+        ];
         foreach ($categoryReligiosOwnerShip as $key) {
             $data[$key] = $row[$key] ?? null;
         }

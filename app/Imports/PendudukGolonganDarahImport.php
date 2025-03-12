@@ -20,12 +20,12 @@ class PendudukGolonganDarahImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryBlood = config('dataArray.categoryBlood');
-        return new GolonganDarah([
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-        ]);
+        ];
         foreach ($categoryBlood as $key) {
             $data[$key] = $row[$key] ?? null;
         }

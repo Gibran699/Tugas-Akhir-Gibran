@@ -20,13 +20,13 @@ class StrukturUmurAgamaKelompokUmurImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryReligious = config('dataArray.categoryReligious');
-        return new KelompokUmur([
+        $data =[
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
             'kelompok_umur' => $row['kelompok_umur'],
-        ]);
+        ];
         foreach ($categoryReligious as $key) {
             $data[$key] = $row[$key] ?? null;
         }

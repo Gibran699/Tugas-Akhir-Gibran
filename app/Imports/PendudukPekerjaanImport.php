@@ -20,12 +20,12 @@ class PendudukPekerjaanImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $categoryJob = config('dataArray.categoryJob');
-        return new Pekerjaan([
+        $data= [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah']
-        ]);
+        ];
         foreach ($categoryJob as $key) {
             $data[$key] = $row[$key];
         }
