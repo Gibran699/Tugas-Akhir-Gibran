@@ -14,7 +14,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        {!! Form::open([
+                            'id' => 'formSearchKepemilikanAktaKelahiran',
+                            'method' => 'post',
+                            'route' => ['search_data', '6D6A18O1Hm'],
+                        ]) !!}
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
@@ -28,12 +32,12 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <select name="kategori" id="kategori" class="form-control default-select">
+                                    <select name="keterangan" id="kategori" class="form-control default-select">
                                         <option value="" disabled selected>--PILIH KATEGORI--</option>
                                         <option value="1">SEMUA USIA</option>
                                         <option value="2">0-1</option>
-                                        <option value="2">0-5</option>
-                                        <option value="2">0-18</option>
+                                        <option value="3">0-5</option>
+                                        <option value="4">0-18</option>
                                     </select>
                                 </div>
                             </div>
@@ -42,7 +46,7 @@
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
                             </div>
-                        </form>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>

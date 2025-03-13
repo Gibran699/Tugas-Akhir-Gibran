@@ -1008,197 +1008,107 @@ class CalculateDataController extends Controller
     // calculate data DKB kepemilikan akta kelahiran
     public function dataKepemilikanAktaKelahiran($request)
     {
-        $dataPerkelurahan = KepemilikanAktaKelahiran::select([
-            'akta_kelahiran.*',
-            'mstr_kelurahan.nama as kelurahan_nama',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $categoryAktaKelahiranOwnerShip = config('dataArray.categoryAktaKelahiranOwnerShip');
+        $dataPerkelurahan = KepemilikanAktaKelahiran::select(
+            array_merge(
+                [
+                    'mstr_kelurahan.nama as kelurahan_nama',
+                    'mstr_kecamatan.nama as kecamatan_nama',
+                    DB::raw('COALESCE(SUM(wajib_akta_awal_jml), 0) as total_wajib_awal'),
+                    DB::raw('COALESCE(SUM(memiliki_awal_jml), 0) as total_memiliki_awal'),
+                    DB::raw('COALESCE(SUM(wajib_akta_dinamis_jml), 0) as total_wajib_dinamis'),
+                    DB::raw('COALESCE(SUM(memiliki_dinamis_jml), 0) as total_memiliki_dinamis'),
+                    DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
+                    DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
+                    DB::raw("
+                        CASE 
+                            WHEN keterangan = 1 THEN 'Semua Usia'
+                            WHEN keterangan = 2 THEN '0-1 Tahun'
+                            WHEN keterangan = 3 THEN '0-5 Tahun'
+                            WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                            ELSE 'Tidak Diketahui'
+                        END as keterangan
+                    ")
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryAktaKelahiranOwnerShip)
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'akta_kelahiran.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kelahiran.semester', $request['semester'])
             ->where('akta_kelahiran.tahun', $request['tahun'])
+            ->where('akta_kelahiran.keterangan', $request['keterangan'])
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'keterangan')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+
         $dataKeseluruhan = KepemilikanAktaKelahiran::select(
-            // Wajib Akta Awal
-            DB::raw('SUM(wajib_akta_awal_lk) as total_wajib_akta_awal_lk'),
-            DB::raw('SUM(wajib_akta_awal_pr) as total_wajib_akta_awal_pr'),
-            DB::raw('SUM(wajib_akta_awal_jml) as total_wajib_akta_awal_jml'),
-
-            // Memiliki Akta Awal
-            DB::raw('SUM(memiliki_awal_lk) as total_memiliki_awal_lk'),
-            DB::raw('SUM(memiliki_awal_pr) as total_memiliki_awal_pr'),
-            DB::raw('SUM(memiliki_awal_jml) as total_memiliki_awal_jml'),
-
-            // Belum Memiliki Akta Awal
-            DB::raw('SUM(belum_memiliki_awal_lk) as total_belum_memiliki_awal_lk'),
-            DB::raw('SUM(belum_memiliki_awal_pr) as total_belum_memiliki_awal_pr'),
-            DB::raw('SUM(belum_memiliki_awal_jml) as total_belum_memiliki_awal_jml'),
-
-            // Persen Awal
-            DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml) * 100) as persen_memiliki_awal'),
-
-            // Usia Lebih dari Target
-            DB::raw('SUM(usia_lebih_dari_target_lk) as total_usia_lebih_dari_target_lk'),
-            DB::raw('SUM(usia_lebih_dari_target_pr) as total_usia_lebih_dari_target_pr'),
-            DB::raw('SUM(usia_lebih_dari_target_jml) as total_usia_lebih_dari_target_jml'),
-
-            // Meninggal
-            DB::raw('SUM(meninggal_lk) as total_meninggal_lk'),
-            DB::raw('SUM(meninggal_pr) as total_meninggal_pr'),
-            DB::raw('SUM(meninggal_jml) as total_meninggal_jml'),
-
-            // Nonaktif
-            DB::raw('SUM(nonaktif_lk) as total_nonaktif_lk'),
-            DB::raw('SUM(nonaktif_pr) as total_nonaktif_pr'),
-            DB::raw('SUM(nonaktif_jml) as total_nonaktif_jml'),
-
-            // Pindah
-            DB::raw('SUM(pindah_lk) as total_pindah_lk'),
-            DB::raw('SUM(pindah_pr) as total_pindah_pr'),
-            DB::raw('SUM(pindah_jml) as total_pindah_jml'),
-
-            // Datang
-            DB::raw('SUM(datang_lk) as total_datang_lk'),
-            DB::raw('SUM(datang_pr) as total_datang_pr'),
-            DB::raw('SUM(datang_jml) as total_datang_jml'),
-
-            // Hapus Operator
-            DB::raw('SUM(hapus_operator_lk) as total_hapus_operator_lk'),
-            DB::raw('SUM(hapus_operator_pr) as total_hapus_operator_pr'),
-            DB::raw('SUM(hapus_operator_jml) as total_hapus_operator_jml'),
-
-            // Terbit Akta Baru Dalam DKB
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_lk) as total_terbit_akta_baru_dalam_dkb_lk'),
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_pr) as total_terbit_akta_baru_dalam_dkb_pr'),
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_jml) as total_terbit_akta_baru_dalam_dkb_jml'),
-
-            // Terbit Akta Baru Luar DKB
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_lk) as total_terbit_akta_baru_luar_dkb_lk'),
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_pr) as total_terbit_akta_baru_luar_dkb_pr'),
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_jml) as total_terbit_akta_baru_luar_dkb_jml'),
-
-            // Wajib Akta Dinamis
-            DB::raw('SUM(wajib_akta_dinamis_lk) as total_wajib_akta_dinamis_lk'),
-            DB::raw('SUM(wajib_akta_dinamis_pr) as total_wajib_akta_dinamis_pr'),
-            DB::raw('SUM(wajib_akta_dinamis_jml) as total_wajib_akta_dinamis_jml'),
-
-            // Memiliki Akta Dinamis
-            DB::raw('SUM(memiliki_dinamis_lk) as total_memiliki_dinamis_lk'),
-            DB::raw('SUM(memiliki_dinamis_pr) as total_memiliki_dinamis_pr'),
-            DB::raw('SUM(memiliki_dinamis_jml) as total_memiliki_dinamis_jml'),
-
-            // Belum Memiliki Akta Dinamis
-            DB::raw('SUM(belum_memiliki_dinamis_lk) as total_belum_memiliki_dinamis_lk'),
-            DB::raw('SUM(belum_memiliki_dinamis_pr) as total_belum_memiliki_dinamis_pr'),
-            DB::raw('SUM(belum_memiliki_dinamis_jml) as total_belum_memiliki_dinamis_jml'),
-
-            // Persen Dinamis
-            DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml) * 100) as persen_memiliki_dinamis'),
-
-            // Penambahan
-            DB::raw('SUM(penambahan_lk) as total_penambahan_lk'),
-            DB::raw('SUM(penambahan_pr) as total_penambahan_pr'),
-            DB::raw('SUM(penambahan_jml) as total_penambahan_jml'),
-            'akta_kelahiran.keterangan as keterangan_umur'
-        )->where('semester', $request['semester'])
+            array_merge(
+                [
+                    DB::raw('COALESCE(SUM(wajib_akta_awal_jml), 0) as total_wajib_awal'),
+                    DB::raw('COALESCE(SUM(memiliki_awal_jml), 0) as total_memiliki_awal'),
+                    DB::raw('COALESCE(SUM(wajib_akta_dinamis_jml), 0) as total_wajib_dinamis'),
+                    DB::raw('COALESCE(SUM(memiliki_dinamis_jml), 0) as total_memiliki_dinamis'),
+                    DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
+                    DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
+                    DB::raw("
+                CASE 
+                    WHEN keterangan = 1 THEN 'Semua Usia'
+                    WHEN keterangan = 2 THEN '0-1 Tahun'
+                    WHEN keterangan = 3 THEN '0-5 Tahun'
+                    WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                    ELSE 'Tidak Diketahui'
+                END as keterangan
+            ")
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryAktaKelahiranOwnerShip)
+            )
+        )
+            ->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = KepemilikanAktaKelahiran::select([
-            // Wajib Akta Awal
-            DB::raw('SUM(wajib_akta_awal_lk) as total_wajib_akta_awal_lk'),
-            DB::raw('SUM(wajib_akta_awal_pr) as total_wajib_akta_awal_pr'),
-            DB::raw('SUM(wajib_akta_awal_jml) as total_wajib_akta_awal_jml'),
-
-            // Memiliki Akta Awal
-            DB::raw('SUM(memiliki_awal_lk) as total_memiliki_awal_lk'),
-            DB::raw('SUM(memiliki_awal_pr) as total_memiliki_awal_pr'),
-            DB::raw('SUM(memiliki_awal_jml) as total_memiliki_awal_jml'),
-
-            // Belum Memiliki Akta Awal
-            DB::raw('SUM(belum_memiliki_awal_lk) as total_belum_memiliki_awal_lk'),
-            DB::raw('SUM(belum_memiliki_awal_pr) as total_belum_memiliki_awal_pr'),
-            DB::raw('SUM(belum_memiliki_awal_jml) as total_belum_memiliki_awal_jml'),
-
-            // Persen Awal
-            DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml) * 100) as persen_memiliki_awal'),
-
-            // Usia Lebih dari Target
-            DB::raw('SUM(usia_lebih_dari_target_lk) as total_usia_lebih_dari_target_lk'),
-            DB::raw('SUM(usia_lebih_dari_target_pr) as total_usia_lebih_dari_target_pr'),
-            DB::raw('SUM(usia_lebih_dari_target_jml) as total_usia_lebih_dari_target_jml'),
-
-            // Meninggal
-            DB::raw('SUM(meninggal_lk) as total_meninggal_lk'),
-            DB::raw('SUM(meninggal_pr) as total_meninggal_pr'),
-            DB::raw('SUM(meninggal_jml) as total_meninggal_jml'),
-
-            // Nonaktif
-            DB::raw('SUM(nonaktif_lk) as total_nonaktif_lk'),
-            DB::raw('SUM(nonaktif_pr) as total_nonaktif_pr'),
-            DB::raw('SUM(nonaktif_jml) as total_nonaktif_jml'),
-
-            // Pindah
-            DB::raw('SUM(pindah_lk) as total_pindah_lk'),
-            DB::raw('SUM(pindah_pr) as total_pindah_pr'),
-            DB::raw('SUM(pindah_jml) as total_pindah_jml'),
-
-            // Datang
-            DB::raw('SUM(datang_lk) as total_datang_lk'),
-            DB::raw('SUM(datang_pr) as total_datang_pr'),
-            DB::raw('SUM(datang_jml) as total_datang_jml'),
-
-            // Hapus Operator
-            DB::raw('SUM(hapus_operator_lk) as total_hapus_operator_lk'),
-            DB::raw('SUM(hapus_operator_pr) as total_hapus_operator_pr'),
-            DB::raw('SUM(hapus_operator_jml) as total_hapus_operator_jml'),
-
-            // Terbit Akta Baru Dalam DKB
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_lk) as total_terbit_akta_baru_dalam_dkb_lk'),
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_pr) as total_terbit_akta_baru_dalam_dkb_pr'),
-            DB::raw('SUM(terbit_akta_baru_dalam_dkb_jml) as total_terbit_akta_baru_dalam_dkb_jml'),
-
-            // Terbit Akta Baru Luar DKB
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_lk) as total_terbit_akta_baru_luar_dkb_lk'),
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_pr) as total_terbit_akta_baru_luar_dkb_pr'),
-            DB::raw('SUM(terbit_akta_baru_luar_dkb_jml) as total_terbit_akta_baru_luar_dkb_jml'),
-
-            // Wajib Akta Dinamis
-            DB::raw('SUM(wajib_akta_dinamis_lk) as total_wajib_akta_dinamis_lk'),
-            DB::raw('SUM(wajib_akta_dinamis_pr) as total_wajib_akta_dinamis_pr'),
-            DB::raw('SUM(wajib_akta_dinamis_jml) as total_wajib_akta_dinamis_jml'),
-
-            // Memiliki Akta Dinamis
-            DB::raw('SUM(memiliki_dinamis_lk) as total_memiliki_dinamis_lk'),
-            DB::raw('SUM(memiliki_dinamis_pr) as total_memiliki_dinamis_pr'),
-            DB::raw('SUM(memiliki_dinamis_jml) as total_memiliki_dinamis_jml'),
-
-            // Belum Memiliki Akta Dinamis
-            DB::raw('SUM(belum_memiliki_dinamis_lk) as total_belum_memiliki_dinamis_lk'),
-            DB::raw('SUM(belum_memiliki_dinamis_pr) as total_belum_memiliki_dinamis_pr'),
-            DB::raw('SUM(belum_memiliki_dinamis_jml) as total_belum_memiliki_dinamis_jml'),
-
-            // Persen Dinamis
-            DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml) * 100) as persen_memiliki_dinamis'),
-
-            // Penambahan
-            DB::raw('SUM(penambahan_lk) as total_penambahan_lk'),
-            DB::raw('SUM(penambahan_pr) as total_penambahan_pr'),
-            DB::raw('SUM(penambahan_jml) as total_penambahan_jml'),
-            'akta_kelahiran.keterangan as keterangan_umur',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->where('keterangan', $request['keterangan'])
+            ->groupBy('keterangan')
+            ->get();
+        $dataPerkecamatan = KepemilikanAktaKelahiran::select(
+            array_merge(
+                [
+                    'mstr_kecamatan.kode as kode_kecamatan',
+                    'mstr_kecamatan.nama as nama_kecamatan',
+                    DB::raw('COALESCE(SUM(wajib_akta_awal_jml), 0) as total_wajib_awal'),
+                    DB::raw('COALESCE(SUM(memiliki_awal_jml), 0) as total_memiliki_awal'),
+                    DB::raw('COALESCE(SUM(wajib_akta_dinamis_jml), 0) as total_wajib_dinamis'),
+                    DB::raw('COALESCE(SUM(memiliki_dinamis_jml), 0) as total_memiliki_dinamis'),
+                    DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
+                    DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
+                    DB::raw("
+                            CASE 
+                                WHEN keterangan = 1 THEN 'Semua Usia'
+                                WHEN keterangan = 2 THEN '0-1 Tahun'
+                                WHEN keterangan = 3 THEN '0-5 Tahun'
+                                WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                                ELSE 'Tidak Diketahui'
+                            END as keterangan
+                        ")
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryAktaKelahiranOwnerShip)
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'akta_kelahiran.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kelahiran.semester', $request['semester'])
             ->where('akta_kelahiran.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->where('akta_kelahiran.keterangan', $request['keterangan'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'keterangan')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepemilikanAktaPerkawinan($request)
     {
