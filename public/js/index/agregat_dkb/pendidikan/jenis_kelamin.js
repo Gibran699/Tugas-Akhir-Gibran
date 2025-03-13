@@ -6,32 +6,41 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchStatusKawinAgama'));
-        const religious = [
-            'islam_lk',
-            'islam_pr',
-            'islam_jml',
-            'katholik_lk',
-            'katholik_pr',
-            'katholik_jml',
-            'kristen_lk',
-            'kristen_pr',
-            'kristen_jml',
-            'hindu_lk',
-            'hindu_pr',
-            'hindu_jml',
-            'budha_lk',
-            'budha_pr',
-            'budha_jml',
-            'konghucu_lk',
-            'konghucu_pr',
-            'konghucu_jml',
-            'kepercayaan_lk',
-            'kepercayaan_pr',
-            'kepercayaan_jml',
+        var formData = new FormData(document.getElementById('formSearchPendidikanJenisKelamin'));
+        const educations = [
+            'tidak_blm_sekolah_l',
+            'tidak_blm_sekolah_p',
+            'tidak_blm_sekolah_jml',
+            'belum_tamat_sd_sederajat_l',
+            'belum_tamat_sd_sederajat_p',
+            'belum_tamat_sd_sederajat_jml',
+            'tamat_sd_sederajat_l',
+            'tamat_sd_sederajat_p',
+            'tamat_sd_sederajat_jml',
+            'sltp_sederajat_l',
+            'sltp_sederajat_p',
+            'sltp_sederajat_jml',
+            'slta_sederajat_l',
+            'slta_sederajat_p',
+            'slta_sederajat_jml',
+            'diploma_i_ii_l',
+            'diploma_i_ii_p',
+            'diploma_i_ii_jml',
+            'akademi_dipl_iii_s_muda_l',
+            'akademi_dipl_iii_s_muda_p',
+            'akademi_dipl_iii_s_muda_jml',
+            'diploma_iv_strata_i_l',
+            'diploma_iv_strata_i_p',
+            'diploma_iv_strata_i_jml',
+            'strata_ii_l',
+            'strata_ii_p',
+            'strata_ii_jml',
+            'strata_iii_l',
+            'strata_iii_p',
+            'strata_iii_jml',
         ];
         $.ajax({
-            url: $('#formSearchStatusKawinAgama').attr('action'),
+            url: $('#formSearchPendidikanJenisKelamin').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -52,13 +61,13 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, educations);
+                setTableKecamatan(response, educations);
+                setTableSum(response, educations);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Status Kawin Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Status Kawin Jenis Kelamin Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -75,15 +84,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, educations) {
+        // Map the response to the dataSet format dynamically using the educations array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
+            let row = [item.kecamatan_nama, item.kelurahan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the educations data based on the educations array
+            educations.forEach(educationsKey => {
+                row.push(item[educationsKey]); // Add the value from the item object
             });
 
             return row;
@@ -98,13 +107,12 @@
         // Define the columns dynamically
         let columns = [
             { title: "KECAMATAN" },
-            { title: "KELURAHAN" },
-            { title: "KETERANGAN" },
+            { title: "KELURAHAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each educations key
+        educations.forEach(educationsKey => {
+            columns.push({ title: educationsKey.toUpperCase() }); // Add the educations key as the column title
         });
 
         // Initialize DataTable
@@ -134,15 +142,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, educations) {
+        // Map the response to the dataSet format dynamically using the educations array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.keterangan];
+            let row = [item.kecamatan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the educations data based on the educations array
+            educations.forEach(educationsKey => {
+                row.push(item[educationsKey]); // Add the value from the item object
             });
 
             return row;
@@ -156,13 +164,12 @@
 
         // Define the columns dynamically
         let columns = [
-            { title: "KECAMATAN" },
-            { title: "KETERANGAN" }
+            { title: "KECAMATAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each educations key
+        educations.forEach(educationsKey => {
+            columns.push({ title: educationsKey.toUpperCase() }); // Add the educations key as the column title
         });
 
         // Initialize DataTable
@@ -191,49 +198,41 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
-        console.log("Response Data:", response); // Debugging
-    
+    function setTableSum(response, educations) {
+        // Extract the summed data from the response
         const summedData = response.dataKeseluruhan;
-    
-        if ($.fn.DataTable.isDataTable('#tableSum')) {
-            $('#tableSum').DataTable().clear().destroy();
-        }
-    
-        const tableData = [];
-    
-        summedData.forEach(data => {
-            religious.forEach(religionKey => {
-                // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
-                const religionName = religionKey.toUpperCase();
-                
-                const row = [
-                    religionName, // Agama
-                    data.keterangan, // Keterangan
-                    data[`${religionKey}`] || 0 // Jumlah
-                ];
-                tableData.push(row);
-            });
-        });
-    
-        $('#tableSum').DataTable({
-            data: tableData,
-            columns: [
-                { title: "Agama" },
-                { title: "Keterangan" },
-                { title: "Jumlah" }
-            ],
-            destroy: true,
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+
+        // Clear the table body before populating
+        $('#tableSum tbody').empty();
+
+        // Iterate over the educations array to dynamically generate rows
+        educations.forEach(educationsKey => {
+            // Extract the educations name from the key (e.g., "islam_lk" -> "Islam")
+            const educationsName = educationsKey.replace(/_(l|p|jml)$/, '').toUpperCase();
+            // Check if the educations name already exists in the table
+            const existingRow = $(`#tableSum tbody tr:contains("${educationsName}")`);
+            if (existingRow.length > 0) {
+                // If the row already exists, update the values
+                const row = existingRow[0];
+                const cellType = educationsKey.split('_')[1]; // e.g., "lk", "pr", "jml"
+                if (cellType === 'lk') {
+                    $(row).find('td:eq(1)').text(summedData[educationsKey]); // Update Laki-Laki
+                } else if (cellType === 'pr') {
+                    $(row).find('td:eq(2)').text(summedData[educationsKey]); // Update Perempuan
+                } else if (cellType === 'jml') {
+                    $(row).find('td:eq(3)').text(summedData[educationsKey]); // Update jml
                 }
+            } else {
+                // If the row does not exist, create a new row
+                const row = `
+                    <tr>
+                        <td>${educationsName}</td>
+                        <td>${summedData[`${educationsName.toLowerCase()}_lk`] || 0}</td>
+                        <td>${summedData[`${educationsName.toLowerCase()}_pr`] || 0}</td>
+                        <td>${summedData[`${educationsName.toLowerCase()}_jml`] || 0}</td>
+                    </tr>
+                `;
+                $('#tableSum tbody').append(row);
             }
         });
     }

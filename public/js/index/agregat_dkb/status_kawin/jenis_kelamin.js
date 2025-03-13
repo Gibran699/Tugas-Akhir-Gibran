@@ -6,32 +6,19 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchStatusKawinAgama'));
-        const religious = [
-            'islam_lk',
-            'islam_pr',
-            'islam_jml',
-            'katholik_lk',
-            'katholik_pr',
-            'katholik_jml',
-            'kristen_lk',
-            'kristen_pr',
-            'kristen_jml',
-            'hindu_lk',
-            'hindu_pr',
-            'hindu_jml',
-            'budha_lk',
-            'budha_pr',
-            'budha_jml',
-            'konghucu_lk',
-            'konghucu_pr',
-            'konghucu_jml',
-            'kepercayaan_lk',
-            'kepercayaan_pr',
-            'kepercayaan_jml',
+        var formData = new FormData(document.getElementById('formSearchStatusKawinJenisKelamin'));
+        const mariageStat = [
+            'kawin_lk',
+            'kawin_pr',
+            'belum_kawin_lk',
+            'belum_kawin_pr',
+            'cerai_hidup_lk',
+            'cerai_hidup_pr',
+            'cerai_mati_lk',
+            'cerai_mati_pr',
         ];
         $.ajax({
-            url: $('#formSearchStatusKawinAgama').attr('action'),
+            url: $('#formSearchStatusKawinJenisKelamin').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -52,13 +39,13 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, mariageStat);
+                setTableKecamatan(response, mariageStat);
+                setTableSum(response, mariageStat);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Status Kawin Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Status Kawin Jenis Kelamin Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -75,15 +62,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, mariageStat) {
+        // Map the response to the dataSet format dynamically using the mariageStat array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
+            let row = [item.kecamatan_nama, item.kelurahan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the mariageStat data based on the mariageStat array
+            mariageStat.forEach(mariageStatKey => {
+                row.push(item[mariageStatKey]); // Add the value from the item object
             });
 
             return row;
@@ -98,13 +85,12 @@
         // Define the columns dynamically
         let columns = [
             { title: "KECAMATAN" },
-            { title: "KELURAHAN" },
-            { title: "KETERANGAN" },
+            { title: "KELURAHAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each mariageStat key
+        mariageStat.forEach(mariageStatKey => {
+            columns.push({ title: mariageStatKey.toUpperCase() }); // Add the mariageStat key as the column title
         });
 
         // Initialize DataTable
@@ -134,15 +120,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, mariageStat) {
+        // Map the response to the dataSet format dynamically using the mariageStat array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.keterangan];
+            let row = [item.kecamatan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the mariageStat data based on the mariageStat array
+            mariageStat.forEach(mariageStatKey => {
+                row.push(item[mariageStatKey]); // Add the value from the item object
             });
 
             return row;
@@ -156,13 +142,12 @@
 
         // Define the columns dynamically
         let columns = [
-            { title: "KECAMATAN" },
-            { title: "KETERANGAN" }
+            { title: "KECAMATAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each mariageStat key
+        mariageStat.forEach(mariageStatKey => {
+            columns.push({ title: mariageStatKey.toUpperCase() }); // Add the mariageStat key as the column title
         });
 
         // Initialize DataTable
@@ -191,49 +176,38 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
-        console.log("Response Data:", response); // Debugging
-    
+    function setTableSum(response, mariageStat) {
+        // Extract the summed data from the response
         const summedData = response.dataKeseluruhan;
-    
-        if ($.fn.DataTable.isDataTable('#tableSum')) {
-            $('#tableSum').DataTable().clear().destroy();
-        }
-    
-        const tableData = [];
-    
-        summedData.forEach(data => {
-            religious.forEach(religionKey => {
-                // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
-                const religionName = religionKey.toUpperCase();
-                
-                const row = [
-                    religionName, // Agama
-                    data.keterangan, // Keterangan
-                    data[`${religionKey}`] || 0 // Jumlah
-                ];
-                tableData.push(row);
-            });
-        });
-    
-        $('#tableSum').DataTable({
-            data: tableData,
-            columns: [
-                { title: "Agama" },
-                { title: "Keterangan" },
-                { title: "Jumlah" }
-            ],
-            destroy: true,
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+
+        // Clear the table body before populating
+        $('#tableSum tbody').empty();
+
+        // Iterate over the mariageStat array to dynamically generate rows
+        mariageStat.forEach(mariageStatKey => {
+            // Extract the mariageStat name from the key (e.g., "islam_lk" -> "Islam")
+            const mariageStatName = mariageStatKey.replace(/(_lk|_pr)$/, '').toUpperCase();
+            // Check if the mariageStat name already exists in the table
+            const existingRow = $(`#tableSum tbody tr:contains("${mariageStatName}")`);
+            if (existingRow.length > 0) {
+                // If the row already exists, update the values
+                const row = existingRow[0];
+                const cellType = mariageStatKey.split('_')[1]; // e.g., "lk", "pr", "jml"
+                if (cellType === 'lk') {
+                    $(row).find('td:eq(1)').text(summedData[mariageStatKey]); // Update Laki-Laki
+                } else if (cellType === 'pr') {
+                    $(row).find('td:eq(2)').text(summedData[mariageStatKey]); // Update Perempuan
                 }
+            } else {
+                // If the row does not exist, create a new row
+                const row = `
+                    <tr>
+                        <td>${mariageStatName}</td>
+                        <td>${summedData[`${mariageStatName.toLowerCase()}_lk`] || 0}</td>
+                        <td>${summedData[`${mariageStatName.toLowerCase()}_pr`] || 0}</td>
+                    </tr>
+                `;
+                $('#tableSum tbody').append(row);
             }
         });
     }

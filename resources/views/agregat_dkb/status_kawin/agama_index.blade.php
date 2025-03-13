@@ -63,8 +63,6 @@
                                     <tr>
                                         <th class="text-uppercase">Agama</th>
                                         <th class="text-uppercase">Keterangan</th>
-                                        <th class="text-uppercase">Laki-Laki</th>
-                                        <th class="text-uppercase">Perempuan</th>
                                         <th class="text-uppercase">Jumlah</th>
                                     </tr>
                                 </thead>

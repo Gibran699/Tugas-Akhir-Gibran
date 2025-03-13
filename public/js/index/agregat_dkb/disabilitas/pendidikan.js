@@ -6,32 +6,41 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchStatusKawinAgama'));
-        const religious = [
-            'islam_lk',
-            'islam_pr',
-            'islam_jml',
-            'katholik_lk',
-            'katholik_pr',
-            'katholik_jml',
-            'kristen_lk',
-            'kristen_pr',
-            'kristen_jml',
-            'hindu_lk',
-            'hindu_pr',
-            'hindu_jml',
-            'budha_lk',
-            'budha_pr',
-            'budha_jml',
-            'konghucu_lk',
-            'konghucu_pr',
-            'konghucu_jml',
-            'kepercayaan_lk',
-            'kepercayaan_pr',
-            'kepercayaan_jml',
+        var formData = new FormData(document.getElementById('formSearchDisabilitasPendidikan'));
+        const education = [
+            'tidak_blm_sekolah_l',
+            'tidak_blm_sekolah_p',
+            'tidak_blm_sekolah_jml',
+            'belum_tamat_sd_sederajat_l',
+            'belum_tamat_sd_sederajat_p',
+            'belum_tamat_sd_sederajat_jml',
+            'tamat_sd_sederajat_l',
+            'tamat_sd_sederajat_p',
+            'tamat_sd_sederajat_jml',
+            'sltp_sederajat_l',
+            'sltp_sederajat_p',
+            'sltp_sederajat_jml',
+            'slta_sederajat_l',
+            'slta_sederajat_p',
+            'slta_sederajat_jml',
+            'diploma_i_ii_l',
+            'diploma_i_ii_p',
+            'diploma_i_ii_jml',
+            'akademi_diploma_iii_s_muda_l',
+            'akademi_diploma_iii_s_muda_p',
+            'akademi_diploma_iii_s_muda_jml',
+            'diploma_iv_strata_i_l',
+            'diploma_iv_strata_i_p',
+            'diploma_iv_strata_i_jml',
+            'strata_ii_l',
+            'strata_ii_p',
+            'strata_ii_jml',
+            'strata_iii_l',
+            'strata_iii_p',
+            'strata_iii_jml',
         ];
         $.ajax({
-            url: $('#formSearchStatusKawinAgama').attr('action'),
+            url: $('#formSearchDisabilitasPendidikan').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -52,13 +61,13 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, education);
+                setTableKecamatan(response, education);
+                setTableSum(response, education);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Status Kawin Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Disabilitas Pendidikan Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -75,15 +84,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, education) {
+        // Map the response to the dataSet format dynamically using the education array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the education data based on the education array
+            education.forEach(educationKey => {
+                row.push(item[educationKey]); // Add the value from the item object
             });
 
             return row;
@@ -102,9 +111,9 @@
             { title: "KETERANGAN" },
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each education key
+        education.forEach(educationKey => {
+            columns.push({ title: educationKey.toUpperCase() }); // Add the education key as the column title
         });
 
         // Initialize DataTable
@@ -134,15 +143,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, education) {
+        // Map the response to the dataSet format dynamically using the education array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama, item.keterangan];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the education data based on the education array
+            education.forEach(educationKey => {
+                row.push(item[educationKey]); // Add the value from the item object
             });
 
             return row;
@@ -160,9 +169,9 @@
             { title: "KETERANGAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each education key
+        education.forEach(educationKey => {
+            columns.push({ title: educationKey.toUpperCase() }); // Add the education key as the column title
         });
 
         // Initialize DataTable
@@ -191,35 +200,33 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
-        console.log("Response Data:", response); // Debugging
-    
+    function setTableSum(response, education) {
         const summedData = response.dataKeseluruhan;
-    
+
         if ($.fn.DataTable.isDataTable('#tableSum')) {
             $('#tableSum').DataTable().clear().destroy();
         }
-    
+
         const tableData = [];
-    
+
         summedData.forEach(data => {
-            religious.forEach(religionKey => {
-                // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
-                const religionName = religionKey.toUpperCase();
-                
+            education.forEach(educationKey => {
+                // const educationName = educationKey.split('_')[0].charAt(0).toUpperCase() + educationKey.split('_')[0].slice(1);
+                const educationName = educationKey.toUpperCase();
+
                 const row = [
-                    religionName, // Agama
+                    educationName, // Agama
                     data.keterangan, // Keterangan
-                    data[`${religionKey}`] || 0 // Jumlah
+                    data[`${educationKey}`] || 0 // Jumlah
                 ];
                 tableData.push(row);
             });
         });
-    
+
         $('#tableSum').DataTable({
             data: tableData,
             columns: [
-                { title: "Agama" },
+                { title: "Pendidikan" },
                 { title: "Keterangan" },
                 { title: "Jumlah" }
             ],

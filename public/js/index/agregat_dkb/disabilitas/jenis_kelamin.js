@@ -6,32 +6,29 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchStatusKawinAgama'));
-        const religious = [
-            'islam_lk',
-            'islam_pr',
-            'islam_jml',
-            'katholik_lk',
-            'katholik_pr',
-            'katholik_jml',
-            'kristen_lk',
-            'kristen_pr',
-            'kristen_jml',
-            'hindu_lk',
-            'hindu_pr',
-            'hindu_jml',
-            'budha_lk',
-            'budha_pr',
-            'budha_jml',
-            'konghucu_lk',
-            'konghucu_pr',
-            'konghucu_jml',
-            'kepercayaan_lk',
-            'kepercayaan_pr',
-            'kepercayaan_jml',
+        var formData = new FormData(document.getElementById('formSearchDisabilitasJenisKelamin'));
+        const disabilites = [
+            'disabiltas_fisik_lk',
+            'disabiltas_fisik_pr',
+            'disabiltas_fisik_jml',
+            'disabiltas_netra_buta_lk',
+            'disabiltas_netra_buta_pr',
+            'disabiltas_netra_buta_jml',
+            'disabiltas_rungu_wicara_lk',
+            'disabiltas_rungu_wicara_pr',
+            'disabiltas_rungu_wicara_jml',
+            'disabiltas_mental_jiwa_lk',
+            'disabiltas_mental_jiwa_pr',
+            'disabiltas_mental_jiwa_jml',
+            'disabiltas_fisik_mental_lk',
+            'disabiltas_fisik_mental_pr',
+            'disabiltas_fisik_mental_jml',
+            'disabiltas_lainya_lk',
+            'disabiltas_lainya_pr',
+            'disabiltas_lainya_jml',
         ];
         $.ajax({
-            url: $('#formSearchStatusKawinAgama').attr('action'),
+            url: $('#formSearchDisabilitasJenisKelamin').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -52,13 +49,13 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, disabilites);
+                setTableKecamatan(response, disabilites);
+                setTableSum(response, disabilites);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Status Kawin Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Status Kawin Jenis Kelamin Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -75,15 +72,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, disabilites) {
+        // Map the response to the dataSet format dynamically using the disabilites array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
+            let row = [item.kecamatan_nama, item.kelurahan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the disabilites data based on the disabilites array
+            disabilites.forEach(disabilitesKey => {
+                row.push(item[disabilitesKey]); // Add the value from the item object
             });
 
             return row;
@@ -98,13 +95,12 @@
         // Define the columns dynamically
         let columns = [
             { title: "KECAMATAN" },
-            { title: "KELURAHAN" },
-            { title: "KETERANGAN" },
+            { title: "KELURAHAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each disabilites key
+        disabilites.forEach(disabilitesKey => {
+            columns.push({ title: disabilitesKey.toUpperCase() }); // Add the disabilites key as the column title
         });
 
         // Initialize DataTable
@@ -134,15 +130,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, disabilites) {
+        // Map the response to the dataSet format dynamically using the disabilites array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.keterangan];
+            let row = [item.kecamatan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the disabilites data based on the disabilites array
+            disabilites.forEach(disabilitesKey => {
+                row.push(item[disabilitesKey]); // Add the value from the item object
             });
 
             return row;
@@ -156,13 +152,12 @@
 
         // Define the columns dynamically
         let columns = [
-            { title: "KECAMATAN" },
-            { title: "KETERANGAN" }
+            { title: "KECAMATAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each disabilites key
+        disabilites.forEach(disabilitesKey => {
+            columns.push({ title: disabilitesKey.toUpperCase() }); // Add the disabilites key as the column title
         });
 
         // Initialize DataTable
@@ -191,49 +186,41 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
-        console.log("Response Data:", response); // Debugging
-    
+    function setTableSum(response, disabilites) {
+        // Extract the summed data from the response
         const summedData = response.dataKeseluruhan;
-    
-        if ($.fn.DataTable.isDataTable('#tableSum')) {
-            $('#tableSum').DataTable().clear().destroy();
-        }
-    
-        const tableData = [];
-    
-        summedData.forEach(data => {
-            religious.forEach(religionKey => {
-                // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
-                const religionName = religionKey.toUpperCase();
-                
-                const row = [
-                    religionName, // Agama
-                    data.keterangan, // Keterangan
-                    data[`${religionKey}`] || 0 // Jumlah
-                ];
-                tableData.push(row);
-            });
-        });
-    
-        $('#tableSum').DataTable({
-            data: tableData,
-            columns: [
-                { title: "Agama" },
-                { title: "Keterangan" },
-                { title: "Jumlah" }
-            ],
-            destroy: true,
-            responsive: true,
-            paging: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+
+        // Clear the table body before populating
+        $('#tableSum tbody').empty();
+
+        // Iterate over the disabilites array to dynamically generate rows
+        disabilites.forEach(disabilitesKey => {
+            // Extract the disabilites name from the key (e.g., "islam_lk" -> "Islam")
+            const disabilitesName = disabilitesKey.replace(/(_lk|_pr|_jml)$/, '').toUpperCase();
+            // Check if the disabilites name already exists in the table
+            const existingRow = $(`#tableSum tbody tr:contains("${disabilitesName}")`);
+            if (existingRow.length > 0) {
+                // If the row already exists, update the values
+                const row = existingRow[0];
+                const cellType = disabilitesKey.split('_')[1]; // e.g., "lk", "pr", "jml"
+                if (cellType === 'lk') {
+                    $(row).find('td:eq(1)').text(summedData[disabilitesKey]); // Update Laki-Laki
+                } else if (cellType === 'pr') {
+                    $(row).find('td:eq(2)').text(summedData[disabilitesKey]); // Update Perempuan
+                }else if (cellType === 'jml') {
+                    $(row).find('td:eq(3)').text(summedData[disabilitesKey]); // Update jumlah
                 }
+            } else {
+                // If the row does not exist, create a new row
+                const row = `
+                    <tr>
+                        <td>${disabilitesName}</td>
+                        <td>${summedData[`${disabilitesName.toLowerCase()}_lk`] || 0}</td>
+                        <td>${summedData[`${disabilitesName.toLowerCase()}_pr`] || 0}</td>
+                        <td>${summedData[`${disabilitesName.toLowerCase()}_jml`] || 0}</td>
+                    </tr>
+                `;
+                $('#tableSum tbody').append(row);
             }
         });
     }

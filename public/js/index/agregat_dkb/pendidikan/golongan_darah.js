@@ -6,32 +6,48 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchStatusKawinAgama'));
-        const religious = [
-            'islam_lk',
-            'islam_pr',
-            'islam_jml',
-            'katholik_lk',
-            'katholik_pr',
-            'katholik_jml',
-            'kristen_lk',
-            'kristen_pr',
-            'kristen_jml',
-            'hindu_lk',
-            'hindu_pr',
-            'hindu_jml',
-            'budha_lk',
-            'budha_pr',
-            'budha_jml',
-            'konghucu_lk',
-            'konghucu_pr',
-            'konghucu_jml',
-            'kepercayaan_lk',
-            'kepercayaan_pr',
-            'kepercayaan_jml',
-        ];
+        var formData = new FormData(document.getElementById('formSearchPendidikanGolanganDarah'));
+        const blood = ['a_lk',
+        'a_pr',
+        'a_jml',
+        'a_m_lk',
+        'a_m_pr',
+        'a_m_jml',
+        'a_p_lk',
+        'a_p_pr',
+        'a_p_jml',
+        'b_lk',
+        'b_pr',
+        'b_jml',
+        'b_m_lk',
+        'b_m_pr',
+        'b_m_jml',
+        'b_p_lk',
+        'b_p_pr',
+        'b_p_jml',
+        'ab_lk',
+        'ab_pr',
+        'ab_jml',
+        'ab_m_lk',
+        'ab_m_pr',
+        'ab_m_jml',
+        'ab_p_lk',
+        'ab_p_pr',
+        'ab_p_jml',
+        'o_lk',
+        'o_pr',
+        'o_jml',
+        'o_m_lk',
+        'o_m_pr',
+        'o_m_jml',
+        'o_p_lk',
+        'o_p_pr',
+        'o_p_jml',
+        'tidak_tahu_lk',
+        'tidak_tahu_pr',
+        'tidak_tahu_jml',];
         $.ajax({
-            url: $('#formSearchStatusKawinAgama').attr('action'),
+            url: $('#formSearchPendidikanGolanganDarah').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -52,9 +68,9 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, blood);
+                setTableKecamatan(response, blood);
+                setTableSum(response, blood);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
@@ -75,15 +91,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, blood) {
+        // Map the response to the dataSet format dynamically using the blood array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the blood data based on the blood array
+            blood.forEach(bloodKey => {
+                row.push(item[bloodKey]); // Add the value from the item object
             });
 
             return row;
@@ -102,9 +118,9 @@
             { title: "KETERANGAN" },
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each blood key
+        blood.forEach(bloodKey => {
+            columns.push({ title: bloodKey.toUpperCase() }); // Add the blood key as the column title
         });
 
         // Initialize DataTable
@@ -134,15 +150,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, blood) {
+        // Map the response to the dataSet format dynamically using the blood array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama, item.keterangan];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the blood data based on the blood array
+            blood.forEach(bloodKey => {
+                row.push(item[bloodKey]); // Add the value from the item object
             });
 
             return row;
@@ -160,9 +176,9 @@
             { title: "KETERANGAN" }
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each blood key
+        blood.forEach(bloodKey => {
+            columns.push({ title: bloodKey.toUpperCase() }); // Add the blood key as the column title
         });
 
         // Initialize DataTable
@@ -191,36 +207,34 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
-        console.log("Response Data:", response); // Debugging
-    
+    function setTableSum(response, blood) {
         const summedData = response.dataKeseluruhan;
-    
+
         if ($.fn.DataTable.isDataTable('#tableSum')) {
             $('#tableSum').DataTable().clear().destroy();
         }
-    
+
         const tableData = [];
-    
+
         summedData.forEach(data => {
-            religious.forEach(religionKey => {
-                // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
-                const religionName = religionKey.toUpperCase();
-                
+            blood.forEach(bloodKey => {
+                // const bloodName = bloodKey.split('_')[0].charAt(0).toUpperCase() + bloodKey.split('_')[0].slice(1);
+                const bloodName = bloodKey.toUpperCase();
+
                 const row = [
-                    religionName, // Agama
+                    bloodName, // Agama
                     data.keterangan, // Keterangan
-                    data[`${religionKey}`] || 0 // Jumlah
+                    data[`${bloodKey}`] || 0 // Jumlah
                 ];
                 tableData.push(row);
             });
         });
-    
+
         $('#tableSum').DataTable({
             data: tableData,
             columns: [
-                { title: "Agama" },
-                { title: "Keterangan" },
+                { title: "Golongan Darah" },
+                { title: "Pendidikan" },
                 { title: "Jumlah" }
             ],
             destroy: true,
