@@ -67,7 +67,7 @@ return [
         '19' => 'App\Models\Kepemilikan\KartuKeluarga',
         '20' => 'App\Models\Kepemilikan\KIA',
         '21' => 'App\Models\Kepemilikan\AktaCeraiAgama',
-        '22' => 'App\Models\Kepemilikan\AktaAgamaKawin',
+        '22' => 'App\Models\Kepemilikan\AktaKawinAgama',
         '23' => 'App\Models\StrukturUmur\Agama\KelompokUmur',
         '24' => 'App\Models\StrukturUmur\Disabilitas\KelompokUmur',
         '25' => 'App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal',
@@ -109,6 +109,8 @@ return [
         'iXnbXnoUnq' =>  'dataDisabilitasPekerjaan',
         '8sfHKi6GHS' =>  'dataDisabilitasPendidikan',
         '6D6A18O1Hm' =>  'dataKepemilikanAktaKelahiran',
+        'CJY6qXue82' =>  'dataKepemilikanAktaPerkawinan',
+        'PKf3FqywDa' =>  'dataKepemilikanAktaPerkawinanAgama',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_blm_sekolah_l',

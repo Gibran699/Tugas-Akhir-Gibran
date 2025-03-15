@@ -18,16 +18,15 @@ class AktaKawin extends Model
     protected $fillable = [
         'uuid',
         'kode_wilayah',
-        'muslim_jml',
-        'non_muslim_jml',
-        'status_kawin_lk',
-        'status_kawin_pr',
-        'status_kawin_jml',
+        'wajib_akta_kawin_lk',
+        'wajib_akta_kawin_pr',
+        'wajib_akta_kawin_jml',
         'memiliki_akta_kawin_lk',
         'memiliki_akta_kawin_pr',
         'memiliki_akta_kawin_jml',
+        'belum_memiliki_akta_kawin_lk',
+        'belum_memiliki_akta_kawin_pr',
         'belum_memiliki_akta_kawin_jml',
-        'persen_memiliki',
         'semester',
         'tahun'
     ];

@@ -25,16 +25,15 @@ class KepemilikanAktaKawinImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'muslim_jml' => $row['muslim_jml'],
-            'non_muslim_jml' => $row['non_muslim_jml'],
-            'status_kawin_lk' => $row['status_kawin_lk'],
-            'status_kawin_pr' => $row['status_kawin_pr'],
-            'status_kawin_jml' => $row['status_kawin_jml'],
+            'wajib_akta_kawin_lk' => $row['wajib_akta_kawin_lk'],
+            'wajib_akta_kawin_pr' => $row['wajib_akta_kawin_pr'],
+            'wajib_akta_kawin_jml' => $row['wajib_akta_kawin_jml'],
             'memiliki_akta_kawin_lk' => $row['memiliki_akta_kawin_lk'],
             'memiliki_akta_kawin_pr' => $row['memiliki_akta_kawin_pr'],
             'memiliki_akta_kawin_jml' => $row['memiliki_akta_kawin_jml'],
+            'belum_memiliki_akta_kawin_lk' => $row['belum_memiliki_akta_kawin_lk'],
+            'belum_memiliki_akta_kawin_pr' => $row['belum_memiliki_akta_kawin_pr'],
             'belum_memiliki_akta_kawin_jml' => $row['belum_memiliki_akta_kawin_jml'],
-            'persen_memiliki' => $row['persen_memiliki'],
         ]);
     }
 }
