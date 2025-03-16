@@ -16,16 +16,15 @@ class AktaCerai extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'uuid', 'kode_wilayah',
-        'muslim_jml',
-        'non_muslim_jml',
-        'status_cerai_lk',
-        'status_cerai_pr',
-        'status_cerai_jml',
+        'wajib_akta_cerai_lk',
+        'wajib_akta_cerai_pr',
+        'wajib_akta_cerai_jml',
         'memiliki_akta_cerai_lk',
         'memiliki_akta_cerai_pr',
         'memiliki_akta_cerai_jml',
+        'belum_memiliki_akta_cerai_lk',
+        'belum_memiliki_akta_cerai_pr',
         'belum_memiliki_akta_cerai_jml',
-        'persen_memiliki',
         'semester', 'tahun'
     ];
     

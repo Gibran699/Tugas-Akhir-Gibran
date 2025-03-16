@@ -6,7 +6,7 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchKepemilikanAktaKawinAgama'));
+        var formData = new FormData(document.getElementById('formSearchKepemilikanAktaCeraiAgama'));
         const religious = [
             'islam_memiliki_lk',
             'islam_memiliki_pr',
@@ -38,7 +38,7 @@
             'kepercayaan_blm_memiliki_jml',
         ];
         $.ajax({
-            url: $('#formSearchKepemilikanAktaKawinAgama').attr('action'),
+            url: $('#formSearchKepemilikanAktaCeraiAgama').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -65,7 +65,7 @@
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Kepemilikan Akta Cerai Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Kepemilikan Akta Kawin Agama Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';

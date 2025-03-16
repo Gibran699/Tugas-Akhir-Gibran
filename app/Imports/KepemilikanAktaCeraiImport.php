@@ -24,16 +24,15 @@ class KepemilikanAktaCeraiImport implements ToModel, WithHeadingRow
             'kode_wilayah' => $row['kode_wilayah'],
             'semester' => $this->semester,
             'tahun' => $this->tahun,
-            'muslim_jml' => $row['muslim_jml'],
-            'non_muslim_jml' => $row['non_muslim_jml'],
-            'status_cerai_lk' => $row['status_cerai_lk'],
-            'status_cerai_pr' => $row['status_cerai_pr'],
-            'status_cerai_jml' => $row['status_cerai_jml'],
+            'wajib_akta_cerai_lk' => $row['wajib_akta_cerai_lk'],
+            'wajib_akta_cerai_pr' => $row['wajib_akta_cerai_pr'],
+            'wajib_akta_cerai_jml' => $row['wajib_akta_cerai_jml'],
             'memiliki_akta_cerai_lk' => $row['memiliki_akta_cerai_lk'],
             'memiliki_akta_cerai_pr' => $row['memiliki_akta_cerai_pr'],
             'memiliki_akta_cerai_jml' => $row['memiliki_akta_cerai_jml'],
             'belum_memiliki_akta_cerai_jml' => $row['belum_memiliki_akta_cerai_jml'],
-            'persen_memiliki' => $row['persen_memiliki'],
+            'belum_memiliki_akta_cerai_pr' => $row['belum_memiliki_akta_cerai_pr'],
+            'belum_memiliki_akta_cerai_lk' => $row['belum_memiliki_akta_cerai_lk'],
         ]);
     }
 }

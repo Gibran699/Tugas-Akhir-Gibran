@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <div class="basic-form">
                         {!! Form::open([
-                            'id' => 'formSearchKepemilikanAktaKawinAgama',
+                            'id' => 'formSearchKepemilikanAktaKawin',
                             'method' => 'post',
                             'route' => ['search_data', 'CJY6qXue82'],
                         ]) !!}

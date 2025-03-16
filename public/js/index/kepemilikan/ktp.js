@@ -6,39 +6,28 @@
     });
 
     function fetchData() {
-        var formData = new FormData(document.getElementById('formSearchKepemilikanAktaKawinAgama'));
-        const religious = [
-            'islam_memiliki_lk',
-            'islam_memiliki_pr',
-            'islam_memiliki_jml',
-            'islam_blm_memiliki_jml',
-            'kristen_memiliki_lk',
-            'kristen_memiliki_pr',
-            'kristen_memiliki_jml',
-            'kristen_blm_memiliki_jml',
-            'katholik_memiliki_lk',
-            'katholik_memiliki_pr',
-            'katholik_memiliki_jml',
-            'katholik_blm_memiliki_jml',
-            'hindu_memiliki_lk',
-            'hindu_memiliki_pr',
-            'hindu_memiliki_jml',
-            'hindu_blm_memiliki_jml',
-            'budha_memiliki_lk',
-            'budha_memiliki_pr',
-            'budha_memiliki_jml',
-            'budha_blm_memiliki_jml',
-            'khonghucu_memiliki_lk',
-            'khonghucu_memiliki_pr',
-            'khonghucu_memiliki_jml',
-            'khonghucu_blm_memiliki_jml',
-            'kepercayaan_memiliki_lk',
-            'kepercayaan_memiliki_pr',
-            'kepercayaan_memiliki_jml',
-            'kepercayaan_blm_memiliki_jml',
+        var formData = new FormData(document.getElementById('formSearchKepemilikanKTP'));
+        const category = [
+            'wajib_ktp_lk',
+        'wajib_ktp_pr',
+        'wajib_ktp_jml',
+        'rekam_lk',
+        'rekam_pr',
+        'rekam_jml',
+        'persen_sudah_rekam',
+        'belum_rekam_lk',
+        'belum_rekam_pr',
+        'belum_rekam_jml',
+        'ktp_pr',
+        'ktp_lk',
+        'ktp_jml',
+        'persen_memiliki_ktp',
+        'blm_ktp_lk',
+        'blm_ktp_pr',
+        'blm_ktp_jml',
         ];
         $.ajax({
-            url: $('#formSearchKepemilikanAktaKawinAgama').attr('action'),
+            url: $('#formSearchKepemilikanKTP').attr('action'),
             type: 'POST',
             data: formData,
             processData: false,
@@ -59,13 +48,13 @@
                     title: 'Berhasil',
                     text: response.message || 'Pencarian Berhasil!',
                 });
-                setTableKelurahan(response, religious);
-                setTableKecamatan(response, religious);
-                setTableSum(response, religious);
+                setTableKelurahan(response, category);
+                setTableKecamatan(response, category);
+                setTableSum(response, category);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Kepemilikan Akta Cerai Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Kepemilikan EKTP Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -82,15 +71,15 @@
         });
     }
 
-    function setTableKelurahan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKelurahan(response, category) {
+        // Map the response to the dataSet format dynamically using the category array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama, item.kelurahan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the category data based on the category array
+            category.forEach(categoryKey => {
+                row.push(item[categoryKey]); // Add the value from the item object
             });
 
             return row;
@@ -105,12 +94,12 @@
         // Define the columns dynamically
         let columns = [
             { title: "KECAMATAN" },
-            { title: "KELURAHAN" }
+            { title: "KELURAHAN" },
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each category key
+        category.forEach(categoryKey => {
+            columns.push({ title: categoryKey.toUpperCase() }); // Add the category key as the column title
         });
 
         // Initialize DataTable
@@ -140,15 +129,15 @@
         });
     }
 
-    function setTableKecamatan(response, religious) {
-        // Map the response to the dataSet format dynamically using the religious array
+    function setTableKecamatan(response, category) {
+        // Map the response to the dataSet format dynamically using the category array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama];
 
-            // Dynamically add the religious data based on the religious array
-            religious.forEach(religionKey => {
-                row.push(item[religionKey]); // Add the value from the item object
+            // Dynamically add the category data based on the category array
+            category.forEach(categoryKey => {
+                row.push(item[categoryKey]); // Add the value from the item object
             });
 
             return row;
@@ -162,12 +151,12 @@
 
         // Define the columns dynamically
         let columns = [
-            { title: "KECAMATAN" }
+            { title: "KECAMATAN" },
         ];
 
-        // Add columns for each religious key
-        religious.forEach(religionKey => {
-            columns.push({ title: religionKey.toUpperCase() }); // Add the religious key as the column title
+        // Add columns for each category key
+        category.forEach(categoryKey => {
+            columns.push({ title: categoryKey.toUpperCase() }); // Add the category key as the column title
         });
 
         // Initialize DataTable
@@ -196,52 +185,46 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, religious) {
+    function setTableSum(response, category) {
         const summedData = response.dataKeseluruhan;
-        const tableBody = $('#tableSum tbody');
 
-        // Clear the table body before populating
-        tableBody.empty();
+        if ($.fn.DataTable.isDataTable('#tableSum')) {
+            $('#tableSum').DataTable().clear().destroy();
+        }
 
-        // Create a map to group data by religion
-        const religionMap = {};
+        const tableData = [];
 
-        // Process each religious key and group data by religion
-        religious.forEach(religionKey => {
-            const [religion, type, gender] = religionKey.split('_');
-            const religionName = religion.toUpperCase();
+        summedData.forEach(data => {
+            category.forEach(categoryKey => {
+                // const categoryName = categoryKey.split('_')[0].charAt(0).toUpperCase() + categoryKey.split('_')[0].slice(1);
+                const categoryName = categoryKey.replace(/_/g, ' ').toUpperCase();
 
-            // Initialize the religion entry if it doesn't exist
-            if (!religionMap[religionName]) {
-                religionMap[religionName] = {
-                    memiliki_lk: 0,
-                    memiliki_pr: 0,
-                    memiliki_jml: 0,
-                    blm_memiliki_jml: 0,
-                };
-            }
-
-            // Update the corresponding field in the map
-            if (type === 'memiliki') {
-                religionMap[religionName][`${type}_${gender}`] = summedData[religionKey] || 0;
-            } else if (type === 'blm' && gender === 'memiliki') {
-                // Handle the "blm_memiliki_jml" case
-                religionMap[religionName].blm_memiliki_jml = summedData[religionKey] || 0;
-            }
+                const row = [
+                    categoryName, // Agama
+                    data[`${categoryKey}`] || 0 // Jumlah
+                ];
+                tableData.push(row);
+            });
         });
 
-        // Generate rows from the grouped data
-        Object.entries(religionMap).forEach(([religionName, data]) => {
-            const row = `
-                <tr>
-                    <td>${religionName}</td>
-                    <td>${data.memiliki_lk}</td>
-                    <td>${data.memiliki_pr}</td>
-                    <td>${data.memiliki_jml}</td>
-                    <td>${data.blm_memiliki_jml}</td>
-                </tr>
-            `;
-            tableBody.append(row);
+        $('#tableSum').DataTable({
+            data: tableData,
+            columns: [
+                { title: "Keterangan" },
+                { title: "Jumlah" }
+            ],
+            destroy: true,
+            responsive: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            language: {
+                paginate: {
+                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                }
+            }
         });
     }
 })(jQuery);

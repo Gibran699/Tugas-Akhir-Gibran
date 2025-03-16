@@ -1,5 +1,19 @@
 @extends('layout.master')
 @section('content')
+@php
+    $categories = [
+        'wajib_akta_cerai_lk',
+        'wajib_akta_cerai_pr',
+        'wajib_akta_cerai_jml',
+        'memiliki_akta_cerai_lk',
+        'memiliki_akta_cerai_pr',
+        'memiliki_akta_cerai_jml',
+        'belum_memiliki_akta_cerai_lk',
+        'belum_memiliki_akta_cerai_pr',
+        'belum_memiliki_akta_cerai_jml',
+        'persen_memiliki',
+    ];
+@endphp
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
@@ -14,7 +28,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        {!! Form::open([
+                            'id' => 'formSearchKepemilikanAktaCerai',
+                            'method' => 'post',
+                            'route' => ['search_data', 'goKsHUTCOG'],
+                        ]) !!}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
@@ -29,11 +47,11 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="submitSearch">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
                             </div>
-                        </form>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -42,26 +60,52 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Kepemilikan - Akta Cerai <span id="tahunSemester">I
-                                2025</span></h4>
+                        <h4 class="card-title" id="tahunSemester"></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            @php
-                                $categories = [
-                                    'MUSLIM(JML)',
-                                    'NON MUSLIM(JML)',
-                                    'STATUS CERAI(LK)',
-                                    'STATUS CERAI(PR)',
-                                    'STATUS CERAI(JML)',
-                                    'MEMILIKI AKTA CERAI(LK)',
-                                    'MEMILIKI AKTA CERAI(PR)',
-                                    'MEMILIKI AKTA CERAI(JML)',
-                                    'BELUM MEMILIKI AKTA CERAI(JML)',
-                                    'PERSEN (MEMILIKI)(%)',
-                                ];
-                            @endphp
-                            <table id="table" class="display" style="min-width: 845px">
+                            <table class="display table table-striped" id="tableSum">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Keterangan</th>
+                                        <th class="text-uppercase">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkecamatan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKecamatan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>KECAMATAN</th>
+                                        @foreach ($categories as $item)
+                                            <th>{{ $item }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkelurahan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKelurahan" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th>KECAMATAN</th>
@@ -78,5 +122,9 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
+    <script src="{{ asset('js/global_func.js') }}"></script>
+    <script>
+        generateYearOptions('tahun');
+    </script>
+    <script src="{{ asset('js/index/kepemilikan/akta_cerai.js') }}"></script>
 @endsection

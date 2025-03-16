@@ -1224,62 +1224,51 @@ class CalculateDataController extends Controller
     }
     public function dataKepemilikanAktaCerai($request)
     {
-        $dataPerkelurahan = KepemilikanAktaCerai::select([
-            'akta_cerai.*',
-            'mstr_kelurahan.nama as kelurahan_nama',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $attributTable = [
+            'wajib_akta_cerai_lk',
+            'wajib_akta_cerai_pr',
+            'wajib_akta_cerai_jml',
+            'memiliki_akta_cerai_lk',
+            'memiliki_akta_cerai_pr',
+            'memiliki_akta_cerai_jml',
+            'belum_memiliki_akta_cerai_lk',
+            'belum_memiliki_akta_cerai_pr',
+            'belum_memiliki_akta_cerai_jml',
+        ];
+        $dataPerkelurahan = KepemilikanAktaCerai::select(array_merge(
+            [
+                'mstr_kelurahan.nama as kelurahan_nama',
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(wajib_akta_cerai_jml) = 0, 0, (SUM(memiliki_akta_cerai_jml) / SUM(wajib_akta_cerai_jml)) * 100) as persen_memiliki'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'akta_cerai.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_cerai.semester', $request['semester'])
             ->where('akta_cerai.tahun', $request['tahun'])
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaCerai::select(
-            // Muslim and Non-Muslim
-            DB::raw('SUM(muslim_jml) as total_muslim_jml'),
-            DB::raw('SUM(non_muslim_jml) as total_non_muslim_jml'),
-
-            // Status Cerai
-            DB::raw('SUM(status_cerai_lk) as total_status_cerai_lk'),
-            DB::raw('SUM(status_cerai_pr) as total_status_cerai_pr'),
-            DB::raw('SUM(status_cerai_jml) as total_status_cerai_jml'),
-
-            // Memiliki Akta Cerai
-            DB::raw('SUM(memiliki_akta_cerai_lk) as total_memiliki_akta_cerai_lk'),
-            DB::raw('SUM(memiliki_akta_cerai_pr) as total_memiliki_akta_cerai_pr'),
-            DB::raw('SUM(memiliki_akta_cerai_jml) as total_memiliki_akta_cerai_jml'),
-
-            // Belum Memiliki Akta Cerai
-            DB::raw('SUM(belum_memiliki_akta_cerai_jml) as total_belum_memiliki_akta_cerai_jml'),
-            // persen
-            DB::raw('IF(SUM(status_cerai_jml) = 0, 0, SUM(memiliki_akta_cerai_jml) / SUM(status_cerai_jml) * 100) as persen_memiliki')
-
+            array_merge(
+                [
+                    DB::raw('IF(SUM(wajib_akta_cerai_jml) = 0, 0, (SUM(memiliki_akta_cerai_jml) / SUM(wajib_akta_cerai_jml)) * 100) as persen_memiliki'),
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = KepemilikanAktaCerai::select([
-            // Muslim and Non-Muslim
-            DB::raw('SUM(muslim_jml) as total_muslim_jml'),
-            DB::raw('SUM(non_muslim_jml) as total_non_muslim_jml'),
-
-            // Status Cerai
-            DB::raw('SUM(status_cerai_lk) as total_status_cerai_lk'),
-            DB::raw('SUM(status_cerai_pr) as total_status_cerai_pr'),
-            DB::raw('SUM(status_cerai_jml) as total_status_cerai_jml'),
-
-            // Memiliki Akta Cerai
-            DB::raw('SUM(memiliki_akta_cerai_lk) as total_memiliki_akta_cerai_lk'),
-            DB::raw('SUM(memiliki_akta_cerai_pr) as total_memiliki_akta_cerai_pr'),
-            DB::raw('SUM(memiliki_akta_cerai_jml) as total_memiliki_akta_cerai_jml'),
-
-            // Belum Memiliki Akta Cerai
-            DB::raw('SUM(belum_memiliki_akta_cerai_jml) as total_belum_memiliki_akta_cerai_jml'),
-            // persen
-            DB::raw('IF(SUM(status_cerai_jml) = 0, 0, SUM(memiliki_akta_cerai_jml) / SUM(status_cerai_jml) * 100) as persen_memiliki'),
-
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->get();
+        $dataPerkecamatan = KepemilikanAktaCerai::select(
+            array_merge(
+                [
+                    'mstr_kecamatan.nama as kecamatan_nama',
+                    DB::raw('IF(SUM(wajib_akta_cerai_jml) = 0, 0, (SUM(memiliki_akta_cerai_jml) / SUM(wajib_akta_cerai_jml)) * 100) as persen_memiliki'),
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'akta_cerai.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_cerai.semester', $request['semester'])
@@ -1290,10 +1279,15 @@ class CalculateDataController extends Controller
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepemilikanAktaCeraiAgama($request)
     {
+        $categoryReligiosOwnerShip = config('dataArray.categoryReligiosOwnerShip');
         $dataPerkelurahan = KepemilikanAktaCeraiAgama::select([
             'akta_cerai_agama.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -1306,94 +1300,22 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaCeraiAgama::select(
-            // Islam
-            DB::raw('SUM(islam_memiliki_lk) as total_islam_memiliki_lk'),
-            DB::raw('SUM(islam_memiliki_pr) as total_islam_memiliki_pr'),
-            DB::raw('SUM(islam_memiliki_jml) as total_islam_memiliki_jml'),
-            DB::raw('SUM(islam_blm_memiliki_jml) as total_islam_blm_memiliki_jml'),
-
-            // Kristen
-            DB::raw('SUM(kristen_memiliki_lk) as total_kristen_memiliki_lk'),
-            DB::raw('SUM(kristen_memiliki_pr) as total_kristen_memiliki_pr'),
-            DB::raw('SUM(kristen_memiliki_jml) as total_kristen_memiliki_jml'),
-            DB::raw('SUM(kristen_blm_memiliki_jml) as total_kristen_blm_memiliki_jml'),
-
-            // Katholik
-            DB::raw('SUM(katholik_memiliki_lk) as total_katholik_memiliki_lk'),
-            DB::raw('SUM(katholik_memiliki_pr) as total_katholik_memiliki_pr'),
-            DB::raw('SUM(katholik_memiliki_jml) as total_katholik_memiliki_jml'),
-            DB::raw('SUM(katholik_blm_memiliki_jml) as total_katholik_blm_memiliki_jml'),
-
-            // Hindu
-            DB::raw('SUM(hindu_memiliki_lk) as total_hindu_memiliki_lk'),
-            DB::raw('SUM(hindu_memiliki_pr) as total_hindu_memiliki_pr'),
-            DB::raw('SUM(hindu_memiliki_jml) as total_hindu_memiliki_jml'),
-            DB::raw('SUM(hindu_blm_memiliki_jml) as total_hindu_blm_memiliki_jml'),
-
-            // Budha
-            DB::raw('SUM(budha_memiliki_lk) as total_budha_memiliki_lk'),
-            DB::raw('SUM(budha_memiliki_pr) as total_budha_memiliki_pr'),
-            DB::raw('SUM(budha_memiliki_jml) as total_budha_memiliki_jml'),
-            DB::raw('SUM(budha_blm_memiliki_jml) as total_budha_blm_memiliki_jml'),
-
-            // Khonghucu
-            DB::raw('SUM(khonghucu_memiliki_lk) as total_khonghucu_memiliki_lk'),
-            DB::raw('SUM(khonghucu_memiliki_pr) as total_khonghucu_memiliki_pr'),
-            DB::raw('SUM(khonghucu_memiliki_jml) as total_khonghucu_memiliki_jml'),
-            DB::raw('SUM(khonghucu_blm_memiliki_jml) as total_khonghucu_blm_memiliki_jml'),
-
-            // Kepercayaan
-            DB::raw('SUM(kepercayaan_memiliki_lk) as total_kepercayaan_memiliki_lk'),
-            DB::raw('SUM(kepercayaan_memiliki_pr) as total_kepercayaan_memiliki_pr'),
-            DB::raw('SUM(kepercayaan_memiliki_jml) as total_kepercayaan_memiliki_jml'),
-            DB::raw('SUM(kepercayaan_blm_memiliki_jml) as total_kepercayaan_blm_memiliki_jml')
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $categoryReligiosOwnerShip)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
             ->first();
-        $dataPerkecamatan = KepemilikanAktaCeraiAgama::select([
-            // Islam
-            DB::raw('SUM(islam_memiliki_lk) as total_islam_memiliki_lk'),
-            DB::raw('SUM(islam_memiliki_pr) as total_islam_memiliki_pr'),
-            DB::raw('SUM(islam_memiliki_jml) as total_islam_memiliki_jml'),
-            DB::raw('SUM(islam_blm_memiliki_jml) as total_islam_blm_memiliki_jml'),
-
-            // Kristen
-            DB::raw('SUM(kristen_memiliki_lk) as total_kristen_memiliki_lk'),
-            DB::raw('SUM(kristen_memiliki_pr) as total_kristen_memiliki_pr'),
-            DB::raw('SUM(kristen_memiliki_jml) as total_kristen_memiliki_jml'),
-            DB::raw('SUM(kristen_blm_memiliki_jml) as total_kristen_blm_memiliki_jml'),
-
-            // Katholik
-            DB::raw('SUM(katholik_memiliki_lk) as total_katholik_memiliki_lk'),
-            DB::raw('SUM(katholik_memiliki_pr) as total_katholik_memiliki_pr'),
-            DB::raw('SUM(katholik_memiliki_jml) as total_katholik_memiliki_jml'),
-            DB::raw('SUM(katholik_blm_memiliki_jml) as total_katholik_blm_memiliki_jml'),
-
-            // Hindu
-            DB::raw('SUM(hindu_memiliki_lk) as total_hindu_memiliki_lk'),
-            DB::raw('SUM(hindu_memiliki_pr) as total_hindu_memiliki_pr'),
-            DB::raw('SUM(hindu_memiliki_jml) as total_hindu_memiliki_jml'),
-            DB::raw('SUM(hindu_blm_memiliki_jml) as total_hindu_blm_memiliki_jml'),
-
-            // Budha
-            DB::raw('SUM(budha_memiliki_lk) as total_budha_memiliki_lk'),
-            DB::raw('SUM(budha_memiliki_pr) as total_budha_memiliki_pr'),
-            DB::raw('SUM(budha_memiliki_jml) as total_budha_memiliki_jml'),
-            DB::raw('SUM(budha_blm_memiliki_jml) as total_budha_blm_memiliki_jml'),
-
-            // Khonghucu
-            DB::raw('SUM(khonghucu_memiliki_lk) as total_khonghucu_memiliki_lk'),
-            DB::raw('SUM(khonghucu_memiliki_pr) as total_khonghucu_memiliki_pr'),
-            DB::raw('SUM(khonghucu_memiliki_jml) as total_khonghucu_memiliki_jml'),
-            DB::raw('SUM(khonghucu_blm_memiliki_jml) as total_khonghucu_blm_memiliki_jml'),
-
-            // Kepercayaan
-            DB::raw('SUM(kepercayaan_memiliki_lk) as total_kepercayaan_memiliki_lk'),
-            DB::raw('SUM(kepercayaan_memiliki_pr) as total_kepercayaan_memiliki_pr'),
-            DB::raw('SUM(kepercayaan_memiliki_jml) as total_kepercayaan_memiliki_jml'),
-            DB::raw('SUM(kepercayaan_blm_memiliki_jml) as total_kepercayaan_blm_memiliki_jml'),
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $dataPerkecamatan = KepemilikanAktaCeraiAgama::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $categoryReligiosOwnerShip),
+                ['mstr_kecamatan.nama as kecamatan_nama']
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'akta_cerai_agama.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_cerai_agama.semester', $request['semester'])
@@ -1401,161 +1323,53 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepemilikanKia($request)
     {
-        $dataPerkelurahan = KepemilikanKia::select([
-            'kia.*',
-            'mstr_kelurahan.nama as kelurahan_nama',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $categoryKiaOwnerShip = config('dataArray.categoryKiaOwnerShip');
+        $dataPerkelurahan = KepemilikanKia::select(array_merge(
+            [
+                'mstr_kelurahan.nama as kelurahan_nama',
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(jumlah_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(jumlah_awal_jml)) * 100) as persen_awal'),
+                DB::raw('IF(SUM(jumlah_dinamis_ttl) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(jumlah_dinamis_ttl)) * 100) as persen_dinamis'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryKiaOwnerShip)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kia.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kia.semester', $request['semester'])
             ->where('kia.tahun', $request['tahun'])
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKia::select(
-            // Jumlah awal penduduk
-            DB::raw('SUM(jumlah_awal_lk) as total_jumlah_awal_lk'), // Jumlah awal laki-laki
-            DB::raw('SUM(jumlah_awal_pr) as total_jumlah_awal_pr'), // Jumlah awal perempuan
-            DB::raw('SUM(jumlah_awal_jml) as total_jumlah_awal_jml'), // Total jumlah awal
-
-            // Memiliki dokumen pada awal periode
-            DB::raw('SUM(memiliki_awal_lk) as total_memiliki_awal_lk'), // Laki-laki yang memiliki dokumen
-            DB::raw('SUM(memiliki_awal_pr) as total_memiliki_awal_pr'), // Perempuan yang memiliki dokumen
-            DB::raw('SUM(memiliki_awal_jml) as total_memiliki_awal_jml'), // Total yang memiliki dokumen
-
-            // Belum memiliki dokumen pada awal periode
-            DB::raw('SUM(belum_memiliki_awal_lk) as total_belum_memiliki_awal_lk'), // Laki-laki yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_awal_pr) as total_belum_memiliki_awal_pr'), // Perempuan yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_awal_jml) as total_belum_memiliki_awal_jml'), // Total yang belum memiliki dokumen
-
-            // Persentase kepemilikan awal
-            DB::raw('IF(SUM(jumlah_awal_jml) = 0, 0, SUM(memiliki_awal_jml) / SUM(jumlah_awal_jml) * 100) as persen_memiliki_awal'), // Persentase penduduk yang memiliki dokumen
-
-            // Penduduk yang sudah melewati usia target
-            DB::raw('SUM(usia_lebih_target_lk) as total_usia_lebih_target_lk'), // Laki-laki yang melebihi usia target
-            DB::raw('SUM(usia_lebih_target_pr) as total_usia_lebih_target_pr'), // Perempuan yang melebihi usia target
-            DB::raw('SUM(usia_lebih_target_jml) as total_usia_lebih_target_jml'), // Total yang melebihi usia target
-
-            // Penduduk yang meninggal
-            DB::raw('SUM(meninggal_lk) as total_meninggal_lk'), // Laki-laki yang meninggal
-            DB::raw('SUM(meninggal_pr) as total_meninggal_pr'), // Perempuan yang meninggal
-            DB::raw('SUM(meninggal_jml) as total_meninggal_jml'), // Total yang meninggal
-
-            // Penduduk yang dinonaktifkan
-            DB::raw('SUM(nonaktif_lk) as total_nonaktif_lk'), // Laki-laki yang dinonaktifkan
-            DB::raw('SUM(nonaktif_pr) as total_nonaktif_pr'), // Perempuan yang dinonaktifkan
-            DB::raw('SUM(nonaktif_jml) as total_nonaktif_jml'), // Total yang dinonaktifkan
-
-            // Memiliki dokumen dalam Data Kependudukan Berbasis Wilayah (DKB)
-            DB::raw('SUM(memiliki_dalam_dkb_lk) as total_memiliki_dalam_dkb_lk'), // Laki-laki dalam DKB
-            DB::raw('SUM(memiliki_dalam_dkb_pr) as total_memiliki_dalam_dkb_pr'), // Perempuan dalam DKB
-            DB::raw('SUM(memiliki_dalam_dkb_jml) as total_memiliki_dalam_dkb_jml'), // Total dalam DKB
-
-            // Memiliki dokumen di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_lk) as total_memiliki_luar_dkb_lk'), // Laki-laki di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_pr) as total_memiliki_luar_dkb_pr'), // Perempuan di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_jml) as total_memiliki_luar_dkb_jml'), // Total di luar DKB
-
-            // Jumlah penduduk yang mengalami perubahan dinamis
-            DB::raw('SUM(jumlah_dinamis_lk) as total_jumlah_dinamis_lk'), // Laki-laki yang berubah statusnya
-            DB::raw('SUM(jumlah_dinamis_pr) as total_jumlah_dinamis_pr'), // Perempuan yang berubah statusnya
-            DB::raw('SUM(jumlah_dinamis_ttl) as total_jumlah_dinamis_ttl'), // Total perubahan status
-
-            // Memiliki dokumen dalam perubahan dinamis
-            DB::raw('SUM(memiliki_dinamis_lk) as total_memiliki_dinamis_lk'), // Laki-laki yang memiliki dokumen setelah perubahan
-            DB::raw('SUM(memiliki_dinamis_pr) as total_memiliki_dinamis_pr'), // Perempuan yang memiliki dokumen setelah perubahan
-            DB::raw('SUM(memiliki_dinamis_jml) as total_memiliki_dinamis_jml'), // Total yang memiliki dokumen setelah perubahan
-
-            // Belum memiliki dokumen dalam perubahan dinamis
-            DB::raw('SUM(belum_memiliki_dinamis_lk) as total_belum_memiliki_dinamis_lk'), // Laki-laki yang belum memiliki dokumen setelah perubahan
-            DB::raw('SUM(belum_memiliki_dinamis_pr) as total_belum_memiliki_dinamis_pr'), // Perempuan yang belum memiliki dokumen setelah perubahan
-            DB::raw('SUM(belum_memiliki_dinamis_jml) as total_belum_memiliki_dinamis_jml'), // Total yang belum memiliki dokumen setelah perubahan
-
-            // Persentase kepemilikan dokumen setelah perubahan dinamis
-            DB::raw('IF(SUM(jumlah_dinamis_ttl) = 0, 0, SUM(memiliki_dinamis_jml) / SUM(jumlah_dinamis_ttl) * 100) as persen_memiliki_dinamis'), // Persentase kepemilikan setelah perubahan
-
-            // Penambahan penduduk baru
-            DB::raw('SUM(penambahan_lk) as total_penambahan_lk'), // Penambahan laki-laki
-            DB::raw('SUM(penambahan_pr) as total_penambahan_pr'), // Penambahan perempuan
-            DB::raw('SUM(penambahan_jml) as total_penambahan_jml'), // Penambahan total
+            array_merge(
+                [
+                    DB::raw('IF(SUM(jumlah_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(jumlah_awal_jml)) * 100) as persen_awal'),
+                    DB::raw('IF(SUM(jumlah_dinamis_ttl) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(jumlah_dinamis_ttl)) * 100) as persen_dinamis'),
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryKiaOwnerShip)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = PendudukJenisKelamin::select([
-            // Jumlah awal penduduk
-            DB::raw('SUM(jumlah_awal_lk) as total_jumlah_awal_lk'), // Jumlah awal laki-laki
-            DB::raw('SUM(jumlah_awal_pr) as total_jumlah_awal_pr'), // Jumlah awal perempuan
-            DB::raw('SUM(jumlah_awal_jml) as total_jumlah_awal_jml'), // Total jumlah awal
-
-            // Memiliki dokumen pada awal periode
-            DB::raw('SUM(memiliki_awal_lk) as total_memiliki_awal_lk'), // Laki-laki yang memiliki dokumen
-            DB::raw('SUM(memiliki_awal_pr) as total_memiliki_awal_pr'), // Perempuan yang memiliki dokumen
-            DB::raw('SUM(memiliki_awal_jml) as total_memiliki_awal_jml'), // Total yang memiliki dokumen
-
-            // Belum memiliki dokumen pada awal periode
-            DB::raw('SUM(belum_memiliki_awal_lk) as total_belum_memiliki_awal_lk'), // Laki-laki yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_awal_pr) as total_belum_memiliki_awal_pr'), // Perempuan yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_awal_jml) as total_belum_memiliki_awal_jml'), // Total yang belum memiliki dokumen
-
-            // Persentase kepemilikan awal
-            DB::raw('IF(SUM(jumlah_awal_jml) = 0, 0, SUM(memiliki_awal_jml) / SUM(jumlah_awal_jml) * 100) as persen_memiliki_awal'), // Persentase penduduk yang memiliki dokumen
-
-            // Penduduk yang sudah melewati usia target
-            DB::raw('SUM(usia_lebih_target_lk) as total_usia_lebih_target_lk'), // Laki-laki yang melebihi usia target
-            DB::raw('SUM(usia_lebih_target_pr) as total_usia_lebih_target_pr'), // Perempuan yang melebihi usia target
-            DB::raw('SUM(usia_lebih_target_jml) as total_usia_lebih_target_jml'), // Total yang melebihi usia target
-
-            // Penduduk yang meninggal
-            DB::raw('SUM(meninggal_lk) as total_meninggal_lk'), // Laki-laki yang meninggal
-            DB::raw('SUM(meninggal_pr) as total_meninggal_pr'), // Perempuan yang meninggal
-            DB::raw('SUM(meninggal_jml) as total_meninggal_jml'), // Total yang meninggal
-
-            // Penduduk yang dinonaktifkan
-            DB::raw('SUM(nonaktif_lk) as total_nonaktif_lk'), // Laki-laki yang dinonaktifkan
-            DB::raw('SUM(nonaktif_pr) as total_nonaktif_pr'), // Perempuan yang dinonaktifkan
-            DB::raw('SUM(nonaktif_jml) as total_nonaktif_jml'), // Total yang dinonaktifkan
-
-            // Memiliki dokumen dalam Data Kependudukan Berbasis Wilayah (DKB)
-            DB::raw('SUM(memiliki_dalam_dkb_lk) as total_memiliki_dalam_dkb_lk'), // Laki-laki dalam DKB
-            DB::raw('SUM(memiliki_dalam_dkb_pr) as total_memiliki_dalam_dkb_pr'), // Perempuan dalam DKB
-            DB::raw('SUM(memiliki_dalam_dkb_jml) as total_memiliki_dalam_dkb_jml'), // Total dalam DKB
-
-            // Memiliki dokumen di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_lk) as total_memiliki_luar_dkb_lk'), // Laki-laki di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_pr) as total_memiliki_luar_dkb_pr'), // Perempuan di luar DKB
-            DB::raw('SUM(memiliki_luar_dkb_jml) as total_memiliki_luar_dkb_jml'), // Total di luar DKB
-
-            // Jumlah penduduk yang mengalami perubahan dinamis
-            DB::raw('SUM(jumlah_dinamis_lk) as total_jumlah_dinamis_lk'), // Laki-laki yang berubah statusnya
-            DB::raw('SUM(jumlah_dinamis_pr) as total_jumlah_dinamis_pr'), // Perempuan yang berubah statusnya
-            DB::raw('SUM(jumlah_dinamis_ttl) as total_jumlah_dinamis_ttl'), // Total perubahan status
-
-            // Memiliki dokumen dalam perubahan dinamis
-            DB::raw('SUM(memiliki_dinamis_lk) as total_memiliki_dinamis_lk'), // Laki-laki yang memiliki dokumen setelah perubahan
-            DB::raw('SUM(memiliki_dinamis_pr) as total_memiliki_dinamis_pr'), // Perempuan yang memiliki dokumen setelah perubahan
-            DB::raw('SUM(memiliki_dinamis_jml) as total_memiliki_dinamis_jml'), // Total yang memiliki dokumen setelah perubahan
-
-            // Belum memiliki dokumen dalam perubahan dinamis
-            DB::raw('SUM(belum_memiliki_dinamis_lk) as total_belum_memiliki_dinamis_lk'), // Laki-laki yang belum memiliki dokumen setelah perubahan
-            DB::raw('SUM(belum_memiliki_dinamis_pr) as total_belum_memiliki_dinamis_pr'), // Perempuan yang belum memiliki dokumen setelah perubahan
-            DB::raw('SUM(belum_memiliki_dinamis_jml) as total_belum_memiliki_dinamis_jml'), // Total yang belum memiliki dokumen setelah perubahan
-
-            // Persentase kepemilikan dokumen setelah perubahan dinamis
-            DB::raw('IF(SUM(jumlah_dinamis_ttl) = 0, 0, SUM(memiliki_dinamis_jml) / SUM(jumlah_dinamis_ttl) * 100) as persen_memiliki_dinamis'), // Persentase kepemilikan setelah perubahan
-
-            // Penambahan penduduk baru
-            DB::raw('SUM(penambahan_lk) as total_penambahan_lk'), // Penambahan laki-laki
-            DB::raw('SUM(penambahan_pr) as total_penambahan_pr'), // Penambahan perempuan
-            DB::raw('SUM(penambahan_jml) as total_penambahan_jml'), // Penambahan total
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->get();
+        $dataPerkecamatan = KepemilikanKia::select(array_merge(
+            [
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(jumlah_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(jumlah_awal_jml)) * 100) as persen_awal'),
+                DB::raw('IF(SUM(jumlah_dinamis_ttl) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(jumlah_dinamis_ttl)) * 100) as persen_dinamis'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryKiaOwnerShip)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kia.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kia.semester', $request['semester'])
@@ -1563,59 +1377,60 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepemilikanKartuKeluarga($request)
     {
-        $dataPerkelurahan = KepemilikanKartuKeluarga::select([
-            'kartu_keluarga.*',
-            'mstr_kelurahan.nama as kelurahan_nama',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $attributTable = [
+            'kk_lk',
+            'kk_pr',
+            'kk_jml',
+            'memiliki_lk',
+            'memiliki_pr',
+            'memiliki_jml',
+            'belum_memiliki_lk',
+            'belum_memiliki_pr',
+            'belum_memiliki_jml',
+        ];
+        $dataPerkelurahan = KepemilikanKartuKeluarga::select(array_merge(
+            [
+                'mstr_kelurahan.nama as kelurahan_nama',
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(kk_jml) = 0, 0, (SUM(memiliki_jml) / SUM(kk_jml)) * 100) as persen_memiliki'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kartu_keluarga.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kartu_keluarga.semester', $request['semester'])
             ->where('kartu_keluarga.tahun', $request['tahun'])
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKartuKeluarga::select(
-            // Kepala Keluarga (KK)
-            DB::raw('SUM(kk_lk) as total_kk_lk'), // Jumlah kepala keluarga laki-laki
-            DB::raw('SUM(kk_pr) as total_kk_pr'), // Jumlah kepala keluarga perempuan
-            DB::raw('SUM(kk_jml) as total_kk_jml'), // Total kepala keluarga
-
-            // Penduduk yang memiliki dokumen
-            DB::raw('SUM(memiliki_lk) as total_memiliki_lk'), // Laki-laki yang memiliki dokumen
-            DB::raw('SUM(memiliki_pr) as total_memiliki_pr'), // Perempuan yang memiliki dokumen
-            DB::raw('SUM(memiliki_jml) as total_memiliki_jml'), // Total penduduk yang memiliki dokumen
-
-            // Penduduk yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_lk) as total_belum_memiliki_lk'), // Laki-laki yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_pr) as total_belum_memiliki_pr'), // Perempuan yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_jml) as total_belum_memiliki_jml') // Total penduduk yang belum memiliki dokumen
+            array_merge(
+                [
+                    DB::raw('IF(SUM(kk_jml) = 0, 0, (SUM(memiliki_jml) / SUM(kk_jml)) * 100) as persen_memiliki'),
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = DisabilitasPendudukPendidikan::select([
-            // Kepala Keluarga (KK)
-            DB::raw('SUM(kk_lk) as total_kk_lk'), // Jumlah kepala keluarga laki-laki
-            DB::raw('SUM(kk_pr) as total_kk_pr'), // Jumlah kepala keluarga perempuan
-            DB::raw('SUM(kk_jml) as total_kk_jml'), // Total kepala keluarga
-
-            // Penduduk yang memiliki dokumen
-            DB::raw('SUM(memiliki_lk) as total_memiliki_lk'), // Laki-laki yang memiliki dokumen
-            DB::raw('SUM(memiliki_pr) as total_memiliki_pr'), // Perempuan yang memiliki dokumen
-            DB::raw('SUM(memiliki_jml) as total_memiliki_jml'), // Total penduduk yang memiliki dokumen
-
-            // Penduduk yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_lk) as total_belum_memiliki_lk'), // Laki-laki yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_pr) as total_belum_memiliki_pr'), // Perempuan yang belum memiliki dokumen
-            DB::raw('SUM(belum_memiliki_jml) as total_belum_memiliki_jml'), // Total penduduk yang belum memiliki dokumen
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->get();
+        $dataPerkecamatan = KepemilikanKartuKeluarga::select(array_merge(
+            [
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(kk_jml) = 0, 0, (SUM(memiliki_jml) / SUM(kk_jml)) * 100) as persen_memiliki'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kartu_keluarga.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kartu_keluarga.semester', $request['semester'])
@@ -1623,79 +1438,69 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataKepemilikanKTP($request)
     {
-        $dataPerkelurahan = KepemilikanKtp::select([
-            'ktp.*',
-            'mstr_kelurahan.nama as kelurahan_nama',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+        $attributTable = [
+            'wajib_ktp_lk',
+            'wajib_ktp_pr',
+            'wajib_ktp_jml',
+            'rekam_lk',
+            'rekam_pr',
+            'rekam_jml',
+            'belum_rekam_lk',
+            'belum_rekam_pr',
+            'belum_rekam_jml',
+            'ktp_pr',
+            'ktp_lk',
+            'ktp_jml',
+            'blm_ktp_lk',
+            'blm_ktp_pr',
+            'blm_ktp_jml',
+        ];
+        $dataPerkelurahan = KepemilikanKtp::select(array_merge(
+            [
+                'mstr_kelurahan.nama as kelurahan_nama',
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(rekam_jml) = 0, 0, (SUM(ktp_jml) / SUM(rekam_jml)) * 100) as persen_memiliki_ktp'),
+                DB::raw('IF(SUM(wajib_ktp_jml) = 0, 0, (SUM(rekam_jml) / SUM(wajib_ktp_jml)) * 100) as persen_sudah_rekam'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'ktp.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('ktp.semester', $request['semester'])
             ->where('ktp.tahun', $request['tahun'])
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKtp::select(
-            // Wajib KTP
-            DB::raw('SUM(wajib_ktp_lk) as total_wajib_ktp_lk'),
-            DB::raw('SUM(wajib_ktp_pr) as total_wajib_ktp_pr'),
-            DB::raw('SUM(wajib_ktp_jml) as total_wajib_ktp_jml'),
-
-            // Rekam KTP
-            DB::raw('SUM(rekam_lk) as total_rekam_lk'),
-            DB::raw('SUM(rekam_pr) as total_rekam_pr'),
-            DB::raw('SUM(rekam_jml) as total_rekam_jml'),
-
-            // Belum Rekam KTP
-            DB::raw('SUM(belum_rekam_lk) as total_belum_rekam_lk'),
-            DB::raw('SUM(belum_rekam_pr) as total_belum_rekam_pr'),
-            DB::raw('SUM(belum_rekam_jml) as total_belum_rekam_jml'),
-
-            // KTP
-            DB::raw('SUM(ktp_lk) as total_ktp_lk'),
-            DB::raw('SUM(ktp_pr) as total_ktp_pr'),
-            DB::raw('SUM(ktp_jml) as total_ktp_jml'),
-
-            // Belum KTP
-            DB::raw('SUM(blm_ktp_lk) as total_blm_ktp_lk'),
-            DB::raw('SUM(blm_ktp_pr) as total_blm_ktp_pr'),
-            DB::raw('SUM(blm_ktp_jml) as total_blm_ktp_jml')
+            array_merge(
+                [
+                    DB::raw('IF(SUM(rekam_jml) = 0, 0, (SUM(ktp_jml) / SUM(rekam_jml)) * 100) as persen_memiliki_ktp'),
+                    DB::raw('IF(SUM(wajib_ktp_jml) = 0, 0, (SUM(rekam_jml) / SUM(wajib_ktp_jml)) * 100) as persen_sudah_rekam'),
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = KepemilikanKtp::select([
-            // Wajib KTP
-            DB::raw('SUM(wajib_ktp_lk) as total_wajib_ktp_lk'),
-            DB::raw('SUM(wajib_ktp_pr) as total_wajib_ktp_pr'),
-            DB::raw('SUM(wajib_ktp_jml) as total_wajib_ktp_jml'),
-
-            // Rekam KTP
-            DB::raw('SUM(rekam_lk) as total_rekam_lk'),
-            DB::raw('SUM(rekam_pr) as total_rekam_pr'),
-            DB::raw('SUM(rekam_jml) as total_rekam_jml'),
-
-            // Belum Rekam KTP
-            DB::raw('SUM(belum_rekam_lk) as total_belum_rekam_lk'),
-            DB::raw('SUM(belum_rekam_pr) as total_belum_rekam_pr'),
-            DB::raw('SUM(belum_rekam_jml) as total_belum_rekam_jml'),
-
-            // KTP
-            DB::raw('SUM(ktp_lk) as total_ktp_lk'),
-            DB::raw('SUM(ktp_pr) as total_ktp_pr'),
-            DB::raw('SUM(ktp_jml) as total_ktp_jml'),
-
-            // Belum KTP
-            DB::raw('SUM(blm_ktp_lk) as total_blm_ktp_lk'),
-            DB::raw('SUM(blm_ktp_pr) as total_blm_ktp_pr'),
-            DB::raw('SUM(blm_ktp_jml) as total_blm_ktp_jml'),
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->get();
+        $dataPerkecamatan = KepemilikanKtp::select(array_merge(
+            [
+                'mstr_kecamatan.nama as kecamatan_nama',
+                DB::raw('IF(SUM(rekam_jml) = 0, 0, (SUM(ktp_jml) / SUM(rekam_jml)) * 100) as persen_memiliki_ktp'),
+                DB::raw('IF(SUM(wajib_ktp_jml) = 0, 0, (SUM(rekam_jml) / SUM(wajib_ktp_jml)) * 100) as persen_sudah_rekam'),
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $attributTable)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'ktp.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('ktp.semester', $request['semester'])
@@ -1703,10 +1508,14 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataStrukturUmurAgamaKelompokUmur($request)
     {
