@@ -1,5 +1,8 @@
 @extends('layout.master')
 @section('content')
+@php
+    $headerData = config('dataArray.categoryReligious');
+@endphp;
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
@@ -14,7 +17,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        {!! Form::open([
+                            'id' => 'formSearchStrukturUmurAgamaKelompokAgama',
+                            'method' => 'POST',
+                            'route' => ['search_data', 'OqF8P0knI7']
+                        ]) !!}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
@@ -29,11 +36,11 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="submitSearch">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
                             </div>
-                        </form>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -42,37 +49,77 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Agama - Kelompok Umur <span id="tahunSemester">I 2025</span></h4>
+                        <h4 class="card-title" id="tahunSemester"></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="table" class="display" style="min-width: 845px">
+                            <table class="display table table-striped" id="tableSum">
+                                <div class="col-md-12">
+                                    <select id="agamaFilter" class="mb-3">
+                                        <option value="">All</option>
+                                        <option value="BUDHA">Budha</option>
+                                        <option value="HINDU">Hindu</option>
+                                        <option value="ISLAM">Islam</option>
+                                        <option value="KATHOLIK">Katholik</option>
+                                        <option value="KEPERCAYAAN">kepercayaan</option>
+                                        <option value="KRISTEN">Kristen</option>
+                                        <option value="KONGHUCU ">konghucu</option>
+                                    </select>
+                                </div>
                                 <thead>
                                     <tr>
-                                        <th>Kecamatan</th>
-                                        <th>Kelurahan</th>
-                                        <th>Kelompok umur</th>
-                                        <th>Islam LK</th>
-                                        <th>Islam PR</th>
-                                        <th>Islam JML</th>
-                                        <th>Katholik LK</th>
-                                        <th>Katholik PR</th>
-                                        <th>Katholik JML</th>
-                                        <th>Kristen LK</th>
-                                        <th>Kristen PR</th>
-                                        <th>Kristen JML</th>
-                                        <th>Hindu LK</th>
-                                        <th>Hindu PR</th>
-                                        <th>Hindu JML</th>
-                                        <th>Budha LK</th>
-                                        <th>Budha PR</th>
-                                        <th>Budha JML</th>
-                                        <th>Konghucu LK</th>
-                                        <th>Konghucu PR</th>
-                                        <th>Konghucu JML</th>
-                                        <th>Kepercayaan LK</th>
-                                        <th>Kepercayaan PR</th>
-                                        <th>Kepercayaan JML</th>
+                                        <th class="text-uppercase">Agama</th>
+                                        <th class="text-uppercase">Kelompok Umur</th>
+                                        <th class="text-uppercase">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkecamatan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKecamatan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Kecamatan</th>
+                                        <th class="text-uppercase">Kelompok Umur</th>
+                                        @foreach ($headerData as $item)
+                                        <th class="text-uppercase">{{ $item }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkelurahan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKelurahan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Kecamatan</th>
+                                        <th class="text-uppercase">Kelurahan</th>
+                                        <th class="text-uppercase">Kelompok Umur</th>
+                                        @foreach ($headerData as $item)
+                                        <th class="text-uppercase">{{ $item }}</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,9 +132,9 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
+    <script src="{{ asset('js/global_func.js') }}"></script>
     <script>
-        $("#umur").select2();
-        selectAge()
+        generateYearOptions('tahun');
     </script>
+    <script src="{{ asset('js/index/struktur_umur/agama/agama_kelompok_umur.js') }}"></script>
 @endsection

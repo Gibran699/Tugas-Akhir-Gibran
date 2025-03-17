@@ -56,24 +56,24 @@
                                         <th>Kecamatan</th>
                                         <th>Kelurahan</th>
                                         <th>Umur</th>
-                                        <th>Disabiltas Fisik LK</th>
-                                        <th>Disabiltas Fisik PR</th>
-                                        <th>Disabiltas Fisik JML</th>
-                                        <th>Disabiltas Netra / Buta LK</th>
-                                        <th>Disabiltas Netra / Buta PR</th>
-                                        <th>Disabiltas Netra / Buta JML</th>
-                                        <th>Disabiltas Rungu / Wicara LK</th>
-                                        <th>Disabiltas Rungu / Wicara PR</th>
-                                        <th>Disabiltas Rungu / Wicara JML</th>
-                                        <th>Disabiltas Mental / Jiwa LK</th>
-                                        <th>Disabiltas Mental / Jiwa PR</th>
-                                        <th>Disabiltas Mental / Jiwa JML</th>
-                                        <th>Disabiltas Fisik & Mental LK</th>
-                                        <th>Disabiltas Fisik & Mental PR</th>
-                                        <th>Disabiltas Fisik & Mental JML</th>
-                                        <th>Disabiltas Lainya LK</th>
-                                        <th>Disabiltas Lainya PR</th>
-                                        <th>Disabiltas Lainya JML</th>
+                                        <th>disabilitas Fisik LK</th>
+                                        <th>disabilitas Fisik PR</th>
+                                        <th>disabilitas Fisik JML</th>
+                                        <th>disabilitas Netra / Buta LK</th>
+                                        <th>disabilitas Netra / Buta PR</th>
+                                        <th>disabilitas Netra / Buta JML</th>
+                                        <th>disabilitas Rungu / Wicara LK</th>
+                                        <th>disabilitas Rungu / Wicara PR</th>
+                                        <th>disabilitas Rungu / Wicara JML</th>
+                                        <th>disabilitas Mental / Jiwa LK</th>
+                                        <th>disabilitas Mental / Jiwa PR</th>
+                                        <th>disabilitas Mental / Jiwa JML</th>
+                                        <th>disabilitas Fisik & Mental LK</th>
+                                        <th>disabilitas Fisik & Mental PR</th>
+                                        <th>disabilitas Fisik & Mental JML</th>
+                                        <th>disabilitas Lainya LK</th>
+                                        <th>disabilitas Lainya PR</th>
+                                        <th>disabilitas Lainya JML</th>
                                     </tr>
                                 </thead>
                             </table>

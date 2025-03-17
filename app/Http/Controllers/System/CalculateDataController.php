@@ -271,7 +271,7 @@ class CalculateDataController extends Controller
     }
     public function dataPendudukPekerjaan($request)
     {
-        $categoryJob =  config('dataArray.categoryJob');
+        $categoryJob = config('dataArray.categoryJob');
         $dataPerkelurahan = PendudukPekerjaan::select([
             'pekerjaan_penduduk.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -799,7 +799,7 @@ class CalculateDataController extends Controller
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
-    public function  dataPendidikanGolonganDarah($request)
+    public function dataPendidikanGolonganDarah($request)
     {
         $categoryBlood = config('dataArray.categoryBlood');
         $dataPerkelurahan = PendidikanPendudukJGolonganDarah::select([
@@ -1519,6 +1519,7 @@ class CalculateDataController extends Controller
     }
     public function dataStrukturUmurAgamaKelompokUmur($request)
     {
+        $categoryReligious = config('dataArray.categoryReligious');
         $dataPerkelurahan = KelompokUmurAgama::select([
             'kelompok_umur_agama.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -1531,96 +1532,42 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KelompokUmurAgama::select(
-            // Islam
-            DB::raw('SUM(islam_lk) as total_islam_lk'),
-            DB::raw('SUM(islam_pr) as total_islam_pr'),
-            DB::raw('SUM(islam_jml) as total_islam_jml'),
-
-            // Katholik
-            DB::raw('SUM(katholik_lk) as total_katholik_lk'),
-            DB::raw('SUM(katholik_pr) as total_katholik_pr'),
-            DB::raw('SUM(katholik_jml) as total_katholik_jml'),
-
-            // Kristen
-            DB::raw('SUM(kristen_lk) as total_kristen_lk'),
-            DB::raw('SUM(kristen_pr) as total_kristen_pr'),
-            DB::raw('SUM(kristen_jml) as total_kristen_jml'),
-
-            // Hindu
-            DB::raw('SUM(hindu_lk) as total_hindu_lk'),
-            DB::raw('SUM(hindu_pr) as total_hindu_pr'),
-            DB::raw('SUM(hindu_jml) as total_hindu_jml'),
-
-            // Budha
-            DB::raw('SUM(budha_lk) as total_budha_lk'),
-            DB::raw('SUM(budha_pr) as total_budha_pr'),
-            DB::raw('SUM(budha_jml) as total_budha_jml'),
-
-            // Konghucu
-            DB::raw('SUM(konghucu_lk) as total_konghucu_lk'),
-            DB::raw('SUM(konghucu_pr) as total_konghucu_pr'),
-            DB::raw('SUM(konghucu_jml) as total_konghucu_jml'),
-
-            // Kepercayaan
-            DB::raw('SUM(kepercayaan_lk) as total_kepercayaan_lk'),
-            DB::raw('SUM(kepercayaan_pr) as total_kepercayaan_pr'),
-            DB::raw('SUM(kepercayaan_jml) as total_kepercayaan_jml'),
-            'kelompok_umur_agama.kelompok_umur',
+            array_merge(
+                [
+                    'kelompok_umur'
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryReligious)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = KelompokUmurAgama::select([
-            // Islam
-            DB::raw('SUM(islam_lk) as total_islam_lk'),
-            DB::raw('SUM(islam_pr) as total_islam_pr'),
-            DB::raw('SUM(islam_jml) as total_islam_jml'),
-
-            // Katholik
-            DB::raw('SUM(katholik_lk) as total_katholik_lk'),
-            DB::raw('SUM(katholik_pr) as total_katholik_pr'),
-            DB::raw('SUM(katholik_jml) as total_katholik_jml'),
-
-            // Kristen
-            DB::raw('SUM(kristen_lk) as total_kristen_lk'),
-            DB::raw('SUM(kristen_pr) as total_kristen_pr'),
-            DB::raw('SUM(kristen_jml) as total_kristen_jml'),
-
-            // Hindu
-            DB::raw('SUM(hindu_lk) as total_hindu_lk'),
-            DB::raw('SUM(hindu_pr) as total_hindu_pr'),
-            DB::raw('SUM(hindu_jml) as total_hindu_jml'),
-
-            // Budha
-            DB::raw('SUM(budha_lk) as total_budha_lk'),
-            DB::raw('SUM(budha_pr) as total_budha_pr'),
-            DB::raw('SUM(budha_jml) as total_budha_jml'),
-
-            // Konghucu
-            DB::raw('SUM(konghucu_lk) as total_konghucu_lk'),
-            DB::raw('SUM(konghucu_pr) as total_konghucu_pr'),
-            DB::raw('SUM(konghucu_jml) as total_konghucu_jml'),
-
-            // Kepercayaan
-            DB::raw('SUM(kepercayaan_lk) as total_kepercayaan_lk'),
-            DB::raw('SUM(kepercayaan_pr) as total_kepercayaan_pr'),
-            DB::raw('SUM(kepercayaan_jml) as total_kepercayaan_jml'),
-            'kelompok_umur_agama.kelompok_umur',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->groupBy('kelompok_umur_agama.kelompok_umur')
+            ->get();
+        $dataPerkecamatan = KelompokUmurAgama::select(array_merge(
+            [
+                'kelompok_umur_agama.kelompok_umur',
+                'mstr_kecamatan.nama as kecamatan_nama'
+            ],
+            array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryReligious)
+        ))
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kelompok_umur_agama.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kelompok_umur_agama.semester', $request['semester'])
             ->where('kelompok_umur_agama.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'kelompok_umur_agama.kelompok_umur')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataStrukturUmurDisabilitasKelompokUmur($request)
     {
+        $categoryDisabilites = config('dataArray.categoryDisabilities');
         $dataPerkelurahan = KelompokUmurDisabilitas::select([
             'kelompok_umur_disabilitas.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -1633,83 +1580,40 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KelompokUmurDisabilitas::select(
-            // Disabilitas Fisik
-            DB::raw('SUM(disabilitas_fisik_lk) as total_disabilitas_fisik_lk'),
-            DB::raw('SUM(disabilitas_fisik_pr) as total_disabilitas_fisik_pr'),
-            DB::raw('SUM(disabilitas_fisik_jml) as total_disabilitas_fisik_jml'),
-
-            // Disabilitas Netra/Buta
-            DB::raw('SUM(disabilitas_netra_buta_lk) as total_disabilitas_netra_buta_lk'),
-            DB::raw('SUM(disabilitas_netra_buta_pr) as total_disabilitas_netra_buta_pr'),
-            DB::raw('SUM(disabilitas_netra_buta_jml) as total_disabilitas_netra_buta_jml'),
-
-            // Disabilitas Rungu/Wicara
-            DB::raw('SUM(disabilitas_rungu_wicara_lk) as total_disabilitas_rungu_wicara_lk'),
-            DB::raw('SUM(disabilitas_rungu_wicara_pr) as total_disabilitas_rungu_wicara_pr'),
-            DB::raw('SUM(disabilitas_rungu_wicara_jml) as total_disabilitas_rungu_wicara_jml'),
-
-            // Disabilitas Mental/Jiwa
-            DB::raw('SUM(disabilitas_mental_jiwa_lk) as total_disabilitas_mental_jiwa_lk'),
-            DB::raw('SUM(disabilitas_mental_jiwa_pr) as total_disabilitas_mental_jiwa_pr'),
-            DB::raw('SUM(disabilitas_mental_jiwa_jml) as total_disabilitas_mental_jiwa_jml'),
-
-            // Disabilitas Fisik & Mental
-            DB::raw('SUM(disabilitas_fisik_mental_lk) as total_disabilitas_fisik_mental_lk'),
-            DB::raw('SUM(disabilitas_fisik_mental_pr) as total_disabilitas_fisik_mental_pr'),
-            DB::raw('SUM(disabilitas_fisik_mental_jml) as total_disabilitas_fisik_mental_jml'),
-
-            // Disabilitas Lainnya
-            DB::raw('SUM(disabilitas_lainnya_lk) as total_disabilitas_lainnya_lk'),
-            DB::raw('SUM(disabilitas_lainnya_pr) as total_disabilitas_lainnya_pr'),
-            DB::raw('SUM(disabilitas_lainnya_jml) as total_disabilitas_lainnya_jml'),
-            'kelompok_umur_disabilitas.kelompok_umur as kelompok_umur'
+            array_merge(
+                [
+                    'kelompok_umur'
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryDisabilites)
+            )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = KelompokUmurDisabilitas::select([
-            // Disabilitas Fisik
-            DB::raw('SUM(disabilitas_fisik_lk) as total_disabilitas_fisik_lk'),
-            DB::raw('SUM(disabilitas_fisik_pr) as total_disabilitas_fisik_pr'),
-            DB::raw('SUM(disabilitas_fisik_jml) as total_disabilitas_fisik_jml'),
-
-            // Disabilitas Netra/Buta
-            DB::raw('SUM(disabilitas_netra_buta_lk) as total_disabilitas_netra_buta_lk'),
-            DB::raw('SUM(disabilitas_netra_buta_pr) as total_disabilitas_netra_buta_pr'),
-            DB::raw('SUM(disabilitas_netra_buta_jml) as total_disabilitas_netra_buta_jml'),
-
-            // Disabilitas Rungu/Wicara
-            DB::raw('SUM(disabilitas_rungu_wicara_lk) as total_disabilitas_rungu_wicara_lk'),
-            DB::raw('SUM(disabilitas_rungu_wicara_pr) as total_disabilitas_rungu_wicara_pr'),
-            DB::raw('SUM(disabilitas_rungu_wicara_jml) as total_disabilitas_rungu_wicara_jml'),
-
-            // Disabilitas Mental/Jiwa
-            DB::raw('SUM(disabilitas_mental_jiwa_lk) as total_disabilitas_mental_jiwa_lk'),
-            DB::raw('SUM(disabilitas_mental_jiwa_pr) as total_disabilitas_mental_jiwa_pr'),
-            DB::raw('SUM(disabilitas_mental_jiwa_jml) as total_disabilitas_mental_jiwa_jml'),
-
-            // Disabilitas Fisik & Mental
-            DB::raw('SUM(disabilitas_fisik_mental_lk) as total_disabilitas_fisik_mental_lk'),
-            DB::raw('SUM(disabilitas_fisik_mental_pr) as total_disabilitas_fisik_mental_pr'),
-            DB::raw('SUM(disabilitas_fisik_mental_jml) as total_disabilitas_fisik_mental_jml'),
-
-            // Disabilitas Lainnya
-            DB::raw('SUM(disabilitas_lainnya_lk) as total_disabilitas_lainnya_lk'),
-            DB::raw('SUM(disabilitas_lainnya_pr) as total_disabilitas_lainnya_pr'),
-            DB::raw('SUM(disabilitas_lainnya_jml) as total_disabilitas_lainnya_jml'),
-            'kelompok_umur_disabilitas.kelompok_umur as kelompok_umur',
-            'mstr_kecamatan.nama as kecamatan_nama'
-        ])
+            ->groupBy('kelompok_umur_disabilitas.kelompok_umur')
+            ->get();
+        $dataPerkecamatan = KelompokUmurDisabilitas::select(
+            array_merge(
+                [
+                    'kelompok_umur',
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryDisabilites)
+            )
+        )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'kelompok_umur_disabilitas.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kelompok_umur_disabilitas.semester', $request['semester'])
             ->where('kelompok_umur_disabilitas.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'kelompok_umur')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataStrukturUmurDisabilitasPendidikan($request)
     {
