@@ -1,19 +1,19 @@
 @extends('layout.master')
 @section('content')
-@php
-    $categories = [
-        'wajib_akta_cerai_lk',
-        'wajib_akta_cerai_pr',
-        'wajib_akta_cerai_jml',
-        'memiliki_akta_cerai_lk',
-        'memiliki_akta_cerai_pr',
-        'memiliki_akta_cerai_jml',
-        'belum_memiliki_akta_cerai_lk',
-        'belum_memiliki_akta_cerai_pr',
-        'belum_memiliki_akta_cerai_jml',
-        'persen_memiliki',
-    ];
-@endphp
+    @php
+        $categories = [
+            'wajib_akta_cerai_lk',
+            'wajib_akta_cerai_pr',
+            'wajib_akta_cerai_jml',
+            'memiliki_akta_cerai_lk',
+            'memiliki_akta_cerai_pr',
+            'memiliki_akta_cerai_jml',
+            'belum_memiliki_akta_cerai_lk',
+            'belum_memiliki_akta_cerai_pr',
+            'belum_memiliki_akta_cerai_jml',
+            'persen_memiliki',
+        ];
+    @endphp
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
@@ -33,24 +33,24 @@
                             'method' => 'post',
                             'route' => ['search_data', 'goKsHUTCOG'],
                         ]) !!}
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <select name="semester" id="semester" class="form-control default-select">
-                                        <option value="" disabled selected>--PILIH Semester--</option>
-                                        <option value="1">I</option>
-                                        <option value="2">II</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <select name="tahun" id="tahun" class="form-control default-select">
-                                    </select>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <select name="semester" id="semester" class="form-control default-select">
+                                    <option value="" disabled selected>--PILIH Semester--</option>
+                                    <option value="1">I</option>
+                                    <option value="2">II</option>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary" id="submitSearch">
-                                    <i class="fa fa-list"></i> Tampilkan
-                                </button>
+                            <div class="col-md-6 mb-3">
+                                <select name="tahun" id="tahun" class="form-control default-select">
+                                </select>
                             </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary" id="submitSearch">
+                                <i class="fa fa-list"></i> Tampilkan
+                            </button>
+                        </div>
                         {!! Form::close() !!}
                     </div>
                 </div>

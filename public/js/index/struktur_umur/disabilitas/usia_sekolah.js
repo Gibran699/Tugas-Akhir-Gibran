@@ -7,22 +7,60 @@
 
     function fetchData() {
         var formData = new FormData(
-            document.getElementById("formSearchKepemilikanAktaCerai")
+            document.getElementById("formSearchDisabilitasUsiaSekolah")
         );
-        const category = [
-            "wajib_akta_cerai_lk",
-            "wajib_akta_cerai_pr",
-            "wajib_akta_cerai_jml",
-            "memiliki_akta_cerai_lk",
-            "memiliki_akta_cerai_pr",
-            "memiliki_akta_cerai_jml",
-            "belum_memiliki_akta_cerai_lk",
-            "belum_memiliki_akta_cerai_pr",
-            "belum_memiliki_akta_cerai_jml",
-            "persen_memiliki",
+        const disabilities = [
+            "fisik_u4_6th_lk",
+            "fisik_u4_6th_pr",
+            "fisik_u7_12th_lk",
+            "fisik_u7_12th_pr",
+            "fisik_u13_15th_lk",
+            "fisik_u13_15th_pr",
+            "fisik_u16_18th_lk",
+            "fisik_u16_18th_pr",
+            "netra_buta_u4_6th_lk",
+            "netra_buta_u4_6th_pr",
+            "netra_buta_u7_12th_lk",
+            "netra_buta_u7_12th_pr",
+            "netra_buta_u13_15th_lk",
+            "netra_buta_u13_15th_pr",
+            "netra_buta_u16_18th_lk",
+            "netra_buta_u16_18th_pr",
+            "rungu_wicara_u4_6th_lk",
+            "rungu_wicara_u4_6th_pr",
+            "rungu_wicara_u7_12th_lk",
+            "rungu_wicara_u7_12th_pr",
+            "rungu_wicara_u13_15th_lk",
+            "rungu_wicara_u13_15th_pr",
+            "rungu_wicara_u16_18th_lk",
+            "rungu_wicara_u16_18th_pr",
+            "mental_jiwa_u4_6th_lk",
+            "mental_jiwa_u4_6th_pr",
+            "mental_jiwa_u7_12th_lk",
+            "mental_jiwa_u7_12th_pr",
+            "mental_jiwa_u13_15th_lk",
+            "mental_jiwa_u13_15th_pr",
+            "mental_jiwa_u16_18th_lk",
+            "mental_jiwa_u16_18th_pr",
+            "fisik_mental_u4_6th_lk",
+            "fisik_mental_u4_6th_pr",
+            "fisik_mental_u7_12th_lk",
+            "fisik_mental_u7_12th_pr",
+            "fisik_mental_u13_15th_lk",
+            "fisik_mental_u13_15th_pr",
+            "fisik_mental_u16_18th_lk",
+            "fisik_mental_u16_18th_pr",
+            "lainnya_u4_6th_lk",
+            "lainnya_u4_6th_pr",
+            "lainnya_u7_12th_lk",
+            "lainnya_u7_12th_pr",
+            "lainnya_u13_15th_lk",
+            "lainnya_u13_15th_pr",
+            "lainnya_u16_18th_lk",
+            "lainnya_u16_18th_pr",
         ];
         $.ajax({
-            url: $("#formSearchKepemilikanAktaCerai").attr("action"),
+            url: $("#formSearchDisabilitasUsiaSekolah").attr("action"),
             type: "POST",
             data: formData,
             processData: false,
@@ -43,14 +81,14 @@
                     title: "Berhasil",
                     text: response.message || "Pencarian Berhasil!",
                 });
-                setTableKelurahan(response, category);
-                setTableKecamatan(response, category);
-                setTableSum(response, category);
+                setTableKelurahan(response, disabilities);
+                setTableKecamatan(response, disabilities);
+                setTableSum(response, disabilities);
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
                 $("#tahunSemester").text(
-                    `Kepemilikan Akta Cerai Tahun ${tahun} - Semester ${semester}`
+                    `Penduduk Disabilitas Usia Sekolaj Tahun ${tahun} - Semester ${semester}`
                 );
             },
             error: function (xhr) {
@@ -69,15 +107,18 @@
         });
     }
 
-    function setTableKelurahan(response, category) {
-        // Map the response to the dataSet format dynamically using the category array
+    function setTableKelurahan(response, disabilities) {
+        // Map the response to the dataSet format dynamically using the disabilities array
         let dataSet = response.dataPerkelurahan.map((item) => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.kelurahan_nama];
+            let row = [
+                item.kecamatan_nama,
+                item.kelurahan_nama,
+            ];
 
-            // Dynamically add the category data based on the category array
-            category.forEach((categoryKey) => {
-                row.push(item[categoryKey]); // Add the value from the item object
+            // Dynamically add the disabilities data based on the disabilities array
+            disabilities.forEach((religionKey) => {
+                row.push(item[religionKey]); // Add the value from the item object
             });
 
             return row;
@@ -90,11 +131,14 @@
         }
 
         // Define the columns dynamically
-        let columns = [{ title: "KECAMATAN" }, { title: "KELURAHAN" }];
+        let columns = [
+            { title: "KECAMATAN" },
+            { title: "KELURAHAN" },
+        ];
 
-        // Add columns for each category key
-        category.forEach((categoryKey) => {
-            columns.push({ title: categoryKey.toUpperCase() }); // Add the category key as the column title
+        // Add columns for each disabilities key
+        disabilities.forEach((religionKey) => {
+            columns.push({ title: religionKey.toUpperCase() }); // Add the disabilities key as the column title
         });
 
         // Initialize DataTable
@@ -125,15 +169,15 @@
         });
     }
 
-    function setTableKecamatan(response, category) {
-        // Map the response to the dataSet format dynamically using the category array
+    function setTableKecamatan(response, disabilities) {
+        // Map the response to the dataSet format dynamically using the disabilities array
         let dataSet = response.dataPerkecamatan.map((item) => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
             let row = [item.kecamatan_nama];
 
-            // Dynamically add the category data based on the category array
-            category.forEach((categoryKey) => {
-                row.push(item[categoryKey]); // Add the value from the item object
+            // Dynamically add the disabilities data based on the disabilities array
+            disabilities.forEach((religionKey) => {
+                row.push(item[religionKey]); // Add the value from the item object
             });
 
             return row;
@@ -148,9 +192,9 @@
         // Define the columns dynamically
         let columns = [{ title: "KECAMATAN" }];
 
-        // Add columns for each category key
-        category.forEach((categoryKey) => {
-            columns.push({ title: categoryKey.toUpperCase() }); // Add the category key as the column title
+        // Add columns for each disabilities key
+        disabilities.forEach((religionKey) => {
+            columns.push({ title: religionKey.toUpperCase() }); // Add the disabilities key as the column title
         });
 
         // Initialize DataTable
@@ -180,7 +224,7 @@
             this.nodes().to$().removeClass("selected");
         });
     }
-    function setTableSum(response, category) {
+    function setTableSum(response, disabilities) {
         const summedData = response.dataKeseluruhan;
 
         if ($.fn.DataTable.isDataTable("#tableSum")) {
@@ -190,15 +234,15 @@
         const tableData = [];
 
         summedData.forEach((data) => {
-            category.forEach((categoryKey) => {
-                // const categoryName = categoryKey.split('_')[0].charAt(0).toUpperCase() + categoryKey.split('_')[0].slice(1);
-                const categoryName = categoryKey
+            disabilities.forEach((disabilitiesKey) => {
+                // const disabilitiesName = disabilitiesKey.split('_')[0].charAt(0).toUpperCase() + disabilitiesKey.split('_')[0].slice(1);
+                const disabilitiesName = disabilitiesKey
                     .replace(/_/g, " ")
                     .toUpperCase();
 
                 const row = [
-                    categoryName, // Agama
-                    data[`${categoryKey}`] || 0, // Jumlah
+                    disabilitiesName, // Agama
+                    data[`${disabilitiesKey}`] || 0, // Jumlah
                 ];
                 tableData.push(row);
             });
@@ -206,7 +250,10 @@
 
         $("#tableSum").DataTable({
             data: tableData,
-            columns: [{ title: "Keterangan" }, { title: "Jumlah" }],
+            columns: [
+                { title: "Keterangan" },
+                { title: "Jumlah" },
+            ],
             destroy: true,
             responsive: true,
             paging: true,
@@ -221,5 +268,16 @@
                 },
             },
         });
+        // Add filter functionality
+        // $("#disabilitasFilter").on("change", function () {
+        //     const selectedDisabilitas = $(this).val();
+        //     const table = $("#tableSum").DataTable();
+
+        //     if (selectedDisabilitas) {
+        //         table.column(0).search(selectedDisabilitas).draw(); // Filter by Agama
+        //     } else {
+        //         table.column(0).search("").draw(); // Clear filter
+        //     }
+        // });
     }
 })(jQuery);

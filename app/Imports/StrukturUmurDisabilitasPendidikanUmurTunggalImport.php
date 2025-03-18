@@ -5,9 +5,10 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Illuminate\Support\Str;
 
-class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, WithHeadingRow
+class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading
 {
     protected $tahun;
     protected $semester;
@@ -20,17 +21,24 @@ class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, Wit
 
     public function model(array $row)
     {
-        $categoryDisabilities = config('dataArray.categoryDisabilities');
-        $data =[
+        $categoryEducationDisabilites = config('dataArray.categoryEducationDisabilites');
+        $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
             'umur' => $row['umur'],
         ];
-        foreach ($categoryDisabilities as $key) {
+
+        foreach ($categoryEducationDisabilites as $key) {
             $data[$key] = $row[$key] ?? null;
         }
+
         return new PendidikanUmurTunggal($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 100; // Process 100 rows at a time
     }
 }

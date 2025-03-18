@@ -17,24 +17,13 @@ return new class extends Migration
             $table->string('kode_wilayah');
             $table->string('umur');
 
-            $categories = ['fisik', 'netra_buta', 'rungu_wicara', 'lainnya'];
-            $education_levels = [
-                'tidak_blm_sekolah', 'belum_tamat_sd_sederajat', 'tamat_sd_sederajat',
-                'sltp_sederajat', 'slta_sederajat', 'diploma_i_ii',
-                'akademi_diploma_iii_s_muda', 'diploma_iv_strata_i',
-                'strata_ii', 'strata_iii'
-            ];
-
-            foreach ($categories as $category) {
-                foreach ($education_levels as $level) {
-                    $table->bigInteger("{$category}_{$level}_l");
-                    $table->bigInteger("{$category}_{$level}_p");
-                    $table->bigInteger("{$category}_{$level}");
-                }
+            $categories = config('dataArray.categoryEducationDisabilites');
+            foreach ($categories as $item) {
+                $table->bigInteger($item);
             }
 
             $table->integer('semester');
-            $table->integer('tahun');
+            $table->bigInteger('tahun');
             $table->timestamps();
             $table->softDeletes();
         });

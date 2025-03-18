@@ -32,6 +32,7 @@ class MainController extends Controller
             'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
         $file = $request->file('file');
+        $fileSize = $file->getSize();
         $tahun = $request->input('tahun');
         $semester = $request->input('semester');
         $validateAvailableData = $listFileModel::where('tahun',$tahun)->where('semester',$semester)->exists();
@@ -49,7 +50,10 @@ class MainController extends Controller
             } elseif ($file->getClientOriginalExtension() === 'csv') {
                 $fileType = \Maatwebsite\Excel\Excel::CSV;
             }
-    
+            if ($fileSize > 2 * 1024 * 1024) {
+                ini_set('memory_limit', '1024M'); // 1GB
+                set_time_limit(600); // 10 minutes
+            }
             Excel::import(new $listFileImport($tahun, $semester), $file, null, $fileType);
     
             DB::commit();

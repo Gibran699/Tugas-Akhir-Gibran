@@ -1627,19 +1627,22 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->where('umur', $request['umur'])
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = DisabilitasUmurTunggalPendidikan::select(
             array_merge(
-                array_map(function ($item) {
-                    return DB::raw("SUM($item) as $item");
-                }, $categoryEducationDisabilites),
-                ['pendidikan_umur_tunggal_disabilitas.umur as umur']
+                [
+                    'umur'
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryEducationDisabilites)
             )
         )
             ->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
+            ->where('umur', $request['umur'])
+            ->groupBy('umur')
+            ->get();
         $dataPerkecamatan = DisabilitasUmurTunggalPendidikan::select(
             array_merge(
                 array_map(function ($item) {
@@ -1655,13 +1658,18 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->where('umur', $request['umur'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'umur')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-        if (!$dataPerkelurahan) {
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
+        if (!$dataKeseluruhan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     // belum set range umur
     public function dataStrukturUmurDisabilitasUmurTunggal($request)
@@ -1676,22 +1684,23 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->where('umur', $request['umur'])
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = DisabilitasUmurTunggal::select(
             array_merge(
-                array_map(function ($item) {
-                    return DB::raw("SUM($item) as $item");
-                }, $categoryDisabilites),
                 [
-                    'umur_tunggal_disabilitas.umur as umur'
-                ]
+                    'umur'
+                ],
+                array_map(fn($item) => DB::raw("COALESCE(SUM($item),0) as $item"), $categoryDisabilites)
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
+            ->where('umur', $request['umur'])
+            ->groupBy('umur')
+            ->get();
 
-        $dataPerkecamatan = PendudukJenisKelamin::select(
+        $dataPerkecamatan = DisabilitasUmurTunggal::select(
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
@@ -1701,17 +1710,21 @@ class CalculateDataController extends Controller
                     'mstr_kecamatan.nama as kecamatan_nama'
                 ]
             )
-        )->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'jenis_kelamin_penduduk.kode_wilayah')
+        )->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_disabilitas.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
-            ->where('jenis_kelamin_penduduk.semester', $request['semester'])
-            ->where('jenis_kelamin_penduduk.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->where('umur_tunggal_disabilitas.semester', $request['semester'])
+            ->where('umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'umur')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTilte' => $dataTitle], 200);
     }
     public function dataStrukturUmurDisabilitasUsiaSekolah($request)
     {
@@ -1735,8 +1748,8 @@ class CalculateDataController extends Controller
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
-        $dataPerkecamatan = PendudukJenisKelamin::select(array_merge(
+            ->get();
+        $dataPerkecamatan = DisabilitasUsiaSekolah::select(array_merge(
             array_map(function ($item) {
                 return DB::raw("SUM($item) as $item");
             }, $categoryAgeSchollDisabilities),
@@ -1744,17 +1757,21 @@ class CalculateDataController extends Controller
                 'mstr_kecamatan.nama as kecamatan_nama'
             ]
         ))
-            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'jenis_kelamin_penduduk.kode_wilayah')
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'usia_sekolah_kelompok_umur_disabilitas.kode_wilayah')
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
-            ->where('jenis_kelamin_penduduk.semester', $request['semester'])
-            ->where('jenis_kelamin_penduduk.tahun', $request['tahun'])
+            ->where('usia_sekolah_kelompok_umur_disabilitas.semester', $request['semester'])
+            ->where('usia_sekolah_kelompok_umur_disabilitas.tahun', $request['tahun'])
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
+            $dataTitle = [
+                'semester' => $request['semester'],
+                'tahun' => $request['tahun'],
+            ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataStrukturUmurGolonganDarahKelompokUmur($request)
     {
