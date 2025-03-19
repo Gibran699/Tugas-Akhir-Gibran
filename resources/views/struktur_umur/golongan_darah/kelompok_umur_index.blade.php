@@ -1,5 +1,48 @@
 @extends('layout.master')
 @section('content')
+    @php
+        $bloodTypes = [
+            'A (LK)',
+            'A (PR)',
+            'A (JML)',
+            'A- (LK)',
+            'A- (PR)',
+            'A- (JML)',
+            'A+ (LK)',
+            'A+ (PR)',
+            'A+ (JML)',
+            'B (LK)',
+            'B (PR)',
+            'B (JML)',
+            'B- (LK)',
+            'B- (PR)',
+            'B- (JML)',
+            'B+ (LK)',
+            'B+ (PR)',
+            'B+ (JML)',
+            'AB (LK)',
+            'AB (PR)',
+            'AB (JML)',
+            'AB- (LK)',
+            'AB- (PR)',
+            'AB- (JML)',
+            'AB+ (LK)',
+            'AB+ (PR)',
+            'AB+ (JML)',
+            'O (LK)',
+            'O (PR)',
+            'O (JML)',
+            'O- (LK)',
+            'O- (PR)',
+            'O- (JML)',
+            'O+ (LK)',
+            'O+ (PR)',
+            'O+ (JML)',
+            'TIDAK TAHU (LK)',
+            'TIDAK TAHU (PR)',
+            'TIDAK TAHU (JML)',
+        ];
+    @endphp
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
@@ -14,26 +57,30 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <select name="semester" id="semester" class="form-control default-select">
-                                        <option value="" disabled selected>--PILIH Semester--</option>
-                                        <option value="1">I</option>
-                                        <option value="2">II</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <select name="tahun" id="tahun" class="form-control default-select">
-                                    </select>
-                                </div>
+                        {!! Form::open([
+                            'id' => 'formSearchGolonganDarahKelompokUmur',
+                            'method' => 'post',
+                            'route' => ['search_data', 'dRgHdz0S5A'],
+                        ]) !!}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <select name="semester" id="semester" class="form-control default-select">
+                                    <option value="" disabled selected>--PILIH Semester--</option>
+                                    <option value="1">I</option>
+                                    <option value="2">II</option>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-list"></i> Tampilkan
-                                </button>
+                            <div class="col-md-6 mb-3">
+                                <select name="tahun" id="tahun" class="form-control default-select">
+                                </select>
                             </div>
-                        </form>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary" id="submitSearch">
+                                <i class="fa fa-list"></i> Tampilkan
+                            </button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -42,61 +89,61 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Golongan Darah - Kelompok Umur <span id="tahunSemester">I 2025</span></h4>
+                        <h4 class="card-title" id="tahunSemester"></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            @php
-                                $bloodTypes = [
-                                    'A (LK)',
-                                    'A (PR)',
-                                    'A (JML)',
-                                    'A- (LK)',
-                                    'A- (PR)',
-                                    'A- (JML)',
-                                    'A+ (LK)',
-                                    'A+ (PR)',
-                                    'A+ (JML)',
-                                    'B (LK)',
-                                    'B (PR)',
-                                    'B (JML)',
-                                    'B- (LK)',
-                                    'B- (PR)',
-                                    'B- (JML)',
-                                    'B+ (LK)',
-                                    'B+ (PR)',
-                                    'B+ (JML)',
-                                    'AB (LK)',
-                                    'AB (PR)',
-                                    'AB (JML)',
-                                    'AB- (LK)',
-                                    'AB- (PR)',
-                                    'AB- (JML)',
-                                    'AB+ (LK)',
-                                    'AB+ (PR)',
-                                    'AB+ (JML)',
-                                    'O (LK)',
-                                    'O (PR)',
-                                    'O (JML)',
-                                    'O- (LK)',
-                                    'O- (PR)',
-                                    'O- (JML)',
-                                    'O+ (LK)',
-                                    'O+ (PR)',
-                                    'O+ (JML)',
-                                    'TIDAK TAHU (LK)',
-                                    'TIDAK TAHU (PR)',
-                                    'TIDAK TAHU (JML)',
-                                ];
-                            @endphp
-                            <table id="table" class="display" style="min-width: 845px">
+                            <table class="display table table-striped" id="tableSum">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Golongan <data value=""></data>arah</th>
+                                        <th class="text-uppercase">Kelompok Umur</th>
+                                        <th class="text-uppercase">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkecamatan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKecamatan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Kecamatan</th>
+                                        <th>Kelompok Umur</th>
+                                        @foreach ($bloodTypes as $item)
+                                            <th>{{ $item }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkelurahan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKelurahan" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Kelurahan</th>
                                         <th>Kelompok Umur</th>
                                         @foreach ($bloodTypes as $item)
-                                            <th>{{$item}}</th>
+                                            <th>{{ $item }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -107,5 +154,9 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
+    <script src="{{ asset('js/global_func.js') }}"></script>
+    <script>
+        generateYearOptions('tahun');
+    </script>
+    <script src="{{ asset('js/index/struktur_umur/golongan_darah/kelompok_umur.js') }}"></script>
 @endsection

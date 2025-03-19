@@ -98,7 +98,7 @@ class StatusKawinKelompokUmur extends Model
         '45_49_cerai_mati_pr',
         '50_54_belum_kawin_lk',
         '50_54_belum_kawin_pr',
-        '50_54_kawin _lk',
+        '50_54_kawin_lk',
         '50_54_kawin_pr',
         '50_54_cerai_hidup_lk',
         '50_54_cerai_hidup_pr',
