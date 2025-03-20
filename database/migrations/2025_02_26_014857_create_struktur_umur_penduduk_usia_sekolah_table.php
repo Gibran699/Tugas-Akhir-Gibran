@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah');
             $table->bigInteger('usia_sd_sederajat');
-            $table->bigInteger('usia_sltu_sederajat');
+            $table->bigInteger('usia_sltp_sederajat');
             $table->bigInteger('usia_slta_sederajat');
             $table->bigInteger('usia_perguruan_tinggi');
             $table->integer('semester');

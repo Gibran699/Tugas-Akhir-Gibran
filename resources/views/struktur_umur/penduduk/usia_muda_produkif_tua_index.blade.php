@@ -14,7 +14,11 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form>
+                        {!! Form::open([
+                            'id' => 'formSearchPendudukUsiaMudaProduktif',
+                            'method' => 'post',
+                            'route' => ['search_data','7fKa0gsKtH'],
+                        ]) !!}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <select name="semester" id="semester" class="form-control default-select">
@@ -29,11 +33,11 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="submitSearch">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
                             </div>
-                        </form>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>
@@ -42,11 +46,52 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Penduduk - Usia Muda, Produktif & Tua <span id="tahunSemester">I 2025</span></h4>
+                        <h4 class="card-title" id="tahunSemester"></h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="table" class="display" style="min-width: 845px">
+                            <table class="display table table-striped table-responsive" id="tableSum">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase">kategori usia</th>
+                                        <th class="text-uppercase">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkecamatan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKecamatan" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Kecamatan</th>
+                                        <th>Usia Muda</th>
+                                        <th>Usia Produktif</th>
+                                        <th>Usia Tua</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Perkelurahan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tableKelurahan" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
                                         <th>Kecamatan</th>
@@ -63,5 +108,9 @@
             </div>
         </div>
     </div>
-    @include('elements.data_table')
+    <script src="{{ asset('js/global_func.js') }}"></script>
+    <script>
+        generateYearOptions('tahun');
+    </script>
+    <script src="{{ asset('js/index/struktur_umur/penduduk/usia_produktif.js') }}"></script>
 @endsection

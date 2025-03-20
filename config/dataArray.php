@@ -126,6 +126,12 @@ return [
         'svFaBJRBLQ' =>  'dataStrukturUmurKepalaKeluargaKelompokUmur',
         'lo4z2cDrRC' =>  'dataStrukturUmurKepalaKeluargaUmurTunggal',
         'EJpy2qXC3z' =>  'dataStrukturUmurKepalaKeluargaStatusKawin',
+        'Byxp2PxZK2' =>  'dataStrukturUmurPendudukUmurTunggal',
+        '4riLDLsE6q' =>  'dataStrukturUmurPendudukStatuKawinUmurTunggal',
+        'gWNOWEQuYC' =>  'dataSturukUmurPendudukKelompokUmur',
+        'RIvQj7G1XZ' =>  'dataStrukturUmurPendudukStatusKawinKelompokUmur',
+        'ObqRhsP78G' =>  'dataStrukturUmurPendudukUsiaSekolah',
+        '7fKa0gsKtH' =>  'dataStrukturUmurPendudukUsiaMudaProduktifTua',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

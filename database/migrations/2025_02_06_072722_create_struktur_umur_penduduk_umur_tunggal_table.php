@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('uuid')->unique();
             $table->string('kode_wilayah', 50);
+            $table->string('umur', 50);
             $table->integer('lk');
             $table->integer('pr');
             $table->integer('jumlah');
