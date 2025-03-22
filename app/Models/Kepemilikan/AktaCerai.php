@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AktaCerai extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'akta_cerai';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid',
+        'kode_wilayah',
         'wajib_akta_cerai_lk',
         'wajib_akta_cerai_pr',
         'wajib_akta_cerai_jml',
@@ -25,7 +26,7 @@ class AktaCerai extends Model
         'belum_memiliki_akta_cerai_lk',
         'belum_memiliki_akta_cerai_pr',
         'belum_memiliki_akta_cerai_jml',
-        'semester', 'tahun'
+        'semester',
+        'tahun'
     ];
-    
 }

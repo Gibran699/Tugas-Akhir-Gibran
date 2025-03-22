@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KelompokUmur extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'kelompok_umur_golongan_darah';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah','kelompok_umur',
+        'uuid',
+        'kode_wilayah',
+        'kelompok_umur',
         'a_lk',
         'a_pr',
         'a_jml',
@@ -55,6 +57,7 @@ class KelompokUmur extends Model
         'tidak_tahu_lk',
         'tidak_tahu_pr',
         'tidak_tahu_jml',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
 }

@@ -35,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
     //system import
     Route::get('/form-import', function () {
         return view('pengaturan.import_data.form_input');
-    });
+    })->name('import_data_excel');
     Route::post('system/import-data',[SystemMainController::class,'importData'])->name('import_data');
     //management user
     Route::resource('user', UserController::class);

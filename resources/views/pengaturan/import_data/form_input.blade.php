@@ -12,6 +12,9 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Form Import Data</h4>
+                    <button class="btn btn-success text-right" data-bs-toggle="modal"
+                        data-bs-target=".listFileExcelFormatImport"><i class="fa fa-file-excel"></i> Format file import
+                        excel</button>
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
@@ -45,17 +48,18 @@
                                     <option value="" disabled selected>--PILIHAN DATA--</option>
                                     @foreach (config('dataArray.listFileImport') as $key => $value)
                                         <option value="{{ $key }}">
-                                            {{ str_replace(['App\Imports\\', 'Import'], '', $value) }}</option>
+                                            {{ preg_replace('/(?<!^)([A-Z])/', ' $1', str_replace(['App\Imports\\', 'Import'], '', $value)) }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="d-flex justify-content-end">
-                                {{-- <button type="button" class="btn btn-primary" id="submitImport">
-                                    <i class="fa fa-file-import"></i> Import
-                                </button> --}}
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="submitImport">
                                     <i class="fa fa-file-import"></i> Import
                                 </button>
+                                {{-- <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-file-import"></i> Import
+                                </button> --}}
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -64,13 +68,78 @@
             </div>
         </div>
     </div>
+    <div class="modal fade listFileExcelFormatImport" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">File Excel Format Import</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="fileTable">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <th>Nama File</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($collection = config('dataArray.listDataFileExcelFormatImport') as $item)
+                                                <tr>
+                                                    <td>{{ $item['name_file'] }}</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-success"
+                                                            onclick="downloadFile('{{ $item['location_file'] }}', '{{ $item['name_file'] }}.xlsx')">
+                                                            <i class="fa fa-download"></i> Download</button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="{{ asset('js/global_func.js') }}"></script>
     <script>
-        // Generate options untuk tahun
-        generateYearOptions('tahun');
+        (function($) {
+            // Generate options untuk tahun
+            generateYearOptions('tahun');
 
-        // Inisialisasi Select2 pada elemen dengan ID 'keteranganFile'
-        $("#keteranganFile").select2();
+            // Inisialisasi Select2 pada elemen dengan ID 'keteranganFile'
+            $("#keteranganFile").select2();
+            $('#fileTable').DataTable({
+                language: {
+                paginate: {
+                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                }
+            }
+            });
+            //download file excel
+            function downloadFile(filePath, fileName) {
+                // Create a temporary anchor element
+                const link = document.createElement('a');
+                link.href = filePath; // Set the file path
+                link.download = fileName; // Set the file name for download
+                document.body.appendChild(link);
+
+                // Trigger the download
+                link.click();
+
+                // Clean up
+                document.body.removeChild(link);
+            }
+        })(jQuery);
     </script>
     <script src="{{ asset('js/system/import_data.js') }}"></script>
 @endsection

@@ -9,14 +9,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JenisKelamin extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'jenis_kelamin_disabilitas';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid',
+        'kode_wilayah',
         'disabilitas_fisik_lk',
         'disabilitas_fisik_pr',
         'disabilitas_fisik_jml',
@@ -35,7 +36,7 @@ class JenisKelamin extends Model
         'disabilitas_lainnya_lk',
         'disabilitas_lainnya_pr',
         'disabilitas_lainnya_jml',
-        'semester', 'tahun'
+        'semester',
+        'tahun'
     ];
-    
 }

@@ -1020,5 +1020,175 @@ return [
         "lainnya_l",
         "lainnya_p",
         "lainnya_jml",
+    ],
+    'listDataFileExcelFormatImport' => [
+        [
+            "name_file" => "Penduduk Agama",
+            "location_file" => "/format_file_excel_import/penduduk_agama.xlsx"
+        ],
+        [
+            "name_file" => "Penduduk Golongan Darah",
+            "location_file" => "/format_file_excel_import/penduduk_golongan_darah.xlsx"
+        ],
+        [
+            "name_file" => "Penduduk Jenis Kelamin",
+            "location_file" => "/format_file_excel_import/penduduk_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Penduduk Pekerjaan",
+            "location_file" => "/format_file_excel_import/penduduk_pekerjaan.xlsx"
+        ],
+        [
+            "name_file" => "Penduduk Hubungan Keluarga",
+            "location_file" => "/format_file_excel_import/penduduk_hubungan_keluarga.xlsx"
+        ],
+        [
+            "name_file" => "Kepala Keluraga Agama",
+            "location_file" => "/format_file_excel_import/kepala_keluarga_agama.xlsx"
+        ],
+        [
+            "name_file" => "Kepala Keluraga Jenis Kelamin",
+            "location_file" => "/format_file_excel_import/kepala_keluarga_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Kepala Keluraga Pendidikan",
+            "location_file" => "/format_file_excel_import/kepala_keluarga_pendidikan.xlsx"
+        ],
+        [
+            "name_file" => "Kepala Keluraga Pekerjaan",
+            "location_file" => "/format_file_excel_import/kepala_keluarga_pekerjaan.xlsx"
+        ],
+        [
+            "name_file" => "Kepala Keluarga Status Kawin",
+            "location_file" => "/format_file_excel_import/kepala_keluarga_status_kawin.xlsx"
+        ],
+        [
+            "name_file" => "Status Kawin Agama",
+            "location_file" => "/format_file_excel_import/status_kawin_agama.xlsx"
+        ],
+        [
+            "name_file" => "Status Kawin Jenis Kelamin",
+            "location_file" => "/format_file_excel_import/status_kawin_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Pendidikan Jenis Kelamin",
+            "location_file" => "/format_file_excel_import/pendidikan_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Pendidikan Pekerjaan",
+            "location_file" => "/format_file_excel_import/pendidikan_pekerjaan.xlsx"
+        ],
+        [
+            "name_file" => "Pendidikan Golongan Darah",
+            "location_file" => "/format_file_excel_import/pendidikan_golongan_darah.xlsx"
+        ],
+        [
+            "name_file" => "Disabilitas Jenis Kelamin",
+            "location_file" => "/format_file_excel_import/disabilitas_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Disabilitas Pekerjaan",
+            "location_file" => "/format_file_excel_import/disabilitas_pekerjaan.xlsx"
+        ],
+        [
+            "name_file" => "Disabilitas Pendidikan",
+            "location_file" => "/format_file_excel_import/disabilitas_pendidikan.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Akta Kelahiran",
+            "location_file" => "/format_file_excel_import/kepemilikan_akta_kelahiran.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Akta Perkawinan",
+            "location_file" => "/format_file_excel_import/kepemilikan_akta_kawin.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Akta Perkawinan - Agama",
+            "location_file" => "/format_file_excel_import/kepemilikan_akta_kawin_agama.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Akta Perceraian",
+            "location_file" => "/format_file_excel_import/kepemilikan_akta_cerai.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Akta Perceraian - Agama",
+            "location_file" => "/format_file_excel_import/kepemilikan_akta_cerai_agama.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan KIA",
+            "location_file" => "/format_file_excel_import/kepemilikan_kia.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan Kartu Keluarga",
+            "location_file" => "/format_file_excel_import/kepemilikan_kartu_keluarga.xlsx"
+        ],
+        [
+            "name_file" => "Kepmilikan KTP",
+            "location_file" => "/format_file_excel_import/kepemilikan_ktp.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Agama Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_agama_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Disabilitas Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_disabilitas_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Disabilitas Pendidikan Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_disabilitas_pendidikan_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Disabilitas Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_disabilitas_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Disabilitas Usia Sekolah",
+            "location_file" => "/format_file_excel_import/struktur_umur_disabilitas_usia_sekolah.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Golongan Darah Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_golongan_darah_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Golongan Darah Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_golongan_darah_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Kepala Keluarga Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_kepala_keluarga_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Kepala Keluarga Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_kepala_keluarga_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Kepala Keluarga Status Kawin Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_kepala_keluarga_status_kawin_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Status Kawin Kelompok Umur",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_status_kawin_kelompok_umur.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Status Kawin Umur Tunggal",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_status_kawin_umur_tunggal.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Usia Sekolah",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_usia_sekolah.xlsx"
+        ],
+        [
+            "name_file" => "Struktur Umur Penduduk Demografi Usia",
+            "location_file" => "/format_file_excel_import/struktur_umur_penduduk_demografi_usia.xlsx"
+        ],
     ]
 ];

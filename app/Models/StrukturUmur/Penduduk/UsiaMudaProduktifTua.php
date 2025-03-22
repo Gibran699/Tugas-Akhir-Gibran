@@ -8,17 +8,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsiaMudaProduktifTua extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'usia_muda_produktif_tua_penduduk';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid',
+        'kode_wilayah',
         'usia_muda',
         'usia_produktif',
         'usia_tua',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
 }

@@ -9,14 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pekerjaan extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'pekerjaan_disabilitas';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah','keterangan',
+        'uuid',
+        'kode_wilayah',
+        'keterangan',
         'belum_tidak_bekerja_l',
         'belum_tidak_bekerja_p',
         'mengurus_rumah_tangga_l',
@@ -215,7 +217,7 @@ class Pekerjaan extends Model
         'asisten_ahli_p',
         'pekerjaan_lainnya_l',
         'pekerjaan_lainnya_p',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
-    
 }

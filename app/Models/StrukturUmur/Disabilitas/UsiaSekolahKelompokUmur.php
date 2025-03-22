@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsiaSekolahKelompokUmur extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'usia_sekolah_kelompok_umur_disabilitas';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid',
+        'kode_wilayah',
         'fisik_u4_6th_lk',
         'fisik_u4_6th_pr',
         'fisik_u7_12th_lk',
@@ -64,6 +65,7 @@ class UsiaSekolahKelompokUmur extends Model
         'lainnya_u13_15th_pr',
         'lainnya_u16_18th_lk',
         'lainnya_u16_18th_pr',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
 }

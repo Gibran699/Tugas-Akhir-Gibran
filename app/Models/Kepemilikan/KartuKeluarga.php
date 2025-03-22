@@ -29,6 +29,5 @@ class KartuKeluarga extends Model
         'belum_memiliki_jml',
         'semester',
         'tahun',
-    ];
-    
+    ];    
 }

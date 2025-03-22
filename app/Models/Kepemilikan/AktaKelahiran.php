@@ -9,14 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AktaKelahiran extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'akta_kelahiran';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah', 'keterangan',
+        'uuid',
+        'kode_wilayah',
+        'keterangan',
         'wajib_akta_awal_lk',
         'wajib_akta_awal_pr',
         'wajib_akta_awal_jml',

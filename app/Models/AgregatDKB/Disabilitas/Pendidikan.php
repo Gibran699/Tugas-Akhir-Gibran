@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pendidikan extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'pendidikan_disabilitas';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah', 'keterangan',
+        'uuid',
+        'kode_wilayah',
+        'keterangan',
         'tidak_blm_sekolah_l',
         'tidak_blm_sekolah_p',
         'tidak_blm_sekolah_jml',
@@ -46,7 +48,7 @@ class Pendidikan extends Model
         'strata_iii_l',
         'strata_iii_p',
         'strata_iii_jml',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
-    
 }

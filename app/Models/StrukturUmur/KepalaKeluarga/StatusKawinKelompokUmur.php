@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StatusKawinKelompokUmur extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     public $table = 'status_kawin_kelompok_umur_kepala_keluarga';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid', 'kode_wilayah',
+        'uuid',
+        'kode_wilayah',
         '00_04_belum_kawin_lk',
         '00_04_belum_kawin_pr',
         '00_04_kawin_lk',
@@ -144,6 +145,7 @@ class StatusKawinKelompokUmur extends Model
         'lebih_75_cerai_hidup_pr',
         'lebih_75_cerai_mati_lk',
         'lebih_75_cerai_mati_pr',
-        'semester', 'tahun',
+        'semester',
+        'tahun',
     ];
 }
