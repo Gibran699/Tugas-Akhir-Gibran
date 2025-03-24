@@ -30,6 +30,8 @@ use App\Models\Kepemilikan\AktaCeraiAgama as KepemilikanAktaCeraiAgama;
 use App\Models\Kepemilikan\KIA as KepemilikanKia;
 use App\Models\Kepemilikan\KartuKeluarga as KepemilikanKartuKeluarga;
 use App\Models\Kepemilikan\Ktp as KepemilikanKtp;
+use App\Models\LaporanKinerjaFormatPdak\Capil;
+use App\Models\LaporanKinerjaFormatPdak\Dafduk;
 use App\Models\StrukturUmur\Agama\KelompokUmur as KelompokUmurAgama;
 use App\Models\StrukturUmur\Disabilitas\KelompokUmur as KelompokUmurDisabilitas;
 use App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal as DisabilitasUmurTunggalPendidikan;
@@ -46,8 +48,7 @@ use App\Models\StrukturUmur\Penduduk\KelompokUmur as PendudukKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur as PendudukStatusKawinKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\UsiaSekolah as PendudukUsiaSekolah;
 use App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua as PendudukUsiaMudaProduktifTua;
-
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -2151,7 +2152,7 @@ class CalculateDataController extends Controller
                 }, $categoryAgeGroup)
             )
         )->where('semester', $request['semester'])
-            ->where('tahun', $request['tahun']) 
+            ->where('tahun', $request['tahun'])
             ->get();
         $dataPerkecamatan = PendudukKelompokUmur::select(
             array_merge(
@@ -2170,10 +2171,10 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-            ];
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
@@ -2219,10 +2220,10 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-            ];
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
@@ -2263,14 +2264,14 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-            ];
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan,'dataTitle' => $dataTitle], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dataStrukturUmurPendudukUsiaMudaProduktifTua($request)
     {
@@ -2305,13 +2306,164 @@ class CalculateDataController extends Controller
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-            ];
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
-        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan,'dataTitle' => $dataTitle], 200);
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function laporanKinerjaPdakCapil($request)
+    {
+        // dateTime
+        $from = Carbon::parse($request['form'])->addSeconds(0);
+        $to = Carbon::parse($request['to'])->addHours(23)->addMinutes(59)->addSeconds(0);
+        //atributTable
+        $attributTable = [
+            'cetak_akta_kelahiran_lk',
+            'cetak_akta_kelahiran_pr',
+            'cetak_akta_kelahiran_jml',
+            'pembatalan_kelahiran',
+            'pembetulan_kelahiran',
+            'cetak_akta_kematian_lk',
+            'cetak_akta_kematian_pr',
+            'cetak_akta_kematian_jml',
+            'cetak_akta_kawin',
+            'pembatalan_akta_kawin',
+            'cetak_akta_cerai',
+            'pembatalan_akta_cerai',
+            'perubahan_wni_wna',
+            'perubahan_wna_wni',
+            'perubahan_nama',
+            'perubahan_jenis_kelamin',
+            'pengesahan_anak_lk',
+            'pengesahan_anak_pr',
+            'pengesahan_anak_jml',
+            'pengangkatan_anak_lk',
+            'pengangkatan_anak_pr',
+            'pengangkatan_anak_jml',
+        ];
+        $dataPerkelurahan = Capil::select([
+            'laporan_kinerja_capil_format_pdak.*',
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'laporan_kinerja_capil_format_pdak.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('tanggal_laporan', [$from, $to])
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = Capil::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $attributTable),
+                [
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'laporan_kinerja_capil_format_pdak.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('tanggal_laporan', [$from, $to])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan = Capil::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $attributTable)
+            )
+        )->whereBetween('tanggal_laporan', [$from, $to])
+
+            ->get();
+        $dataTitle = [
+            'dari' => $request['from'],
+            'sampai' => $request['to'],
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function laporanKinerjaPdakDafduk($request)
+    {
+        // dateTime
+        $from = Carbon::parse($request['form'])->addSeconds(0);
+        $to = Carbon::parse($request['to'])->addHours(23)->addMinutes(59)->addSeconds(0);
+        //atributTable
+        $attributTable = [
+            'penerbitan_kk',
+            'perubahan_kk',
+            'penerbitan_nik_wni_lk',
+            'penerbitan_nik_wni_pr',
+            'penerbitan_nik_wni_jml',
+            'penerbitan_nik_oa_lk',
+            'penerbitan_nik_oa_pr',
+            'penerbitan_nik_oa_jml',
+            'pencetakan_kia_lk',
+            'pencetakan_kia_pr',
+            'pencetakan_kia_jml',
+            'ktp_el_rekam_lk',
+            'ktp_el_rekam_pr',
+            'ktp_el_rekam_jml',
+            'ktp_el_cetak_lk',
+            'ktp_el_cetak_pr',
+            'ktp_el_cetak_jml',
+            'jml_surat_pindah',
+            'jml_pindah_lk',
+            'jml_pindah_pr',
+            'jml_pindah_jml',
+            'jml_surat_datang',
+            'jml_datang_lk',
+            'jml_datang_pr',
+            'jml_datang_jml',
+        ];
+        $dataPerkelurahan = Dafduk::select([
+            'laporan_kinerja_dafduk_format_pdak.*',
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        ])
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'laporan_kinerja_dafduk_format_pdak.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('tanggal_laporan', [$from, $to])
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = Dafduk::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $attributTable),
+                [
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'laporan_kinerja_dafduk_format_pdak.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('tanggal_laporan', [$from, $to])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan = Dafduk::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $attributTable)
+            )
+        )->whereBetween('tanggal_laporan', [$from, $to])
+
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
 }

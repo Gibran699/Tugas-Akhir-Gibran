@@ -1,6 +1,6 @@
 {{-- pelayanan --}}
 <div class="modal fade pelayanan" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Data Pelayanan</h5>
@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xl-6">
+                    <div class="col-xl-4">
                         <div class="card">
                             <div class="card-header border-0 pb-0"
                                 style="display: flex; justify-content: center; align-items: center;">
@@ -27,20 +27,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-xl-4">
                         <div class="card">
                             <div class="card-header border-0 pb-0"
                                 style="display: flex; justify-content: center; align-items: center;">
-                                <h5 class="card-title">Pelayanan PDAK</h5>
+                                <h5 class="card-title">Pelayanan Capil</h5>
                             </div>
                             <div class="card-body">
                                 <p class="card-text text-just">Data pelayanan bersumber dari PDAK untuk semua kategori
-                                    pelayanan
+                                    pelayanan Catatan Sipil
                                 </p>
                             </div>
                             <div class="card-footer border-0 pt-0"
                                 style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
-                                <a href="javascript:void(0);" class="btn btn-success text-center">
+                                <a href="{{ route('index_rumah_data', ['codeView' => 'aB3x9LpQrT']) }}" class="btn btn-success text-center">
+                                    <i class="fa fa-folder-open"></i> Open
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-header border-0 pb-0"
+                                style="display: flex; justify-content: center; align-items: center;">
+                                <h5 class="card-title">Pelayanan Dafduk</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-just">Data pelayanan bersumber dari PDAK untuk semua kategori
+                                    pelayanan Pendaftaran Penduduk
+                                </p>
+                            </div>
+                            <div class="card-footer border-0 pt-0"
+                                style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
+                                <a href="{{ route('index_rumah_data', ['codeView' => '7yZk8WvNmD']) }}" class="btn btn-success text-center">
                                     <i class="fa fa-folder-open"></i> Open
                                 </a>
                             </div>

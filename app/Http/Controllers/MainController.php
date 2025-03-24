@@ -54,6 +54,8 @@ class MainController extends Controller
             "7fKa0gsKtH" => "struktur_umur.penduduk.usia_muda_produkif_tua_index",
             "ObqRhsP78G" => "struktur_umur.penduduk.usia_sekolah_index",
             "IxmdS85aaN" => "pengaturan.wilayah_kelurahan.create_index",
+            'aB3x9LpQrT' =>  "laporan_pelayanan.layanan_capil_index",
+            '7yZk8WvNmD' =>  "laporan_pelayanan.layanan_dafduk_index",
         ];
         // Check if the $codeView exists in the $redirectView array
         if (isset($redirectView[$codeView])) {

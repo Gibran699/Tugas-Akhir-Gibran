@@ -52,4 +52,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::get('test_function_calculate', [CalculateDataController::class,'dataPendudukJenisKelamin']);
+Route::get('/layout',function(){
+    return view('laporan_pelayanan.layanan_dafduk_index');
+});

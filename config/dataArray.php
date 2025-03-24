@@ -43,6 +43,8 @@ return [
         '39' => 'App\Imports\StatusKawinPendudukAgamaImport',
         '40' => 'App\Imports\StatusKawinPendudukJenisKelaminImport',
         '41' => 'App\Imports\StatusKawinPendudukPekerjaanImport',
+        '42' => 'App\Imports\LaporanKinerjaCapilFormatPdakImport',
+        '43' => 'App\Imports\LaporanKinerjaDafdukFormatPdakImport',
 
     ],
     'listFileModel' => [
@@ -87,6 +89,8 @@ return [
         '39' => 'App\Models\AgregatDKB\StatusKawin\Agama',
         '40' => 'App\Models\AgregatDKB\StatusKawin\JenisKelamin',
         '41' => 'App\Models\AgregatDKB\StatusKawin\Pekerjaan',
+        '42' => 'App\Models\LaporanKinerjaFormatPdak\Capil',
+        '43' => 'App\Models\LaporanKinerjaFormatPdak\Dafduk',
     ],
     'listCalculateDataFunction' => [
         'CV8V59hUCF' => 'dataPendudukJenisKelamin',
@@ -132,6 +136,8 @@ return [
         'RIvQj7G1XZ' =>  'dataStrukturUmurPendudukStatusKawinKelompokUmur',
         'ObqRhsP78G' =>  'dataStrukturUmurPendudukUsiaSekolah',
         '7fKa0gsKtH' =>  'dataStrukturUmurPendudukUsiaMudaProduktifTua',
+        'aB3x9LpQrT' =>  'laporanKinerjaPdakCapil',
+        '7yZk8WvNmD' =>  'laporanKinerjaPdakDafduk',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',
