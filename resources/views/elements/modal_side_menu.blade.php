@@ -21,7 +21,7 @@
                             </div>
                             <div class="card-footer border-0 pt-0"
                                 style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
-                                <a href="javascript:void(0);" class="btn btn-success text-center">
+                                <a href="{{route('index_rumah_data', ['codeView' => 'kP9mY2qR7s'])}}" class="btn btn-success text-center">
                                     <i class="fa fa-folder-open"></i> Open
                                 </a>
                             </div>
@@ -60,6 +60,40 @@
                             <div class="card-footer border-0 pt-0"
                                 style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
                                 <a href="{{ route('index_rumah_data', ['codeView' => '7yZk8WvNmD']) }}" class="btn btn-success text-center">
+                                    <i class="fa fa-folder-open"></i> Open
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-header border-0 pb-0"
+                                style="display: flex; justify-content: center; align-items: center;">
+                                <h5 class="card-title">Pelayanan Cetak EKTP</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-just">Data pelayanan secara real time bersumber dari DataBase EKTP</p>
+                            </div>
+                            <div class="card-footer border-0 pt-0"
+                                style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
+                                <a href="{{ route('index_rumah_data', ['codeView' => '7fK97qB2ax']) }}" class="btn btn-success text-center">
+                                    <i class="fa fa-folder-open"></i> Open
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-header border-0 pb-0"
+                                style="display: flex; justify-content: center; align-items: center;">
+                                <h5 class="card-title">Pelayanan Perekaman</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text text-just">Data pelayanan secara real time bersumber dari DataBase Perekaman</p>
+                            </div>
+                            <div class="card-footer border-0 pt-0"
+                                style="border-top: 1px solid #848789; display: flex; justify-content: center; align-items: center;">
+                                <a href="{{ route('index_rumah_data', ['codeView' => '7x9Fk2pQ8R']) }}" class="btn btn-success text-center">
                                     <i class="fa fa-folder-open"></i> Open
                                 </a>
                             </div>

@@ -48,12 +48,25 @@ use App\Models\StrukturUmur\Penduduk\KelompokUmur as PendudukKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur as PendudukStatusKawinKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\UsiaSekolah as PendudukUsiaSekolah;
 use App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua as PendudukUsiaMudaProduktifTua;
+use App\Services\ExternalApiService;
+use App\Services\KtpApiService;
+use App\Services\perekamanService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CalculateDataController extends Controller
 {
+    protected $apiService, $ktpApi, $perekamanApi;
+
+    public function __construct(ExternalApiService $apiService, KtpApiService $ktpApi, perekamanService $perekamanApi)
+    {
+        $this->apiService = $apiService;
+        $this->ktpApi = $ktpApi;
+        $this->perekamanApi = $perekamanApi;
+    }
     //calculate data DKB penduduk 
     public function dataPendudukJenisKelamin($request)
     {
@@ -2465,5 +2478,118 @@ class CalculateDataController extends Controller
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function dataPelayananOnline($request)
+    {
+        $dataTitle = [
+            'start' => $request['start'],
+            'finish' => $request['finish'],
+        ];
+        try {
+            $data = $this->apiService->post('/api/data_layanan_online', $request->all());
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function dataCetakEktp($request)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'start_date' => 'required|date_format:Y-m-d', // Form sends Y-m-d
+                'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date',
+                'draw' => 'sometimes|integer',
+                'detailed' => 'sometimes|boolean'
+            ]);
+
+            // Convert dates to d-m-Y for API
+            $apiStartDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->format('d-m-Y');
+            $apiEndDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->format('d-m-Y');
+
+            // Get data from API with correct date format
+            $apiResponse = $this->ktpApi->getKtpData($apiStartDate, $apiEndDate);
+
+            // For detailed view (modal)
+            if ($request->input('detailed')) {
+                return response()->json([
+                    'data' => [
+                        'daily_data' => [
+                            $request->input('start_date') => [ // Keep Y-m-d in response
+                                'users' => $apiResponse['data'],
+                                'date_total' => array_sum(array_column($apiResponse['data'], 'JUMLAH'))
+                            ]
+                        ]
+                    ]
+                ]);
+            }
+
+            // For main DataTable
+            return response()->json([
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => count($apiResponse['data']),
+                'recordsFiltered' => count($apiResponse['data']),
+                'data' => $apiResponse['data']
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => []
+            ], 500);
+        }
+    }
+    public function dataPerekaman($request)
+    {
+        try {
+            // Validate request
+            $request->validate([
+                'start_date' => 'required|date_format:Y-m-d', // Form sends Y-m-d
+                'end_date' => 'required|date_format:Y-m-d|after_or_equal:start_date',
+                'draw' => 'sometimes|integer',
+                'detailed' => 'sometimes|boolean'
+            ]);
+
+            // Convert dates to d-m-Y for API
+            $apiStartDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->format('d-m-Y');
+            $apiEndDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->format('d-m-Y');
+
+            // Get data from API with correct date format
+            $apiResponse = $this->perekamanApi->getData($apiStartDate, $apiEndDate);
+
+            // For detailed view (modal)
+            if ($request->input('detailed')) {
+                return response()->json([
+                    'data' => [
+                        'daily_data' => [
+                            $request->input('start_date') => [ // Keep Y-m-d in response
+                                'users' => $apiResponse['data'],
+                                'date_total' => array_sum(array_column($apiResponse['data'], 'JUMLAH'))
+                            ]
+                        ]
+                    ]
+                ]);
+            }
+
+            // For main DataTable
+            return response()->json([
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => count($apiResponse['data']),
+                'recordsFiltered' => count($apiResponse['data']),
+                'data' => $apiResponse['data']
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'draw' => $request->input('draw', 1),
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
+                'data' => []
+            ], 500);
+        }
     }
 }

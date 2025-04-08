@@ -138,6 +138,9 @@ return [
         '7fKa0gsKtH' =>  'dataStrukturUmurPendudukUsiaMudaProduktifTua',
         'aB3x9LpQrT' =>  'laporanKinerjaPdakCapil',
         '7yZk8WvNmD' =>  'laporanKinerjaPdakDafduk',
+        'kP9mY2qR7s' =>  'dataPelayananOnline',
+        '7fK97qB2ax' =>  'dataCetakEktp',
+        '7x9Fk2pQ8R' =>  'dataPerekaman',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

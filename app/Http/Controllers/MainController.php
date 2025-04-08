@@ -56,6 +56,9 @@ class MainController extends Controller
             "IxmdS85aaN" => "pengaturan.wilayah_kelurahan.create_index",
             'aB3x9LpQrT' =>  "laporan_pelayanan.layanan_capil_index",
             '7yZk8WvNmD' =>  "laporan_pelayanan.layanan_dafduk_index",
+            'kP9mY2qR7s' =>  "laporan_pelayanan.online.index",
+            "7fK97qB2ax" =>  "laporan_pelayanan.layanan_ektp_index",
+            "7x9Fk2pQ8R" => "laporan_pelayanan.layanan_perekaman_index"
         ];
         // Check if the $codeView exists in the $redirectView array
         if (isset($redirectView[$codeView])) {
@@ -66,4 +69,6 @@ class MainController extends Controller
         // Fallback for invalid $codeView (e.g., show a 404 page or redirect)
         return abort(404, 'View not found');
     }
+
+    
 }
