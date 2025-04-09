@@ -216,23 +216,27 @@
     }
     function setTableSum(response, blood, headerTable) {
         const summedData = response.dataKeseluruhan || {};
-
-        $('#tableSum tbody').empty();
-
-        headerTable.forEach((bloodName, index) => {
-            const bloodKey = blood[index]; // Pastikan tidak melebihi panjang blood
-
-            if (bloodKey) {
-                const row = `
-                    <tr>
-                        <td>${bloodName.toUpperCase()}</td>
-                        <td>${summedData[`${bloodKey}_lk`] || 0}</td>
-                        <td>${summedData[`${bloodKey}_pr`] || 0}</td>
-                        <td>${summedData[`${bloodKey}_jml`] || 0}</td>
-                    </tr>
-                `;
-                $('#tableSum tbody').append(row);
-            }
-        });
+        const $tbody = $('#tableSum tbody');
+        
+        // Clear the table body more efficiently
+        $tbody.empty();
+    
+        // Ensure we don't exceed either array's length
+        const loopLength = Math.min(headerTable.length, blood.length / 3);
+        
+        for (let i = 0; i < loopLength; i++) {
+            const bloodName = headerTable[i];
+            const baseKey = blood[i * 3].split('_').slice(0, -1).join('_'); // Get base key without suffix
+            
+            const row = `
+                <tr>
+                    <td>${bloodName.toUpperCase()}</td>
+                    <td>${summedData[`${baseKey}_lk`] || 0}</td>
+                    <td>${summedData[`${baseKey}_pr`] || 0}</td>
+                    <td>${summedData[`${baseKey}_jml`] || 0}</td>
+                </tr>
+            `;
+            $tbody.append(row);
+        }
     }
 })(jQuery);

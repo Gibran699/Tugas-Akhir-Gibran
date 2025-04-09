@@ -278,7 +278,7 @@ class CalculateDataController extends Controller
             'semester' => $request['semester'],
             'tahun' => $request['tahun'],
         ];
-        if ($dataPerkelurahan->sum() === 0) {
+        if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);

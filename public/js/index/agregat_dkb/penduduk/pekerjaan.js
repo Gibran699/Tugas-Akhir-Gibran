@@ -388,40 +388,45 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, job, headerTable) {
+    function setTableSum(response, job, headerTable ) {
         const summedData = response.dataKeseluruhan || {};
     
-        $('#tableSum tbody').empty();
+        const $tbody = $('#tableSum tbody');
+        
+        // Clear the table body more efficiently
+        $tbody.empty();
     
-        headerTable.forEach((jobName, index) => {
-            const jobKey = job[index]; // Pastikan tidak melebihi panjang job
-    
-            if (jobKey) {
-                const row = `
-                    <tr>
-                        <td>${jobName.toUpperCase()}</td>
-                        <td>${summedData[`${jobKey}_lk`] || 0}</td>
-                        <td>${summedData[`${jobKey}_pr`] || 0}</td>
-                    </tr>
-                `;
-                $('#tableSum tbody').append(row);
-            }
-        });
-    
+        // Ensure we don't exceed either array's length
+        const loopLength = Math.min(headerTable.length, job.length / 3);
+        
+        for (let i = 0; i < loopLength; i++) {
+            const jobName = headerTable[i];
+            const baseKey = job[i * 3].split('_').slice(0, -1).join('_'); // Get base key without suffix
+            
+            const row = `
+                <tr>
+                    <td>${jobName.toUpperCase()}</td>
+                    <td>${summedData[`${baseKey}_l`] || 0}</td>
+                    <td>${summedData[`${baseKey}_p`] || 0}</td>
+                </tr>
+            `;
+            $tbody.append(row);
+        }
         // Terapkan DataTables untuk membuat tabel scrollable
         if ($.fn.DataTable.isDataTable('#tableSum')) {
             $('#tableSum').DataTable().destroy();
         }
     
         $('#tableSum').DataTable({
-            scrollY: "400px", // Scroll vertikal dengan tinggi 400px
-            scrollX: true, // Scroll horizontal jika kolom banyak
-            paging: false, // Nonaktifkan paginasi agar semua data langsung terlihat
-            searching: false, // Nonaktifkan fitur pencarian
+            paging: true, // Nonaktifkan paginasi agar semua data langsung terlihat
+            searching: true, // Nonaktifkan fitur pencarian
             info: false, // Sembunyikan informasi jumlah data
             ordering: false, // Nonaktifkan pengurutan kolom
             language: {
-                emptyTable: "Tidak ada data tersedia"
+                paginate: {
+                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                }
             }
         });
     }

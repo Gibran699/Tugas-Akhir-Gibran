@@ -207,23 +207,27 @@
     }
     function setTableSum(response, relationshipFamily, headerTable) {
         const summedData = response.dataKeseluruhan || {};
-
-        $('#tableSum tbody').empty();
-
-        headerTable.forEach((relationshipFamilyName, index) => {
-            const relationshipFamilyKey = relationshipFamily[index]; // Pastikan tidak melebihi panjang relationshipFamily
-
-            if (relationshipFamilyKey) {
-                const row = `
-                    <tr>
-                        <td>${relationshipFamilyName.toUpperCase()}</td>
-                        <td>${summedData[`${relationshipFamilyKey}_lk`] || 0}</td>
-                        <td>${summedData[`${relationshipFamilyKey}_pr`] || 0}</td>
-                        <td>${summedData[`${relationshipFamilyKey}_jml`] || 0}</td>
-                    </tr>
-                `;
-                $('#tableSum tbody').append(row);
-            }
-        });
+        const $tbody = $('#tableSum tbody');
+        
+        // Clear the table body more efficiently
+        $tbody.empty();
+    
+        // Ensure we don't exceed either array's length
+        const loopLength = Math.min(headerTable.length, relationshipFamily.length / 3);
+        
+        for (let i = 0; i < loopLength; i++) {
+            const relationshipFamilyName = headerTable[i];
+            const baseKey = relationshipFamily[i * 3].split('_').slice(0, -1).join('_'); // Get base key without suffix
+            
+            const row = `
+                <tr>
+                    <td>${relationshipFamilyName.toUpperCase()}</td>
+                    <td>${summedData[`${baseKey}_l`] || 0}</td>
+                    <td>${summedData[`${baseKey}_p`] || 0}</td>
+                    <td>${summedData[`${baseKey}_jml`] || 0}</td>
+                </tr>
+            `;
+            $tbody.append(row);
+        }
     }
 })(jQuery);

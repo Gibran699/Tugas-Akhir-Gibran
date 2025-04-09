@@ -17,7 +17,7 @@ class MainController extends Controller
     {
         $this->calculateDateFunction = $calculateDateFunction;
     }
-    // import data excel 
+    // import data excel
     function importData(Request $request) {
         $listFileImport = config('dataArray.listFileImport');
         $listFileModel = config('dataArray.listFileModel');

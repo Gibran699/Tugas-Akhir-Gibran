@@ -54,12 +54,12 @@
                                 </select>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary" id="submitImport">
-                                    <i class="fa fa-file-import"></i> Import
-                                </button>
-                                {{-- <button type="submit" class="btn btn-primary">
+                                {{-- <button type="button" class="btn btn-primary" id="submitImport">
                                     <i class="fa fa-file-import"></i> Import
                                 </button> --}}
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-file-import"></i> Import
+                                </button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -93,9 +93,7 @@
                                                 <tr>
                                                     <td>{{ $item['name_file'] }}</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-success"
-                                                            onclick="downloadFile('{{ $item['location_file'] }}', '{{ $item['name_file'] }}.xlsx')">
-                                                            <i class="fa fa-download"></i> Download</button>
+                                                        <button class="btn btn-success download-btn" data-filepath="{{ $item['location_file'] }}" data-filename="{{ $item['name_file'] }}.xlsx"><i class="fa fa-download"></i>Download</button>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -111,34 +109,43 @@
     </div>
     <script src="{{ asset('js/global_func.js') }}"></script>
     <script>
+        // Move this function outside the jQuery closure
+        function downloadFile(filePath, fileName) {
+            // Create a temporary anchor element
+            const link = document.createElement('a');
+            link.href = filePath; // Set the file path
+            link.download = fileName; // Set the file name for download
+            document.body.appendChild(link);
+
+            // Trigger the download
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+        }
+
         (function($) {
             // Generate options untuk tahun
             generateYearOptions('tahun');
 
             // Inisialisasi Select2 pada elemen dengan ID 'keteranganFile'
             $("#keteranganFile").select2();
+
             $('#fileTable').DataTable({
                 language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-                    previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                    paginate: {
+                        next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+                        previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>'
+                    }
                 }
-            }
             });
-            //download file excel
-            function downloadFile(filePath, fileName) {
-                // Create a temporary anchor element
-                const link = document.createElement('a');
-                link.href = filePath; // Set the file path
-                link.download = fileName; // Set the file name for download
-                document.body.appendChild(link);
 
-                // Trigger the download
-                link.click();
-
-                // Clean up
-                document.body.removeChild(link);
-            }
+            // Alternatively, you can use jQuery event delegation instead of onclick attributes
+            $(document).on('click', '.download-btn', function() {
+                const filePath = $(this).data('filepath');
+                const fileName = $(this).data('filename');
+                downloadFile(filePath, fileName);
+            });
         })(jQuery);
     </script>
     <script src="{{ asset('js/system/import_data.js') }}"></script>
