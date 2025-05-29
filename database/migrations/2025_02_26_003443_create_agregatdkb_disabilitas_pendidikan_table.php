@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah', 50);
+            $table->string('keterangan', 100);
             $table->bigInteger('tidak_blm_sekolah_l');
             $table->bigInteger('tidak_blm_sekolah_p');
             $table->bigInteger('tidak_blm_sekolah_jml');

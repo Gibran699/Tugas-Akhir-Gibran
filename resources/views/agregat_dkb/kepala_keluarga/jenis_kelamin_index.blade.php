@@ -43,9 +43,9 @@
             </div>
         </div>
         <div class="row">
+            <h3 id="tahunSemester"></h3>
             <div class="col-xl-4 col-xxl-12">
                 <div class="row">
-                    <h3 id="tahunSemester"></h3>
                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6">
                         <div class="card">
                             <div class="card-header">

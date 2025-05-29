@@ -1,7 +1,7 @@
 @extends('layout.master')
 @section('content')
     @php
-        $educations = config('dataArray.cetegoryEducation');
+        $educations = config('dataArray.categoryEducation');
     @endphp
     <div class="container-fluid">
         <div class="row page-titles">
@@ -36,6 +36,9 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end">
+                                {{-- <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-list"></i> Tampilkan
+                                </button> --}}
                                 <button type="button" class="btn btn-primary" id="submitSearch">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>

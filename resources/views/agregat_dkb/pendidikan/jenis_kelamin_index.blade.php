@@ -1,7 +1,7 @@
 @extends('layout.master')
 @section('content')
     @php
-        $educations = config('dataArray.cetegoryEducation');
+        $educations = config('dataArray.categoryEducation');
     @endphp
     <div class="container-fluid">
         <div class="row page-titles">

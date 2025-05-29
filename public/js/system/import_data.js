@@ -49,8 +49,9 @@ function importData() {
                 title: 'Berhasil',
                 text: response.message || 'Import Berhasil!',
             }).then(() => {
-                $('#formImport').trigger('reset');
-                $('#formImport')[0].reset();
+                // $('#formImport').trigger('reset');
+                // $('#formImport')[0].reset();
+                window.location.reload();
             });
         },
         error: function(xhr) {

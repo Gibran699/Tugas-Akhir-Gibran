@@ -2,7 +2,6 @@
 
 namespace App\Imports;
 
-use App\Models\Kepemilikan\AktaCerai;
 use App\Models\Kepemilikan\AktaCeraiAgama;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
@@ -30,6 +29,6 @@ class KepemilikanAktaCeraiAgamaImport implements ToModel,WithHeadingRow
         foreach ($categoryReligiosOwnerShip as $key) {
             $data[$key] = $row[$key] ?? null;
         }
-        return new AktaCerai($data);
+        return new AktaCeraiAgama($data);
     }
 }

@@ -45,7 +45,9 @@ return [
         '41' => 'App\Imports\StatusKawinPendudukPekerjaanImport',
         '42' => 'App\Imports\LaporanKinerjaCapilFormatPdakImport',
         '43' => 'App\Imports\LaporanKinerjaDafdukFormatPdakImport',
-
+        '44' => 'App\Imports\PendidikanPekerjaanImport',
+        '45' => 'App\Imports\KepemilikanKtpImport',
+        
     ],
     'listFileModel' => [
         '1' => 'App\Models\AgregatDKB\Disabilitas\JenisKelamin',
@@ -57,7 +59,7 @@ return [
         '7' => 'App\Models\AgregatDKB\KepalaKeluarga\Pendidikan',
         '8' => 'App\Models\AgregatDKB\KepalaKeluarga\StatusKawin',
         '9' => 'App\Models\AgregatDKB\Pendidikan\GolonganDarah',
-        '10' => 'App\Models\AgregatDKB\Pendidikan\JenisKelamin',
+        '10' => 'App\Models\AgregatDKB\Pendidikan\JenisKelamin', 
         '11' => 'App\Models\AgregatDKB\Penduduk\JenisKelamin',
         '12' => 'App\Models\AgregatDKB\Penduduk\Agama',
         '13' => 'App\Models\AgregatDKB\Penduduk\GolonganDarah',
@@ -91,6 +93,8 @@ return [
         '41' => 'App\Models\AgregatDKB\StatusKawin\Pekerjaan',
         '42' => 'App\Models\LaporanKinerjaFormatPdak\Capil',
         '43' => 'App\Models\LaporanKinerjaFormatPdak\Dafduk',
+        '44' => 'App\Models\AgregatDKB\Pendidikan\Pekerjaan',
+        '45' => 'App\Models\Kepemilikan\Ktp'
     ],
     'listCalculateDataFunction' => [
         'CV8V59hUCF' => 'dataPendudukJenisKelamin',
@@ -825,7 +829,7 @@ return [
         'pekerjaan_lainnya_l',
         'pekerjaan_lainnya_p',
     ],
-    'cetegoryEducation' => [
+    'categoryEducation' => [
         'tidak_blm_sekolah_l',
         'tidak_blm_sekolah_p',
         'tidak_blm_sekolah_jml',
@@ -1078,6 +1082,10 @@ return [
         [
             "name_file" => "Status Kawin Jenis Kelamin",
             "location_file" => "/format_file_excel_import/status_kawin_jenis_kelamin.xlsx"
+        ],
+        [
+            "name_file" => "Status Kawin Pekerjaan",
+            "location_file" => "/format_file_excel_import/status_kawin_pekerjaan.xlsx"
         ],
         [
             "name_file" => "Pendidikan Jenis Kelamin",

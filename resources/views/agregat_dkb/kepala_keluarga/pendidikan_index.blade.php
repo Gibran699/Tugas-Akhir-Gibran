@@ -1,38 +1,7 @@
 @extends('layout.master')
 @section('content')
     @php
-        $educationalStatuses = [
-            'TIDAK/BLM SEKOLAH L',
-            'TIDAK/BLM SEKOLAH P',
-            'TIDAK/BLM SEKOLAH JML',
-            'BELUM TAMAT SD/SEDERAJAT L',
-            'BELUM TAMAT SD/SEDERAJAT P',
-            'BELUM TAMAT SD/SEDERAJAT JML',
-            'TAMAT SD/SEDERAJAT L',
-            'TAMAT SD/SEDERAJAT P',
-            'TAMAT SD/SEDERAJAT JML',
-            'SLTP/SEDERAJAT L',
-            'SLTP/SEDERAJAT P',
-            'SLTP/SEDERAJAT JML',
-            'SLTA/SEDERAJAT L',
-            'SLTA/SEDERAJAT P',
-            'SLTA/SEDERAJAT JML',
-            'DIPLOMA I/II L',
-            'DIPLOMA I/II P',
-            'DIPLOMA I/II JML',
-            'AKADEMI/DIPL.III/S. MUDA L',
-            'AKADEMI/DIPL.III/S.MUDA P',
-            'AKADEMI/DIPL.III/S.MUDA JML',
-            'DIPLOMA IV/STRATA I L',
-            'DIPLOMA IV/STRATA I P',
-            'DIPLOMA IV/STRATA I JML',
-            'STRATA-II L',
-            'STRATA-II P',
-            'STRATA-II JML',
-            'STRATA-III L',
-            'STRATA-III P',
-            'STRATA-III JML',
-        ];
+        $educationalStatuses = config('dataArray.categoryEducation');
     @endphp
     <div class="container-fluid">
         <div class="row page-titles">
@@ -70,6 +39,11 @@
                             <button type="button" class="btn btn-primary" id="submitSearch">
                                 <i class="fa fa-list"></i> Tampilkan
                             </button>
+                            
+                            {{-- <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-list"></i> Tampilkan
+                            </button> --}}
+                            
                         </div>
                         {!! Form::close() !!}
                     </div>

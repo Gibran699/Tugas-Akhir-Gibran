@@ -28,6 +28,7 @@ class DisabilitasPekerjaanImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
+            'keterangan' => $row['keterangan'],
         ];
         foreach ($categoryJob as $key) {
             $data[$key] = $row[$key] ?? null;

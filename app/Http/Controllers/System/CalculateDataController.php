@@ -469,7 +469,7 @@ class CalculateDataController extends Controller
     }
     public function dataKepalaKeluargaPendidikan($request)
     {
-        $cetegoryEducation = config('dataArray.cetegoryEducation');
+        $categoryEducation = config('dataArray.categoryEducation');
         $dataPerkelurahan = KepalaKeluargaPendidikan::select([
             'pendidikan_kepala_keluarga.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -485,7 +485,7 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation)
+                }, $categoryEducation)
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
@@ -494,7 +494,7 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation),
+                }, $categoryEducation),
                 ['mstr_kecamatan.nama as kecamatan_nama']
             )
         )
@@ -536,7 +536,7 @@ class CalculateDataController extends Controller
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->first();
+            ->get();
         $dataPerkecamatan = KepalaKeluargaStatusKawin::select(
             array_merge(
                 array_map(function ($item) {
@@ -720,7 +720,7 @@ class CalculateDataController extends Controller
     // calculate data DKB Pendidikan
     public function dataPendidikanPendudukJenisKelamin($request)
     {
-        $cetegoryEducation = config('dataArray.cetegoryEducation');
+        $categoryEducation = config('dataArray.categoryEducation');
         $dataPerkelurahan = PendidikanPendudukJenisKelamin::select([
             'jenis_kelamin_pendidikan.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -736,7 +736,7 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation)
+                }, $categoryEducation)
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
@@ -745,7 +745,7 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation),
+                }, $categoryEducation),
                 ['mstr_kecamatan.nama as kecamatan_nama']
             )
         )
@@ -969,7 +969,7 @@ class CalculateDataController extends Controller
     }
     public function dataDisabilitasPendidikan($request)
     {
-        $cetegoryEducation = config('dataArray.cetegoryEducation');
+        $categoryEducation = config('dataArray.categoryEducation');
         $dataPerkelurahan = DisabilitasPendudukPendidikan::select([
             'pendidikan_disabilitas.*',
             'mstr_kelurahan.nama as kelurahan_nama',
@@ -986,7 +986,7 @@ class CalculateDataController extends Controller
                 ['keterangan'], // Include 'keterangan'
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation)
+                }, $categoryEducation)
             )
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
@@ -996,9 +996,9 @@ class CalculateDataController extends Controller
             array_merge(
                 array_map(function ($item) {
                     return DB::raw("SUM($item) as $item");
-                }, $cetegoryEducation),
+                }, $categoryEducation),
                 [
-                    'pendidikan_disabilitas.keterangan as keterangan_disabilitas',
+                    'pendidikan_disabilitas.keterangan as keterangan',
                     'mstr_kecamatan.nama as kecamatan_nama'
                 ]
             )
@@ -1038,8 +1038,9 @@ class CalculateDataController extends Controller
                         CASE 
                             WHEN keterangan = 1 THEN 'Semua Usia'
                             WHEN keterangan = 2 THEN '0-1 Tahun'
-                            WHEN keterangan = 3 THEN '0-5 Tahun'
-                            WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                            WHEN keterangan = 3 THEN '0-4 Tahun'
+                            WHEN keterangan = 4 THEN '0-5 Tahun'
+                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
                             ELSE 'Tidak Diketahui'
                         END as keterangan
                     ")
@@ -1067,10 +1068,11 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
                 CASE 
-                    WHEN keterangan = 1 THEN 'Semua Usia'
-                    WHEN keterangan = 2 THEN '0-1 Tahun'
-                    WHEN keterangan = 3 THEN '0-5 Tahun'
-                    WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                        WHEN keterangan = 1 THEN 'Semua Usia'
+                            WHEN keterangan = 2 THEN '0-1 Tahun'
+                            WHEN keterangan = 3 THEN '0-4 Tahun'
+                            WHEN keterangan = 4 THEN '0-5 Tahun'
+                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
                     ELSE 'Tidak Diketahui'
                 END as keterangan
             ")
@@ -1096,9 +1098,10 @@ class CalculateDataController extends Controller
                     DB::raw("
                             CASE 
                                 WHEN keterangan = 1 THEN 'Semua Usia'
-                                WHEN keterangan = 2 THEN '0-1 Tahun'
-                                WHEN keterangan = 3 THEN '0-5 Tahun'
-                                WHEN keterangan = 4 THEN '0-18 Tahun Kurang 1 Hari'
+                            WHEN keterangan = 2 THEN '0-1 Tahun'
+                            WHEN keterangan = 3 THEN '0-4 Tahun'
+                            WHEN keterangan = 4 THEN '0-5 Tahun'
+                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
                                 ELSE 'Tidak Diketahui'
                             END as keterangan
                         ")

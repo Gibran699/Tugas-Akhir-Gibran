@@ -25,7 +25,8 @@ class StrukturUmurGolonganDarahKelompokUmurImport implements ToModel,WithHeading
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
-            'kode_wilayah' => $row['kode_wilayah']
+            'kode_wilayah' => $row['kode_wilayah'],
+            'kelompok_umur' => $row['kelompok_umur']
         ]; 
         foreach ($categoryBlood as $key) {
             $data[$key] = $row[$key] ?? null;

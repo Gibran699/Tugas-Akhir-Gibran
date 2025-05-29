@@ -23,13 +23,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('login', function () {
     return view('auth.login');
-})->name('login');
+})->name('login')->middleware(['guest']);
 Route::post('login',[\App\Http\Controllers\Auth\MainController::class,'login'])->name('action_login');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('welcome');
-    });
+    })->name('home');
     //layout view side bar
     Route::get('{codeView}/index-rumah-data',[MainController::class,'index'])->name('index_rumah_data');
     //system import

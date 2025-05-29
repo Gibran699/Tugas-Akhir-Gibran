@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('kode_wilayah', 50);
+            $table->string('keterangan', 100);
 
             $pekerjaan = [
                 'belum_tidak_bekerja', 'mengurus_rumah_tangga', 'pelajar_mahasiswa', 'pensiunan',

@@ -89,8 +89,9 @@
                                     <option value="" disabled selected>--PILIH KATEGORI--</option>
                                     <option value="1">SEMUA USIA</option>
                                     <option value="2">0-1</option>
-                                    <option value="3">0-5</option>
-                                    <option value="4">0-18</option>
+                                    <option value="3">0-4</option>
+                                    <option value="4">0-5</option>
+                                    <option value="5">0-18</option>
                                 </select>
                             </div>
                         </div>

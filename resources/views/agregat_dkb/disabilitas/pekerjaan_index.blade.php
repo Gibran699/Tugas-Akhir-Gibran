@@ -39,6 +39,10 @@
                                 <button type="button" class="btn btn-primary" id="submitSearch">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button>
+                                {{-- <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-list"></i> Tampilkan
+                                </button> --}}
+                                
                             </div>
                         {!! Form::close() !!}
                     </div>

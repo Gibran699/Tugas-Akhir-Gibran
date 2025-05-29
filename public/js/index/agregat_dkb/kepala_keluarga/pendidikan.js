@@ -26,9 +26,9 @@
             'diploma_i_ii_l',
             'diploma_i_ii_p',
             'diploma_i_ii_jml',
-            'akademi_diploma_iii_s_muda_l',
-            'akademi_diploma_iii_s_muda_p',
-            'akademi_diploma_iii_s_muda_jml',
+            'akademi_dipl_iii_s_muda_l',
+            'akademi_dipl_iii_s_muda_p',
+            'akademi_dipl_iii_s_muda_jml',
             'diploma_iv_strata_i_l',
             'diploma_iv_strata_i_p',
             'diploma_iv_strata_i_jml',
@@ -67,7 +67,7 @@
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Penduduk Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Kepala Keluarga Pendidikan Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -216,9 +216,9 @@
                 // If the row already exists, update the values
                 const row = existingRow[0];
                 const cellType = educationKey.split('_')[1]; // e.g., "lk", "pr", "jml"
-                if (cellType === 'lk') {
+                if (cellType === 'l') {
                     $(row).find('td:eq(1)').text(summedData[educationKey]); // Update Laki-Laki
-                } else if (cellType === 'pr') {
+                } else if (cellType === 'p') {
                     $(row).find('td:eq(2)').text(summedData[educationKey]); // Update Perempuan
                 } else if (cellType === 'jml') {
                     $(row).find('td:eq(3)').text(summedData[educationKey]); // Update Jumlah
@@ -228,8 +228,8 @@
                 const row = `
                     <tr>
                         <td>${educationName}</td>
-                        <td>${summedData[`${educationName.toLowerCase()}_lk`] || 0}</td>
-                        <td>${summedData[`${educationName.toLowerCase()}_pr`] || 0}</td>
+                        <td>${summedData[`${educationName.toLowerCase()}_l`] || 0}</td>
+                        <td>${summedData[`${educationName.toLowerCase()}_p`] || 0}</td>
                         <td>${summedData[`${educationName.toLowerCase()}_jml`] || 0}</td>
                     </tr>
                 `;

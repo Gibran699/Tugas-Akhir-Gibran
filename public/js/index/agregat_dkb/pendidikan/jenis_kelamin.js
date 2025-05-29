@@ -215,9 +215,9 @@
                 // If the row already exists, update the values
                 const row = existingRow[0];
                 const cellType = educationsKey.split('_')[1]; // e.g., "lk", "pr", "jml"
-                if (cellType === 'lk') {
+                if (cellType === 'l') {
                     $(row).find('td:eq(1)').text(summedData[educationsKey]); // Update Laki-Laki
-                } else if (cellType === 'pr') {
+                } else if (cellType === 'p') {
                     $(row).find('td:eq(2)').text(summedData[educationsKey]); // Update Perempuan
                 } else if (cellType === 'jml') {
                     $(row).find('td:eq(3)').text(summedData[educationsKey]); // Update jml
@@ -227,8 +227,8 @@
                 const row = `
                     <tr>
                         <td>${educationsName}</td>
-                        <td>${summedData[`${educationsName.toLowerCase()}_lk`] || 0}</td>
-                        <td>${summedData[`${educationsName.toLowerCase()}_pr`] || 0}</td>
+                        <td>${summedData[`${educationsName.toLowerCase()}_l`] || 0}</td>
+                        <td>${summedData[`${educationsName.toLowerCase()}_p`] || 0}</td>
                         <td>${summedData[`${educationsName.toLowerCase()}_jml`] || 0}</td>
                     </tr>
                 `;

@@ -176,32 +176,32 @@
             this.nodes().to$().removeClass('selected');
         });
     }
-    function setTableSum(response, mariageStat) {
-        // Extract the summed data from the response
-        const summedData = response.dataKeseluruhan;
-
-        // Clear the table body before populating
+    function setTableSum(response, mariageStats) {
+        const summedData = response.dataKeseluruhan[0]; // Access the first element of the array
+    
+        console.log('Summed Data:', summedData); // Log the entire summedData object
+    
         $('#tableSum tbody').empty();
-
-        // Iterate over the mariageStat array to dynamically generate rows
-        mariageStat.forEach(mariageStatKey => {
-            // Extract the mariageStat name from the key (e.g., "islam_lk" -> "Islam")
+    
+        mariageStats.forEach(mariageStatKey => {
             const mariageStatName = mariageStatKey.replace(/(_lk|_pr)$/, '').toUpperCase();
-            // Check if the mariageStat name already exists in the table
-            const existingRow = $(`#tableSum tbody tr:contains("${mariageStatName}")`);
+    
+            const existingRow = $(`#tableSum tbody tr[data-name="${mariageStatName}"]`);
             if (existingRow.length > 0) {
-                // If the row already exists, update the values
                 const row = existingRow[0];
-                const cellType = mariageStatKey.split('_')[1]; // e.g., "lk", "pr", "jml"
+                const cellType = mariageStatKey.split('_')[1];
+                let value = summedData[mariageStatKey];
+    
+                console.log(`Value for ${mariageStatKey}:`, value); // Log the value being set
+    
                 if (cellType === 'lk') {
-                    $(row).find('td:eq(1)').text(summedData[mariageStatKey]); // Update Laki-Laki
+                    $(row).find('td:eq(1)').text(value || 0);
                 } else if (cellType === 'pr') {
-                    $(row).find('td:eq(2)').text(summedData[mariageStatKey]); // Update Perempuan
+                    $(row).find('td:eq(2)').text(value || 0);
                 }
             } else {
-                // If the row does not exist, create a new row
                 const row = `
-                    <tr>
+                    <tr data-name="${mariageStatName}">
                         <td>${mariageStatName}</td>
                         <td>${summedData[`${mariageStatName.toLowerCase()}_lk`] || 0}</td>
                         <td>${summedData[`${mariageStatName.toLowerCase()}_pr`] || 0}</td>

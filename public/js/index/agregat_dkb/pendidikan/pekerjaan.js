@@ -9,7 +9,7 @@
         var formData = new FormData(document.getElementById('formSearchPendidikanPekerjaan'));
         const job = [
             'belum_tidak_bekerja_l',
-            'belum_tidak_bekerja_p',
+             'belum_tidak_bekerja_p',
             'mengurus_rumah_tangga_l',
             'mengurus_rumah_tangga_p',
             'pelajar_mahasiswa_l',
@@ -256,7 +256,7 @@
         // Map the response to the dataSet format dynamically using the job array
         let dataSet = response.dataPerkelurahan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.kelurahan_nama, item.keterangan];
+            let row = [item.kecamatan_nama, item.kelurahan_nama, item.pendidikan];
 
             // Dynamically add the job data based on the job array
             job.forEach(jobKey => {
@@ -276,7 +276,7 @@
         let columns = [
             { title: "KECAMATAN" },
             { title: "KELURAHAN" },
-            { title: "KETERANGAN" },
+            { title: "PENDIDIKAN" },
         ];
 
         // Add columns for each job key
@@ -315,7 +315,7 @@
         // Map the response to the dataSet format dynamically using the job array
         let dataSet = response.dataPerkecamatan.map(item => {
             // Start with the fixed columns (kecamatan_nama and kelurahan_nama)
-            let row = [item.kecamatan_nama, item.keterangan];
+            let row = [item.kecamatan_nama, item.pendidikan];
 
             // Dynamically add the job data based on the job array
             job.forEach(jobKey => {
@@ -334,7 +334,7 @@
         // Define the columns dynamically
         let columns = [
             { title: "KECAMATAN" },
-            { title: "KETERANGAN" }
+            { title: "Pendidikan" }
         ];
 
         // Add columns for each job key
@@ -384,7 +384,7 @@
 
                 const row = [
                     jobName, // Agama
-                    data.keterangan, // Keterangan
+                    data.pendidikan, // Keterangan
                     data[`${jobKey}`] || 0 // Jumlah
                 ];
                 tableData.push(row);
@@ -395,7 +395,7 @@
             data: tableData,
             columns: [
                 { title: "Pekerjaan" },
-                { title: "Status Kawin" },
+                { title: "Pendidikan" },
                 { title: "Jumlah" }
             ],
             destroy: true,
