@@ -77,6 +77,8 @@ class UserController extends Controller
                 'users.id'
             )->orderBy('data_pengguna.nama', 'asc')
             ->get();
+        // $user = User::all();
+        // // dd($user);
         $role = Role::select('name')->orderBy('name', 'asc')->get();
         return view('pengaturan.user.create_index', compact('data','role'));
     }

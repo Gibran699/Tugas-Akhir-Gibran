@@ -67,7 +67,7 @@ class CalculateDataController extends Controller
         $this->ktpApi = $ktpApi;
         $this->perekamanApi = $perekamanApi;
     }
-    //calculate data DKB penduduk 
+    //calculate data DKB penduduk
     public function dataPendudukJenisKelamin($request)
     {
         $dataPerkelurahan = PendudukJenisKelamin::select([
@@ -865,7 +865,7 @@ class CalculateDataController extends Controller
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
-    // calculate data DKB disabilitas 
+    // calculate data DKB disabilitas
     public function dataDisabilitasJenisKelamin($request)
     {
         $categoryDisabilites = config('dataArray.categoryDisabilities');
@@ -1035,7 +1035,7 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
-                        CASE 
+                        CASE
                             WHEN keterangan = 1 THEN 'Semua Usia'
                             WHEN keterangan = 2 THEN '0-1 Tahun'
                             WHEN keterangan = 3 THEN '0-4 Tahun'
@@ -1053,7 +1053,7 @@ class CalculateDataController extends Controller
             ->where('akta_kelahiran.semester', $request['semester'])
             ->where('akta_kelahiran.tahun', $request['tahun'])
             ->where('akta_kelahiran.keterangan', $request['keterangan'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'keterangan')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode', 'keterangan')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
 
@@ -1067,7 +1067,7 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
-                CASE 
+                CASE
                         WHEN keterangan = 1 THEN 'Semua Usia'
                             WHEN keterangan = 2 THEN '0-1 Tahun'
                             WHEN keterangan = 3 THEN '0-4 Tahun'
@@ -1096,7 +1096,7 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
-                            CASE 
+                            CASE
                                 WHEN keterangan = 1 THEN 'Semua Usia'
                             WHEN keterangan = 2 THEN '0-1 Tahun'
                             WHEN keterangan = 3 THEN '0-4 Tahun'
@@ -1115,7 +1115,7 @@ class CalculateDataController extends Controller
             ->where('akta_kelahiran.tahun', $request['tahun'])
             ->where('akta_kelahiran.keterangan', $request['keterangan'])
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'keterangan')
-            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->orderBy('mstr_kecamatan.kode', 'ASC')
             ->get();
         $dataTitle = [
             'semester' => $request['semester'],
@@ -1151,7 +1151,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kawin.semester', $request['semester'])
             ->where('akta_kawin.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaKawin::select(
@@ -1264,7 +1264,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_cerai.semester', $request['semester'])
             ->where('akta_cerai.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaCerai::select(
@@ -1365,7 +1365,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kia.semester', $request['semester'])
             ->where('kia.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKia::select(
@@ -1428,7 +1428,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kartu_keluarga.semester', $request['semester'])
             ->where('kartu_keluarga.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKartuKeluarga::select(
@@ -1496,7 +1496,8 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('ktp.semester', $request['semester'])
             ->where('ktp.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            // ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKtp::select(

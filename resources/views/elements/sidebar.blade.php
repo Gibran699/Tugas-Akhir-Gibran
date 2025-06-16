@@ -5,7 +5,7 @@
     <div class="deznav-scroll">
         <div class="main-profile">
             <div class="image-bx">
-                <img src="{{asset('images/Untitled-1.jpg')}}" alt="">
+                <img src="{{ asset('images/Untitled-1.jpg') }}" alt="">
                 <a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i></a>
             </div>
             <h5 class="name"><span class="font-w400">Hello, {{ Auth::user()->name }}</span> </h5>
@@ -19,22 +19,26 @@
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
-            <li><a href="#1" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".pelayanan">
+            <li><a href="#1" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                    data-bs-target=".pelayanan">
                     <i class="glyph-icon flaticon-381-archive"></i>
                     <span class="nav-text">Pelayanan</span>
                 </a>
             </li>
-            <li><a href="#2" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".agregat-dkb">
+            <li><a href="#2" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                    data-bs-target=".agregat-dkb">
                     <i class="glyph-icon flaticon-381-database"></i>
                     <span class="nav-text">Agregat DKB</span>
                 </a>
             </li>
-            <li><a href="#3" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".kepemilikan-dkb">
+            <li><a href="#3" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                    data-bs-target=".kepemilikan-dkb">
                     <i class="glyph-icon flaticon-381-bookmark-1"></i>
                     <span class="nav-text">Kepemilikan</span>
                 </a>
             </li>
-            <li><a href="#5" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".umur-dkb">
+            <li><a href="#5" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                    data-bs-target=".umur-dkb">
                     <i class="glyph-icon flaticon-381-user-8"></i>
                     <span class="nav-text">Struktur Umur</span>
                 </a>
@@ -46,17 +50,20 @@
                 </a>
             </li>
             <li class="nav-label">Import</li>
-            <li><a href="{{route('import_data_excel')}}" class="ai-icon" aria-expanded="false">
+            <li><a href="{{ route('import_data_excel') }}" class="ai-icon" aria-expanded="false">
                     <i class="fa fa-file-excel"></i>
                     <span class="nav-text">Import Excel</span>
                 </a>
             </li>
-            <li class="nav-label">Konfigurasi</li>
-            <li><a href="#7" class="ai-icon" aria-expanded="false" data-bs-toggle="modal" data-bs-target=".pengaturan-dkb">
-				<i class="glyph-icon flaticon-381-settings-7"></i>
-				<span class="nav-text">Pengaturan</span>
-			</a>
-		</li>
+            @can('pengaturan')
+                <li class="nav-label">Konfigurasi</li>
+                <li><a href="#7" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                        data-bs-target=".pengaturan-dkb">
+                        <i class="glyph-icon flaticon-381-settings-7"></i>
+                        <span class="nav-text">Pengaturan</span>
+                    </a>
+                </li>
+            @endcan
         </ul>
     </div>
 </div>

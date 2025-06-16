@@ -112,8 +112,8 @@
                         </select>
                     </div>
                     <div class="form-actions">
-
-                        <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button>
+                        {{-- <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button> --}}
+                        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
                     </div>
                     {!! Form::close() !!}
                 </div>
