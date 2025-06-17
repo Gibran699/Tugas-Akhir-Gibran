@@ -48,7 +48,7 @@ use App\Models\StrukturUmur\Penduduk\KelompokUmur as PendudukKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur as PendudukStatusKawinKelompokUmur;
 use App\Models\StrukturUmur\Penduduk\UsiaSekolah as PendudukUsiaSekolah;
 use App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua as PendudukUsiaMudaProduktifTua;
-use App\Services\ExternalApiService;
+use App\services\ExternalApiService;
 use App\Services\KtpApiService;
 use App\Services\perekamanService;
 use Carbon\Carbon;
