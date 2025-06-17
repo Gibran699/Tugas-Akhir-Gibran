@@ -49,8 +49,8 @@ use App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur as PendudukStatusKa
 use App\Models\StrukturUmur\Penduduk\UsiaSekolah as PendudukUsiaSekolah;
 use App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua as PendudukUsiaMudaProduktifTua;
 use App\services\ExternalApiService;
-use App\Services\KtpApiService;
-use App\Services\perekamanService;
+use App\services\KtpApiService;
+use App\services\perekamanService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
