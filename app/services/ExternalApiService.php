@@ -27,9 +27,9 @@ class ExternalApiService
         return Cache::remember('external_api_token', now()->addHours(1), function () {
             $password = $this->credentials['password'];
 
-            if (str_starts_with($password, 'encrypted:')) {
-                $password = Crypt::decryptString(str_replace('encrypted:', '', $password));
-            }
+            // if (str_starts_with($password, 'encrypted:')) {
+            //     $password = Crypt::decryptString(str_replace('encrypted:', '', $password));
+            // }
 
             // Tambahkan environment check untuk keamanan
             $verifySSL = app()->environment('production')
