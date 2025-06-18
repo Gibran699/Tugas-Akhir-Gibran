@@ -4,10 +4,10 @@
 <div class="deznav">
     <div class="deznav-scroll">
         <div class="main-profile">
-            <div class="image-bx">
+            {{-- <div class="image-bx">
                 <img src="{{ asset('images/Untitled-1.jpg') }}" alt="">
                 <a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i></a>
-            </div>
+            </div> --}}
             <h5 class="name"><span class="font-w400">Hello, {{ Auth::user()->name }}</span> </h5>
             <p class="email">{{ Auth::user()->email }}</p>
         </div>
