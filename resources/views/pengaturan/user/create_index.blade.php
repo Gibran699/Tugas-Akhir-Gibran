@@ -8,7 +8,7 @@
             </ol>
         </div>
 
-        <div class="col-xl-12 col-lg-6">
+        <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">user Management</h4>

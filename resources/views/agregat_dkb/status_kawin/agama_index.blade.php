@@ -10,7 +10,7 @@
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Status Kawin - Agama</a></li>
             </ol>
         </div>
-        <div class="col-xl-12 col-lg-6">
+        <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Semester & Tahun</h4>
@@ -85,7 +85,7 @@
                                         <th class="text-uppercase">KECAMATAN</th>
                                         <th class="text-uppercase">STATUS KAWIN</th>
                                         @foreach ($religoius as $item)
-                                        <th class="text-uppercase">{{$item}}</th> 
+                                        <th class="text-uppercase">{{$item}}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -110,7 +110,7 @@
                                         <th class="text-uppercase">KELURAHAN</th>
                                         <th class="text-uppercase">STATUS KAWIN</th>
                                         @foreach ($religoius as $item)
-                                        <th class="text-uppercase">{{$item}}</th> 
+                                        <th class="text-uppercase">{{$item}}</th>
                                         @endforeach
                                     </tr>
                                 </thead>

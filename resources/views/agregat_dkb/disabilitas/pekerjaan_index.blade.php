@@ -10,7 +10,7 @@
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Pekerjaan</a></li>
             </ol>
         </div>
-        <div class="col-xl-12 col-lg-6">
+        <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Semester & Tahun</h4>
@@ -42,7 +42,7 @@
                                 {{-- <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button> --}}
-                                
+
                             </div>
                         {!! Form::close() !!}
                     </div>

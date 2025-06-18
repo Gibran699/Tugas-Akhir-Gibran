@@ -49,7 +49,7 @@
                 <li class="breadcrumb-item"><a href="javascript:void(0)">KIA</a></li>
             </ol>
         </div>
-        <div class="col-xl-12 col-lg-6">
+        <div class="col-xl-12 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Semester & Tahun</h4>
