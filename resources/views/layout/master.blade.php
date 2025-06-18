@@ -16,8 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <title>Rumah Data 2.0 Kota Samarinda</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
-
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logos/logo_pemkot.png') }}">
 
     {{-- page level css --}}
     <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
