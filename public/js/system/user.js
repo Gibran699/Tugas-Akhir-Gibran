@@ -1,97 +1,94 @@
 dataTableBasic();
+
 document.addEventListener('DOMContentLoaded', function () {
-    // Attach event listeners to all delete buttons
+    // Event listener untuk delete buttons
     document.querySelectorAll('.deleteUser').forEach(function (button) {
         button.addEventListener('click', function () {
-            const userId = this.getAttribute('data-id')
-
-            swal({
-                title: "Konfirmasi",
-                text: "Apakah Anda yakin ingin menghapus data ini?",
-                type: "warning",
-                buttons: {
-                    cancel: "Batal",
-                    confirm: {
-                        text: "Simpan",
-                        value: true,
-                        visible: true,
-                        className: "btn btn-primary",
-                    }
-                },
-                dangerMode: true,
-            }).then((willSave) => {
-                if (willSave) {
-                    // If the user confirms, submit the form
-                    deleteData(userId)
+            const userId = this.getAttribute('data-id');
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin menghapus data ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Hapus',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteData(userId);
                 } else {
-                    swal("Pembatalan", "Data tidak dihapus", "info");
+                    Swal.fire('Pembatalan', 'Data tidak dihapus', 'info');
                 }
             });
         });
     });
-    document.getElementById('saveUser').addEventListener('click', function () {
-        swal({
-            title: "Konfirmasi",
-            text: "Apakah Anda yakin ingin menyimpan data ini?",
-            type: "warning",
-            buttons: {
-                cancel: "Batal",
-                confirm: {
-                    text: "Simpan",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-primary",
-                }
-            },
-            dangerMode: true,
-        }).then((willSave) => {
-            if (willSave) {
-                // If the user confirms, submit the form
-                store()
+
+    // Event listener untuk submit form create
+    document.getElementById('formUserCreate').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin menyimpan data ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Simpan',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                store();
             } else {
-                swal("Pembatalan", "Data tidak disimpan", "info");
+                Swal.fire('Pembatalan', 'Data tidak disimpan', 'info');
             }
         });
     });
+
+    // Event listener untuk edit buttons
     document.querySelectorAll('.editUser').forEach(function (button) {
         button.addEventListener('click', function () {
-            const userId = this.getAttribute('data-id')
-            fetchDataUserId(userId)
-        })
-    })
-    document.getElementById('saveEditUser').addEventListener('click', function () {
-        swal({
-            title: "Konfirmasi",
-            text: "Apakah Anda yakin ingin menyimpan data ini?",
-            type: "warning",
-            buttons: {
-                cancel: "Batal",
-                confirm: {
-                    text: "Simpan",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-primary",
-                }
-            },
-            dangerMode: true,
-        }).then((willSave) => {
-            if (willSave) {
-                // If the user confirms, submit the form
-                updateData()
+            const userId = this.getAttribute('data-id');
+            fetchDataUserId(userId);
+        });
+    });
+
+    // Event listener untuk submit form edit
+    document.getElementById('formUserEdit').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin menyimpan perubahan ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Simpan',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                updateData();
             } else {
-                swal("Pembatalan", "Data tidak disimpan", "info");
+                Swal.fire('Pembatalan', 'Data tidak disimpan', 'info');
             }
         });
     });
+
+    // Reset form saat modal ditutup
+    $('#crudModal, #editModal').on('hidden.bs.modal', function () {
+        $(this).find('form')[0].reset();
+    });
 });
+
 function store() {
-    var formData = new FormData(document.getElementById('formUserCreate'));
+    const formData = $('#formUserCreate').serialize();
     $.ajax({
         url: $('#formUserCreate').attr('action'),
         type: 'POST',
         data: formData,
-        processData: false,
-        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
         beforeSend: function () {
             Swal.fire({
                 title: 'Processing...',
@@ -99,12 +96,12 @@ function store() {
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
             });
         },
         success: function (response) {
             Swal.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Berhasil',
                 text: response.message || 'User berhasil ditambahkan!',
             }).then(() => {
@@ -113,27 +110,31 @@ function store() {
         },
         error: function (xhr) {
             let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
-
             if (xhr.status === 409) {
-                errorMessage = xhr.responseJSON?.data;
+                errorMessage = xhr.responseJSON?.data || 'Data sudah terdaftar.';
+            } else if (xhr.status === 422) {
+                errorMessage = xhr.responseJSON?.errors
+                    ? Object.values(xhr.responseJSON.errors).flat().join('<br>')
+                    : 'Validasi gagal.';
             } else if (xhr.status === 500) {
-                errorMessage = xhr.responseJSON?.data;
+                errorMessage = xhr.responseJSON?.data || 'Kesalahan server.';
             }
             Swal.fire({
-                type: 'error',
+                icon: 'error',
                 title: 'Gagal',
-                text: errorMessage,
+                html: errorMessage,
             });
-        }
+        },
     });
 }
+
 function deleteData(userId) {
-    const deleteUrl = `user/:id`.replace(':id', userId); // Replace with user ID
+    const deleteUrl = `/user/${userId}`;
     $.ajax({
         url: deleteUrl,
         type: 'DELETE',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for Laravel
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
         },
         beforeSend: function () {
             Swal.fire({
@@ -142,41 +143,42 @@ function deleteData(userId) {
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
             });
         },
         success: function (response) {
             Swal.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Berhasil',
                 text: response.message || 'User telah dihapus!',
             }).then(() => {
-                location.reload(); // Reload page after success
+                location.reload();
             });
         },
         error: function (xhr) {
             let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
-
-            if (xhr.status === 409 || xhr.status === 500) {
-                errorMessage = xhr.responseJSON?.data || errorMessage;
+            if (xhr.status === 409) {
+                errorMessage = xhr.responseJSON?.data || 'Konflik data.';
+            } else if (xhr.status === 500) {
+                errorMessage = xhr.responseJSON?.data || 'Kesalahan server.';
             }
-
             Swal.fire({
-                type: 'error',
+                icon: 'error',
                 title: 'Gagal',
                 text: errorMessage,
             });
-        }
+        },
     });
 }
+
 function updateData() {
-    var formData = $('#formUserEdit').serialize()
+    const formData = $('#formUserEdit').serialize();
     $.ajax({
         url: $('#formUserEdit').attr('action'),
         type: 'PATCH',
         data: formData,
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for Laravel
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
         },
         beforeSend: function () {
             Swal.fire({
@@ -185,53 +187,64 @@ function updateData() {
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
-                }
+                },
             });
         },
         success: function (response) {
             Swal.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Berhasil',
                 text: response.message || 'User telah diubah!',
             }).then(() => {
-                location.reload(); // Reload page after success
+                location.reload();
             });
         },
         error: function (xhr) {
             let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
-
-            if (xhr.status === 409 || xhr.status === 500) {
-                errorMessage = xhr.responseJSON?.data || errorMessage;
+            if (xhr.status === 409) {
+                errorMessage = xhr.responseJSON?.data || 'Konflik data.';
+            } else if (xhr.status === 422) {
+                errorMessage = xhr.responseJSON?.errors
+                    ? Object.values(xhr.responseJSON.errors).flat().join('<br>')
+                    : 'Validasi gagal.';
+            } else if (xhr.status === 500) {
+                errorMessage = xhr.responseJSON?.data || 'Kesalahan server.';
             }
-
             Swal.fire({
-                type: 'error',
+                icon: 'error',
                 title: 'Gagal',
-                text: errorMessage,
+                html: errorMessage,
             });
-        }
+        },
     });
 }
+
 function fetchDataUserId(userId) {
-    $('#editModal').modal('show')
+    $('#editModal').modal('show');
     $.ajax({
-        url: '/user/' + userId + '/edit',
+        url: `/user/${userId}/edit`,
         type: 'GET',
         success: function (data) {
-            $('#nameEdit').val(data.nama);
+            // Sesuaikan dengan struktur data yang dikembalikan dari server
+            $('#nameEdit').val(data.nama || data.user?.nama);
             $('#nikEdit').val(data.nik);
-            $('#emailEdit').val(data.email);
+            $('#emailEdit').val(data.email || data.user?.email);
             $('#contactEdit').val(data.contact);
-            $('#instansiEdit').val(data.instansi).change();
-            $('#roleEdit').val(data.role_names).change();
+            $('#instansiEdit').val(data.instansi).trigger('change');
+            $('#roleEdit').val(data.role_names || data.user?.role_names).trigger('change');
             $('#namaInstansiEdit').val(data.nama_instansi);
-            $('#formUserEdit ').attr('action', '/user/' + data.id);
+            $('#formUserEdit').attr('action', `/user/${data.id || data.user?.id}`);
         },
-        error: function (xhr, status, error) {
-            console.error("Error:", error);
-        }
-    })
+        error: function (xhr) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Gagal mengambil data user. Silakan coba lagi.',
+            });
+        },
+    });
 }
+
 function openModal() {
     $('#crudModal').modal('show');
 }

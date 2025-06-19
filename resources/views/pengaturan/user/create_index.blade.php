@@ -75,19 +75,19 @@
                     </div>
                     <div class="form-group">
                         <label for="description">NIK</label>
-                        <input type="number" class="form-control" id="nik" name="nik">
+                        <input type="number" class="form-control" id="nik" name="nik" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="description">No.Telp</label>
-                        <input type="number" class="form-control" id="contact" name="contact">
+                        <input type="number" class="form-control" id="contact" name="contact" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Jenis Instasi</label>
-                        <select name="instansi" id="instansi" class="form-control">
+                        <select name="instansi" id="instansi" class="form-control" required>
                             <option selected disabled>--Pilihan Instasi--</option>
                             <option value="1">OPD Pemerintah</option>
                             <option value="2">OPD Kecamatan</option>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">Role</label>
-                        <select name="role" id="role" class="form-control">
+                        <select name="role" id="role" class="form-control" required>
                             <option value="" selected disabled>--Pilih Role--</option>
                             @foreach ($role as $item)
                                 <option value="{{ $item->name }}">{{ $item->name }}</option>
@@ -112,8 +112,8 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        {{-- <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button> --}}
-                        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+                        <button type="button" class="btn btn-primary mt-3" id="saveUser">Simpan</button>
+                        {{-- <button type="submit" class="btn btn-primary mt-3">Simpan</button> --}}
                     </div>
                     {!! Form::close() !!}
                 </div>

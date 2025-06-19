@@ -19,7 +19,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'contact' => 'required|integer',
+            'contact' => 'required|numeric',
             'nik' => 'required|integer',
             'instansi' => 'required|integer',
             'nama_instansi' => 'required',

@@ -43,18 +43,22 @@
                     <span class="nav-text">Struktur Umur</span>
                 </a>
             </li>
+            @can('web_service')
             <li class="nav-label">Web Service</li>
             <li><a href="#6" class="ai-icon" aria-expanded="false">
                     <i class="glyph-icon flaticon-381-internet"></i>
                     <span class="nav-text">API</span>
                 </a>
             </li>
-            <li class="nav-label">Import</li>
-            <li><a href="{{ route('import_data_excel') }}" class="ai-icon" aria-expanded="false">
-                    <i class="fa fa-file-excel"></i>
-                    <span class="nav-text">Import Excel</span>
-                </a>
-            </li>
+            @endcan
+            @can('import_data')
+                <li class="nav-label">Import</li>
+                <li><a href="{{ route('import_data_excel') }}" class="ai-icon" aria-expanded="false">
+                        <i class="fa fa-file-excel"></i>
+                        <span class="nav-text">Import Excel</span>
+                    </a>
+                </li>
+            @endcan
             @can('pengaturan')
                 <li class="nav-label">Konfigurasi</li>
                 <li><a href="#7" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"

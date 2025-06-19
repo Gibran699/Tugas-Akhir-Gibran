@@ -32,12 +32,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('home');
     //layout view side bar
     Route::get('{codeView}/index-rumah-data', [MainController::class, 'index'])->name('index_rumah_data');
-    //system import
-    Route::get('/form-import', function () {
-        return view('pengaturan.import_data.form_input');
-    })->name('import_data_excel');
-    Route::post('system/import-data', [SystemMainController::class, 'importData'])->name('import_data');
-    Route::group(['middleware' => ['can:pengaturan_users']],function()  {
+    Route::group(['middleware' => ['can:pengaturan']], function () {
+        //system import
+        Route::get('/form-import', function () {
+            return view('pengaturan.import_data.form_input');
+        })->name('import_data_excel');
+        Route::post('system/import-data', [SystemMainController::class, 'importData'])->name('import_data');
+    });
+    Route::group(['middleware' => ['can:pengaturan']], function () {
         //management user
     });
     Route::resource('role', RoleController::class);
