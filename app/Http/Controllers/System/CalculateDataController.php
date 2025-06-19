@@ -2059,9 +2059,9 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = PendudukUmurTunggal::select(
-            DB::raw('sum(lk) as total_lk'),
-            DB::raw('sum(pr) as total_pr'),
-            DB::raw('sum(jumlah) as total_jumlah'),
+            DB::raw('sum(lk) as lk'),
+            DB::raw('sum(pr) as pr'),
+            DB::raw('sum(jumlah) as jumlah'),
             'umur'
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
@@ -2069,9 +2069,9 @@ class CalculateDataController extends Controller
             ->groupBy('umur')
             ->get();
         $dataPerkecamatan = PendudukUmurTunggal::select([
-            DB::raw('sum(lk) as total_lk'),
-            DB::raw('sum(pr) as total_pr'),
-            DB::raw('sum(jumlah) as total_jumlah'),
+            DB::raw('sum(lk) as lk'),
+            DB::raw('sum(pr) as pr'),
+            DB::raw('sum(jumlah) as jumlah'),
             'umur',
             'mstr_kecamatan.nama as kecamatan_nama'
         ])
