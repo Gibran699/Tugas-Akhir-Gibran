@@ -1974,7 +1974,7 @@ class CalculateDataController extends Controller
             ->get();
         $dataPerkecamatan = KepalaKeluargaUmurTunggal::select([
             DB::raw('sum(lk) as lk'),
-            DB::raw('sum(pr) as total_pr'),
+            DB::raw('sum(pr) as pr'),
             DB::raw('sum(jumlah) as jumlah'),
             'mstr_kecamatan.nama as kecamatan_nama',
             'umur'
