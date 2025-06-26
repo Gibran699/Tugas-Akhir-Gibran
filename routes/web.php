@@ -28,12 +28,14 @@ Route::post('login', [\App\Http\Controllers\Auth\MainController::class, 'login']
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+        return view('dashboard.home');
     })->name('home');
+    //dataJson
+    Route::get('data_json/dashboard',[MainController::class,'dataDashboard']);
     //layout view side bar
     Route::get('{codeView}/index-rumah-data', [MainController::class, 'index'])->name('index_rumah_data');
     Route::group(['middleware' => ['can:pengaturan']], function () {
-        //system import
+        // system import
         Route::get('/form-import', function () {
             return view('pengaturan.import_data.form_input');
         })->name('import_data_excel');
@@ -49,7 +51,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('change-password', [AuthMainController::class, 'changePassword'])->name('change_password');
     //wilayah kelurahan
     Route::get('json/wilayah-kelurahan', [WilayahController::class, 'indexKelurahan']);
-
     //search master data
     Route::post('json/search-data/{jenisData}', [SystemMainController::class, 'searchData'])->name('search_data');
 });
@@ -58,3 +59,5 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/layout', function () {
     return view('laporan_pelayanan.layanan_dafduk_index');
 });
+
+// Route::get('test_api', [MainController::class,'dataDashboard']);
