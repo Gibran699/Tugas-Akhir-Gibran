@@ -14,7 +14,7 @@
         <ul class="metismenu" id="menu">
             <li class="nav-label first">Main Menu</li>
             <li>
-                <a class="ai-icon" href="#" aria-expanded="false">
+                <a class="ai-icon" href="{{route('home')}}" aria-expanded="false">
                     <i class="flaticon-144-layout"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
