@@ -108,8 +108,18 @@
          */
         const processData = (data, config, dataKey) => {
             if (!data || !data[dataKey]) {
-                console.warn(`${dataKey} data is missing`);
+                console.warn(`${dataKey} data is missing or empty`);
                 return { labels: [], values: [] };
+            }
+            if (dataKey === 'top10_pekerjaan') {
+                if (!Array.isArray(data[dataKey]) || data[dataKey].length === 0) {
+                    console.warn('top10_pekerjaan data is not a valid array or is empty');
+                    return { labels: [], values: [] };
+                }
+                return {
+                    labels: data[dataKey].map(item => item.pekerjaan || 'Unknown'),
+                    values: data[dataKey].map(item => parseInt(item.total || 0))
+                };
             }
             return {
                 labels: config.map(item => item.label),
@@ -126,6 +136,10 @@
          * @returns {Chart} Chart.js instance
          */
         const initializeBarChart = (context, labels, values, colors) => {
+            if (!labels.length || !values.length) {
+                console.warn('No data to render bar chart');
+                return null;
+            }
             context.height = CHART_CONFIG.height;
             return new Chart(context, {
                 type: 'bar',
@@ -163,6 +177,10 @@
          * @returns {Chart} Chart.js instance
          */
         const initializePieChart = (context, labels, values, colors) => {
+            if (!labels.length || !values.length) {
+                console.warn('No data to render pie chart');
+                return null;
+            }
             context.height = CHART_CONFIG.height;
             return new Chart(context, {
                 type: 'pie',
@@ -210,8 +228,12 @@
         const renderWorkStatusChart = (data) => {
             if (!checkElementExists(CHART_CONFIG.barCanvasId, 'Work status chart')) return;
             const context = document.getElementById('top10Work').getContext('2d');
-            const { labels, values } = processData(data, data.top10_pekerjaan.map(item => ({ key: null, label: item.pekerjaan })), 'top10_pekerjaan');
-            initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
+            const { labels, values } = processData(data, [], 'top10_pekerjaan');
+            if (labels.length && values.length) {
+                initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
+            } else {
+                console.warn('No valid data for work status chart');
+            }
         };
 
         /**
@@ -289,6 +311,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: (data) => {
+                    console.log('Dashboard data:', data); // Debug log
                     updateCardContent(data);
                     renderWorkStatusChart(data);
                     renderMaritalStatusChart(data);

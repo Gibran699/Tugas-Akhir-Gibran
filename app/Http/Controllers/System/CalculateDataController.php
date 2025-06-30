@@ -1151,7 +1151,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kawin.semester', $request['semester'])
             ->where('akta_kawin.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaKawin::select(
@@ -1264,7 +1264,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_cerai.semester', $request['semester'])
             ->where('akta_cerai.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanAktaCerai::select(
@@ -1365,7 +1365,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kia.semester', $request['semester'])
             ->where('kia.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKia::select(
@@ -1428,7 +1428,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('kartu_keluarga.semester', $request['semester'])
             ->where('kartu_keluarga.tahun', $request['tahun'])
-            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama','mstr_kecamatan.kode')
+            ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = KepemilikanKartuKeluarga::select(
@@ -2595,5 +2595,67 @@ class CalculateDataController extends Controller
                 'data' => []
             ], 500);
         }
+    }
+
+    public function dateRangeAgeDisabilitasPendidikan($request)
+    {
+        $atributField = config('dataArray.categoryEducationDisabilites');
+        $dataPerkelurahan = \App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField),
+                [
+                    'mstr_kelurahan.nama as kelurahan_nama',
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'pendidikan_umur_tunggal_disabilitas.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
+            ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode','mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = \App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField),
+                [
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'pendidikan_umur_tunggal_disabilitas.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
+            ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan =  \App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField)
+            )
+        )
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
+            ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
+            ->get();
+         $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+            'title' => 'Kelompok Umur '. $request['from'].'-'.$request['to']
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
 }

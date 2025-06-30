@@ -60,7 +60,8 @@ class MainController extends Controller
             '7yZk8WvNmD' =>  "laporan_pelayanan.layanan_dafduk_index",
             'kP9mY2qR7s' =>  "laporan_pelayanan.online.index",
             "7fK97qB2ax" =>  "laporan_pelayanan.layanan_ektp_index",
-            "7x9Fk2pQ8R" => "laporan_pelayanan.layanan_perekaman_index"
+            "7x9Fk2pQ8R" => "laporan_pelayanan.layanan_perekaman_index",
+            "7fGk2pQ9Lm" => "costum_date_range.disabilitas_pendidikan_index",
         ];
         // Check if the $codeView exists in the $redirectView array
         if (isset($redirectView[$codeView])) {

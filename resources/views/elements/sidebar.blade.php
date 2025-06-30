@@ -43,6 +43,13 @@
                     <span class="nav-text">Struktur Umur</span>
                 </a>
             </li>
+            <li>
+                <a href="#4" class="ai-icon" aria-expanded="false" data-bs-toggle="modal"
+                    data-bs-target=".kelompok-umur-dkb">
+                    <i class="glyph-icon flaticon-152-followers"></i>
+                    <span class="nav-text">Statistik Kelompok Umur</span>
+                </a>
+            </li>
             @can('web_service')
             <li class="nav-label">Web Service</li>
             <li><a href="#6" class="ai-icon" aria-expanded="false">

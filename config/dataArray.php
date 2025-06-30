@@ -149,6 +149,7 @@ return [
         'kP9mY2qR7s' =>  'dataPelayananOnline',
         '7fK97qB2ax' =>  'dataCetakEktp',
         '7x9Fk2pQ8R' =>  'dataPerekaman',
+        '7fGk2pQ9Lm' => 'dateRangeAgeDisabilitasPendidikan',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

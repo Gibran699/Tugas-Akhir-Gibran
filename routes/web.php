@@ -57,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/layout', function () {
-    return view('laporan_pelayanan.layanan_dafduk_index');
+    return view('costum_date_range.disabilitas_pendidikan');
 });
 
-// Route::get('test_api', [MainController::class,'dataDashboard']);

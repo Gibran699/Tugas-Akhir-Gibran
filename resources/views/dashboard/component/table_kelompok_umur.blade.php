@@ -27,9 +27,8 @@
                     </div>
                     <div class="card-body tab-content p-0">
                         <div class="tab-pane fade active show" id="kelompokUmurPenduduk" role="tabpanel">
-                            {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12"> --}}
                                 <div class="table-responsive">
-                                    <table class="table table-bordered border-no" id="table_kelompok_umur">
+                                    <table class="table table primary-table-bg-hover" id="table_kelompok_umur">
                                         <thead>
                                             <tr>
                                                 <th>Kelompok Umur</th>
@@ -39,11 +38,10 @@
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                            {{-- </div> --}}
                         </div>
                         <div class="tab-pane fade" id="kelompokUmurKepalaKeluarga" role="tabpanel">
                             <div class="table-responsive">
-                                <table class="table shadow-hover card-table border-no tbl-btn short-one" id="table_kepala_keluarga_kelompok_umur">
+                                <table class="table table primary-table-bg-hover" id="table_kepala_keluarga_kelompok_umur">
                                     <thead>
                                         <tr>
                                             <th>Kelompok Umur</th>
