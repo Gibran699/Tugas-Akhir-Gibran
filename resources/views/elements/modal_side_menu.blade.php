@@ -821,6 +821,22 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'B5nR8yT3sK']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-004-bar-chart"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Disabilitas</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
                         <a href="{{ route('index_rumah_data', ['codeView' => '7fGk2pQ9Lm']) }}">
                             <div class="widget-stat card bg-primary">
                                 <div class="card-body p-4">
@@ -830,6 +846,23 @@
                                         </span>
                                         <div class="media-body text-white text-right">
                                             <p class="mb-1">Disabilitas Pendidikan</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'aD4vH9jM6P']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-004-bar-chart"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Golongan Darah</p>
                                             {{-- <h3 class="text-white">$76</h3> --}}
                                         </div>
                                     </div>

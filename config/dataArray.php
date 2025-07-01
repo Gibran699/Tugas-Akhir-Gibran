@@ -150,6 +150,8 @@ return [
         '7fK97qB2ax' =>  'dataCetakEktp',
         '7x9Fk2pQ8R' =>  'dataPerekaman',
         '7fGk2pQ9Lm' => 'dateRangeAgeDisabilitasPendidikan',
+        'B5nR8yT3sK' => 'dateRangeAgeDisabilitasUmur',
+        'aD4vH9jM6P' => 'dateRangeAgeBloodTypeUmur',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',
