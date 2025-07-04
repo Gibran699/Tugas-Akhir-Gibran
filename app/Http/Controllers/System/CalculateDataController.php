@@ -2831,54 +2831,137 @@ class CalculateDataController extends Controller
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
     public function dateRangeAgePendudukUmur($request)
-    { {
-            $dataPerkelurahan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-                DB::raw('SUM(lk)'),
-                DB::raw('SUM(pr)'),
-                DB::raw('SUM(jumlah)'),
-                'mstr_kelurahan.nama as kelurahan_nama',
-                'mstr_kecamatan.nama as kecamatan_nama'
-            )
-                ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
-                ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
-                ->whereBetween('umur', [$request->from, $request->to])
-                ->where('umur_tunggal_penduduk.semester', $request['semester'])
-                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
-                ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
-                ->orderBy('mstr_kecamatan.kode', 'asc')
-                ->get();
-            $dataPerkecamatan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-                DB::raw('SUM(lk)'),
-                DB::raw('SUM(pr)'),
-                DB::raw('SUM(jumlah)'),
-                'mstr_kecamatan.nama as kecamatan_nama'
-            )
-                ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
-                ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
-                ->whereBetween('umur', [$request->from, $request->to])
-                ->where('umur_tunggal_penduduk.semester', $request['semester'])
-                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
-                ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
-                ->orderBy('mstr_kecamatan.kode', 'asc')
-                ->get();
-            $dataKeseluruhan =  \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-                DB::raw('SUM(lk)'),
-                DB::raw('SUM(pr)'),
-                DB::raw('SUM(jumlah)'),
-            )
-                ->whereBetween('umur', [$request->from, $request->to])
-                ->where('umur_tunggal_penduduk.semester', $request['semester'])
-                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
-                ->get();
-            $dataTitle = [
-                'semester' => $request['semester'],
-                'tahun' => $request['tahun'],
-                'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
-            ];
-            if (!$dataPerkelurahan) {
-                return response()->json(['message' => 'data tidak ditemukan'], 404);
-            }
-            return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    {
+        $dataPerkelurahan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+            'mstr_kecamatan.nama as kecamatan_nama'
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan =  \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+        )
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function dateRangeAgePendudukStatKawin($request)
+    {
+        $atributField = [
+            'belum_kawin_lk',
+            'belum_kawin_pr',
+            'kawin_lk',
+            'kawin_pr',
+            'cerai_hidup_lk',
+            'cerai_hidup_pr',
+            'cerai_mati_lk',
+            'cerai_mati_pr',
+        ];
+        $dataPerkelurahan = \App\Models\StrukturUmur\Penduduk\StatusKawinUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField),
+                [
+                    DB::raw('SUM(belum_kawin_lk) + SUM(belum_kawin_pr) as belum_kawin_jml'),
+                    DB::raw('SUM(kawin_lk) + SUM(kawin_pr) as kawin_jml'),
+                    DB::raw('SUM(cerai_hidup_lk) + SUM(cerai_hidup_pr) as cerai_hidup_jml'),
+                    DB::raw('SUM(cerai_mati_lk) + SUM(cerai_mati_pr) as cerai_mati_jml'),
+                    'mstr_kelurahan.nama as kelurahan_nama',
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'status_kawin_umur_tunggal_penduduk.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('status_kawin_umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('status_kawin_umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = \App\Models\StrukturUmur\Penduduk\StatusKawinUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField),
+                [
+                    DB::raw('SUM(belum_kawin_lk) + SUM(belum_kawin_pr) as belum_kawin_jml'),
+                    DB::raw('SUM(kawin_lk) + SUM(kawin_pr) as kawin_jml'),
+                    DB::raw('SUM(cerai_hidup_lk) + SUM(cerai_hidup_pr) as cerai_hidup_jml'),
+                    DB::raw('SUM(cerai_mati_lk) + SUM(cerai_mati_pr) as cerai_mati_jml'),
+                    'mstr_kecamatan.nama as kecamatan_nama'
+                ]
+            )
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'status_kawin_umur_tunggal_penduduk.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('status_kawin_umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('status_kawin_umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan =  \App\Models\StrukturUmur\Penduduk\StatusKawinUmurTunggal::select(
+            array_merge(
+                array_map(function ($item) {
+                    return DB::raw("SUM($item) as $item");
+                }, $atributField),
+                [
+                    DB::raw('SUM(belum_kawin_lk) + SUM(belum_kawin_pr) as belum_kawin_jml'),
+                    DB::raw('SUM(kawin_lk) + SUM(kawin_pr) as kawin_jml'),
+                    DB::raw('SUM(cerai_hidup_lk) + SUM(cerai_hidup_pr) as cerai_hidup_jml'),
+                    DB::raw('SUM(cerai_mati_lk) + SUM(cerai_mati_pr) as cerai_mati_jml'),
+                ]
+            )
+        )
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('status_kawin_umur_tunggal_penduduk.semester', $request['semester'])
+            ->where('status_kawin_umur_tunggal_penduduk.tahun', $request['tahun'])
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }
 }

@@ -904,6 +904,23 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'J5nR8yR3sK']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-004-bar-chart"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Penduduk Stat Kawin</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

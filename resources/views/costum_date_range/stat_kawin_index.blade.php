@@ -1,15 +1,26 @@
 @extends('layout.master')
 @section('content')
-@php
-    $atributField = [
-        'LK', 'PR', 'JUMLAH'
-    ];
-@endphp
+    @php
+        $atributField = [
+            'belum_kawin_lk',
+            'belum_kawin_pr',
+            'belum_kawin_jml',
+            'kawin_lk',
+            'kawin_pr',
+            'kawin_jml',
+            'cerai_hidup_lk',
+            'cerai_hidup_pr',
+            'cerai_hidup_jml',
+            'cerai_mati_lk',
+            'cerai_mati_pr',
+            'cerai_mati_jml',
+        ];
+    @endphp
     <div class="container-fluid">
         <div class="row page-titles">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active"><a href="javascript:void(0)">Costum Kelompok Umur</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Penduduk</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Penduduk Status Kawin</a></li>
             </ol>
         </div>
         <div class="col-xl-12 col-md-12">
@@ -20,9 +31,9 @@
                 <div class="card-body">
                     <div class="basic-form">
                         {!! Form::open([
-                            'id' => 'formSearchDateRangePenduduk',
+                            'id' => 'formSearchDateRangePendudukStatKawin',
                             'method' => 'post',
-                            'route' => ['search_data', 'L9bJk5rV2e'],
+                            'route' => ['search_data', 'J5nR8yR3sK'],
                         ]) !!}
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -37,10 +48,12 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <input type="number" class="form-control" id="from" name="from" placeholder="dari umur">
+                                <input type="number" class="form-control" id="from" name="from"
+                                    placeholder="dari umur">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <input type="number" class="form-control" id="to" name="to" placeholder="sampai umur">
+                                <input type="number" class="form-control" id="to" name="to"
+                                    placeholder="sampai umur">
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -128,5 +141,5 @@
     <script>
         generateYearOptions('tahun');
     </script>
-    <script src="{{asset('js/index/date_range/penduduk.js')}}"></script>
+    <script src="{{ asset('js/index/date_range/penduduk_stat_kawin.js') }}"></script>
 @endsection

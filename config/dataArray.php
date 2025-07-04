@@ -154,6 +154,7 @@ return [
         'aD4vH9jM6P' => 'dateRangeAgeBloodTypeUmur',
         '3XwN7zYqF1' => 'dateRangeAgeKepalaKeluargaUmur',
         'L9bJk5rV2e' => 'dateRangeAgePendudukUmur',
+        'J5nR8yR3sK' => 'dateRangeAgePendudukStatKawin',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

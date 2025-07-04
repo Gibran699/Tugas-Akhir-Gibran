@@ -66,6 +66,7 @@ class MainController extends Controller
             "aD4vH9jM6P" => "costum_date_range.golongan_darah_index",
             "3XwN7zYqF1" => "costum_date_range.kepala_keluarga_index",
             "L9bJk5rV2e" => "costum_date_range.penduduk_index",
+            "J5nR8yR3sK" => "costum_date_range.stat_kawin_index",
         ];
         // Check if the $codeView exists in the $redirectView array
         if (isset($redirectView[$codeView])) {
