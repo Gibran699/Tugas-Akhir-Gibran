@@ -2833,9 +2833,9 @@ class CalculateDataController extends Controller
     public function dateRangeAgePendudukUmur($request)
     {
         $dataPerkelurahan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-            DB::raw('SUM(lk)'),
-            DB::raw('SUM(pr)'),
-            DB::raw('SUM(jumlah)'),
+            DB::raw('SUM(lk) as lk'),
+            DB::raw('SUM(pr) as pr'),
+            DB::raw('SUM(jumlah) as jumlah'),
             'mstr_kelurahan.nama as kelurahan_nama',
             'mstr_kecamatan.nama as kecamatan_nama'
         )
@@ -2848,9 +2848,9 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataPerkecamatan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-            DB::raw('SUM(lk)'),
-            DB::raw('SUM(pr)'),
-            DB::raw('SUM(jumlah)'),
+           DB::raw('SUM(lk) as lk'),
+            DB::raw('SUM(pr) as pr'),
+            DB::raw('SUM(jumlah) as jumlah'),
             'mstr_kecamatan.nama as kecamatan_nama'
         )
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
@@ -2862,9 +2862,9 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan =  \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
-            DB::raw('SUM(lk)'),
-            DB::raw('SUM(pr)'),
-            DB::raw('SUM(jumlah)'),
+            DB::raw('SUM(lk) as lk'),
+            DB::raw('SUM(pr) as pr'),
+            DB::raw('SUM(jumlah) as jumlah'),
         )
             ->whereBetween('umur', [$request->from, $request->to])
             ->where('umur_tunggal_penduduk.semester', $request['semester'])
