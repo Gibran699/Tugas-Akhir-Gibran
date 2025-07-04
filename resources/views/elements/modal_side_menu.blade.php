@@ -870,6 +870,40 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => '3XwN7zYqF1']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-004-bar-chart"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Kepala Keluraga</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-xxl-4 col-lg-6 col-sm-6">
+                        <a href="{{ route('index_rumah_data', ['codeView' => 'L9bJk5rV2e']) }}">
+                            <div class="widget-stat card bg-primary">
+                                <div class="card-body p-4">
+                                    <div class="media">
+                                        <span class="me-3">
+                                            <i class="flaticon-004-bar-chart"></i>
+                                        </span>
+                                        <div class="media-body text-white text-right">
+                                            <p class="mb-1">Penduduk</p>
+                                            {{-- <h3 class="text-white">$76</h3> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

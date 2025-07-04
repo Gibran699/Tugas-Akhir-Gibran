@@ -152,6 +152,8 @@ return [
         '7fGk2pQ9Lm' => 'dateRangeAgeDisabilitasPendidikan',
         'B5nR8yT3sK' => 'dateRangeAgeDisabilitasUmur',
         'aD4vH9jM6P' => 'dateRangeAgeBloodTypeUmur',
+        '3XwN7zYqF1' => 'dateRangeAgeKepalaKeluargaUmur',
+        'L9bJk5rV2e' => 'dateRangeAgePendudukUmur',
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

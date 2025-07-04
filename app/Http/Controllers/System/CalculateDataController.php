@@ -2616,7 +2616,7 @@ class CalculateDataController extends Controller
             ->whereBetween('umur', [$request->from, $request->to])
             ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode','mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataPerkecamatan = \App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal::select(
@@ -2648,10 +2648,10 @@ class CalculateDataController extends Controller
             ->where('pendidikan_umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('pendidikan_umur_tunggal_disabilitas.tahun', $request['tahun'])
             ->get();
-         $dataTitle = [
+        $dataTitle = [
             'semester' => $request['semester'],
             'tahun' => $request['tahun'],
-            'title' => 'Kelompok Umur '. $request['from'].'-'.$request['to']
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
         ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
@@ -2677,7 +2677,7 @@ class CalculateDataController extends Controller
             ->whereBetween('umur', [$request->from, $request->to])
             ->where('umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('umur_tunggal_disabilitas.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode','mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataPerkecamatan = \App\Models\StrukturUmur\Disabilitas\UmurTunggal::select(
@@ -2709,10 +2709,10 @@ class CalculateDataController extends Controller
             ->where('umur_tunggal_disabilitas.semester', $request['semester'])
             ->where('umur_tunggal_disabilitas.tahun', $request['tahun'])
             ->get();
-         $dataTitle = [
+        $dataTitle = [
             'semester' => $request['semester'],
             'tahun' => $request['tahun'],
-            'title' => 'Kelompok Umur '. $request['from'].'-'.$request['to']
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
         ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
@@ -2738,7 +2738,7 @@ class CalculateDataController extends Controller
             ->whereBetween('umur', [$request->from, $request->to])
             ->where('umur_tunggal_golongan_darah.semester', $request['semester'])
             ->where('umur_tunggal_golongan_darah.tahun', $request['tahun'])
-            ->groupBy('mstr_kecamatan.kode','mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataPerkecamatan = \App\Models\StrukturUmur\GolonganDarah\UmurTunggal::select(
@@ -2770,14 +2770,115 @@ class CalculateDataController extends Controller
             ->where('umur_tunggal_golongan_darah.semester', $request['semester'])
             ->where('umur_tunggal_golongan_darah.tahun', $request['tahun'])
             ->get();
-         $dataTitle = [
+        $dataTitle = [
             'semester' => $request['semester'],
             'tahun' => $request['tahun'],
-            'title' => 'Kelompok Umur '. $request['from'].'-'.$request['to']
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
         ];
         if (!$dataPerkelurahan) {
             return response()->json(['message' => 'data tidak ditemukan'], 404);
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function dateRangeAgeKepalaKeluargaUmur($request)
+    {
+        $dataPerkelurahan = \App\Models\StrukturUmur\KepalaKeluarga\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+            'mstr_kelurahan.nama as kelurahan_nama',
+            'mstr_kecamatan.nama as kecamatan_nama'
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_kepala_keluarga.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_kepala_keluarga.semester', $request['semester'])
+            ->where('umur_tunggal_kepala_keluarga.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataPerkecamatan = \App\Models\StrukturUmur\KepalaKeluarga\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+            'mstr_kecamatan.nama as kecamatan_nama'
+        )
+            ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_kepala_keluarga.kode_wilayah')
+            ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_kepala_keluarga.semester', $request['semester'])
+            ->where('umur_tunggal_kepala_keluarga.tahun', $request['tahun'])
+            ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+            ->orderBy('mstr_kecamatan.kode', 'asc')
+            ->get();
+        $dataKeseluruhan =  \App\Models\StrukturUmur\KepalaKeluarga\UmurTunggal::select(
+            DB::raw('SUM(lk)'),
+            DB::raw('SUM(pr)'),
+            DB::raw('SUM(jumlah)'),
+        )
+            ->whereBetween('umur', [$request->from, $request->to])
+            ->where('umur_tunggal_kepala_keluarga.semester', $request['semester'])
+            ->where('umur_tunggal_kepala_keluarga.tahun', $request['tahun'])
+            ->get();
+        $dataTitle = [
+            'semester' => $request['semester'],
+            'tahun' => $request['tahun'],
+            'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
+        ];
+        if (!$dataPerkelurahan) {
+            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        }
+        return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+    }
+    public function dateRangeAgePendudukUmur($request)
+    { {
+            $dataPerkelurahan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+                DB::raw('SUM(lk)'),
+                DB::raw('SUM(pr)'),
+                DB::raw('SUM(jumlah)'),
+                'mstr_kelurahan.nama as kelurahan_nama',
+                'mstr_kecamatan.nama as kecamatan_nama'
+            )
+                ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
+                ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+                ->whereBetween('umur', [$request->from, $request->to])
+                ->where('umur_tunggal_penduduk.semester', $request['semester'])
+                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+                ->groupBy('mstr_kecamatan.kode', 'mstr_kelurahan.nama', 'mstr_kecamatan.nama')
+                ->orderBy('mstr_kecamatan.kode', 'asc')
+                ->get();
+            $dataPerkecamatan = \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+                DB::raw('SUM(lk)'),
+                DB::raw('SUM(pr)'),
+                DB::raw('SUM(jumlah)'),
+                'mstr_kecamatan.nama as kecamatan_nama'
+            )
+                ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'umur_tunggal_penduduk.kode_wilayah')
+                ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
+                ->whereBetween('umur', [$request->from, $request->to])
+                ->where('umur_tunggal_penduduk.semester', $request['semester'])
+                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+                ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama')
+                ->orderBy('mstr_kecamatan.kode', 'asc')
+                ->get();
+            $dataKeseluruhan =  \App\Models\StrukturUmur\Penduduk\UmurTunggal::select(
+                DB::raw('SUM(lk)'),
+                DB::raw('SUM(pr)'),
+                DB::raw('SUM(jumlah)'),
+            )
+                ->whereBetween('umur', [$request->from, $request->to])
+                ->where('umur_tunggal_penduduk.semester', $request['semester'])
+                ->where('umur_tunggal_penduduk.tahun', $request['tahun'])
+                ->get();
+            $dataTitle = [
+                'semester' => $request['semester'],
+                'tahun' => $request['tahun'],
+                'title' => 'Kelompok Umur ' . $request['from'] . '-' . $request['to']
+            ];
+            if (!$dataPerkelurahan) {
+                return response()->json(['message' => 'data tidak ditemukan'], 404);
+            }
+            return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
+        }
     }
 }
