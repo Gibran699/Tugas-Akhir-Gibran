@@ -20,7 +20,7 @@
                         {!! Form::open([
                             'id' => 'formSearchKepalaKeluargaAgama',
                             'method' => 'post',
-                            'route' => ['search_data', 'MupFCfSa6a'],
+                            'route' => ['search_data', 'nYtZCUxdr6'],
                         ]) !!}
                         <div class="row">
                             <div class="col-md-6 mb-3">
