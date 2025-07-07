@@ -20,7 +20,7 @@ class StrukturUmurKepalaKeluargaStatusKawinKelompokUmurImport implements ToModel
 
     public function model(array $row)
     {
-        $categoryAgeGroup = config('dataArray.categoryAgeGroup');
+        $categoryAgeGroup = config('dataArray.categoryAgeGroupMarriageStatus');
         $data = [
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
