@@ -58,7 +58,7 @@
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Penduduk Agama Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Kepala Keluarga Agama Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';

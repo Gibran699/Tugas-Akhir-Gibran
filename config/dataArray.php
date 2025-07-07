@@ -84,7 +84,7 @@ return [
         '28' => 'App\Models\StrukturUmur\GolonganDarah\KelompokUmur',
         '29' => 'App\Models\StrukturUmur\GolonganDarah\UmurTunggal',
         '30' => 'App\Models\StrukturUmur\KepalaKeluarga\KelompokUmur',
-        '31' => 'App\Models\StrukturUmur\KepalaKeluarga\StatusKawin',
+        '31' => 'App\Models\StrukturUmur\KepalaKeluarga\StatusKawinKelompokUmur',
         '32' => 'App\Models\StrukturUmur\KepalaKeluarga\UmurTunggal',
         '33' => 'App\Models\StrukturUmur\Penduduk\KelompokUmur',
         '34' => 'App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur',

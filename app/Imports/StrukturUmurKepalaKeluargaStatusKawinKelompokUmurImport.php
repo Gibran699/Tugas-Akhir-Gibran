@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Str;
 
-class StrukturUmurKepalaKeluargaStatusKawinImport implements ToModel, WithHeadingRow
+class StrukturUmurKepalaKeluargaStatusKawinKelompokUmurImport implements ToModel, WithHeadingRow
 {
     protected $tahun;
     protected $semester;
