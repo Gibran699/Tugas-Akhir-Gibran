@@ -19,27 +19,27 @@
                             'method' => 'post',
                             'route' => ['search_data', 'ZvGL0vPJLC'],
                         ]) !!}
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <select name="semester" id="semester" class="form-control default-select">
-                                        <option value="" disabled selected>--PILIH Semester--</option>
-                                        <option value="1">I</option>
-                                        <option value="2">II</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <select name="tahun" id="tahun" class="form-control default-select">
-                                    </select>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <select name="semester" id="semester" class="form-control default-select">
+                                    <option value="" disabled selected>--PILIH Semester--</option>
+                                    <option value="1">I</option>
+                                    <option value="2">II</option>
+                                </select>
                             </div>
-                            <div class="d-flex justify-content-end">
-                                {{-- <button type="submit" class="btn btn-primary">
+                            <div class="col-md-6 mb-3">
+                                <select name="tahun" id="tahun" class="form-control default-select">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            {{-- <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-list"></i> Tampilkan
                                 </button> --}}
-                                <button type="button" class="btn btn-primary" id="submitSearch">
-                                    <i class="fa fa-list"></i> Tampilkan
-                                </button>
-                            </div>
+                            <button type="button" class="btn btn-primary" id="submitSearch">
+                                <i class="fa fa-list"></i> Tampilkan
+                            </button>
+                        </div>
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -74,8 +74,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKecamatan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKecamatan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Belum Kawin LK</th>
@@ -100,8 +100,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKelurahan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKelurahan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Kelurahan</th>

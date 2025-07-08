@@ -121,7 +121,7 @@
                         <div class="table-responsive">
                             <table id="tableKecamatan" class="display table table-bordered table-responssive"
                                 style="min-width: 845px">
-                                <thead>
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>KECAMATAN</th>
                                         @foreach ($bloodTypes as $item)
@@ -144,7 +144,7 @@
                         <div class="table-responsive">
                             <table id="tableKelurahan" class="display table table-bordered table-responssive"
                                 style="min-width: 845px">
-                                <thead>
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
@@ -165,5 +165,5 @@
     <script>
         generateYearOptions('tahun');
     </script>
-    <script src="{{asset('js/index/agregat_dkb/penduduk/goldar.js')}}"></script>
+    <script src="{{ asset('js/index/agregat_dkb/penduduk/goldar.js') }}"></script>
 @endsection

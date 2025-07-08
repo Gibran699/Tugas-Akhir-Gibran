@@ -72,8 +72,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="display table table-striped table-responsive" id="tableKecamatan">
-                                <thead>
+                            <table class="display table table-bordered table-responsive" id="tableKecamatan">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th class="text-uppercase">Kecamatan</th>
                                         <th class="text-uppercase">Islam LK</th>
@@ -109,8 +109,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKelurahan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKelurahan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th class="text-uppercase">KECAMATAN</th>
                                         <th class="text-uppercase">KELURAHAN</th>
