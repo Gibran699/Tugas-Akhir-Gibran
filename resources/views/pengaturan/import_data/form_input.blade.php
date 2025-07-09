@@ -54,12 +54,12 @@
                                 </select>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-primary" id="submitImport">
-                                    <i class="fa fa-file-import"></i> Import
-                                </button>
-                                {{-- <button type="submit" class="btn btn-primary">
+                                {{-- <button type="button" class="btn btn-primary" id="submitImport">
                                     <i class="fa fa-file-import"></i> Import
                                 </button> --}}
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-file-import"></i> Import
+                                </button>
                             </div>
                         </div>
                         {!! Form::close() !!}

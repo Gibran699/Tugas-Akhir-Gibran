@@ -23,6 +23,7 @@ class StrukturUmurPendudukStatusKawinUmurTunggalImport implements ToModel, WithH
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
+            'umur' => $row['umur'],
             'kode_wilayah' => $row['kode_wilayah'],
             'belum_kawin_lk' => $row['belum_kawin_lk'],
             'belum_kawin_pr' => $row['belum_kawin_pr'],

@@ -34,13 +34,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('data_json/dashboard',[MainController::class,'dataDashboard']);
     //layout view side bar
     Route::get('{codeView}/index-rumah-data', [MainController::class, 'index'])->name('index_rumah_data');
-    Route::group(['middleware' => ['can:pengaturan']], function () {
+    // Route::group(['middleware' => ['can:pengaturan']], function () {
         // system import
         Route::get('/form-import', function () {
             return view('pengaturan.import_data.form_input');
         })->name('import_data_excel');
         Route::post('system/import-data', [SystemMainController::class, 'importData'])->name('import_data');
-    });
+    // });
     Route::group(['middleware' => ['can:pengaturan']], function () {
         //management user
     });
