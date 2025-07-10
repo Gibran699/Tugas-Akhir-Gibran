@@ -111,6 +111,14 @@
         let table = $('#tableKelurahan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -169,6 +177,14 @@
         let table = $('#tableKecamatan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -193,20 +209,20 @@
     }
     function setTableSum(response, religious) {
         console.log("Response Data:", response); // Debugging
-    
+
         const summedData = response.dataKeseluruhan;
-    
+
         if ($.fn.DataTable.isDataTable('#tableSum')) {
             $('#tableSum').DataTable().clear().destroy();
         }
-    
+
         const tableData = [];
-    
+
         summedData.forEach(data => {
             religious.forEach(religionKey => {
                 // const religionName = religionKey.split('_')[0].charAt(0).toUpperCase() + religionKey.split('_')[0].slice(1);
                 const religionName = religionKey.toUpperCase();
-                
+
                 const row = [
                     religionName, // Agama
                     data.keterangan, // Keterangan
@@ -215,7 +231,7 @@
                 tableData.push(row);
             });
         });
-    
+
         $('#tableSum').DataTable({
             data: tableData,
             columns: [

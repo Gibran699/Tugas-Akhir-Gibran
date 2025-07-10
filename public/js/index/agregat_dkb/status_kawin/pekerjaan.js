@@ -288,6 +288,14 @@
         let table = $('#tableKelurahan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -346,6 +354,14 @@
         let table = $('#tableKecamatan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -370,18 +386,18 @@
     }
     function setTableSum(response, job) {
         const summedData = response.dataKeseluruhan;
-    
+
         if ($.fn.DataTable.isDataTable('#tableSum')) {
             $('#tableSum').DataTable().clear().destroy();
         }
-    
+
         const tableData = [];
-    
+
         summedData.forEach(data => {
             job.forEach(jobKey => {
                 // const jobName = jobKey.split('_')[0].charAt(0).toUpperCase() + jobKey.split('_')[0].slice(1);
                 const jobName = jobKey.toUpperCase();
-                
+
                 const row = [
                     jobName, // Agama
                     data.keterangan, // Keterangan
@@ -390,7 +406,7 @@
                 tableData.push(row);
             });
         });
-    
+
         $('#tableSum').DataTable({
             data: tableData,
             columns: [

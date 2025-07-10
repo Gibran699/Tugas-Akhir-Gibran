@@ -55,7 +55,7 @@
                 // Set the value of #tahunSemester dynamically
                 const semester = response.dataTitle.semester || "N/A";
                 const tahun = response.dataTitle.tahun || "N/A";
-                $("#tahunSemester").text(`Status Kawin Jenis Kelamin Tahun ${tahun} - Semester ${semester}`);
+                $("#tahunSemester").text(`Disabilitas Jenis Kelamin Tahun ${tahun} - Semester ${semester}`);
             },
             error: function (xhr) {
                 let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -107,6 +107,14 @@
         let table = $('#tableKelurahan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -164,6 +172,14 @@
         let table = $('#tableKecamatan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },

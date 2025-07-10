@@ -127,6 +127,14 @@
         let table = $('#tableKelurahan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },
@@ -185,6 +193,14 @@
         let table = $('#tableKecamatan').DataTable({
             data: dataSet,
             columns: columns,
+            scrollY: "60vh", // Enable vertical scrolling with a fixed height
+            scrollX: true, // Enable horizontal scrolling
+            scrollCollapse: true, // Adjust table height dynamically
+            fixedHeader: true, // Enable fixed header
+            fixedColumns: {
+                left: 1, // Fix the first column (KECAMATAN)
+            },
+            paging: true, // Enable pagination
             createdRow: function (row, data, index) {
                 $(row).addClass('selected');
             },

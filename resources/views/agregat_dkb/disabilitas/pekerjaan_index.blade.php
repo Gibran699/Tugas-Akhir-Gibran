@@ -70,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-            </div
+            </div>
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -78,8 +78,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKecamatan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKecamatan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th class="text-uppercase">Kecamatan</th>
                                         <th class="text-uppercase">Keterangan</th>
@@ -100,8 +100,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKelurahan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKelurahan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th class="text-uppercase">Kecamatan</th>
                                         <th class="text-uppercase">Kelurahan</th>
