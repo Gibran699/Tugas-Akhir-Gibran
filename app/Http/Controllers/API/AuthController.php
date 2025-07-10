@@ -28,9 +28,9 @@ class AuthController extends Controller
 
         // Cek role user (pastikan Anda menggunakan Spatie Laravel Permission atau sistem role lainnya)
         $user = Auth::user();
-        // if (!$user->hasRole('developer|api_smart_rt')) {
-        //     return response()->json(['error_message' => 'Forbidden: Invalid role'], 403);
-        // }
+        if (!$user->hasRole('developer|api_smart_rt')) {
+            return response()->json(['error_message' => 'Forbidden: Invalid role'], 403);
+        }
 
         // Generate token (Passport)
         $tokenResult = $user->createToken('API Token');
