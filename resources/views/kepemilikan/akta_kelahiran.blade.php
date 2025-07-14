@@ -139,8 +139,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKecamatan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKecamatan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KETERANGAN</th>
@@ -161,8 +161,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tableKelurahan" class="display" style="min-width: 845px">
-                                <thead>
+                            <table id="tableKelurahan" class="table table-bordered display" style="min-width: 845px">
+                                <thead class="thead-primary">
                                     <tr>
                                         <th>KECAMATAN</th>
                                         <th>KELURAHAN</th>
