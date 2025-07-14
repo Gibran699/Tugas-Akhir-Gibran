@@ -90,7 +90,7 @@ return [
         '34' => 'App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur',
         '35' => 'App\Models\StrukturUmur\Penduduk\StatusKawinUmurTunggal',
         '36' => 'App\Models\StrukturUmur\Penduduk\UmurTunggal',
-        '37' => 'App\Models\StrukturUmur\Penduduk\UsiaMudaProduktif',
+        '37' => 'App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua',
         '38' => 'App\Models\StrukturUmur\Penduduk\UsiaSekolah',
         '39' => 'App\Models\AgregatDKB\StatusKawin\Agama',
         '40' => 'App\Models\AgregatDKB\StatusKawin\JenisKelamin',
