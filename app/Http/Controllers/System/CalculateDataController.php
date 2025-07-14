@@ -2304,16 +2304,16 @@ class CalculateDataController extends Controller
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
         $dataKeseluruhan = PendudukUsiaMudaProduktifTua::select(
-            DB::raw('sum(usia_muda) as total_usia_muda'),
-            DB::raw('sum(usia_produktif) as total_usia_produktif'),
-            DB::raw('sum(usia_tua) as total_usia_tua'),
+            DB::raw('sum(usia_muda) as usia_muda'),
+            DB::raw('sum(usia_produktif) as usia_produktif'),
+            DB::raw('sum(usia_tua) as usia_tua'),
         )->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
             ->get();
         $dataPerkecamatan = PendudukUsiaMudaProduktifTua::select([
-            DB::raw('sum(usia_muda) as total_usia_muda'),
-            DB::raw('sum(usia_produktif) as total_usia_produktif'),
-            DB::raw('sum(usia_tua) as total_usia_tua'),
+            DB::raw('sum(usia_muda) as usia_muda'),
+            DB::raw('sum(usia_produktif) as usia_produktif'),
+            DB::raw('sum(usia_tua) as usia_tua'),
             'mstr_kecamatan.nama as kecamatan_nama'
         ])
             ->join('mstr_kelurahan', 'mstr_kelurahan.kode', '=', 'usia_muda_produktif_tua_penduduk.kode_wilayah')
