@@ -5,42 +5,52 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.deleteUser').forEach(function (button) {
         button.addEventListener('click', function () {
             const userId = this.getAttribute('data-id');
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: 'Apakah Anda yakin ingin menghapus data ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonText: 'Batal',
-                confirmButtonText: 'Hapus',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-            }).then((result) => {
-                if (result.isConfirmed) {
+            swal({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin menghapus data ini?",
+                type: "warning",
+                buttons: {
+                    cancel: "Batal",
+                    confirm: {
+                        text: "Hapus",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-primary",
+                    }
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
                     deleteData(userId);
                 } else {
-                    Swal.fire('Pembatalan', 'Data tidak dihapus', 'info');
+                    swal("Pembatalan", "Data tidak dihapus", "info");
                 }
             });
         });
     });
 
-    // Event listener untuk submit form create
-    document.getElementById('formUserCreate').addEventListener('submit', function (e) {
+    // Event listener untuk button save create
+    document.getElementById('saveUser').addEventListener('click', function (e) {
         e.preventDefault();
-        Swal.fire({
-            title: 'Konfirmasi',
-            text: 'Apakah Anda yakin ingin menyimpan data ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Simpan',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-        }).then((result) => {
-            if (result.isConfirmed) {
+        swal({
+            title: "Konfirmasi",
+            text: "Apakah Anda yakin ingin menyimpan data ini?",
+            type: "warning",
+            buttons: {
+                cancel: "Batal",
+                confirm: {
+                    text: "Simpan",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary",
+                }
+            },
+            dangerMode: true,
+        }).then((willSave) => {
+            if (willSave) {
                 store();
             } else {
-                Swal.fire('Pembatalan', 'Data tidak disimpan', 'info');
+                swal("Pembatalan", "Data tidak disimpan", "info");
             }
         });
     });
@@ -53,23 +63,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Event listener untuk submit form edit
-    document.getElementById('formUserEdit').addEventListener('submit', function (e) {
+    // Event listener untuk button save edit
+    document.getElementById('saveEditUser').addEventListener('click', function (e) {
         e.preventDefault();
-        Swal.fire({
-            title: 'Konfirmasi',
-            text: 'Apakah Anda yakin ingin menyimpan perubahan ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Simpan',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-        }).then((result) => {
-            if (result.isConfirmed) {
+        swal({
+            title: "Konfirmasi",
+            text: "Apakah Anda yakin ingin menyimpan perubahan ini?",
+            type: "warning",
+            buttons: {
+                cancel: "Batal",
+                confirm: {
+                    text: "Simpan",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary",
+                }
+            },
+            dangerMode: true,
+        }).then((willSave) => {
+            if (willSave) {
                 updateData();
             } else {
-                Swal.fire('Pembatalan', 'Data tidak disimpan', 'info');
+                swal("Pembatalan", "Data tidak disimpan", "info");
             }
         });
     });
@@ -82,6 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function store() {
     const formData = $('#formUserCreate').serialize();
+    
+    // Debug: Log form data
+    console.log('Form Data:', formData);
+    console.log('URL:', $('#formUserCreate').attr('action'));
+    
     $.ajax({
         url: $('#formUserCreate').attr('action'),
         type: 'POST',
@@ -173,6 +193,11 @@ function deleteData(userId) {
 
 function updateData() {
     const formData = $('#formUserEdit').serialize();
+    
+    // Debug: Log form data
+    console.log('Update Form Data:', formData);
+    console.log('Update URL:', $('#formUserEdit').attr('action'));
+    
     $.ajax({
         url: $('#formUserEdit').attr('action'),
         type: 'PATCH',

@@ -18,6 +18,7 @@
                             'id' => 'formSearchDataLayananEKTP',
                             'method' => 'post',
                             'route' => ['search_data', '7fK97qB2ax'],
+                            'data-no-loading' => 'true',
                         ]) !!}
                         <div class="row">
                             <div class="col-md-6 mb-3">

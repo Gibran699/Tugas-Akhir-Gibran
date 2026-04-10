@@ -1,0 +1,2 @@
+/* Tailwind CSS — utilities only (preflight disabled to avoid Bootstrap conflict) */
+@tailwind utilities;

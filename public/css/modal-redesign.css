@@ -1,0 +1,349 @@
+/* ============================================
+   Modal Redesign - FontAwesome 6 & Modern UI
+   ============================================ */
+
+/* Modal rounded corners */
+.modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ---- Modal Headers ---- */
+.modal-header-green {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    border-bottom: none;
+}
+.modal-header-blue {
+    background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
+    color: white;
+    border-bottom: none;
+}
+.modal-header-purple {
+    background: linear-gradient(135deg, #8e44ad 0%, #a569bd 100%);
+    color: white;
+    border-bottom: none;
+}
+.modal-header-orange {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    border-bottom: none;
+}
+.modal-header-teal {
+    background: linear-gradient(135deg, #1abc9c 0%, #48c9b0 100%);
+    color: white;
+    border-bottom: none;
+}
+.modal-header-dark {
+    background: linear-gradient(135deg, #434E78 0%, #607B8F 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.modal-header-green .btn-close,
+.modal-header-blue .btn-close,
+.modal-header-purple .btn-close,
+.modal-header-orange .btn-close,
+.modal-header-teal .btn-close,
+.modal-header-dark .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* ============================================
+   SERVICE CARDS (Pelayanan Modal)
+   ============================================ */
+.service-card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+}
+.service-card-header {
+    padding: 28px 20px 14px;
+    text-align: center;
+    background: white;
+}
+.service-icon-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+    color: white;
+    margin: 0 auto 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+.service-card-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1e293b;
+    margin-bottom: 0;
+}
+.service-card-body {
+    padding: 0 20px 14px;
+    font-size: 0.84rem;
+    color: #64748b;
+    text-align: center;
+    flex: 1;
+}
+.service-card-footer {
+    padding: 12px 20px 18px;
+    border-top: 1px solid #f1f5f9 !important;
+    background: #fafbff !important;
+    display: flex;
+    justify-content: center;
+}
+.btn-service-open {
+    padding: 8px 26px;
+    border-radius: 20px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    border: none;
+    letter-spacing: 0.3px;
+}
+.btn-service-open:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
+
+/* Icon gradient backgrounds */
+.icon-bg-blue   { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.icon-bg-green  { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.icon-bg-orange { background: linear-gradient(135deg, #fa8231, #f7b733); }
+.icon-bg-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+.icon-bg-teal   { background: linear-gradient(135deg, #11998e, #38ef7d); }
+
+/* Button gradient variants */
+.btn-open-blue   { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #064663 !important; }
+.btn-open-green  { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #0d5a40 !important; }
+.btn-open-orange { background: linear-gradient(135deg, #fa8231, #f7b733); color: white !important; }
+.btn-open-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white !important; }
+.btn-open-teal   { background: linear-gradient(135deg, #11998e, #38ef7d); color: #0d5a40 !important; }
+
+/* ============================================
+   DATA NAV BUTTONS (DKB / Umur tabs)
+   ============================================ */
+.data-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    color: #475569;
+    font-size: 0.88rem;
+    font-weight: 500;
+    width: 100%;
+    text-align: left;
+    text-decoration: none !important;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.data-nav-btn:hover, .data-nav-btn:focus {
+    background: #f0f4ff;
+    border-color: #434E78;
+    color: #434E78;
+    transform: translateX(3px);
+    text-decoration: none;
+}
+.data-nav-btn-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    background: #f1f5f9;
+    color: #607B8F;
+    transition: all 0.2s ease;
+}
+.data-nav-btn:hover .data-nav-btn-icon {
+    background: #434E78;
+    color: white;
+}
+.data-nav-btn-text { flex: 1; }
+.data-nav-btn-arrow {
+    font-size: 0.72rem;
+    opacity: 0.45;
+    transition: all 0.2s ease;
+}
+.data-nav-btn:hover .data-nav-btn-arrow {
+    opacity: 1;
+    transform: translateX(2px);
+}
+
+/* Tab section subheader */
+.tab-section-header {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 16px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.tab-section-header:first-child { margin-top: 0; }
+
+/* List group sidebar tabs */
+.modal-tab-sidebar .list-group-item {
+    border-radius: 10px !important;
+    border: 1.5px solid #e2e8f0;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #475569;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+.modal-tab-sidebar .list-group-item i {
+    font-size: 0.9rem;
+    width: 18px;
+    text-align: center;
+    color: #94a3b8;
+}
+.modal-tab-sidebar .list-group-item.active {
+    background: linear-gradient(135deg, #434E78 0%, #607B8F 100%) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+.modal-tab-sidebar .list-group-item.active i { color: white; }
+.modal-tab-sidebar .list-group-item:hover:not(.active) {
+    background: #f0f4ff;
+    border-color: #434E78;
+    color: #434E78;
+}
+
+/* Tab pane heading */
+.tab-pane-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.tab-pane-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #434E78, #607B8F);
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   DOCUMENT STAT CARDS (Kepemilikan / Kelompok Umur)
+   ============================================ */
+.doc-stat-card {
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    text-decoration: none !important;
+    margin-bottom: 0;
+    height: 100%;
+    min-height: 76px;
+}
+.doc-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.2);
+    color: white;
+    text-decoration: none;
+}
+.doc-stat-icon {
+    width: 46px;
+    height: 46px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+.doc-stat-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex: 1;
+    line-height: 1.3;
+}
+.doc-stat-chevron {
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* Kepemilikan color palette */
+.doc-card-1  { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.doc-card-2  { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.doc-card-3  { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #064663 !important; }
+.doc-card-4  { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #0d4a35 !important; }
+.doc-card-5  { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #4a2500 !important; }
+.doc-card-6  { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #3a1f5c !important; }
+.doc-card-7  { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #4a2500 !important; }
+.doc-card-8  { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #0a3d2e !important; }
+
+.doc-card-3 .doc-stat-label, .doc-card-4 .doc-stat-label,
+.doc-card-5 .doc-stat-label, .doc-card-6 .doc-stat-label,
+.doc-card-7 .doc-stat-label, .doc-card-8 .doc-stat-label { color: inherit; }
+
+/* Kelompok Umur color palette */
+.chart-card-1 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.chart-card-2 { background: linear-gradient(135deg, #e96c4c 0%, #c0392b 100%); }
+.chart-card-3 { background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); }
+.chart-card-4 { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
+.chart-card-5 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #0d4a35 !important; }
+.chart-card-6 { background: linear-gradient(135deg, #c79081 0%, #dfa579 100%); color: #3d1f10 !important; }
+.chart-card-5 .doc-stat-label, .chart-card-6 .doc-stat-label { color: inherit; }
+
+/* ============================================
+   PENGATURAN NEON BUTTONS - FA6 ICON FIX
+   ============================================ */
+.neon-btn .fa-icon {
+    font-size: 1.6rem;
+    width: 40px;
+    text-align: center;
+    flex-shrink: 0;
+    z-index: 2;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+.neon-btn:hover .fa-icon {
+    transform: translateY(-3px);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+    .service-icon-wrap { width: 52px; height: 52px; font-size: 1.4rem; }
+    .doc-stat-card { padding: 12px 14px; min-height: 64px; }
+    .doc-stat-icon { width: 38px; height: 38px; font-size: 1.1rem; }
+    .doc-stat-label { font-size: 0.82rem; }
+}

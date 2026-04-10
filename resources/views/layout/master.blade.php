@@ -29,6 +29,14 @@
     <link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     {{-- global style css --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/neon-buttons.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/loading-animation.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/modal-redesign.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/datatable-modern.css') }}" rel="stylesheet" type="text/css" />
+    {{-- FontAwesome 6 --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    {{-- Tailwind CSS utilities (loaded last so utility classes override Bootstrap when needed) --}}
+    @vite(['resources/css/app.css'])
     {{-- package js --}}
     {{-- jquery --}}
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
@@ -48,19 +56,7 @@
 
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
-    <div id="preloader">
-        <div class="sk-three-bounce">
-            <div class="sk-child sk-bounce1"></div>
-            <div class="sk-child sk-bounce2"></div>
-            <div class="sk-child sk-bounce3"></div>
-        </div>
-    </div>
-    <!--*******************
-        Preloader end
-    ********************-->
+    {{-- Template preloader removed — using custom Capil loading overlay instead --}}
 
 
     <!--**********************************
@@ -154,10 +150,36 @@
         {{-- modal sub menu --}}
         @include('elements.modal_side_menu')
 
+
     </div>
     <!--**********************************
         Main wrapper end
     ***********************************-->
+
+    {{-- Loading Animation Overlay — must be outside #main-wrapper so position:fixed
+         is not affected by the sidebar CSS transform on #main-wrapper --}}
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-card">
+            <div class="loading-icon-wrap">
+                <div class="loading-orbit loading-orbit-1"></div>
+                <div class="loading-orbit loading-orbit-2"></div>
+                <div class="loading-orbit loading-orbit-3"></div>
+                <div class="loading-mascot">
+                    <img src="{{ asset('images/pesut-logo.png') }}" alt="Pesut Samarinda" class="loading-mascot-img">
+                </div>
+            </div>
+            <div class="loading-brand">Disdukcapil Samarinda</div>
+            <div class="loading-text">Memuat Data...</div>
+            <div class="loading-progress">
+                <div class="loading-progress-bar"></div>
+            </div>
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
 
     <!--**********************************
         Scripts
@@ -169,6 +191,8 @@
 
     <script src="{{ asset('js/custom.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/deznav-init.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/neon-splash.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/loading-animation.js') }}" type="text/javascript"></script>
 </body>
 @yield('scripts')
 </body>

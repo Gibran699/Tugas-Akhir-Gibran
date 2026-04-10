@@ -494,3 +494,63 @@ jQuery(window).on('resize',function () {
 	}, 1000);
 });
 /*  Window Resize END */
+
+/* ============================================
+    LOADING ANIMATION - managed by loading-animation.js
+    Global helpers (showLoading, hideLoading, showLoadingWithDelay)
+    and all event listeners are defined there.
+   ============================================ */
+
+/* ============================================
+   GLOBAL DATATABLE DEFAULTS
+   Applies to every $.fn.DataTable() call sitewide.
+   Individual table inits can still override per-key.
+   ============================================ */
+(function ($) {
+    if (!$.fn.dataTable) return;
+
+    /* ── Language (Indonesian) ── */
+    $.extend(true, $.fn.dataTable.defaults, {
+        language: {
+            search:          '',
+            searchPlaceholder: 'Cari data...',
+            lengthMenu:      'Tampilkan _MENU_ baris',
+            info:            'Menampilkan _START_–_END_ dari _TOTAL_ data',
+            infoEmpty:       'Tidak ada data',
+            infoFiltered:    '(difilter dari _MAX_ total data)',
+            zeroRecords:     'Data tidak ditemukan',
+            emptyTable:      'Tidak ada data tersedia',
+            loadingRecords:  'Memuat...',
+            processing:      '<i class="fas fa-spinner fa-spin me-1"></i> Memproses...',
+            paginate: {
+                first:    '<i class="fas fa-angle-double-left"></i>',
+                last:     '<i class="fas fa-angle-double-right"></i>',
+                next:     '<i class="fas fa-angle-right"></i>',
+                previous: '<i class="fas fa-angle-left"></i>'
+            }
+        },
+
+        /* ── Header label formatter ─────────────────────────
+           Runs after every table header is rendered.
+           Replaces underscores with spaces in column titles
+           so raw API keys like CETAK_AKTA_KELAHIRAN_LK
+           display as "CETAK AKTA KELAHIRAN LK".
+        ────────────────────────────────────────────────── */
+        headerCallback: function (thead) {
+            $(thead).find('th').each(function () {
+                var $th  = $(this);
+                /* Only reformat if the text contains underscores
+                   and does NOT already contain a space (to avoid
+                   re-formatting manually set readable titles).    */
+                var txt  = $th.text().trim();
+                if (txt.indexOf('_') !== -1 && txt.indexOf(' ') === -1) {
+                    $th.text(txt.replace(/_/g, ' '));
+                }
+            });
+        },
+
+        /* ── Misc defaults ── */
+        autoWidth:  false,
+        pageLength: 10
+    });
+})(jQuery);

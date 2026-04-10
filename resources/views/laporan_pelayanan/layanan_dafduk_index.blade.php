@@ -48,6 +48,7 @@
                             'id' => 'formSearchDataLayananDafduk',
                             'method' => 'post',
                             'route' => ['search_data', '7yZk8WvNmD'],
+                            'data-no-loading' => 'true',
                         ]) !!}
                         <div class="row">
                             <div class="col-md-6 mb-3">

@@ -19,17 +19,21 @@ class RoleController extends Controller
     function store(Request $request) {
         $this->validate($request,[
             'name' => 'required|unique:roles,name',
-            'permission' => 'required',
+            'permission' => 'required|array',
         ]);
         try {
             DB::beginTransaction();
-            $role =Role::create(['name' => $request->input('name')]);
-            $role->syncPermissions($request->input('permission'));
+            $role = Role::create([
+                'name' => $request->input('name'),
+                'guard_name' => 'web'
+            ]);
+            $permissions = array_values($request->input('permission'));
+            $role->syncPermissions($permissions);
             DB::commit();
             return response()->json(['message' => 'berhasil menambahkan'], 200);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'proses gagal'], 500);
+            return response()->json(['message' => 'proses gagal: ' . $e->getMessage()], 500);
         }
     }
     function destroy(Request $request,$id) {
@@ -50,18 +54,24 @@ class RoleController extends Controller
         return response()->json(['role' => $role, 'permission' => $permissionNames], 200);
     }
     function update(Request $request,$id) {
+        $this->validate($request,[
+            'name' => 'required|unique:roles,name,' . $id . ',uuid',
+            'permissionEdit' => 'required|array',
+        ]);
         try {
             DB::beginTransaction();
             $role = Role::where('uuid',$id)->firstOrFail();
             $role->update([
                 'name' => $request->name,
+                'guard_name' => 'web'
             ]);
-            $role->syncPermissions($request->input('permissionEdit'));
+            $permissions = array_values($request->input('permissionEdit'));
+            $role->syncPermissions($permissions);
             DB::commit();
             return response()->json(['message' => 'berhasil mengubah'], 200);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'proses gagal'], 500);
+            return response()->json(['message' => 'proses gagal: ' . $e->getMessage()], 500);
         }
     }
 }

@@ -50,7 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthMainController::class, 'logout'])->name('logout');
     Route::post('change-password', [AuthMainController::class, 'changePassword'])->name('change_password');
     //wilayah kelurahan
-    Route::get('json/wilayah-kelurahan', [WilayahController::class, 'indexKelurahan']);
+    Route::get('json/wilayah-kecamatan', [WilayahController::class, 'indexKecamatan']);
+    Route::get('json/wilayah-kelurahan',  [WilayahController::class, 'indexKelurahan']);
     //search master data
     Route::post('json/search-data/{jenisData}', [SystemMainController::class, 'searchData'])->name('search_data');
 });

@@ -44,4 +44,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the data pengguna associated with the user.
+     */
+    public function dataPengguna()
+    {
+        return $this->hasOne(DataPengguna::class, 'user_id');
+    }
 }

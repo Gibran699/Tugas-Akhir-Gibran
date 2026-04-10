@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Loading Animation</title>
+    <link href="css/loading-animation.css" rel="stylesheet">
+</head>
+<body>
+    <h1 style="text-align: center; margin-top: 50px;">Test Loading Animation</h1>
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="showLoading()" style="padding: 15px 30px; font-size: 16px; cursor: pointer; margin: 10px;">
+            Show Loading
+        </button>
+        <button onclick="hideLoading()" style="padding: 15px 30px; font-size: 16px; cursor: pointer; margin: 10px;">
+            Hide Loading
+        </button>
+    </div>
+
+    <script src="js/loading-animation.js"></script>
+    <script>
+        function showLoading() {
+            window.loadingAnimation.show('Testing Loading...');
+        }
+        
+        function hideLoading() {
+            window.loadingAnimation.hide();
+        }
+        
+        // Auto show on page load for testing
+        setTimeout(() => {
+            console.log('Auto showing loading...');
+            showLoading();
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                console.log('Auto hiding loading...');
+                hideLoading();
+            }, 3000);
+        }, 500);
+    </script>
+</body>
+</html>

@@ -50,8 +50,10 @@
                 });
             },
             success: function (response) {
+                Swal.close();
+                if (typeof window.hideLoading === 'function') window.hideLoading();
                 Swal.fire({
-                    type: "success", // Updated to 'type' for newer SweetAlert versions
+                    icon: "success",
                     title: "Berhasil",
                     text: response.message || "Pencarian Berhasil!",
                 });
@@ -66,17 +68,20 @@
                 );
             },
             error: function (xhr) {
+                if (typeof window.hideLoading === 'function') window.hideLoading();
                 let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
-
                 if (xhr.status === 400 || xhr.status === 404) {
                     errorMessage =
                         xhr.responseJSON?.data || xhr.responseJSON?.message;
                 }
                 Swal.fire({
-                    type: "error", // Updated to 'type' for newer SweetAlert versions
+                    icon: "error",
                     title: "Gagal",
                     text: errorMessage,
                 });
+            },
+            complete: function () {
+                if (typeof window.hideLoading === 'function') window.hideLoading();
             },
         });
     }

@@ -1,0 +1,222 @@
+/* ============================================
+   Modern Capil Loading Overlay
+   Disdukcapil / Population Data Theme
+   ============================================ */
+
+/* Kill template's built-in preloader — replaced by custom overlay */
+#preloader { display: none !important; }
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 20, 45, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ---- Glass card ---- */
+.loading-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 48px 56px;
+    text-align: center;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+    min-width: 280px;
+    max-width: 340px;
+    animation: loadingCardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes loadingCardIn {
+    from { transform: translateY(24px) scale(0.94); opacity: 0; }
+    to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+/* ---- Icon ring system ---- */
+.loading-icon-wrap {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    margin: 0 auto 28px;
+}
+
+.loading-orbit {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2.5px solid transparent;
+}
+
+.loading-orbit-1 {
+    border-top-color:   #F7E396;
+    border-right-color: rgba(247, 227, 150, 0.25);
+    animation: orbitSpin 1.2s linear infinite;
+}
+
+.loading-orbit-2 {
+    inset: 12px;
+    border-bottom-color: #607B8F;
+    border-left-color:   rgba(96, 123, 143, 0.25);
+    animation: orbitSpin 1.9s linear infinite reverse;
+}
+
+.loading-orbit-3 {
+    inset: 24px;
+    border-right-color: rgba(255, 255, 255, 0.3);
+    border-top-color:   transparent;
+    animation: orbitSpin 2.6s linear infinite;
+}
+
+@keyframes orbitSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---- Mascot (Pesut logo) centered inside orbit rings ---- */
+.loading-mascot {
+    position: absolute;
+    inset: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: mascotFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 6px 16px rgba(67, 78, 120, 0.55));
+}
+
+.loading-mascot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+@keyframes mascotFloat {
+    0%, 100% { transform: translateY(0)    scale(1);    filter: drop-shadow(0 6px 16px rgba(67,78,120,0.55)); }
+    50%       { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 24px rgba(96,123,143,0.75)); }
+}
+
+/* ---- Brand label ---- */
+.loading-brand {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    color: rgba(247, 227, 150, 0.85);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ---- Status text ---- */
+.loading-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 22px;
+    font-family: 'Poppins', sans-serif;
+    min-height: 21px;
+    transition: opacity 0.2s ease;
+}
+
+/* ---- Shimmer progress bar ---- */
+.loading-progress {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.loading-progress-bar {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    background: linear-gradient(
+        90deg,
+        #434E78 0%,
+        #607B8F 25%,
+        #F7E396 50%,
+        #607B8F 75%,
+        #434E78 100%
+    );
+    background-size: 300% 100%;
+    animation: shimmerBar 1.8s linear infinite;
+}
+
+@keyframes shimmerBar {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ---- Bouncing dots ---- */
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: dotBounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) {
+    background: #F7E396;
+    animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+    background: #607B8F;
+    animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+    background: #434E78;
+    animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.55); opacity: 0.35; }
+    40%            { transform: scale(1.2);  opacity: 1; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+    .loading-card {
+        padding: 36px 28px;
+        min-width: 240px;
+    }
+
+    .loading-icon-wrap {
+        width: 88px;
+        height: 88px;
+    }
+
+    .loading-icon-bubble {
+        inset: 26px;
+    }
+
+    .loading-icon-bubble svg {
+        width: 22px;
+        height: 22px;
+    }
+}

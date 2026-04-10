@@ -18,4 +18,12 @@ class DataPengguna extends Model
     protected $fillable =[
         'nik','nama','contact','instansi','nama_instansi','user_id'
     ];
+
+    /**
+     * Get the user that owns the data pengguna.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

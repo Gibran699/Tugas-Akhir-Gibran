@@ -20,4 +20,9 @@ class WilayahKelurahan extends Model
         'nama',
         'kec_id'
     ];
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(\App\Models\WilayahKecamatan::class, 'kec_id');
+    }
 }

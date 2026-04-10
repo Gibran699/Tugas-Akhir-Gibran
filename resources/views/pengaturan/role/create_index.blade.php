@@ -169,6 +169,9 @@
         });
 
         function openModal() {
+            $('#name').val('');
+            $('input[name^="permission["]').prop('checked', false);
+            $('input[name="all_permission"]').prop('checked', false);
             $('#crudModal').modal('show');
         }
         document.getElementById('saveRole').addEventListener('click', function() {
@@ -256,7 +259,36 @@
         });
         // all function
         function store() {
-            var formData = new FormData(document.getElementById('formCreateRole'));
+            var permissions = [];
+            $('input[name^="permission["]:checked').each(function() {
+                permissions.push($(this).val());
+            });
+
+            // Validasi: pastikan minimal 1 permission dipilih
+            if (permissions.length === 0) {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Gagal',
+                    text: 'Pilih minimal 1 permission!',
+                });
+                return;
+            }
+
+            console.log('Permissions yang dipilih:', permissions);
+
+            var formData = new FormData();
+            formData.append('name', $('#name').val());
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            
+            permissions.forEach(function(permission) {
+                formData.append('permission[]', permission);
+            });
+
+            // Debug: tampilkan semua data yang akan dikirim
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
             $.ajax({
                 url: $('#formCreateRole').attr('action'),
                 type: 'POST',
@@ -285,10 +317,15 @@
                 error: function(xhr) {
                     let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
 
-                    if (xhr.status === 409) {
-                        errorMessage = xhr.responseJSON?.data;
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            errorMessage = Object.values(errors).flat().join('\n');
+                        }
+                    } else if (xhr.status === 409) {
+                        errorMessage = xhr.responseJSON?.data || xhr.responseJSON?.message;
                     } else if (xhr.status === 500) {
-                        errorMessage = xhr.responseJSON?.data;
+                        errorMessage = xhr.responseJSON?.message || xhr.responseJSON?.data;
                     }
                     Swal.fire({
                         type: 'error',
@@ -321,7 +358,7 @@
                     Swal.fire({
                         type: 'success',
                         title: 'Berhasil',
-                        text: response.message || 'User telah dihapus!',
+                        text: response.message || 'Role telah dihapus!',
                     }).then(() => {
                         location.reload(); // Reload page after success
                     });
@@ -329,8 +366,15 @@
                 error: function(xhr) {
                     let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
 
-                    if (xhr.status === 409 || xhr.status === 500) {
-                        errorMessage = xhr.responseJSON?.data || errorMessage;
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            errorMessage = Object.values(errors).flat().join('\n');
+                        }
+                    } else if (xhr.status === 409) {
+                        errorMessage = xhr.responseJSON?.data || xhr.responseJSON?.message;
+                    } else if (xhr.status === 500) {
+                        errorMessage = xhr.responseJSON?.message || xhr.responseJSON?.data;
                     }
 
                     Swal.fire({
@@ -365,14 +409,43 @@
         }
 
         function updateData(roleId) {
-            var formData = $('#formEditRole').serialize()
+            var permissions = [];
+            $('input[name^="permissionEdit["]:checked').each(function() {
+                permissions.push($(this).val());
+            });
+
+            // Validasi: pastikan minimal 1 permission dipilih
+            if (permissions.length === 0) {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Gagal',
+                    text: 'Pilih minimal 1 permission!',
+                });
+                return;
+            }
+
+            console.log('Permissions yang dipilih untuk update:', permissions);
+
+            var formData = new FormData();
+            formData.append('name', $('#nameEdit').val());
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            formData.append('_method', 'PATCH');
+            
+            permissions.forEach(function(permission) {
+                formData.append('permissionEdit[]', permission);
+            });
+
+            // Debug: tampilkan semua data yang akan dikirim
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
             $.ajax({
                 url: $('#formEditRole').attr('action'),
-                type: 'PATCH',
+                type: 'POST',
                 data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for Laravel
-                },
+                processData: false,
+                contentType: false,
                 beforeSend: function() {
                     Swal.fire({
                         title: 'Processing...',
@@ -387,7 +460,7 @@
                     Swal.fire({
                         type: 'success',
                         title: 'Berhasil',
-                        text: response.message || 'User telah diubah!',
+                        text: response.message || 'Role telah diubah!',
                     }).then(() => {
                         location.reload(); // Reload page after success
                     });
@@ -395,8 +468,15 @@
                 error: function(xhr) {
                     let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
 
-                    if (xhr.status === 409 || xhr.status === 500) {
-                        errorMessage = xhr.responseJSON?.data || errorMessage;
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON?.errors;
+                        if (errors) {
+                            errorMessage = Object.values(errors).flat().join('\n');
+                        }
+                    } else if (xhr.status === 409) {
+                        errorMessage = xhr.responseJSON?.data || xhr.responseJSON?.message;
+                    } else if (xhr.status === 500) {
+                        errorMessage = xhr.responseJSON?.message || xhr.responseJSON?.data;
                     }
 
                     Swal.fire({

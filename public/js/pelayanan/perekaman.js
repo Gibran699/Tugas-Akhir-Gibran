@@ -15,12 +15,17 @@
                 },
             },
         });
+
         const jenisData = "7x9Fk2pQ8R";
         const searchUrl = `/json/search-data/${jenisData}`;
+
+        // Cache last response so Details button never re-fetches
+        let cachedDailyData = {};
+
         // Submit form via AJAX
         $("#formSearchDataLayananPerekaman").on("submit", function (e) {
             e.preventDefault();
-            let formData = $(this).serialize(); // Get form data
+            let formData = $(this).serialize();
             $.ajax({
                 url: searchUrl,
                 method: "POST",
@@ -28,7 +33,7 @@
                 dataType: "json",
                 beforeSend: function () {
                     Swal.fire({
-                        title: "Processing...",
+                        title: "Memproses...",
                         text: "Harap Tunggu",
                         allowOutsideClick: false,
                         didOpen: () => {
@@ -37,91 +42,79 @@
                     });
                 },
                 success: function (response) {
-                    Swal.fire({
-                        type: "success",
-                        title: "Berhasil",
-                        text: response.message || "Pencarian Berhasil!",
-                    });
-                    let dailyData = response.data.daily_data;
-                    let tableData = [];
+                    Swal.close(); // Always close loading first
+                    if (typeof window.hideLoading === 'function') window.hideLoading();
 
+                    let dailyData = response.data.daily_data;
+                    cachedDailyData = dailyData; // Cache for detail lookups
+
+                    let tableData = [];
                     Object.keys(dailyData).forEach((date) => {
                         let total = dailyData[date].date_total;
                         tableData.push({
                             date: date,
                             date_total: total,
-                            actions: `<button class="btn btn-info btn-sm view-details" data-date="${date}">Details</button>`,
+                            actions: `<button class="btn btn-info btn-sm view-details" data-date="${date}"><i class="fas fa-eye me-1"></i>Detail</button>`,
                         });
                     });
-                    //set to H4
-                    const overallCount = response.data.overall_total || "N/A";
 
-                    $('#totalKeseluruhan').text(`Total Keseluruhan Perekaman Adalah ${overallCount}`)
-                    // Clear & reload DataTable
+                    const overallCount = response.data.overall_total || "N/A";
+                    $('#totalKeseluruhan').text(`Total Keseluruhan Perekaman: ${overallCount}`);
                     table.clear().rows.add(tableData).draw();
                 },
                 error: function (xhr) {
+                    if (typeof window.hideLoading === 'function') window.hideLoading();
                     Swal.fire({
-                        type: "error",
+                        icon: "error",
                         title: "Gagal",
                         text: xhr.responseJSON?.message || "Terjadi kesalahan, coba lagi!",
                     });
+                },
+                complete: function () {
+                    if (typeof window.hideLoading === 'function') window.hideLoading();
                 }
             });
         });
 
-        // Handle "Details" button click
+        // Handle "Details" button click — use cached data, no extra AJAX
         $("#rekamTable tbody").on("click", ".view-details", function () {
             let date = $(this).data("date");
+
+            if (!cachedDailyData[date]) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Data tidak tersedia",
+                    text: "Silakan lakukan pencarian terlebih dahulu.",
+                });
+                return;
+            }
+
             $("#modalDate").text(date);
 
-            $.ajax({
-                url: searchUrl,
-                method: "POST",
-                data: $("#formSearchDataLayananPerekaman").serialize(),
-                dataType: "json",
-                beforeSend: function () {
-                    Swal.fire({
-                        title: "Processing...",
-                        text: "Harap Tunggu",
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-                },
-                success: function (response) {
-                    Swal.close(); // Close the loading alert
-                    let users = response.data.daily_data[date].users;
-                    let total = response.data.daily_data[date].date_total;
-                    let detailsTable = $("#detailsTable tbody");
-                    detailsTable.empty();
+            let users = cachedDailyData[date].users || [];
+            let total = cachedDailyData[date].date_total || 0;
+            let detailsTable = $("#detailsTable tbody");
+            detailsTable.empty();
 
-                    users.forEach((user) => {
-                        let percentage =
-                            ((user.count / total) * 100).toFixed(2) + "%";
-                        detailsTable.append(`
-                            <tr>
-                                <td>${user.username}</td>
-                                <td>${user.count}</td>
-                                <td>${percentage}</td>
-                            </tr>
-                        `);
-                    });
+            if (users.length === 0) {
+                detailsTable.append(`<tr><td colspan="3" class="text-center text-muted">Tidak ada data petugas.</td></tr>`);
+            } else {
+                users.forEach((user) => {
+                    let percentage = total > 0
+                        ? ((user.count / total) * 100).toFixed(2) + "%"
+                        : "0%";
+                    detailsTable.append(`
+                        <tr>
+                            <td>${user.username}</td>
+                            <td>${user.count}</td>
+                            <td>${percentage}</td>
+                        </tr>
+                    `);
+                });
+            }
 
-                    let modal = new bootstrap.Modal(
-                        document.getElementById("detailsModal")
-                    );
-                    modal.show();
-                },
-                error: function () {
-                    Swal.fire({
-                        type: "error",
-                        title: "Gagal",
-                        text: "Gagal mengambil data detail!",
-                    });
-                }
-            });
+            let modal = new bootstrap.Modal(document.getElementById("detailsModal"));
+            modal.show();
         });
     });
 })(jQuery);

@@ -45,6 +45,7 @@
                             'id' => 'formSearchDataLayananCapil',
                             'method' => 'post',
                             'route' => ['search_data', 'aB3x9LpQrT'],
+                            'data-no-loading' => 'true',
                         ]) !!}
                         <div class="row">
                             <div class="col-md-6 mb-3">

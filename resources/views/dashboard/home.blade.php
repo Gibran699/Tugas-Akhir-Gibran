@@ -21,24 +21,42 @@
             tablePendudukKelompokUmurId: '#table_kelompok_umur',
             tableKepalaKeluargaKelompokUmurId: '#table_kepala_keluarga_kelompok_umur',
             height: 100,
-            barPercentage: 0.9,
+            barPercentage: 0.72,
             barColors: [
-                'rgba(235, 129, 83, 1)',  // Orange
-                'rgba(52, 152, 219, 1)',  // Blue
-                'rgba(46, 204, 113, 1)',  // Green
-                'rgba(155, 89, 182, 1)',  // Purple
-                'rgba(241, 196, 15, 1)',  // Yellow
-                'rgba(231, 76, 60, 1)',   // Red
-                'rgba(26, 188, 156, 1)',  // Cyan
-                'rgba(230, 126, 34, 1)',  // Dark Orange
-                'rgba(52, 73, 94, 1)',    // Gray
-                'rgba(142, 68, 173, 1)'   // Dark Purple
+                'rgba(99,  102, 241, 0.82)',
+                'rgba(59,  130, 246, 0.82)',
+                'rgba(16,  185, 129, 0.82)',
+                'rgba(245, 158,  11, 0.82)',
+                'rgba(239,  68,  68, 0.82)',
+                'rgba(168,  85, 247, 0.82)',
+                'rgba(20,  184, 166, 0.82)',
+                'rgba(249, 115,  22, 0.82)',
+                'rgba(236,  72, 153, 0.82)',
+                'rgba(34,  197,  94, 0.82)'
+            ],
+            barHoverColors: [
+                'rgba(99,  102, 241, 1)',
+                'rgba(59,  130, 246, 1)',
+                'rgba(16,  185, 129, 1)',
+                'rgba(245, 158,  11, 1)',
+                'rgba(239,  68,  68, 1)',
+                'rgba(168,  85, 247, 1)',
+                'rgba(20,  184, 166, 1)',
+                'rgba(249, 115,  22, 1)',
+                'rgba(236,  72, 153, 1)',
+                'rgba(34,  197,  94, 1)'
             ],
             pieColors: [
-                'rgba(235, 129, 83, 0.9)',  // Orange
-                'rgba(52, 152, 219, 0.9)',  // Blue
-                'rgba(46, 204, 113, 0.9)',  // Green
-                'rgba(155, 89, 182, 0.9)'   // Purple
+                'rgba(99,  102, 241, 0.88)',
+                'rgba(59,  130, 246, 0.88)',
+                'rgba(16,  185, 129, 0.88)',
+                'rgba(245, 158,  11, 0.88)'
+            ],
+            pieHoverColors: [
+                'rgba(99,  102, 241, 1)',
+                'rgba(59,  130, 246, 1)',
+                'rgba(16,  185, 129, 1)',
+                'rgba(245, 158,  11, 1)'
             ],
             kelompokUmurLabels: [
                 { key: '00_04_tahun_jml', label: '0-4 Tahun' },
@@ -140,7 +158,7 @@
                 console.warn('No data to render bar chart');
                 return null;
             }
-            context.height = CHART_CONFIG.height;
+            const hoverColors = CHART_CONFIG.barHoverColors.slice(0, colors.length);
             return new Chart(context, {
                 type: 'bar',
                 data: {
@@ -150,20 +168,71 @@
                         label: 'Jumlah',
                         data: values,
                         backgroundColor: colors,
-                        borderColor: colors,
+                        hoverBackgroundColor: hoverColors,
+                        borderColor: 'transparent',
                         borderWidth: 0
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
+                    hover: {
+                        animationDuration: 180,
+                        mode: 'index'
+                    },
                     legend: { display: false },
                     scales: {
-                        yAxes: [{ ticks: { beginAtZero: true } }],
+                        yAxes: [{
+                            gridLines: {
+                                color: 'rgba(0,0,0,0.045)',
+                                zeroLineColor: 'rgba(0,0,0,0.09)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                fontFamily: 'Poppins',
+                                fontSize: 11,
+                                fontColor: '#9ca3af',
+                                padding: 8,
+                                callback: (v) => v.toLocaleString()
+                            }
+                        }],
                         xAxes: [{
+                            gridLines: { display: false },
                             barPercentage: CHART_CONFIG.barPercentage,
-                            ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 40,
+                                minRotation: 30,
+                                fontFamily: 'Poppins',
+                                fontSize: 11,
+                                fontColor: '#6b7280'
+                            }
                         }]
                     },
-                    tooltips: { callbacks: { label: (tooltipItem, data) => `${data.labels[tooltipItem.index]}: ${formatNumber(data.datasets[0].data[tooltipItem.index])}` } }
+                    tooltips: {
+                        backgroundColor: 'rgba(17,24,39,0.95)',
+                        titleFontFamily: 'Poppins',
+                        titleFontSize: 12,
+                        titleFontColor: '#f9fafb',
+                        bodyFontFamily: 'Poppins',
+                        bodyFontSize: 13,
+                        bodyFontColor: '#d1d5db',
+                        borderColor: 'rgba(255,255,255,0.08)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        xPadding: 14,
+                        yPadding: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: (tooltipItem, data) =>
+                                `  ${data.labels[tooltipItem.index]}: ${formatNumber(data.datasets[0].data[tooltipItem.index])} jiwa`
+                        }
+                    }
                 }
             });
         };
@@ -181,23 +250,67 @@
                 console.warn('No data to render pie chart');
                 return null;
             }
-            context.height = CHART_CONFIG.height;
+            const total = values.reduce((a, b) => a + b, 0);
+            const hoverColors = CHART_CONFIG.pieHoverColors.slice(0, colors.length);
             return new Chart(context, {
-                type: 'pie',
+                type: 'doughnut',
                 data: {
                     defaultFontFamily: 'Poppins',
-                    datasets: [{ data: values, borderWidth: 0, backgroundColor: colors, hoverBackgroundColor: colors }],
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        hoverBackgroundColor: hoverColors,
+                        borderWidth: 3,
+                        borderColor: '#ffffff',
+                        hoverBorderWidth: 4,
+                        hoverBorderColor: '#ffffff'
+                    }],
                     labels
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
+                    cutoutPercentage: 62,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1200,
+                        easing: 'easeOutQuart'
+                    },
+                    hover: { animationDuration: 180 },
                     legend: {
                         display: true,
-                        position: 'right',
-                        labels: { fontFamily: 'Poppins', fontSize: 12, padding: 20 }
+                        position: 'bottom',
+                        labels: {
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            fontColor: '#374151',
+                            padding: 18,
+                            usePointStyle: true
+                        }
                     },
-                    maintainAspectRatio: false,
-                    tooltips: { callbacks: { label: (tooltipItem, data) => `${data.labels[tooltipItem.index]}: ${formatNumber(data.datasets[0].data[tooltipItem.index])}` } }
+                    tooltips: {
+                        backgroundColor: 'rgba(17,24,39,0.95)',
+                        titleFontFamily: 'Poppins',
+                        titleFontSize: 12,
+                        titleFontColor: '#f9fafb',
+                        bodyFontFamily: 'Poppins',
+                        bodyFontSize: 13,
+                        bodyFontColor: '#d1d5db',
+                        borderColor: 'rgba(255,255,255,0.08)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        xPadding: 14,
+                        yPadding: 10,
+                        displayColors: true,
+                        callbacks: {
+                            label: (tooltipItem, data) => {
+                                const val = data.datasets[0].data[tooltipItem.index];
+                                const pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                return `  ${data.labels[tooltipItem.index]}: ${formatNumber(val)} (${pct}%)`;
+                            }
+                        }
+                    }
                 }
             });
         };
