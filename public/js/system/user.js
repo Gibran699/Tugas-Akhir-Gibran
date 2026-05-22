@@ -89,6 +89,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Event listener untuk toggle status buttons
+    document.querySelectorAll('.toggleUser').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const userId = this.getAttribute('data-id');
+            const isCurrentlyActive = this.classList.contains('btn-secondary');
+            const actionText = isCurrentlyActive ? 'menonaktifkan' : 'mengaktifkan';
+            swal({
+                title: 'Konfirmasi',
+                text: `Apakah Anda yakin ingin ${actionText} user ini?`,
+                type: 'warning',
+                buttons: {
+                    cancel: 'Batal',
+                    confirm: { text: 'Ya', value: true, visible: true, className: 'btn btn-primary' }
+                },
+                dangerMode: true,
+            }).then((confirmed) => {
+                if (confirmed) {
+                    toggleStatus(userId);
+                }
+            });
+        });
+    });
+
     // Reset form saat modal ditutup
     $('#crudModal, #editModal').on('hidden.bs.modal', function () {
         $(this).find('form')[0].reset();
@@ -272,4 +295,44 @@ function fetchDataUserId(userId) {
 
 function openModal() {
     $('#crudModal').modal('show');
+}
+
+function toggleStatus(userId) {
+    $.ajax({
+        url: `/user/${userId}/toggle-status`,
+        type: 'PATCH',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        beforeSend: function () {
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Harap Tunggu',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); },
+            });
+        },
+        success: function (response) {
+            const isActive = response.is_active;
+            const badge    = document.getElementById('badge-' + userId);
+            const btn      = document.getElementById('toggle-btn-' + userId);
+            const icon     = document.getElementById('toggle-icon-' + userId);
+
+            if (badge) {
+                badge.textContent = isActive ? 'Active' : 'Inactive';
+                badge.className   = 'badge badge-status ' + (isActive ? 'badge-success' : 'badge-danger');
+            }
+            if (btn) {
+                btn.className = 'btn ' + (isActive ? 'btn-secondary' : 'btn-success') + ' toggleUser';
+                btn.title     = isActive ? 'Nonaktifkan' : 'Aktifkan';
+            }
+            if (icon) {
+                icon.className = isActive ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
+            }
+
+            Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message });
+        },
+        error: function (xhr) {
+            let msg = xhr.responseJSON?.message || 'Terjadi kesalahan.';
+            Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+        },
+    });
 }

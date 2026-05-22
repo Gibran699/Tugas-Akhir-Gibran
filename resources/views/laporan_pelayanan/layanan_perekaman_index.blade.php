@@ -123,5 +123,21 @@
             </div>
         </div>
     </div>
+    <style>
+        .pct-cell {
+            display: inline-block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            white-space: pre;
+            text-align: right;
+            min-width: 7ch;
+            background: #eef2ff;
+            color: #3b5bdb;
+            padding: 2px 8px;
+            border-radius: 5px;
+            border: 1px solid #c7d2fe;
+            letter-spacing: 0;
+        }
+    </style>
     <script src="{{ asset('js/pelayanan/perekaman.js') }}"></script>
 @endsection

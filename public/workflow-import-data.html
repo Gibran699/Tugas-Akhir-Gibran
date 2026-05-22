@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Workflow Import Data – Rumah Data Dukcapil 2.0</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #1e293b; }
+  header {
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    color: white; padding: 2rem; text-align: center;
+  }
+  header h1 { font-size: 1.6rem; }
+  header p { font-size: .85rem; opacity: .8; margin-top: .4rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .card {
+    background: white; border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    margin-bottom: 2rem; overflow: hidden;
+  }
+  .card-header {
+    padding: 1rem 1.5rem; background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .card-header h2 { font-size: 1.05rem; color: #1e3a5f; }
+  .card-header p { font-size: .8rem; color: #64748b; margin-top: .25rem; }
+  .card-body { padding: 1.5rem; overflow-x: auto; }
+  .mermaid { min-height: 100px; display: flex; justify-content: center; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: .8rem;
+    background: white; border-radius: 12px;
+    padding: 1rem 1.5rem; margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    font-size: .82rem; align-items: center;
+  }
+  .leg { display: flex; align-items: center; gap: .5rem; }
+  .sw-rect  { width:28px; height:16px; border-radius:4px; border:2px solid; }
+  .sw-oval  { width:40px; height:18px; border-radius:50%; border:2px solid; }
+  .sw-dia   { width:14px; height:14px; transform:rotate(45deg); border:2px solid; }
+  .sw-para  { width:28px; height:16px; border:2px solid; transform:skewX(-18deg); }
+  .sw-cyl   { width:28px; height:18px; border-radius:40%; border:2px solid; }
+  .divider  { border-left:1px solid #e2e8f0; padding-left:.8rem; margin-left:.4rem; }
+  code { background:#f1f5f9; padding:1px 5px; border-radius:4px; font-size:.82rem; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  th, td { padding:.6rem 1rem; border:1px solid #e2e8f0; }
+  th { background:#f8fafc; color:#1e3a5f; text-align:left; }
+  tr:nth-child(even) td { background:#f8fafc; }
+  footer {
+    text-align:center; font-size:.8rem; color:#94a3b8;
+    padding:2rem 0 3rem;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Workflow Diagram – Fitur Import Data Excel</h1>
+  <p>Rumah Data Dukcapil 2.0 &nbsp;·&nbsp; Alur lengkap dari permintaan pengguna hingga penyimpanan ke database</p>
+</header>
+
+<div class="container">
+
+<!-- ═══════════════════ LEGEND ═══════════════════ -->
+<div class="legend">
+  <strong>Simbol Flowchart:</strong>
+  <div class="leg">
+    <div class="sw-oval" style="background:#1e3a5f;border-color:#1e3a5f"></div>
+    Terminal (Mulai / Selesai)
+  </div>
+  <div class="leg">
+    <div class="sw-rect" style="background:#dbeafe;border-color:#1e40af"></div>
+    Proses
+  </div>
+  <div class="leg">
+    <div class="sw-dia" style="background:#fef3c7;border-color:#d97706"></div>&nbsp;
+    Keputusan (Decision)
+  </div>
+  <div class="leg">
+    <div class="sw-para" style="background:#dcfce7;border-color:#16a34a"></div>
+    Input / Output
+  </div>
+  <div class="leg">
+    <div class="sw-cyl" style="background:#ede9fe;border-color:#7c3aed"></div>
+    Operasi Database
+  </div>
+  <div class="leg">
+    <div class="sw-rect" style="background:#fee2e2;border-color:#dc2626;border-radius:8px"></div>
+    Output Error
+  </div>
+  <div class="leg">
+    <div class="sw-rect" style="background:#d1fae5;border-color:#059669;border-radius:8px"></div>
+    Output Sukses
+  </div>
+</div>
+
+<!-- ═══════════════════ DIAGRAM UTAMA ═══════════════════ -->
+<div class="card">
+  <div class="card-header">
+    <h2>Alur Proses Import Data Excel</h2>
+    <p>Berdasarkan <code>App\Http\Controllers\System\MainController@importData</code> &nbsp;·&nbsp; Route: <code>POST /import-data</code></p>
+  </div>
+  <div class="card-body">
+    <div class="mermaid">
+flowchart TD
+    START([Mulai]):::terminal --> INP
+
+    INP[/Pengguna membuka halaman\nImport Excel/]:::io --> FORM
+
+    FORM[Isi form:\nJenis Data · Semester · Tahun\ndan pilih file Excel]:::process --> BTN
+
+    BTN[Tekan tombol Kirim / Import]:::process --> VAL1
+
+    VAL1{Validasi form:\nSemua field terisi\ndan file terlampir?}:::decision
+    VAL1 -- Tidak --> E1[/Pesan validasi:\nIsi semua field\nyang diperlukan/]:::error
+    E1 --> STOP
+
+    VAL1 -- Ya --> VAL2
+
+    VAL2{Format & ukuran\nfile valid?\nxlsx · xls · csv\nMaks. 20 MB}:::decision
+    VAL2 -- Tidak --> E2[/Pesan validasi:\nFormat file tidak didukung\natau ukuran melebihi 20 MB/]:::error
+    E2 --> STOP
+
+    VAL2 -- Ya --> CONF
+
+    CONF[Ambil kelas Import & Model\ndari config dataArray\nberdasarkan keterangan_file]:::process --> DUPCHK
+
+    DUPCHK{Cek database:\nData tahun & semester\nsudah tersedia?}:::decision
+    DUPCHK -- Ya --> E3[/Respons 409:\nData Sudah ada/]:::error
+    E3 --> STOP
+
+    DUPCHK -- Tidak --> TRX
+
+    TRX[(Mulai transaksi database\nDB::beginTransaction)]:::db --> FTYPE
+
+    FTYPE[Tentukan tipe file berdasarkan\neksttensi: XLSX · XLS · CSV]:::process --> FSIZE
+
+    FSIZE{Ukuran file\n> 2 MB?}:::decision
+
+    FSIZE -- Ya --> CHUNK[Naikkan resource:\nmemory_limit = 1024M\nset_time_limit = 600 dtk\nChunk size = 500 baris]:::process
+    FSIZE -- Tidak --> NORM[Mode proses normal\ntanpa pembatasan chunk]:::process
+
+    CHUNK --> IMPORT
+    NORM --> IMPORT
+
+    IMPORT[Jalankan Excel::import\ndengan kelas Import yang sesuai\nBaca & proses setiap baris Excel]:::process --> CHK
+
+    CHK{Import selesai\ntanpa exception?}:::decision
+
+    CHK -- Tidak --> RB[DB::rollback\nCatat error ke storage/logs]:::process
+    RB --> E4[/Respons 500:\nProses gagal/]:::error
+    E4 --> STOP
+
+    CHK -- Ya --> CMT
+
+    CMT[(DB::commit\nSimpan seluruh data\nke tabel database)]:::db --> OK
+
+    OK[/Respons 200:\nImport berhasil\nData tersedia di menu terkait/]:::success --> STOP
+
+    STOP([Selesai]):::terminal
+
+    classDef terminal fill:#1e3a5f,stroke:#1e3a5f,color:#fff
+    classDef process  fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    classDef decision fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef io       fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef db       fill:#ede9fe,stroke:#7c3aed,color:#3b0764
+    classDef error    fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    classDef success  fill:#d1fae5,stroke:#059669,color:#064e3b
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TABEL CATATAN TEKNIS ═══════════════════ -->
+<div class="card">
+  <div class="card-header">
+    <h2>Catatan Implementasi Teknis</h2>
+    <p>Penjelasan detail setiap tahapan dalam alur import data</p>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%">Tahapan</th>
+          <th style="width:20%">Komponen</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Validasi Dasar</strong></td>
+          <td>Laravel Validator</td>
+          <td>
+            <code>semester</code> required integer &nbsp;·&nbsp;
+            <code>tahun</code> required integer &nbsp;·&nbsp;
+            <code>file</code> required mimes:xlsx,xls,csv max:20480
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Resolusi Kelas Import</strong></td>
+          <td><code>config/dataArray.php</code></td>
+          <td>
+            Kelas import dan model dipilih secara dinamis dari
+            <code>listFileImport[keterangan_file]</code> dan
+            <code>listFileModel[keterangan_file]</code>.
+            Setiap jenis data memiliki kelas Maatwebsite Import tersendiri.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Cek Duplikasi Data</strong></td>
+          <td>Eloquent / Query Builder</td>
+          <td>
+            <code>Model::where('tahun', $tahun)->where('semester', $semester)->exists()</code>
+            &nbsp;— mencegah overwrite data yang sudah ada. Mengembalikan HTTP 409 jika duplikat.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Optimasi File Besar</strong></td>
+          <td>PHP Runtime / Chunk</td>
+          <td>
+            File &gt; 2 MB: <code>ini_set('memory_limit', '1024M')</code>,
+            <code>set_time_limit(600)</code>, dan
+            <code>$import-&gt;setChunkSize(500)</code>
+            untuk membaca 500 baris per iterasi agar tidak kehabisan memori.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Tipe File</strong></td>
+          <td>Maatwebsite\Excel</td>
+          <td>
+            Ekstensi <code>.xlsx</code> → <code>Excel::XLSX</code> (default) &nbsp;·&nbsp;
+            <code>.xls</code> → <code>Excel::XLS</code> &nbsp;·&nbsp;
+            <code>.csv</code> → <code>Excel::CSV</code>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Transaksi Database</strong></td>
+          <td>DB Facade</td>
+          <td>
+            <code>DB::beginTransaction()</code> sebelum import.
+            Jika sukses → <code>DB::commit()</code>.
+            Jika exception → <code>DB::rollback()</code> +
+            <code>Log::error()</code> ke <code>storage/logs</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Respons JSON</strong></td>
+          <td>HTTP Response</td>
+          <td>
+            <strong>200</strong>: <em>"Import berhasil"</em> &nbsp;·&nbsp;
+            <strong>409</strong>: <em>"Data Sudah ada"</em> &nbsp;·&nbsp;
+            <strong>500</strong>: <em>"Proses gagal: [pesan error]"</em>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>Rumah Data Dukcapil 2.0 &nbsp;·&nbsp; Workflow Diagram – Import Data Excel &nbsp;·&nbsp; <code>System\MainController@importData</code></footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#dbeafe',
+      primaryTextColor: '#1e3a5f',
+      primaryBorderColor: '#1e40af',
+      lineColor: '#475569',
+      fontSize: '14px'
+    },
+    flowchart: { curve: 'basis', useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

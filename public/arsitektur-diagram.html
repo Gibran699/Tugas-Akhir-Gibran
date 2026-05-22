@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Architecture Model – Rumah Data 2.0</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 52px 24px 80px;
+  }
+
+  /* ── title block ── */
+  .title-block {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .title-block .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #64748b;
+    background: #e2e8f0;
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin-bottom: 14px;
+  }
+  .title-block h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .title-block p {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.7;
+    max-width: 500px;
+  }
+
+  /* ── diagram card ── */
+  .card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 48px 52px 44px;
+    box-shadow: 0 4px 32px rgba(15,23,42,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ── legend ── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #f1f5f9;
+    width: 100%;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: #475569;
+    font-weight: 500;
+  }
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── decisions row ── */
+  .decisions {
+    margin-top: 28px;
+    width: 100%;
+    max-width: 640px;
+  }
+  .decisions h3 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .decisions-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .decision-chip {
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  svg text { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="eyebrow">XP Architecture Modelling</div>
+  <h1>Architecture Model — Rumah Data 2.0</h1>
+  <p>
+    Arsitektur sebagai serangkaian keputusan yang menentukan struktur dan perilaku sistem.<br/>
+    <em>Fundamentals of Software Architecture</em> — Richards &amp; Ford (2020)
+  </p>
+</div>
+
+<div class="card">
+
+  <!-- ════════════════════════════════════════
+       SVG  —  Architecture Flow Diagram
+  ════════════════════════════════════════════ -->
+  <svg width="780" height="760" viewBox="0 0 780 760" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+        <path d="M1.5,1.5 L1.5,7.5 L8,4.5 Z" fill="#b0b8c8"/>
+      </marker>
+      <marker id="ad" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+        <path d="M1.5,1.5 L1.5,7.5 L8,4.5 Z" fill="#f97316"/>
+      </marker>
+      <filter id="sd">
+        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(15,23,42,0.10)"/>
+      </filter>
+    </defs>
+
+    <!-- ── ROW 1: Pengguna | Web UI | API Client ── -->
+
+    <rect x="24"  y="24" width="158" height="82" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="103" y="54"  text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95">Pengguna</text>
+    <text x="103" y="72"  text-anchor="middle" font-size="11" fill="#6d28d9">Admin · Petugas</text>
+    <text x="103" y="88"  text-anchor="middle" font-size="10" fill="#8b5cf6">Input &amp; Navigasi</text>
+
+    <rect x="310" y="24" width="158" height="82" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="389" y="54"  text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95">Web UI</text>
+    <text x="389" y="72"  text-anchor="middle" font-size="11" fill="#6d28d9">Blade Views</text>
+    <text x="389" y="88"  text-anchor="middle" font-size="10" fill="#8b5cf6">Tailwind CSS · Vite</text>
+
+    <rect x="598" y="24" width="158" height="82" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="677" y="49"  text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95">API Client</text>
+    <text x="677" y="67"  text-anchor="middle" font-size="11" fill="#6d28d9">Sistem Eksternal</text>
+    <text x="677" y="83"  text-anchor="middle" font-size="10" fill="#8b5cf6">Bearer Token (Passport)</text>
+    <text x="677" y="98"  text-anchor="middle" font-size="9"  fill="#a78bfa">role: developer · api_smart_rt</text>
+
+    <!-- Arrows Row1 → Row2 -->
+    <line x1="103" y1="106" x2="103" y2="162" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="380" y1="106" x2="380" y2="162" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="398" y1="162" x2="398" y2="106" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="668" y1="106" x2="668" y2="162" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="686" y1="162" x2="686" y2="106" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+
+    <!-- ── ROW 2: Laravel Router + Middleware (wide) ── -->
+
+    <rect x="24" y="168" width="732" height="76" rx="14" fill="#bfdbfe" stroke="#93c5fd" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="390" y="197" text-anchor="middle" font-size="15" font-weight="700" fill="#1e3a8a">Laravel Router + Middleware</text>
+    <text x="390" y="215" text-anchor="middle" font-size="11" fill="#1d4ed8">web.php (session) · api.php (Passport/Sanctum) · Authenticate · CheckUserActive</text>
+    <text x="390" y="231" text-anchor="middle" font-size="11" fill="#1d4ed8">spatie/laravel-permission · VerifyCsrfToken · auth:api · auth:sanctum</text>
+
+    <!-- Arrows Row2 → Row3 -->
+    <line x1="120" y1="244" x2="103" y2="310" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="370" y1="244" x2="383" y2="310" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="400" y1="310" x2="387" y2="244" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="630" y1="244" x2="645" y2="310" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="663" y1="310" x2="648" y2="244" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+
+    <!-- ── ROW 3: Domain Controller | System Controller | API Controller ── -->
+
+    <rect x="24"  y="316" width="210" height="98" rx="14" fill="#bbf7d0" stroke="#86efac" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="129" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">Domain Controller</text>
+    <text x="129" y="363" text-anchor="middle" font-size="11" fill="#166534">MainController · Auth</text>
+    <text x="129" y="379" text-anchor="middle" font-size="11" fill="#166534">Role · User · Wilayah</text>
+    <text x="129" y="406" text-anchor="middle" font-size="10" fill="#4ade80">AgregatDKB · Kepemilikan</text>
+
+    <rect x="282" y="316" width="210" height="98" rx="14" fill="#bbf7d0" stroke="#86efac" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="387" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">System Controller</text>
+    <text x="387" y="363" text-anchor="middle" font-size="11" fill="#166534">CalculateDataController</text>
+    <text x="387" y="379" text-anchor="middle" font-size="11" fill="#166534">Import (45 class) · Search</text>
+    <text x="387" y="406" text-anchor="middle" font-size="10" fill="#4ade80">StrukturUmur · LaporanPdak</text>
+
+    <rect x="546" y="316" width="210" height="98" rx="14" fill="#bbf7d0" stroke="#86efac" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="651" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">API Controller</text>
+    <text x="651" y="363" text-anchor="middle" font-size="11" fill="#166534">API\AuthController</text>
+    <text x="651" y="379" text-anchor="middle" font-size="11" fill="#166534">POST /api/login → Passport</text>
+    <text x="651" y="395" text-anchor="middle" font-size="11" fill="#166534">GET  /api/list/jenis_data</text>
+    <text x="651" y="411" text-anchor="middle" font-size="10" fill="#4ade80">POST /api/search_data/{type}</text>
+
+    <!-- ── External Service Layer ── -->
+
+    <!-- Arrow System Controller → Ext Service -->
+    <line x1="387" y1="414" x2="387" y2="468" stroke="#f97316" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#ad)"/>
+
+    <rect x="24" y="474" width="540" height="74" rx="14" fill="#ffedd5" stroke="#fed7aa" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="294" y="500" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">External Service Layer</text>
+    <text x="294" y="518" text-anchor="middle" font-size="11" fill="#c2410c">ExternalApiService (Guzzle · Bearer Token · Cache 1h)</text>
+    <text x="294" y="534" text-anchor="middle" font-size="11" fill="#c2410c">KtpApiService · perekamanService → ektp.samarindakota.go.id/API/</text>
+
+    <!-- Arrow Ext Service → External API box -->
+    <line x1="564" y1="511" x2="614" y2="511" stroke="#f97316" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#ad)"/>
+
+    <!-- External API box (outside boundary) -->
+    <rect x="620" y="474" width="136" height="74" rx="14" fill="#fef9c3" stroke="#fde047" stroke-width="1.5" filter="url(#sd)"/>
+    <text x="688" y="500" text-anchor="middle" font-size="11" font-weight="700" fill="#713f12">Sistem Eksternal</text>
+    <text x="688" y="516" text-anchor="middle" font-size="10" fill="#92400e">Dukcapil API</text>
+    <text x="688" y="532" text-anchor="middle" font-size="10" fill="#92400e">ektp.samarindakota.go.id</text>
+    <text x="688" y="545" text-anchor="middle" font-size="9"  fill="#b45309">(ektp · perekaman)</text>
+
+    <!-- Arrows → Database -->
+    <line x1="129" y1="414" x2="226" y2="598" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="387" y1="548" x2="310" y2="598" stroke="#b0b8c8" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="651" y1="414" x2="400" y2="598" stroke="#b0b8c8" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#a)"/>
+
+    <text x="138" y="568" text-anchor="middle" font-size="11" font-style="italic" fill="#94a3b8">simpan data</text>
+    <text x="480" y="568" text-anchor="middle" font-size="11" font-style="italic" fill="#94a3b8">query / tampil</text>
+
+    <!-- ── DATABASE CYLINDER ── -->
+    <rect x="210" y="614" width="196" height="76" fill="#fecaca" stroke="#fca5a5" stroke-width="1.5" filter="url(#sd)"/>
+    <ellipse cx="308" cy="614" rx="98" ry="17" fill="#fecaca" stroke="#fca5a5" stroke-width="1.5"/>
+    <ellipse cx="308" cy="690" rx="98" ry="17" fill="#fda4af" stroke="#fca5a5" stroke-width="1.5"/>
+    <ellipse cx="290" cy="610" rx="36" ry="6"  fill="rgba(255,255,255,0.55)"/>
+    <text x="308" y="648" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">Database</text>
+    <text x="308" y="667" text-anchor="middle" font-size="11" fill="#991b1b">MySQL · 58 Tabel · Eloquent ORM</text>
+
+  </svg>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#ede9fe;border:1.5px solid #c4b5fd;"></div>Client Layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#bfdbfe;border:1.5px solid #93c5fd;"></div>Application Gateway</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#bbf7d0;border:1.5px solid #86efac;"></div>Service Layer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffedd5;border:1.5px solid #fed7aa;"></div>External Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fecaca;border:1.5px solid #fca5a5;"></div>Data Layer</div>
+    <div class="legend-item" style="font-size:11px; color:#94a3b8;">— — → Outbound API call</div>
+  </div>
+
+  <!-- ARCHITECTURAL DECISIONS -->
+  <div class="decisions">
+    <h3>Architectural Decisions</h3>
+    <div class="decisions-grid">
+      <span class="decision-chip" style="background:#ede9fe;color:#5b21b6;">Monolithic Layered MVC</span>
+      <span class="decision-chip" style="background:#dbeafe;color:#1e40af;">Session Auth (Web)</span>
+      <span class="decision-chip" style="background:#dbeafe;color:#1e40af;">Passport Token (API)</span>
+      <span class="decision-chip" style="background:#dcfce7;color:#15803d;">Role &amp; Permission (Spatie)</span>
+      <span class="decision-chip" style="background:#fef3c7;color:#92400e;">Excel Import Pipeline</span>
+      <span class="decision-chip" style="background:#ffedd5;color:#9a3412;">External API (Guzzle HTTP)</span>
+      <span class="decision-chip" style="background:#ffe4e6;color:#9f1239;">MySQL Eloquent ORM</span>
+    </div>
+  </div>
+
+</div><!-- .card -->
+
+</body>
+</html>

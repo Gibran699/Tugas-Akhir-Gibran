@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Diagram &amp; ERD – Rumah Data Dukcapil 2.0</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Segoe UI',sans-serif;background:#f0f4f8;color:#1e293b}
+        header{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:white;padding:2rem;text-align:center}
+        header h1{font-size:1.6rem}
+        header p{font-size:.85rem;opacity:.8;margin-top:.4rem}
+        .container{max-width:1400px;margin:0 auto;padding:2rem 1.5rem}
+        .card{background:white;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:2rem;overflow:hidden}
+        .card-header{padding:1rem 1.5rem;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+        .card-header h2{font-size:1.05rem;color:#1e3a5f}
+        .card-header p{font-size:.8rem;color:#64748b;margin-top:.25rem}
+        .card-body{padding:1.5rem;overflow-x:auto}
+        .mermaid{min-height:100px}
+        .legend{display:flex;flex-wrap:wrap;gap:.8rem;background:white;border-radius:12px;padding:1rem 1.5rem;margin-bottom:2rem;box-shadow:0 2px 10px rgba(0,0,0,.08);font-size:.82rem;align-items:center}
+        .leg{display:flex;align-items:center;gap:.5rem}
+        .swatch{width:28px;height:16px;border-radius:4px;border:2px solid}
+        .oval-swatch{width:32px;height:16px;border-radius:50%;border:2px solid}
+        .diamond-swatch{width:14px;height:14px;transform:rotate(45deg);border:2px solid}
+        .divider{border-left:1px solid #e2e8f0;padding-left:.8rem;margin-left:.4rem}
+    </style>
+</head>
+<body>
+<header>
+    <h1>Class Diagram &amp; ERD – Rumah Data Dukcapil 2.0</h1>
+    <p>Berdasarkan struktur migrasi dan Eloquent Model Laravel yang ada di project</p>
+</header>
+<div class="container">
+
+<div class="legend">
+    <strong>Simbol ERD Chen:</strong>
+    <div class="leg"><div class="swatch" style="background:#dbeafe;border-color:#1e40af"></div> Entitas (Tabel)</div>
+    <div class="leg"><div class="oval-swatch" style="background:#dcfce7;border-color:#16a34a"></div> Atribut Biasa</div>
+    <div class="leg"><div class="oval-swatch" style="background:#fde68a;border-color:#d97706"></div> Atribut PK</div>
+    <div class="leg"><div class="oval-swatch" style="background:#e0e7ff;border-color:#6366f1"></div> Atribut FK</div>
+    <div class="leg"><div class="diamond-swatch" style="background:#fef9c3;border-color:#ca8a04"></div>&nbsp; Relasi (Himpunan Hubungan)</div>
+    <div class="leg divider"><strong>Class Diagram:</strong></div>
+    <div class="leg">--|&gt; Inheritance &nbsp;|&nbsp; --&gt; Association &nbsp;|&nbsp; ..&gt; Dependency &nbsp;|&nbsp; --* Composition</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DIAGRAM 1: CLASS DIAGRAM – CORE AUTH MODELS
+════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>Diagram 1 – Class Diagram: Core Auth Models</h2>
+        <p>User, DataPengguna, Role, Permission, Pivot Tables, MstrKecamatan, MstrKelurahan – semua relasi Eloquent</p>
+    </div>
+    <div class="card-body">
+        <div class="mermaid">
+classDiagram
+    class User {
+        +UUID id
+        +String name
+        +String email
+        +String password
+        +Boolean is_active
+        +Timestamp email_verified_at
+        +String remember_token
+        +Timestamps created_at
+        +login() Boolean
+        +logout() void
+        +changePassword() Boolean
+        +roles() Role
+        +permissions() Permission
+        +dataPengguna() DataPengguna
+    }
+    class DataPengguna {
+        +UUID id
+        +Char nik
+        +String nama
+        +String contact
+        +Integer instansi
+        +String nama_instansi
+        +UUID user_id
+        +Timestamp deleted_at
+        +Timestamps created_at
+        +user() User
+    }
+    class Role {
+        +UUID uuid
+        +String name
+        +String guard_name
+        +Timestamps created_at
+        +users() User
+        +permissions() Permission
+        +syncPermissions() void
+        +hasPermissionTo() Boolean
+    }
+    class Permission {
+        +UUID uuid
+        +String name
+        +String guard_name
+        +Timestamps created_at
+        +roles() Role
+        +users() User
+    }
+    class ModelHasRoles {
+        <<pivot>>
+        +UUID role_id
+        +String model_type
+        +UUID model_id
+    }
+    class RoleHasPermissions {
+        <<pivot>>
+        +UUID permission_id
+        +UUID role_id
+    }
+    class ModelHasPermissions {
+        <<pivot>>
+        +UUID permission_id
+        +String model_type
+        +UUID model_id
+    }
+    class MstrKecamatan {
+        +BigInt id
+        +UUID uuid
+        +String kode
+        +String nama
+        +Timestamp deleted_at
+        +kelurahan() MstrKelurahan
+    }
+    class MstrKelurahan {
+        +BigInt id
+        +UUID uuid
+        +String kode
+        +String nama
+        +Mixed kec_id
+        +Timestamp deleted_at
+        +kecamatan() MstrKecamatan
+    }
+
+    User "1" --> "1" DataPengguna : hasOne
+    User "*" --> "*" Role : assignedVia
+    User "*" --> "*" Permission : directPermission
+    Role "*" --> "*" Permission : syncPermissions
+    MstrKecamatan "1" --> "*" MstrKelurahan : hasMany
+    User ..> ModelHasRoles : uses pivot
+    Role ..> ModelHasRoles : uses pivot
+    Role ..> RoleHasPermissions : uses pivot
+    Permission ..> RoleHasPermissions : uses pivot
+    User ..> ModelHasPermissions : uses pivot
+    Permission ..> ModelHasPermissions : uses pivot
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DIAGRAM 2: CLASS DIAGRAM – DATA MODELS LENGKAP
+════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>Diagram 2 – Class Diagram: Data Models Lengkap (40+ Tabel)</h2>
+        <p>Abstract DataKependudukan sebagai base class, diextend 8 module group – semua berelasi ke MstrKelurahan via kode_wilayah</p>
+    </div>
+    <div class="card-body">
+        <div class="mermaid">
+classDiagram
+    class DataKependudukan {
+        <<abstract>>
+        +BigInt id
+        +UUID uuid
+        +String kode_wilayah
+        +Integer semester
+        +Integer tahun
+        +Timestamp deleted_at
+        +Timestamps created_at
+    }
+    class AgregatPenduduk {
+        <<module>>
+        +Table agama_penduduk
+        +Table jenis_kelamin_penduduk
+        +Table golongan_darah_penduduk
+        +Table pekerjaan_penduduk
+        +Table hubungan_keluarga_penduduk
+    }
+    class AgregatKepalaKeluarga {
+        <<module>>
+        +Table agama_kepala_keluarga
+        +Table jenis_kelamin_kepala_keluarga
+        +Table pekerjaan_kepala_keluarga
+        +Table pendidikan_kepala_keluarga
+        +Table status_kawin_kepala_keluarga
+    }
+    class AgregatStatusKawin {
+        <<module>>
+        +Table agama_status_kawin_penduduk
+        +Table jenis_kelamin_status_kawin_penduduk
+        +Table pekerjaan_status_kawin_penduduk
+    }
+    class AgregatPendidikan {
+        <<module>>
+        +Table jenis_kelamin_pendidikan
+        +Table golongan_darah_pendidikan
+        +Table pekerjaan_pendidikan
+    }
+    class AgregatDisabilitas {
+        <<module>>
+        +Table jenis_kelamin_disabilitas
+        +Table pekerjaan_disabilitas
+        +Table pendidikan_disabilitas
+    }
+    class KepemilikanDokumen {
+        <<module>>
+        +Table ktp
+        +Table kartu_keluarga
+        +Table akta_kelahiran
+        +Table kia
+        +Table akta_kawin
+        +Table akta_kawin_agama
+        +Table akta_cerai
+        +Table akta_cerai_agama
+    }
+    class StrukturUmur {
+        <<module>>
+        +Table kelompok_umur_agama
+        +Table kelompok_umur_disabilitas
+        +Table umur_tunggal_disabilitas
+        +Table pendidikan_umur_tunggal_disabilitas
+        +Table usia_sekolah_kelompok_umur_disabilitas
+        +Table kelompok_umur_golongan_darah
+        +Table umur_tunggal_golongan_darah
+        +Table kelompok_umur_kepala_keluarga
+        +Table status_kawin_kelompok_umur_kepala_keluarga
+        +Table umur_tunggal_kepala_keluarga
+        +Table kelompok_umur_penduduk
+        +Table status_kawin_kelompok_umur_penduduk
+        +Table status_kawin_umur_tunggal_penduduk
+        +Table umur_tunggal_penduduk
+        +Table usia_muda_produktif_tua_penduduk
+        +Table usia_sekolah_penduduk
+    }
+    class LaporanKinerja {
+        <<module>>
+        +Table laporan_kinerja_capil_format_pdak
+        +Table laporan_kinerja_dafduk_format_pdak
+    }
+    class MstrKelurahan {
+        +BigInt id
+        +UUID uuid
+        +String kode
+        +String nama
+    }
+
+    DataKependudukan <|-- AgregatPenduduk
+    DataKependudukan <|-- AgregatKepalaKeluarga
+    DataKependudukan <|-- AgregatStatusKawin
+    DataKependudukan <|-- AgregatPendidikan
+    DataKependudukan <|-- AgregatDisabilitas
+    DataKependudukan <|-- KepemilikanDokumen
+    DataKependudukan <|-- StrukturUmur
+    DataKependudukan <|-- LaporanKinerja
+    MstrKelurahan "1" --> "*" AgregatPenduduk : kode_wilayah
+    MstrKelurahan "1" --> "*" AgregatKepalaKeluarga : kode_wilayah
+    MstrKelurahan "1" --> "*" AgregatStatusKawin : kode_wilayah
+    MstrKelurahan "1" --> "*" AgregatPendidikan : kode_wilayah
+    MstrKelurahan "1" --> "*" AgregatDisabilitas : kode_wilayah
+    MstrKelurahan "1" --> "*" KepemilikanDokumen : kode_wilayah
+    MstrKelurahan "1" --> "*" StrukturUmur : kode_wilayah
+    MstrKelurahan "1" --> "*" LaporanKinerja : kode_wilayah
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DIAGRAM 3: ERD CHEN – SISTEM AUTH dan WILAYAH
+════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>Diagram 3 – ERD Notasi Chen: Sistem Auth &amp; Wilayah</h2>
+        <p>Persegi = Entitas &nbsp;|&nbsp; Oval Hijau = Atribut &nbsp;|&nbsp; Oval Kuning = PK &nbsp;|&nbsp; Oval Ungu = FK &nbsp;|&nbsp; Belah Ketupat = Relasi</p>
+    </div>
+    <div class="card-body">
+        <div class="mermaid">
+flowchart TD
+    USERS["USERS"]:::ent
+    DATA_PENGGUNA["DATA_PENGGUNA"]:::ent
+    ROLES["ROLES"]:::ent
+    PERMISSIONS["PERMISSIONS"]:::ent
+    MSTR_KECAMATAN["MSTR_KECAMATAN"]:::ent
+    MSTR_KELURAHAN["MSTR_KELURAHAN"]:::ent
+
+    MEMILIKI{" MEMILIKI\n 1-1 "}:::rel
+    DIBERIKAN{" DIBERIKAN\n M-N "}:::rel
+    MENGGUNAKAN{" MENGGUNAKAN\n M-N "}:::rel
+    BERISI{" BERISI\n 1-N "}:::rel
+
+    u_id("id"):::pk
+    u_name("name"):::att
+    u_email("email"):::att
+    u_pass("password"):::att
+    u_active("is_active"):::att
+    u_tok("remember_token"):::att
+
+    dp_id("id"):::pk
+    dp_nik("nik"):::att
+    dp_nama("nama"):::att
+    dp_contact("contact"):::att
+    dp_inst("instansi"):::att
+    dp_fk("user_id"):::fk
+
+    ro_id("uuid"):::pk
+    ro_name("name"):::att
+    ro_guard("guard_name"):::att
+
+    pe_id("uuid"):::pk
+    pe_name("name"):::att
+    pe_guard("guard_name"):::att
+
+    kec_id("id"):::pk
+    kec_kode("kode"):::att
+    kec_nama("nama"):::att
+
+    kel_id("id"):::pk
+    kel_kode("kode"):::att
+    kel_nama("nama"):::att
+    kel_fk("kec_id"):::fk
+
+    u_id --- USERS
+    u_name --- USERS
+    u_email --- USERS
+    u_pass --- USERS
+    u_active --- USERS
+    u_tok --- USERS
+
+    dp_id --- DATA_PENGGUNA
+    dp_nik --- DATA_PENGGUNA
+    dp_nama --- DATA_PENGGUNA
+    dp_contact --- DATA_PENGGUNA
+    dp_inst --- DATA_PENGGUNA
+    dp_fk --- DATA_PENGGUNA
+
+    ro_id --- ROLES
+    ro_name --- ROLES
+    ro_guard --- ROLES
+
+    pe_id --- PERMISSIONS
+    pe_name --- PERMISSIONS
+    pe_guard --- PERMISSIONS
+
+    kec_id --- MSTR_KECAMATAN
+    kec_kode --- MSTR_KECAMATAN
+    kec_nama --- MSTR_KECAMATAN
+
+    kel_id --- MSTR_KELURAHAN
+    kel_kode --- MSTR_KELURAHAN
+    kel_nama --- MSTR_KELURAHAN
+    kel_fk --- MSTR_KELURAHAN
+
+    USERS --- MEMILIKI
+    MEMILIKI --- DATA_PENGGUNA
+    USERS --- DIBERIKAN
+    DIBERIKAN --- ROLES
+    ROLES --- MENGGUNAKAN
+    MENGGUNAKAN --- PERMISSIONS
+    MSTR_KECAMATAN --- BERISI
+    BERISI --- MSTR_KELURAHAN
+
+    classDef ent fill:#dbeafe,stroke:#1e40af,color:#1e293b,font-weight:bold,font-size:13px
+    classDef rel fill:#fef9c3,stroke:#ca8a04,color:#92400e,font-weight:bold
+    classDef att fill:#dcfce7,stroke:#16a34a,color:#1e293b,font-size:11px
+    classDef pk  fill:#fde68a,stroke:#d97706,color:#92400e,font-size:11px,font-weight:bold
+    classDef fk  fill:#e0e7ff,stroke:#6366f1,color:#3730a3,font-size:11px
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DIAGRAM 4: ERD CHEN – POLA DATA KEPENDUDUKAN
+════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>Diagram 4 – ERD Notasi Chen: Pola Tabel Data Kependudukan</h2>
+        <p>Contoh representatif agama_penduduk – pola ini berlaku untuk semua 40+ tabel data kependudukan</p>
+    </div>
+    <div class="card-body">
+        <div class="mermaid">
+flowchart LR
+    KEL["MSTR_KELURAHAN"]:::ent
+    AGM["AGAMA_PENDUDUK\npola semua tabel data"]:::ent
+
+    REFF{" MEREFERENSI\n kode_wilayah\n 1 - N "}:::rel
+
+    k_id("id"):::pk
+    k_uuid("uuid"):::att
+    k_kode("kode"):::att
+    k_nama("nama"):::att
+    k_kec("kec_id"):::fk
+
+    a_id("id"):::pk
+    a_uuid("uuid"):::att
+    a_kwil("kode_wilayah"):::fk
+    a_ilk("islam_lk"):::att
+    a_ipr("islam_pr"):::att
+    a_ijk("islam_jml"):::att
+    a_klk("kristen_lk"):::att
+    a_kpr("kristen_pr"):::att
+    a_dst("... dst agama lain"):::att
+    a_smt("semester"):::att
+    a_thn("tahun"):::att
+    a_del("deleted_at"):::att
+
+    k_id --- KEL
+    k_uuid --- KEL
+    k_kode --- KEL
+    k_nama --- KEL
+    k_kec --- KEL
+
+    a_id --- AGM
+    a_uuid --- AGM
+    a_kwil --- AGM
+    a_ilk --- AGM
+    a_ipr --- AGM
+    a_ijk --- AGM
+    a_klk --- AGM
+    a_kpr --- AGM
+    a_dst --- AGM
+    a_smt --- AGM
+    a_thn --- AGM
+    a_del --- AGM
+
+    KEL --- REFF
+    REFF --- AGM
+
+    classDef ent fill:#dbeafe,stroke:#1e40af,color:#1e293b,font-weight:bold
+    classDef rel fill:#fef9c3,stroke:#ca8a04,color:#92400e,font-weight:bold
+    classDef att fill:#dcfce7,stroke:#16a34a,color:#1e293b,font-size:11px
+    classDef pk  fill:#fde68a,stroke:#d97706,color:#92400e,font-size:11px,font-weight:bold
+    classDef fk  fill:#e0e7ff,stroke:#6366f1,color:#3730a3,font-size:11px
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     DIAGRAM 5: INVENTARIS LENGKAP SEMUA TABEL
+════════════════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-header">
+        <h2>Diagram 5 – Inventaris Lengkap Semua Tabel per Modul</h2>
+        <p>Semua 40+ tabel dikelompokkan berdasarkan modul fungsional – garis putus-putus = referensi kode_wilayah</p>
+    </div>
+    <div class="card-body">
+        <div class="mermaid">
+flowchart TD
+    subgraph SYS["Sistem Auth"]
+        T1[users]
+        T2[data_pengguna]
+        T3[roles]
+        T4[permissions]
+        T5[model_has_roles]
+        T6[role_has_permissions]
+        T7[model_has_permissions]
+    end
+    subgraph WIL["Master Wilayah"]
+        W1[mstr_kecamatan]
+        W2[mstr_kelurahan]
+        W1 --> W2
+    end
+    subgraph AGP["Agregat DKB - Penduduk"]
+        A1[agama_penduduk]
+        A2[jenis_kelamin_penduduk]
+        A3[golongan_darah_penduduk]
+        A4[pekerjaan_penduduk]
+        A5[hubungan_keluarga_penduduk]
+    end
+    subgraph AGK["Agregat DKB - Kepala Keluarga"]
+        B1[agama_kepala_keluarga]
+        B2[jenis_kelamin_kepala_keluarga]
+        B3[pekerjaan_kepala_keluarga]
+        B4[pendidikan_kepala_keluarga]
+        B5[status_kawin_kepala_keluarga]
+    end
+    subgraph AGD["Agregat DKB - Status Kawin, Pendidikan dan Disabilitas"]
+        C1[agama_status_kawin_penduduk]
+        C2[jenis_kelamin_status_kawin_penduduk]
+        C3[pekerjaan_status_kawin_penduduk]
+        C4[jenis_kelamin_pendidikan]
+        C5[golongan_darah_pendidikan]
+        C6[pekerjaan_pendidikan]
+        C7[jenis_kelamin_disabilitas]
+        C8[pekerjaan_disabilitas]
+        C9[pendidikan_disabilitas]
+    end
+    subgraph KEP["Kepemilikan Dokumen"]
+        D1[ktp]
+        D2[kartu_keluarga]
+        D3[akta_kelahiran]
+        D4[kia]
+        D5[akta_kawin]
+        D6[akta_kawin_agama]
+        D7[akta_cerai]
+        D8[akta_cerai_agama]
+    end
+    subgraph STR["Struktur Umur - 16 Tabel"]
+        E1[kelompok_umur_agama]
+        E2[kelompok_umur_disabilitas]
+        E3[umur_tunggal_disabilitas]
+        E4[pendidikan_umur_tunggal_disabilitas]
+        E5[usia_sekolah_kelompok_umur_disabilitas]
+        E6[kelompok_umur_golongan_darah]
+        E7[umur_tunggal_golongan_darah]
+        E8[kelompok_umur_kepala_keluarga]
+        E9[status_kawin_kelompok_umur_kepala_keluarga]
+        E10[umur_tunggal_kepala_keluarga]
+        E11[kelompok_umur_penduduk]
+        E12[status_kawin_kelompok_umur_penduduk]
+        E13[status_kawin_umur_tunggal_penduduk]
+        E14[umur_tunggal_penduduk]
+        E15[usia_muda_produktif_tua_penduduk]
+        E16[usia_sekolah_penduduk]
+    end
+    subgraph LAP["Laporan Kinerja"]
+        F1[laporan_kinerja_capil_format_pdak]
+        F2[laporan_kinerja_dafduk_format_pdak]
+    end
+
+    W2 -.->|kode_wilayah| AGP
+    W2 -.->|kode_wilayah| AGK
+    W2 -.->|kode_wilayah| AGD
+    W2 -.->|kode_wilayah| KEP
+    W2 -.->|kode_wilayah| STR
+    W2 -.->|kode_wilayah| LAP
+
+    classDef sys fill:#dbeafe,stroke:#2563eb,color:#1e293b,font-size:11px
+    classDef wil fill:#dcfce7,stroke:#16a34a,color:#1e293b,font-size:11px
+    classDef data fill:#fef3c7,stroke:#f59e0b,color:#1e293b,font-size:11px
+    classDef lap fill:#fee2e2,stroke:#dc2626,color:#1e293b,font-size:11px
+    class T1,T2,T3,T4,T5,T6,T7 sys
+    class W1,W2 wil
+    class A1,A2,A3,A4,A5,B1,B2,B3,B4,B5,C1,C2,C3,C4,C5,C6,C7,C8,C9,D1,D2,D3,D4,D5,D6,D7,D8,E1,E2,E3,E4,E5,E6,E7,E8,E9,E10,E11,E12,E13,E14,E15,E16 data
+    class F1,F2 lap
+        </div>
+    </div>
+</div>
+
+</div>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        flowchart: { useMaxWidth: true, curve: 'basis' },
+        classDiagram: { useMaxWidth: true },
+        themeVariables: {
+            primaryColor: '#dbeafe',
+            primaryTextColor: '#1e293b',
+            primaryBorderColor: '#2563eb',
+            lineColor: '#64748b'
+        }
+    });
+</script>
+</body>
+</html>

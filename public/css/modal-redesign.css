@@ -2,6 +2,12 @@
    Modal Redesign - FontAwesome 6 & Modern UI
    ============================================ */
 
+:root {
+    --modal-theme-primary: #2f4f75;
+    --modal-theme-primary-dark: #233c59;
+    --modal-theme-primary-soft: #f3f6fb;
+}
+
 /* Modal rounded corners */
 .modal-content {
     border-radius: 16px;
@@ -12,32 +18,32 @@
 
 /* ---- Modal Headers ---- */
 .modal-header-green {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
 .modal-header-blue {
-    background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
 .modal-header-purple {
-    background: linear-gradient(135deg, #8e44ad 0%, #a569bd 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
 .modal-header-orange {
-    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
 .modal-header-teal {
-    background: linear-gradient(135deg, #1abc9c 0%, #48c9b0 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
 .modal-header-dark {
-    background: linear-gradient(135deg, #434E78 0%, #607B8F 100%);
+    background: var(--modal-theme-primary);
     color: white;
     border-bottom: none;
 }
@@ -120,18 +126,21 @@
 }
 
 /* Icon gradient backgrounds */
-.icon-bg-blue   { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-.icon-bg-green  { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-.icon-bg-orange { background: linear-gradient(135deg, #fa8231, #f7b733); }
-.icon-bg-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
-.icon-bg-teal   { background: linear-gradient(135deg, #11998e, #38ef7d); }
+.icon-bg-blue,
+.icon-bg-green,
+.icon-bg-orange,
+.icon-bg-purple,
+.icon-bg-teal { background: var(--modal-theme-primary); }
 
 /* Button gradient variants */
-.btn-open-blue   { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #064663 !important; }
-.btn-open-green  { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #0d5a40 !important; }
-.btn-open-orange { background: linear-gradient(135deg, #fa8231, #f7b733); color: white !important; }
-.btn-open-purple { background: linear-gradient(135deg, #a855f7, #7c3aed); color: white !important; }
-.btn-open-teal   { background: linear-gradient(135deg, #11998e, #38ef7d); color: #0d5a40 !important; }
+.btn-open-blue,
+.btn-open-green,
+.btn-open-orange,
+.btn-open-purple,
+.btn-open-teal {
+    background: var(--modal-theme-primary);
+    color: #fff !important;
+}
 
 /* ============================================
    DATA NAV BUTTONS (DKB / Umur tabs)
@@ -223,7 +232,7 @@
     color: #94a3b8;
 }
 .modal-tab-sidebar .list-group-item.active {
-    background: linear-gradient(135deg, #434E78 0%, #607B8F 100%) !important;
+    background: var(--modal-theme-primary) !important;
     border-color: transparent !important;
     color: white !important;
 }
@@ -248,7 +257,7 @@
     content: '';
     width: 4px;
     height: 20px;
-    background: linear-gradient(135deg, #434E78, #607B8F);
+    background: var(--modal-theme-primary);
     border-radius: 2px;
     display: inline-block;
     flex-shrink: 0;
@@ -300,26 +309,34 @@
 }
 
 /* Kepemilikan color palette */
-.doc-card-1  { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.doc-card-2  { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-.doc-card-3  { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #064663 !important; }
-.doc-card-4  { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #0d4a35 !important; }
-.doc-card-5  { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #4a2500 !important; }
-.doc-card-6  { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #3a1f5c !important; }
-.doc-card-7  { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #4a2500 !important; }
-.doc-card-8  { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #0a3d2e !important; }
+
+.doc-card-1,
+.doc-card-2,
+.doc-card-3,
+.doc-card-4,
+.doc-card-5,
+.doc-card-6,
+.doc-card-7,
+.doc-card-8 {
+    background: var(--modal-theme-primary);
+    color: #fff !important;
+}
 
 .doc-card-3 .doc-stat-label, .doc-card-4 .doc-stat-label,
 .doc-card-5 .doc-stat-label, .doc-card-6 .doc-stat-label,
 .doc-card-7 .doc-stat-label, .doc-card-8 .doc-stat-label { color: inherit; }
 
 /* Kelompok Umur color palette */
-.chart-card-1 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-.chart-card-2 { background: linear-gradient(135deg, #e96c4c 0%, #c0392b 100%); }
-.chart-card-3 { background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); }
-.chart-card-4 { background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
-.chart-card-5 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #0d4a35 !important; }
-.chart-card-6 { background: linear-gradient(135deg, #c79081 0%, #dfa579 100%); color: #3d1f10 !important; }
+
+.chart-card-1,
+.chart-card-2,
+.chart-card-3,
+.chart-card-4,
+.chart-card-5,
+.chart-card-6 {
+    background: var(--modal-theme-primary);
+    color: #fff !important;
+}
 .chart-card-5 .doc-stat-label, .chart-card-6 .doc-stat-label { color: inherit; }
 
 /* ============================================

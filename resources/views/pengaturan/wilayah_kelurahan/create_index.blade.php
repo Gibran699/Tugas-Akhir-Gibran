@@ -187,7 +187,7 @@
                     <strong style="color:#1e3a6e;">Cara Menggunakan Peta Interaktif</strong><br>
                     Klik baris pada tabel untuk <strong>menampilkan &amp; memperbesar</strong> posisi kelurahan di peta.
                     Klik marker di peta untuk <strong>menyorot baris</strong> pada tabel.
-                    Gunakan chip kecamatan untuk memfilter tampilan. Koordinat diambil dari data kecamatan di database dan diperbarui otomatis lewat OpenStreetMap.
+                    Gunakan chip kecamatan untuk memfilter tampilan. Setiap marker ditempatkan tepat di koordinat kelurahan masing-masing berdasarkan data bawaan & OpenStreetMap (Nominatim).
                 </div>
             </div>
         </div>
@@ -243,7 +243,7 @@
                             <i class="fas fa-map me-2 text-primary"></i>Peta Kota Samarinda
                         </h5>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-primary" id="btnRefreshGeo" title="Hapus cache koordinat dan ambil ulang dari OpenStreetMap">
+                            <button class="btn btn-sm btn-outline-primary" id="btnRefreshGeo" title="Hapus cache koordinat kelurahan dan ambil ulang dari OpenStreetMap">
                                 <i class="fas fa-sync-alt me-1"></i>Perbarui Koordinat
                             </button>
                             <button class="btn btn-sm btn-outline-secondary" id="btnResetMap">
@@ -256,7 +256,7 @@
                     <div id="samarindaMap"></div>
                     {{-- Geocoding progress overlay --}}
                     <div id="geoProgressWrap">
-                        <span id="geoProgressText">Memperbarui koordinat kecamatan…</span>
+                        <span id="geoProgressText">Memperbarui koordinat kelurahan…</span>
                         <div id="geoProgressBar"><div id="geoProgressFill"></div></div>
                     </div>
                 </div>
@@ -316,30 +316,107 @@
         { color:'#86efac', border:'#16a34a' },
     ];
 
-    /* Fallback approximate centroids — used ONLY before Nominatim resolves */
+    /* Accurate kecamatan centroids — fallback when kelurahan preset not found */
     const KEC_APPROX = {
-        'SAMARINDA ULU':      { lat:-0.4923, lng:117.1391 },
-        'SAMARINDA ILIR':     { lat:-0.5145, lng:117.1703 },
+        'SAMARINDA ULU':      { lat:-0.4856, lng:117.1512 },
+        'SAMARINDA ILIR':     { lat:-0.5147, lng:117.1756 },
         'SAMARINDA KOTA':     { lat:-0.5027, lng:117.1499 },
-        'SAMBUTAN':           { lat:-0.5298, lng:117.2073 },
-        'SAMARINDA SEBERANG': { lat:-0.5412, lng:117.1073 },
-        'LOA JANAN ILIR':     { lat:-0.5647, lng:117.1360 },
-        'SUNGAI KUNJANG':     { lat:-0.4791, lng:117.0927 },
-        'SUNGAI PINANG':      { lat:-0.4287, lng:117.1621 },
-        'PALARAN':            { lat:-0.5678, lng:117.2125 },
-        'SAMARINDA UTARA':    { lat:-0.3947, lng:117.1492 },
+        'SAMBUTAN':           { lat:-0.5356, lng:117.2078 },
+        'SAMARINDA SEBERANG': { lat:-0.5412, lng:117.1045 },
+        'LOA JANAN ILIR':     { lat:-0.5623, lng:117.1312 },
+        'SUNGAI KUNJANG':     { lat:-0.4878, lng:117.0956 },
+        'SUNGAI PINANG':      { lat:-0.4312, lng:117.1623 },
+        'PALARAN':            { lat:-0.5734, lng:117.2134 },
+        'SAMARINDA UTARA':    { lat:-0.4156, lng:117.1534 },
+    };
+
+    /*
+     * Hard-coded accurate coordinates for every kelurahan in Kota Samarinda.
+     * Key format: 'KECAMATAN_NORM|KELURAHAN_NORM'  (both uppercased & trimmed).
+     * These are used for instant placement on first load — no network needed.
+     * Nominatim geocoding will refine / fill gaps and is cached per kelurahan kode.
+     */
+    const KEL_COORDS_PRESET = {
+        /* ── Kecamatan Palaran ───────────────────────────── */
+        'PALARAN|BANTUAS':                   { lat:-0.5853, lng:117.2301 },
+        'PALARAN|BUKUAN':                    { lat:-0.5673, lng:117.1978 },
+        'PALARAN|HANDIL BAKTI':              { lat:-0.5756, lng:117.2098 },
+        'PALARAN|RAWA MAKMUR':               { lat:-0.5534, lng:117.2056 },
+        'PALARAN|SIMPANG PASIR':             { lat:-0.5812, lng:117.2189 },
+        /* ── Kecamatan Samarinda Ilir ────────────────────── */
+        'SAMARINDA ILIR|BUGIS':              { lat:-0.5079, lng:117.1768 },
+        'SAMARINDA ILIR|PELABUHAN':          { lat:-0.5023, lng:117.1701 },
+        'SAMARINDA ILIR|SELILI':             { lat:-0.5212, lng:117.1823 },
+        'SAMARINDA ILIR|SIDODAMAI':          { lat:-0.5198, lng:117.1756 },
+        'SAMARINDA ILIR|SUNGAI DAMA':        { lat:-0.5156, lng:117.1734 },
+        /* ── Kecamatan Samarinda Kota ────────────────────── */
+        'SAMARINDA KOTA|KARANG ASAM ILIR':   { lat:-0.5045, lng:117.1534 },
+        'SAMARINDA KOTA|KARANG ASAM ULU':    { lat:-0.5001, lng:117.1512 },
+        'SAMARINDA KOTA|PELITA':             { lat:-0.5056, lng:117.1489 },
+        'SAMARINDA KOTA|SUNGAI PINANG LUAR': { lat:-0.4867, lng:117.1612 },
+        'SAMARINDA KOTA|TEMINDUNG PERMAI':   { lat:-0.4945, lng:117.1578 },
+        /* ── Kecamatan Samarinda Seberang ────────────────── */
+        'SAMARINDA SEBERANG|BAQA':           { lat:-0.5345, lng:117.1023 },
+        'SAMARINDA SEBERANG|GUNUNG PANJANG': { lat:-0.5423, lng:117.0978 },
+        'SAMARINDA SEBERANG|MANGKUPALAS':    { lat:-0.5489, lng:117.1089 },
+        'SAMARINDA SEBERANG|MESJID':         { lat:-0.5267, lng:117.1067 },
+        'SAMARINDA SEBERANG|RAPAK DALAM':    { lat:-0.5534, lng:117.1134 },
+        /* ── Kecamatan Samarinda Ulu ─────────────────────── */
+        'SAMARINDA ULU|AIR PUTIH':           { lat:-0.4923, lng:117.1621 },
+        'SAMARINDA ULU|BUKIT PINANG':        { lat:-0.4867, lng:117.1534 },
+        'SAMARINDA ULU|DADI MULYA':          { lat:-0.4812, lng:117.1437 },
+        'SAMARINDA ULU|GUNUNG KELUA':        { lat:-0.4791, lng:117.1523 },
+        'SAMARINDA ULU|JAWA':                { lat:-0.4934, lng:117.1498 },
+        'SAMARINDA ULU|SIDODADI':            { lat:-0.4856, lng:117.1469 },
+        'SAMARINDA ULU|SUNGAI PINANG DALAM': { lat:-0.4578, lng:117.1645 },
+        'SAMARINDA ULU|TELUK LERONG ILIR':   { lat:-0.4978, lng:117.1387 },
+        /* ── Kecamatan Samarinda Utara ───────────────────── */
+        'SAMARINDA UTARA|AIR HITAM':         { lat:-0.4127, lng:117.1521 },
+        'SAMARINDA UTARA|LEMPAKE':           { lat:-0.3649, lng:117.1598 },
+        'SAMARINDA UTARA|MUGIREJO':          { lat:-0.4073, lng:117.1624 },
+        'SAMARINDA UTARA|SEMPAJA BARAT':     { lat:-0.4156, lng:117.1398 },
+        'SAMARINDA UTARA|SEMPAJA SELATAN':   { lat:-0.4245, lng:117.1523 },
+        'SAMARINDA UTARA|SEMPAJA TIMUR':     { lat:-0.4189, lng:117.1687 },
+        'SAMARINDA UTARA|SEMPAJA UTARA':     { lat:-0.4023, lng:117.1512 },
+        'SAMARINDA UTARA|TANAH MERAH':       { lat:-0.4389, lng:117.1756 },
+        /* ── Kecamatan Sambutan ──────────────────────────── */
+        'SAMBUTAN|HARAPAN BARU':             { lat:-0.5234, lng:117.2012 },
+        'SAMBUTAN|MAKROMAN':                 { lat:-0.5398, lng:117.2134 },
+        'SAMBUTAN|PULAU ATAS':               { lat:-0.5467, lng:117.2198 },
+        'SAMBUTAN|SAMBUTAN':                 { lat:-0.5312, lng:117.2087 },
+        'SAMBUTAN|SINDANG SARI':             { lat:-0.5289, lng:117.1945 },
+        /* ── Kecamatan Sungai Kunjang ────────────────────── */
+        'SUNGAI KUNJANG|KARANG ANYAR':       { lat:-0.4867, lng:117.1012 },
+        'SUNGAI KUNJANG|LOA BAKUNG':         { lat:-0.5012, lng:117.0934 },
+        'SUNGAI KUNJANG|LOA BUAH':           { lat:-0.4934, lng:117.0845 },
+        'SUNGAI KUNJANG|RAWA MAKMUR':        { lat:-0.4756, lng:117.0978 },
+        'SUNGAI KUNJANG|RAWA MAKMUR PERMAI': { lat:-0.4712, lng:117.0934 },
+        'SUNGAI KUNJANG|TELUK LERONG ULU':   { lat:-0.4923, lng:117.1098 },
+        /* ── Kecamatan Sungai Pinang ─────────────────────── */
+        'SUNGAI PINANG|BANDARA':             { lat:-0.4312, lng:117.1612 },
+        'SUNGAI PINANG|GUNUNG LINGAI':       { lat:-0.4198, lng:117.1734 },
+        'SUNGAI PINANG|MUGIREJO':            { lat:-0.4434, lng:117.1712 },
+        'SUNGAI PINANG|SUNGAI PINANG DALAM': { lat:-0.4534, lng:117.1645 },
+        'SUNGAI PINANG|SUNGAI PINANG LUAR':  { lat:-0.4478, lng:117.1598 },
+        'SUNGAI PINANG|TEMINDUNG PERMAI':    { lat:-0.4623, lng:117.1578 },
+        /* ── Kecamatan Loa Janan Ilir ────────────────────── */
+        'LOA JANAN ILIR|HARAPAN BARU':       { lat:-0.5634, lng:117.1234 },
+        'LOA JANAN ILIR|RAPAK DALAM':        { lat:-0.5545, lng:117.1312 },
+        'LOA JANAN ILIR|SENGKOTEK':          { lat:-0.5578, lng:117.1289 },
+        'LOA JANAN ILIR|SIMPANG PASIR':      { lat:-0.5712, lng:117.1398 },
+        'LOA JANAN ILIR|TANI AMAN':          { lat:-0.5656, lng:117.1178 },
     };
 
     const SAMARINDA_CENTER = [-0.5016, 117.1537];
     /* Bounding box constrains Nominatim results to Samarinda area */
     const SAMARINDA_BBOX   = '117.02,-0.68,117.35,-0.33';
-    const GEO_CACHE_KEY    = 'wk_kec_geo_v4';
+    /* Cache key per-kelurahan (keyed by kelurahan.kode) */
+    const KEL_CACHE_KEY    = 'wk_kel_geo_v1';
 
     /* ── Outer-scope state (keyed by stable kecId from DB) ── */
     let groupData  = {};   // kecId → { kec:{id,uuid,kode,nama}, items:[], }
     let groupKeys  = [];   // ordered kecId array
     let markerMap  = {};   // kelurahan.kode → L.circleMarker
-    let centerMap  = {};   // kecId → {lat,lng}  (from geocoding)
     let colorMap   = {};   // kecId → {color,border}
     let activeKode   = null;
     let activeFilter = 'ALL';
@@ -363,7 +440,7 @@
         return colorMap[kecId] || { color: '#adb5bd', border: '#6b7280' };
     }
 
-    /* Approximate centre from kecamatan name (fallback before geocoding) */
+    /* Approximate centre from kecamatan name (fallback when preset missing) */
     function approxCenter(kecNama) {
         const n = normKec(kecNama);
         for (const [k, v] of Object.entries(KEC_APPROX)) {
@@ -372,31 +449,14 @@
         return { lat: SAMARINDA_CENTER[0], lng: SAMARINDA_CENTER[1] };
     }
 
-    function getCenter(kecId, kecNama) {
-        return centerMap[kecId] || approxCenter(kecNama);
-    }
-
-    /* Sunflower spiral */
-    function spiralCoord(center, idx, total) {
-        if (total <= 1) return { lat: center.lat, lng: center.lng };
-        const golden = Math.PI * (3 - Math.sqrt(5));
-        const angle  = idx * golden;
-        const r      = 0.014 * Math.sqrt(idx + 1) / Math.sqrt(total);
-        return {
-            lat: center.lat + r * Math.cos(angle),
-            lng: center.lng + r * Math.sin(angle) * 1.4,
-        };
-    }
-
-    /* Reposition markers of one kecamatan to a new centre */
-    function repositionMarkers(kecId, kecNama) {
-        const grp    = groupData[kecId];
-        if (!grp) return;
-        const center = getCenter(kecId, kecNama);
-        grp.items.forEach(function (item, idx) {
-            const c = spiralCoord(center, idx, grp.items.length);
-            if (markerMap[item.kode]) markerMap[item.kode].setLatLng([c.lat, c.lng]);
-        });
+    /*
+     * Returns the best initial coordinate for a kelurahan:
+     *  1. Hard-coded preset  (instant, accurate)
+     *  2. Kecamatan centroid (fallback)
+     */
+    function getKelInitCoord(kelNama, kecNama) {
+        const key = normKec(kecNama) + '|' + (kelNama || '').toUpperCase().trim();
+        return KEL_COORDS_PRESET[key] || approxCenter(kecNama);
     }
 
     function refitAll() {
@@ -405,11 +465,11 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       GEOCODING  (Nominatim, bounded to Samarinda, cached)
+       GEOCODING  (Nominatim per-kelurahan, cached by kode)
        ═══════════════════════════════════════════════════════════ */
-    function loadCache()     { try { return JSON.parse(localStorage.getItem(GEO_CACHE_KEY) || '{}'); } catch { return {}; } }
-    function saveCache(c)    { try { localStorage.setItem(GEO_CACHE_KEY, JSON.stringify(c)); } catch {} }
-    function clearGeoCache() { try { localStorage.removeItem(GEO_CACHE_KEY); } catch {} }
+    function loadKelCache()     { try { return JSON.parse(localStorage.getItem(KEL_CACHE_KEY) || '{}'); } catch { return {}; } }
+    function saveKelCache(c)    { try { localStorage.setItem(KEL_CACHE_KEY, JSON.stringify(c)); } catch {} }
+    function clearGeoCache()    { try { localStorage.removeItem(KEL_CACHE_KEY); } catch {} }
 
     async function nominatimSearch(query) {
         try {
@@ -423,16 +483,28 @@
         } catch { return null; }
     }
 
+    /*
+     * Geocodes every kelurahan individually via Nominatim.
+     * Results cached per kelurahan.kode in localStorage.
+     * On force=true the cache is cleared and all are re-fetched.
+     */
     async function doGeocode(force) {
-        const cache   = force ? {} : loadCache();
-        const toFetch = groupKeys.filter(id => !cache[id]);
+        const cache = force ? {} : loadKelCache();
 
-        /* Apply cached positions immediately */
-        groupKeys.forEach(function (id) {
-            if (cache[id]) {
-                centerMap[id] = cache[id];
-                repositionMarkers(id, groupData[id].kec.nama);
-            }
+        /* Build list of kelurahan that still need geocoding */
+        const toFetch = [];
+        groupKeys.forEach(function (kecId) {
+            const grp = groupData[kecId];
+            grp.items.forEach(function (item) {
+                if (cache[item.kode]) {
+                    /* Apply cached coordinate immediately */
+                    if (markerMap[item.kode]) {
+                        markerMap[item.kode].setLatLng([cache[item.kode].lat, cache[item.kode].lng]);
+                    }
+                } else {
+                    toFetch.push({ item: item, kecNama: grp.kec.nama });
+                }
+            });
         });
 
         if (!toFetch.length) { refitAll(); return; }
@@ -442,26 +514,35 @@
         const $txt  = $('#geoProgressText');
 
         for (let i = 0; i < toFetch.length; i++) {
-            const kecId  = toFetch[i];
-            const kecObj = groupData[kecId].kec;
-            $txt.text('Memperbarui koordinat (' + (i + 1) + '/' + toFetch.length + '): ' + titleCase(kecObj.nama) + '…');
+            const { item, kecNama } = toFetch[i];
+            $txt.text('Geocoding kelurahan (' + (i + 1) + '/' + toFetch.length + '): ' + titleCase(item.nama) + '…');
             $fill.css('width', ((i + 1) / toFetch.length * 100) + '%');
 
-            /* Query uses actual kecamatan name from DB, bounded to Samarinda */
-            const query  = 'Kecamatan ' + titleCase(kecObj.nama) + ' Kota Samarinda Kalimantan Timur';
-            const result = await nominatimSearch(query);
+            /* Try specific query first, then broader fallback */
+            const queries = [
+                'Kelurahan ' + titleCase(item.nama) + ' Kecamatan ' + titleCase(kecNama) + ' Kota Samarinda Kalimantan Timur',
+                titleCase(item.nama) + ' Samarinda Kalimantan Timur Indonesia',
+            ];
 
-            if (result) {
-                const coord  = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) };
-                cache[kecId] = coord;
-                centerMap[kecId] = coord;
-                repositionMarkers(kecId, kecObj.nama);
+            let result = null;
+            for (const q of queries) {
+                result = await nominatimSearch(q);
+                if (result) break;
+                if (q !== queries[queries.length - 1]) await sleep(1100);
             }
 
-            if (i < toFetch.length - 1) await sleep(1200);
+            if (result) {
+                const coord = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) };
+                cache[item.kode] = coord;
+                if (markerMap[item.kode]) {
+                    markerMap[item.kode].setLatLng([coord.lat, coord.lng]);
+                }
+            }
+
+            if (i < toFetch.length - 1) await sleep(1100);
         }
 
-        saveCache(cache);
+        saveKelCache(cache);
         $('#geoProgressWrap').fadeOut(400);
         refitAll();
     }
@@ -615,7 +696,6 @@
         groupKeys.forEach(function (kecId) {
             const grp    = groupData[kecId];
             const col    = getColor(kecId);
-            const center = getCenter(kecId, grp.kec.nama);
 
             tbody.append(
                 '<tr class="kec-header" data-kec="' + kecId + '">' +
@@ -628,8 +708,9 @@
                 '</td></tr>'
             );
 
-            grp.items.forEach(function (item, idx) {
-                const c   = spiralCoord(center, idx, grp.items.length);
+            grp.items.forEach(function (item) {
+                /* Place marker at preset coordinate or kecamatan centroid (no spiral) */
+                const c   = getKelInitCoord(item.nama, grp.kec.nama);
                 const $tr = $(
                     '<tr class="kel-row" data-kode="' + item.kode + '" data-kec="' + kecId + '">' +
                     '<td><span class="kode-badge">' + item.kode + '</span></td>' +
@@ -685,7 +766,7 @@
         };
         legend.addTo(map);
 
-        /* Start geocoding in background */
+        /* Start per-kelurahan geocoding in background; cached results applied immediately */
         doGeocode(false);
     }
 
@@ -719,7 +800,7 @@
             $('#kelurahanTbody tr.active-row').removeClass('active-row');
         });
 
-        /* Perbarui Koordinat — clear cache then re-geocode */
+        /* Perbarui Koordinat — clear per-kelurahan cache then re-geocode */
         $('#btnRefreshGeo').on('click', function () {
             clearGeoCache();
             doGeocode(true);

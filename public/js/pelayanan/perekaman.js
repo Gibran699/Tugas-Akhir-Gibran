@@ -100,14 +100,15 @@
                 detailsTable.append(`<tr><td colspan="3" class="text-center text-muted">Tidak ada data petugas.</td></tr>`);
             } else {
                 users.forEach((user) => {
-                    let percentage = total > 0
-                        ? ((user.count / total) * 100).toFixed(2) + "%"
-                        : "0%";
+                    const pctStr = (total > 0
+                        ? ((user.count / total) * 100).toFixed(2)
+                        : '0.00') + '%';
+                    const pctPadded = pctStr.padStart(7);
                     detailsTable.append(`
                         <tr>
                             <td>${user.username}</td>
                             <td>${user.count}</td>
-                            <td>${percentage}</td>
+                            <td><code class="pct-cell">${pctPadded}</code></td>
                         </tr>
                     `);
                 });

@@ -63,6 +63,7 @@ class UserController extends Controller
         $data = User::join('data_pengguna', 'data_pengguna.user_id', '=', 'users.id')
             ->select(
                 'users.id',
+                'users.is_active',
                 'data_pengguna.nik',
                 'data_pengguna.nama',
                 'data_pengguna.contact',
@@ -160,9 +161,35 @@ class UserController extends Controller
                 'instansi' => $dataPengguna->instansi,
                 'nama_instansi' => $dataPengguna->nama_instansi,
                 'role_names' => $roleNames->first(),
+                'is_active' => $user->is_active,
             ];
             
             return response()->json($data, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Proses gagal: ' . $e->getMessage()], 500);
+        }
+    }
+
+    function toggleStatus($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            // Admin cannot deactivate themselves
+            if (auth()->id() === $user->id) {
+                return response()->json(['message' => 'Tidak dapat mengubah status akun sendiri.'], 403);
+            }
+
+            $user->is_active = !$user->is_active;
+            $user->save();
+
+            $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
+            return response()->json([
+                'message'   => "User berhasil {$status}.",
+                'is_active' => $user->is_active,
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         } catch (Exception $e) {

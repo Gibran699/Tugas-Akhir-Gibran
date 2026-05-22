@@ -31,46 +31,6 @@
                         </a>
                     </div>
                     <div class="col-xl-4 col-md-6">
-                        <a href="{{ route('index_rumah_data', ['codeView' => 'aB3x9LpQrT']) }}" class="text-decoration-none">
-                            <div class="service-card card">
-                                <div class="service-card-header">
-                                    <div class="service-icon-wrap icon-bg-green">
-                                        <i class="fas fa-file-circle-check"></i>
-                                    </div>
-                                    <h6 class="service-card-title">Pelayanan Capil</h6>
-                                </div>
-                                <div class="service-card-body">
-                                    Data pelayanan dari PDAK untuk semua kategori pelayanan Catatan Sipil
-                                </div>
-                                <div class="service-card-footer card-footer border-0">
-                                    <span class="btn btn-service-open btn-open-green">
-                                        <i class="fas fa-arrow-up-right-from-square me-2"></i>Buka Data
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <a href="{{ route('index_rumah_data', ['codeView' => '7yZk8WvNmD']) }}" class="text-decoration-none">
-                            <div class="service-card card">
-                                <div class="service-card-header">
-                                    <div class="service-icon-wrap icon-bg-orange">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <h6 class="service-card-title">Pelayanan Dafduk</h6>
-                                </div>
-                                <div class="service-card-body">
-                                    Data pelayanan dari PDAK untuk semua kategori pelayanan Pendaftaran Penduduk
-                                </div>
-                                <div class="service-card-footer card-footer border-0">
-                                    <span class="btn btn-service-open btn-open-orange">
-                                        <i class="fas fa-arrow-up-right-from-square me-2"></i>Buka Data
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
                         <a href="{{ route('index_rumah_data', ['codeView' => '7fK97qB2ax']) }}" class="text-decoration-none">
                             <div class="service-card card">
                                 <div class="service-card-header">

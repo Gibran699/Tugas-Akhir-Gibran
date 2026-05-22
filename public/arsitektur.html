@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Metafor Model Arsitektur – Rumah Data 2.0</title>
+<style>
+  :root {
+    --blue-dark:   #1a2f5e;
+    --blue-mid:    #1e4fa3;
+    --blue-light:  #3b82f6;
+    --cyan:        #06b6d4;
+    --teal:        #0d9488;
+    --green:       #16a34a;
+    --amber:       #d97706;
+    --red:         #dc2626;
+    --purple:      #7c3aed;
+    --bg:          #f0f4f8;
+    --white:       #ffffff;
+    --gray-light:  #e2e8f0;
+    --gray:        #94a3b8;
+    --text:        #1e293b;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, var(--cyan) 100%);
+    color: var(--white);
+    padding: 40px 48px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content:'';
+    position:absolute; top:-60px; right:-60px;
+    width:300px; height:300px;
+    background: rgba(255,255,255,0.05);
+    border-radius:50%;
+  }
+  header .badge {
+    display:inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  header h1 { font-size: 32px; font-weight: 800; line-height:1.2; margin-bottom:8px; }
+  header p  { font-size: 15px; opacity: .75; max-width: 640px; line-height:1.6; }
+
+  /* ── MAIN CONTAINER ── */
+  .container { max-width: 1300px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    display:flex; align-items:center; gap:12px;
+    font-size:20px; font-weight:700; color: var(--blue-dark);
+    margin: 48px 0 24px;
+  }
+  .section-title .icon {
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .section-title .line {
+    flex:1; height:2px; border-radius:2px;
+    background: linear-gradient(90deg, var(--blue-light), transparent);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+  }
+  .card h3 {
+    font-size:15px; font-weight:700; color:var(--blue-dark);
+    margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+
+  /* ── METAPHOR BOX ── */
+  .metaphor-box {
+    background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+    border: 2px dashed var(--blue-light);
+    border-radius:16px; padding:28px 32px; margin-bottom:28px;
+    display:flex; gap:20px; align-items:flex-start;
+  }
+  .metaphor-box .big-icon { font-size:64px; flex-shrink:0; line-height:1; }
+  .metaphor-box h3 { font-size:18px; font-weight:800; color:var(--blue-dark); margin-bottom:10px; }
+  .metaphor-box p  { font-size:14px; color:#475569; line-height:1.7; }
+  .metaphor-box ul { padding-left:18px; }
+  .metaphor-box li { font-size:13px; color:#475569; line-height:1.8; }
+
+  /* ── LAYER DIAGRAM ── */
+  .layers-wrapper { display:flex; flex-direction:column; gap:0; }
+  .layer-row {
+    display:flex; align-items:stretch; border-radius:0;
+    position:relative;
+  }
+  .layer-row:first-child { border-radius:14px 14px 0 0; }
+  .layer-row:last-child  { border-radius:0 0 14px 14px; }
+
+  .layer-label {
+    width:160px; flex-shrink:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:18px 12px; gap:6px;
+    font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+    color:var(--white); text-align:center;
+  }
+  .layer-label .licon { font-size:26px; }
+
+  .layer-content {
+    flex:1; border-left:3px solid rgba(255,255,255,.3);
+    padding:16px 20px;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    background: rgba(255,255,255,0.07);
+  }
+
+  /* Layer colors */
+  .l-presentation { background: var(--blue-mid); }
+  .l-routing      { background: var(--cyan);       color:var(--blue-dark) !important; }
+  .l-routing .layer-label { color:var(--blue-dark); }
+  .l-middleware   { background: var(--amber); }
+  .l-middleware .layer-label { color:var(--blue-dark); }
+  .l-controller   { background: var(--blue-light); }
+  .l-service      { background: var(--purple); }
+  .l-import       { background: var(--teal); }
+  .l-model        { background: var(--green); }
+  .l-database     { background: var(--blue-dark); }
+
+  .chip {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius:8px; padding:5px 10px;
+    font-size:12px; font-weight:600; color:var(--white);
+    white-space:nowrap;
+  }
+  .chip-dark {
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius:8px; padding:5px 10px;
+    font-size:12px; font-weight:600; color:var(--blue-dark);
+    white-space:nowrap;
+  }
+
+  /* Arrow between layers */
+  .layer-arrow {
+    display:flex; justify-content:center; align-items:center;
+    height:28px; background: var(--bg);
+    color: var(--gray); font-size:20px;
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-diagram {
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:0;
+  }
+  .flow-node {
+    width:100%; max-width:820px;
+    background:var(--white);
+    border-radius:12px;
+    padding:14px 20px;
+    display:flex; align-items:center; gap:14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    position:relative;
+    margin-bottom:0;
+  }
+  .flow-node .fn-icon {
+    width:44px; height:44px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; flex-shrink:0;
+  }
+  .flow-node .fn-title  { font-size:14px; font-weight:700; color:var(--blue-dark); }
+  .flow-node .fn-sub    { font-size:12px; color:var(--gray); margin-top:2px; }
+  .flow-connector {
+    width:3px; height:30px; background:var(--blue-light);
+    margin:0 auto;
+    position:relative;
+  }
+  .flow-connector::after {
+    content:'▼';
+    position:absolute; bottom:-10px; left:50%;
+    transform:translateX(-50%);
+    color:var(--blue-light); font-size:12px;
+  }
+
+  /* ── COMPONENT GRID ── */
+  .comp-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap:16px;
+  }
+  .comp-card {
+    border-radius:12px; padding:18px;
+    border-left:4px solid;
+  }
+  .comp-card h4 { font-size:13px; font-weight:700; margin-bottom:8px; }
+  .comp-card ul { padding-left:14px; }
+  .comp-card li { font-size:12px; line-height:1.9; color:#475569; }
+
+  /* ── ALTERNATIVE TABLE ── */
+  .alt-grid {
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px;
+  }
+  .alt-card {
+    border-radius:14px; overflow:hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  }
+  .alt-header {
+    padding:18px 20px;
+    color:var(--white);
+  }
+  .alt-header .alt-num  { font-size:28px; font-weight:900; opacity:.4; line-height:1; }
+  .alt-header h4        { font-size:16px; font-weight:800; margin-top:2px; }
+  .alt-header p         { font-size:12px; opacity:.8; margin-top:4px; }
+  .alt-body             { padding:18px 20px; background:var(--white); }
+  .alt-body .pro        { color:var(--green); font-weight:700; font-size:12px; margin-bottom:6px; }
+  .alt-body .con        { color:var(--red);   font-weight:700; font-size:12px; margin-bottom:6px; margin-top:10px; }
+  .alt-body li          { font-size:12px; color:#475569; line-height:1.8; padding-left:14px; }
+  .alt-body .verdict    {
+    margin-top:12px; padding:8px 12px; border-radius:8px;
+    font-size:12px; font-weight:700;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  /* ── SVG BUILDING DIAGRAM ── */
+  .svg-wrap { display:flex; justify-content:center; margin:8px 0 0; }
+
+  /* ── DECISION TABLE ── */
+  table.decision {
+    width:100%; border-collapse:collapse; font-size:13px;
+  }
+  table.decision thead tr { background:var(--blue-dark); color:var(--white); }
+  table.decision th { padding:12px 16px; text-align:left; font-weight:700; }
+  table.decision tbody tr:nth-child(even) { background:#f8fafc; }
+  table.decision td { padding:11px 16px; border-bottom:1px solid var(--gray-light); vertical-align:top; }
+  table.decision td:first-child { font-weight:700; color:var(--blue-mid); width:220px; }
+  .tag {
+    display:inline-block; padding:2px 8px; border-radius:12px;
+    font-size:11px; font-weight:700;
+  }
+  .tag-green  { background:#dcfce7; color:var(--green); }
+  .tag-blue   { background:#dbeafe; color:var(--blue-mid); }
+  .tag-amber  { background:#fef3c7; color:var(--amber); }
+  .tag-purple { background:#ede9fe; color:var(--purple); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align:center; padding:32px;
+    font-size:12px; color:var(--gray);
+    border-top:1px solid var(--gray-light);
+    margin-top:32px;
+  }
+
+  @media(max-width:900px){
+    .alt-grid { grid-template-columns:1fr; }
+    header { padding:28px 24px 24px; }
+    .container { padding:24px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="badge">XP Architecture Modelling</div>
+  <h1>🏛️ Metafor Model Arsitektur<br/>Rumah Data 2.0</h1>
+  <p>Arsitektur sistem didefinisikan sebagai serangkaian keputusan yang menentukan struktur dan perilaku sistem.
+     Dalam metode XP, model ini dibuat untuk mempertimbangkan berbagai solusi alternatif sebelum implementasi dilakukan.</p>
+</header>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════ 1. METAFOR -->
+  <div class="section-title">
+    <div class="icon" style="background:#dbeafe">💡</div>
+    1. Metafor Sistem
+    <div class="line"></div>
+  </div>
+
+  <div class="metaphor-box">
+    <div class="big-icon">🏢</div>
+    <div>
+      <h3>Rumah Data sebagai Kantor Dinas Kependudukan Digital</h3>
+      <p>Sistem ini dapat dimetaforkan sebagai sebuah <strong>gedung kantor pemerintahan digital</strong> yang melayani kebutuhan data kependudukan secara terpusat.</p>
+      <ul style="margin-top:10px;">
+        <li>🚪 <strong>Pintu Masuk (Login + Middleware)</strong> — pos keamanan yang memverifikasi identitas & hak akses petugas</li>
+        <li>🗺️ <strong>Papan Petunjuk (Routes)</strong> — mengarahkan setiap permintaan ke ruangan / layanan yang tepat</li>
+        <li>👨‍💼 <strong>Petugas Layanan (Controllers)</strong> — memproses setiap permintaan yang masuk dari pengguna</li>
+        <li>📁 <strong>Ruang Arsip (Models + Database)</strong> — menyimpan & mengambil data resmi kependudukan</li>
+        <li>📋 <strong>Loket Tampilan (Blade Views)</strong> — antarmuka yang dilihat oleh pengguna</li>
+        <li>📥 <strong>Bagian Penerimaan Berkas (Import)</strong> — menerima data Excel dari sumber eksternal</li>
+        <li>🔌 <strong>Sambungan Eksternal (Services / API)</strong> — penghubung ke sistem luar (KTP, Perekaman)</li>
+        <li>🔑 <strong>Buku Induk Pegawai (Role + Permission)</strong> — menentukan siapa yang boleh mengakses ruangan apa</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 2. LAYER -->
+  <div class="section-title">
+    <div class="icon" style="background:#ede9fe">🧱</div>
+    2. Model Arsitektur Berlapis (Layered Architecture)
+    <div class="line"></div>
+  </div>
+
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div class="layers-wrapper">
+
+      <!-- Presentation -->
+      <div class="layer-row l-presentation">
+        <div class="layer-label">
+          <span class="licon">🖥️</span>
+          Presentation<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">auth / login</span>
+          <span class="chip">dashboard</span>
+          <span class="chip">agregat_dkb (19 views)</span>
+          <span class="chip">kepemilikan (8 views)</span>
+          <span class="chip">struktur_umur (16 views)</span>
+          <span class="chip">laporan_pelayanan</span>
+          <span class="chip">pengaturan</span>
+          <span class="chip">elements / layout</span>
+          <span class="chip">CSS & JS Assets</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Routing -->
+      <div class="layer-row l-routing">
+        <div class="layer-label">
+          <span class="licon">🗺️</span>
+          Routing<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip-dark">web.php</span>
+          <span class="chip-dark">api.php</span>
+          <span class="chip-dark">Route::middleware(['auth','user.active'])</span>
+          <span class="chip-dark">Route::resource (role, user)</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Middleware -->
+      <div class="layer-row l-middleware">
+        <div class="layer-label">
+          <span class="licon">🔒</span>
+          Middleware<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip-dark">Authenticate</span>
+          <span class="chip-dark">CheckUserActive</span>
+          <span class="chip-dark">RedirectIfAuthenticated</span>
+          <span class="chip-dark">VerifyCsrfToken</span>
+          <span class="chip-dark">spatie/permission</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Controller -->
+      <div class="layer-row l-controller">
+        <div class="layer-label">
+          <span class="licon">⚙️</span>
+          Controller<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">Auth\MainController</span>
+          <span class="chip">MainController</span>
+          <span class="chip">System\MainController</span>
+          <span class="chip">CalculateDataController</span>
+          <span class="chip">RoleController</span>
+          <span class="chip">UserController</span>
+          <span class="chip">WilayahController</span>
+          <span class="chip">API Controller</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Service -->
+      <div class="layer-row l-service">
+        <div class="layer-label">
+          <span class="licon">🔌</span>
+          Service<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">ExternalApiService</span>
+          <span class="chip">KtpApiService</span>
+          <span class="chip">perekamanService</span>
+          <span class="chip">Guzzle HTTP Client</span>
+          <span class="chip">Laravel Passport / Sanctum (API Auth)</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Import -->
+      <div class="layer-row l-import">
+        <div class="layer-label">
+          <span class="licon">📥</span>
+          Import<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">Maatwebsite Excel 3.1</span>
+          <span class="chip">45 Import Classes</span>
+          <span class="chip">Penduduk / KK / Disabilitas</span>
+          <span class="chip">Kepemilikan Dokumen</span>
+          <span class="chip">Struktur Umur</span>
+          <span class="chip">Laporan Kinerja (Capil & Dafduk)</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Model -->
+      <div class="layer-row l-model">
+        <div class="layer-label">
+          <span class="licon">📦</span>
+          Domain<br/>Model Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">AgregatDKB (Penduduk, KK, Pendidikan, Disabilitas, StatusKawin)</span>
+          <span class="chip">Kepemilikan (KTP, KK, Akta, KIA)</span>
+          <span class="chip">StrukturUmur (Agama, Disabilitas, GolDarah, KK, Penduduk)</span>
+          <span class="chip">LaporanKinerjaFormatPdak</span>
+          <span class="chip">User · Role · Permission · DataPengguna</span>
+          <span class="chip">WilayahKecamatan · WilayahKelurahan</span>
+        </div>
+      </div>
+
+      <div class="layer-arrow">↓</div>
+
+      <!-- Database -->
+      <div class="layer-row l-database">
+        <div class="layer-label">
+          <span class="licon">🗄️</span>
+          Data<br/>Layer
+        </div>
+        <div class="layer-content">
+          <span class="chip">MySQL Database</span>
+          <span class="chip">58 Migration Files</span>
+          <span class="chip">Eloquent ORM</span>
+          <span class="chip">rumahdata.sql (20 MB)</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 3. INTERACTION FLOW -->
+  <div class="section-title">
+    <div class="icon" style="background:#d1fae5">🔄</div>
+    3. Alur Interaksi Sistem (Request–Response Flow)
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="flow-diagram">
+
+      <div class="flow-node" style="border-left:4px solid #1e4fa3;">
+        <div class="fn-icon" style="background:#dbeafe;">👤</div>
+        <div>
+          <div class="fn-title">Pengguna / Browser</div>
+          <div class="fn-sub">Mengakses URL aplikasi melalui browser</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <div class="flow-node" style="border-left:4px solid #06b6d4;">
+        <div class="fn-icon" style="background:#cffafe;">🗺️</div>
+        <div>
+          <div class="fn-title">Laravel Router (web.php / api.php)</div>
+          <div class="fn-sub">Mencocokkan URL dengan route yang terdaftar — memutuskan controller mana yang dipanggil</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <div class="flow-node" style="border-left:4px solid #d97706;">
+        <div class="fn-icon" style="background:#fef3c7;">🔒</div>
+        <div>
+          <div class="fn-title">Middleware Stack</div>
+          <div class="fn-sub">Authenticate → CheckUserActive → VerifyCsrfToken → spatie/permission (can:pengaturan)</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <div class="flow-node" style="border-left:4px solid #3b82f6;">
+        <div class="fn-icon" style="background:#eff6ff;">⚙️</div>
+        <div>
+          <div class="fn-title">Controller</div>
+          <div class="fn-sub">Menerima request, memanggil model/service, menyiapkan data untuk view</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <!-- Fork: Model vs Service -->
+      <div style="width:100%; max-width:820px; display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:0;">
+        <div class="flow-node" style="border-left:4px solid #16a34a; max-width:100%;">
+          <div class="fn-icon" style="background:#dcfce7;">📦</div>
+          <div>
+            <div class="fn-title">Eloquent Model</div>
+            <div class="fn-sub">Query database via ORM — read / write data kependudukan</div>
+          </div>
+        </div>
+        <div class="flow-node" style="border-left:4px solid #7c3aed; max-width:100%;">
+          <div class="fn-icon" style="background:#ede9fe;">🔌</div>
+          <div>
+            <div class="fn-title">External Service</div>
+            <div class="fn-sub">KtpApiService / perekamanService / ExternalApiService</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <div class="flow-node" style="border-left:4px solid #1a2f5e;">
+        <div class="fn-icon" style="background:#e0e7ff;">🗄️</div>
+        <div>
+          <div class="fn-title">MySQL Database</div>
+          <div class="fn-sub">Penyimpanan data kependudukan — 58 tabel terdefinisi via migration</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+
+      <div class="flow-node" style="border-left:4px solid #1e4fa3;">
+        <div class="fn-icon" style="background:#dbeafe;">🖥️</div>
+        <div>
+          <div class="fn-title">Blade View</div>
+          <div class="fn-sub">Render HTML final → dikembalikan ke browser pengguna sebagai halaman web</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 4. KOMPONEN -->
+  <div class="section-title">
+    <div class="icon" style="background:#fef3c7">🧩</div>
+    4. Peta Komponen Sistem
+    <div class="line"></div>
+  </div>
+
+  <div class="comp-grid">
+
+    <div class="comp-card" style="border-color:#1e4fa3; background:#f8faff;">
+      <h4 style="color:#1e4fa3;">🔐 Autentikasi & Akses</h4>
+      <ul>
+        <li>Auth\MainController (login, logout, ganti password)</li>
+        <li>Middleware: Authenticate, CheckUserActive</li>
+        <li>Session-based authentication</li>
+        <li>spatie/laravel-permission (Role & Permission)</li>
+        <li>Laravel Passport (API token)</li>
+        <li>Laravel Sanctum (SPA auth)</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#06b6d4; background:#f0fdff;">
+      <h4 style="color:#0891b2;">📊 Dashboard & Navigasi</h4>
+      <ul>
+        <li>MainController → dataDashboard (JSON)</li>
+        <li>Views: dashboard/ (6 views)</li>
+        <li>Code-based view routing (30+ view codes)</li>
+        <li>Sidebar navigasi dinamis</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#0d9488; background:#f0fdf9;">
+      <h4 style="color:#0d9488;">📥 Import Data</h4>
+      <ul>
+        <li>Maatwebsite Excel 3.1</li>
+        <li>45 class import terdedikasi</li>
+        <li>Import Agregat DKB (5 kategori)</li>
+        <li>Import Kepemilikan Dokumen (8 jenis)</li>
+        <li>Import Struktur Umur (16 jenis)</li>
+        <li>Import Laporan Kinerja Pdak (2 format)</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#16a34a; background:#f0fdf4;">
+      <h4 style="color:#16a34a;">📦 Domain Model – Data Statistik</h4>
+      <ul>
+        <li>AgregatDKB: Penduduk, KK, Pendidikan, Disabilitas, StatusKawin</li>
+        <li>Kepemilikan: KTP, KK, AktaKelahiran, AktaKawin, AktaCerai, KIA</li>
+        <li>StrukturUmur: berdasarkan Agama, Disabilitas, GolDarah, Usia</li>
+        <li>LaporanKinerjaFormatPdak (Capil & Dafduk)</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#7c3aed; background:#faf5ff;">
+      <h4 style="color:#7c3aed;">🔌 Integrasi Eksternal</h4>
+      <ul>
+        <li>ExternalApiService (Guzzle HTTP)</li>
+        <li>KtpApiService (verifikasi KTP)</li>
+        <li>perekamanService</li>
+        <li>API endpoint: api.php</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#d97706; background:#fffbeb;">
+      <h4 style="color:#d97706;">👥 Manajemen Pengguna & Wilayah</h4>
+      <ul>
+        <li>UserController (CRUD + toggle status)</li>
+        <li>RoleController (CRUD)</li>
+        <li>PermissionController</li>
+        <li>WilayahController (kecamatan & kelurahan)</li>
+        <li>Model: User, Role, Permission, DataPengguna</li>
+        <li>Model: WilayahKecamatan, WilayahKelurahan</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#3b82f6; background:#eff6ff;">
+      <h4 style="color:#3b82f6;">⚙️ Kalkulasi & Pengolahan Data</h4>
+      <ul>
+        <li>CalculateDataController (151 KB — logika terbesar)</li>
+        <li>System\MainController (search data, import trigger)</li>
+        <li>Proses agregasi dari data DKB</li>
+      </ul>
+    </div>
+
+    <div class="comp-card" style="border-color:#1a2f5e; background:#f1f5f9;">
+      <h4 style="color:#1a2f5e;">🗄️ Infrastruktur Data</h4>
+      <ul>
+        <li>MySQL (via XAMPP)</li>
+        <li>Eloquent ORM (Laravel 10)</li>
+        <li>58 migration files</li>
+        <li>Database seeder & factory</li>
+        <li>rumahdata.sql (20 MB data)</li>
+        <li>Docker support (docker-compose.yml)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 5. ALTERNATIF ARSITEKTUR -->
+  <div class="section-title">
+    <div class="icon" style="background:#fee2e2">⚖️</div>
+    5. Pertimbangan Solusi Alternatif Arsitektur (XP)
+    <div class="line"></div>
+  </div>
+
+  <div class="alt-grid">
+
+    <!-- ALT 1 -->
+    <div class="alt-card">
+      <div class="alt-header" style="background:linear-gradient(135deg,#1e4fa3,#3b82f6);">
+        <div class="alt-num">01</div>
+        <h4>Monolithic Laravel MVC</h4>
+        <p>Seluruh sistem dalam satu aplikasi Laravel</p>
+      </div>
+      <div class="alt-body">
+        <div>
+          <svg width="100%" height="130" viewBox="0 0 260 130">
+            <rect x="80" y="5"  width="100" height="30" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="130" y="25" text-anchor="middle" fill="#1e4fa3" font-size="11" font-weight="700">Blade View</text>
+            <line x1="130" y1="35" x2="130" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+            <rect x="80" y="52" width="100" height="30" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="130" y="72" text-anchor="middle" fill="#7c3aed" font-size="11" font-weight="700">Controller</text>
+            <line x1="130" y1="82" x2="130" y2="99" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+            <rect x="80" y="99" width="100" height="25" rx="6" fill="#d1fae5" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="130" y="116" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">Model → DB</text>
+            <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/></marker></defs>
+          </svg>
+        </div>
+        <p class="pro">✅ Kelebihan</p>
+        <ul>
+          <li>Sederhana dan cepat dikembangkan</li>
+          <li>Deployment mudah (satu server)</li>
+          <li>Cocok untuk tim kecil XP</li>
+          <li>Debugging lebih mudah</li>
+        </ul>
+        <p class="con">⚠️ Kekurangan</p>
+        <ul>
+          <li>Skalabilitas terbatas</li>
+          <li>Controller bisa menjadi sangat besar</li>
+        </ul>
+        <div class="verdict" style="background:#dcfce7; color:#16a34a;">
+          ✅ Digunakan saat ini — paling sesuai
+        </div>
+      </div>
+    </div>
+
+    <!-- ALT 2 -->
+    <div class="alt-card">
+      <div class="alt-header" style="background:linear-gradient(135deg,#0d9488,#06b6d4);">
+        <div class="alt-num">02</div>
+        <h4>Modular Monolith</h4>
+        <p>Modul terpisah dalam satu aplikasi Laravel</p>
+      </div>
+      <div class="alt-body">
+        <div>
+          <svg width="100%" height="130" viewBox="0 0 260 130">
+            <rect x="5"   y="10" width="70" height="50" rx="6" fill="#cffafe" stroke="#06b6d4" stroke-width="1.5"/>
+            <text x="40" y="30" text-anchor="middle" fill="#0891b2" font-size="9"  font-weight="700">Modul</text>
+            <text x="40" y="43" text-anchor="middle" fill="#0891b2" font-size="9">Agregat</text>
+            <text x="40" y="55" text-anchor="middle" fill="#0891b2" font-size="9">DKB</text>
+            <rect x="95"  y="10" width="70" height="50" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+            <text x="130" y="30" text-anchor="middle" fill="#92400e" font-size="9"  font-weight="700">Modul</text>
+            <text x="130" y="43" text-anchor="middle" fill="#92400e" font-size="9">Kepemilikan</text>
+            <rect x="185" y="10" width="70" height="50" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="220" y="30" text-anchor="middle" fill="#6d28d9" font-size="9"  font-weight="700">Modul</text>
+            <text x="220" y="43" text-anchor="middle" fill="#6d28d9" font-size="9">Struktur</text>
+            <text x="220" y="55" text-anchor="middle" fill="#6d28d9" font-size="9">Umur</text>
+            <line x1="40" y1="60" x2="130" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="130" y1="60" x2="130" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="220" y1="60" x2="130" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
+            <rect x="65" y="90" width="130" height="30" rx="6" fill="#d1fae5" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="130" y="110" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">Database</text>
+          </svg>
+        </div>
+        <p class="pro">✅ Kelebihan</p>
+        <ul>
+          <li>Setiap modul dapat dikembangkan mandiri</li>
+          <li>Mudah menambah modul baru</li>
+          <li>Test lebih terarah per modul</li>
+        </ul>
+        <p class="con">⚠️ Kekurangan</p>
+        <ul>
+          <li>Memerlukan struktur folder yang disiplin</li>
+          <li>Overhead awal lebih tinggi</li>
+        </ul>
+        <div class="verdict" style="background:#fef3c7; color:#d97706;">
+          🔄 Rekomendasi untuk pengembangan lanjutan
+        </div>
+      </div>
+    </div>
+
+    <!-- ALT 3 -->
+    <div class="alt-card">
+      <div class="alt-header" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+        <div class="alt-num">03</div>
+        <h4>REST API + Frontend SPA</h4>
+        <p>Backend API Laravel + Frontend React/Vue</p>
+      </div>
+      <div class="alt-body">
+        <div>
+          <svg width="100%" height="130" viewBox="0 0 260 130">
+            <rect x="10"  y="15" width="100" height="40" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="60" y="32" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="700">Frontend SPA</text>
+            <text x="60" y="47" text-anchor="middle" fill="#7c3aed" font-size="9">(React / Vue)</text>
+            <rect x="150" y="15" width="100" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="200" y="32" text-anchor="middle" fill="#1e4fa3" font-size="10" font-weight="700">Laravel API</text>
+            <text x="200" y="47" text-anchor="middle" fill="#1e4fa3" font-size="9">(Sanctum/Passport)</text>
+            <line x1="110" y1="35" x2="150" y2="35" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr2)" marker-start="url(#arr3)"/>
+            <text x="130" y="30" text-anchor="middle" fill="#94a3b8" font-size="8">JSON</text>
+            <rect x="80" y="90" width="100" height="30" rx="6" fill="#d1fae5" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="130" y="110" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">MySQL Database</text>
+            <line x1="200" y1="55" x2="160" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
+            <defs>
+              <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/></marker>
+              <marker id="arr3" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto-start-reverse"><path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/></marker>
+            </defs>
+          </svg>
+        </div>
+        <p class="pro">✅ Kelebihan</p>
+        <ul>
+          <li>Frontend & backend bisa dikembangkan paralel</li>
+          <li>UI lebih responsif (SPA)</li>
+          <li>API bisa dipakai mobile app</li>
+        </ul>
+        <p class="con">⚠️ Kekurangan</p>
+        <ul>
+          <li>Kompleksitas tinggi — 2 codebase</li>
+          <li>Overhead autentikasi API (sudah ada Passport)</li>
+          <li>Kurang cocok untuk tim kecil XP saat ini</li>
+        </ul>
+        <div class="verdict" style="background:#fee2e2; color:#dc2626;">
+          🔮 Cocok untuk versi 3.0 ke depan
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 6. KEPUTUSAN ARSITEKTUR -->
+  <div class="section-title">
+    <div class="icon" style="background:#dcfce7">📋</div>
+    6. Keputusan Arsitektur Utama
+    <div class="line"></div>
+  </div>
+
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table class="decision">
+      <thead>
+        <tr>
+          <th>Keputusan</th>
+          <th>Pilihan yang Diambil</th>
+          <th>Dampak pada Struktur</th>
+          <th>Dampak pada Perilaku</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Framework Utama</td>
+          <td>Laravel 10 + PHP 8.1 (MVC)</td>
+          <td>app/Http, app/Models, resources/views terpisah jelas</td>
+          <td>Request mengalir melalui route → middleware → controller → model → view</td>
+          <td><span class="tag tag-green">✅ Final</span></td>
+        </tr>
+        <tr>
+          <td>Autentikasi Pengguna</td>
+          <td>Session-based Login + Middleware Guard</td>
+          <td>Auth\MainController, CheckUserActive, Authenticate middleware</td>
+          <td>Semua halaman terproteksi — redirect ke login jika belum auth</td>
+          <td><span class="tag tag-green">✅ Final</span></td>
+        </tr>
+        <tr>
+          <td>Otorisasi Hak Akses</td>
+          <td>spatie/laravel-permission (Role & Permission)</td>
+          <td>Model Role, Permission, tabel pivot di database</td>
+          <td>Fitur tertentu dapat di-lock berdasarkan role — can:pengaturan</td>
+          <td><span class="tag tag-green">✅ Final</span></td>
+        </tr>
+        <tr>
+          <td>Import Data Eksternal</td>
+          <td>Maatwebsite Excel 3.1 (45 class Import)</td>
+          <td>Folder app/Imports/ dengan 45 class terdedikasi per jenis data</td>
+          <td>Admin dapat upload file Excel → data masuk ke database secara terstruktur</td>
+          <td><span class="tag tag-green">✅ Final</span></td>
+        </tr>
+        <tr>
+          <td>Struktur Domain Model</td>
+          <td>Model dikelompokkan per kategori data (AgregatDKB, Kepemilikan, StrukturUmur)</td>
+          <td>Folder model hierarkis — mudah diperluas tanpa konflik nama</td>
+          <td>Query data lebih terarah dan semantik sesuai domain kependudukan</td>
+          <td><span class="tag tag-blue">🔄 Berkembang</span></td>
+        </tr>
+        <tr>
+          <td>Kalkulasi & Agregasi Data</td>
+          <td>CalculateDataController (dedicated, 151 KB)</td>
+          <td>Logika kalkulasi terpisah dari controller lain</td>
+          <td>Data statistik dapat dihitung ulang kapan saja dari data mentah</td>
+          <td><span class="tag tag-amber">⚠️ Perlu refactor</span></td>
+        </tr>
+        <tr>
+          <td>Integrasi API Eksternal</td>
+          <td>Service Layer (ExternalApiService, KtpApiService, perekamanService)</td>
+          <td>app/services/ sebagai abstraksi komunikasi eksternal</td>
+          <td>Controller tidak langsung memanggil HTTP — melalui service class</td>
+          <td><span class="tag tag-blue">🔄 Berkembang</span></td>
+        </tr>
+        <tr>
+          <td>API Endpoint Internal</td>
+          <td>Laravel Passport + Sanctum (dual auth)</td>
+          <td>api.php route, API Controller, token management</td>
+          <td>Memungkinkan akses data via API token untuk integrasi sistem lain</td>
+          <td><span class="tag tag-purple">🔮 Future-ready</span></td>
+        </tr>
+        <tr>
+          <td>Deployment & Infrastruktur</td>
+          <td>XAMPP (lokal) + Docker support (docker-compose + nginx)</td>
+          <td>Dockerfile, docker-compose.yml, nginx/ config tersedia</td>
+          <td>Aplikasi siap dipindahkan ke server production berbasis container</td>
+          <td><span class="tag tag-purple">🔮 Siap migrasi</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 7. ARSITEKTUR VISUAL GEDUNG -->
+  <div class="section-title">
+    <div class="icon" style="background:#fce7f3">🏛️</div>
+    7. Ilustrasi Metafor — Gedung Kantor Data Kependudukan
+    <div class="line"></div>
+  </div>
+
+  <div class="card">
+    <div class="svg-wrap">
+      <svg width="860" height="560" viewBox="0 0 860 560" font-family="Segoe UI,sans-serif">
+
+        <!-- Background sky -->
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#dbeafe"/>
+            <stop offset="100%" stop-color="#f0f9ff"/>
+          </linearGradient>
+          <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#bbf7d0"/>
+            <stop offset="100%" stop-color="#dcfce7"/>
+          </linearGradient>
+          <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+            <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.15)"/>
+          </filter>
+        </defs>
+
+        <!-- Sky -->
+        <rect x="0" y="0" width="860" height="440" fill="url(#sky)" rx="12"/>
+        <!-- Ground -->
+        <rect x="0" y="440" width="860" height="120" fill="url(#ground)" rx="12"/>
+
+        <!-- Road -->
+        <rect x="340" y="480" width="180" height="80" fill="#94a3b8" rx="4"/>
+        <rect x="425" y="485" width="10" height="15" fill="white" rx="2"/>
+        <rect x="425" y="510" width="10" height="15" fill="white" rx="2"/>
+        <rect x="425" y="535" width="10" height="15" fill="white" rx="2"/>
+
+        <!-- Main Building body -->
+        <rect x="130" y="120" width="600" height="320" fill="#1e4fa3" rx="10" filter="url(#shadow)"/>
+
+        <!-- Building ROOF / Pediment -->
+        <polygon points="130,120 430,40 730,120" fill="#1a2f5e"/>
+        <text x="430" y="90" text-anchor="middle" fill="white" font-size="16" font-weight="800">🏛️ RUMAH DATA 2.0</text>
+        <text x="430" y="110" text-anchor="middle" fill="#93c5fd" font-size="11">Sistem Informasi Data Kependudukan</text>
+
+        <!-- FLOOR LABELS on left -->
+        <text x="118" y="175" text-anchor="end" fill="#1e4fa3" font-size="11" font-weight="700">Lantai 5</text>
+        <text x="118" y="235" text-anchor="end" fill="#1e4fa3" font-size="11" font-weight="700">Lantai 4</text>
+        <text x="118" y="295" text-anchor="end" fill="#1e4fa3" font-size="11" font-weight="700">Lantai 3</text>
+        <text x="118" y="355" text-anchor="end" fill="#1e4fa3" font-size="11" font-weight="700">Lantai 2</text>
+        <text x="118" y="415" text-anchor="end" fill="#1e4fa3" font-size="11" font-weight="700">Lantai 1</text>
+
+        <!-- Floor separators -->
+        <line x1="130" y1="195" x2="730" y2="195" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="130" y1="255" x2="730" y2="255" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="130" y1="315" x2="730" y2="315" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="130" y1="375" x2="730" y2="375" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+        <!-- L5: Presentation Layer -->
+        <rect x="145" y="130" width="570" height="55" fill="rgba(59,130,246,0.3)" rx="6"/>
+        <text x="160" y="152" fill="white" font-size="13" font-weight="700">🖥️ Presentation Layer — Blade Views</text>
+        <text x="160" y="172" fill="#93c5fd" font-size="10">dashboard · agregat_dkb · kepemilikan · struktur_umur · laporan_pelayanan · auth · pengaturan</text>
+
+        <!-- L4: Routing + Middleware -->
+        <rect x="145" y="205" width="570" height="45" fill="rgba(6,182,212,0.25)" rx="6"/>
+        <text x="160" y="225" fill="white" font-size="13" font-weight="700">🗺️ Routing + 🔒 Middleware</text>
+        <text x="160" y="242" fill="#a5f3fc" font-size="10">web.php · api.php · Authenticate · CheckUserActive · VerifyCsrfToken · spatie/permission</text>
+
+        <!-- L3: Controller -->
+        <rect x="145" y="265" width="570" height="45" fill="rgba(99,102,241,0.3)" rx="6"/>
+        <text x="160" y="285" fill="white" font-size="13" font-weight="700">⚙️ Controller Layer</text>
+        <text x="160" y="302" fill="#c7d2fe" font-size="10">Auth · MainController · System (Calculate, Import, Search) · Role · User · Wilayah · API</text>
+
+        <!-- L2: Model + Service -->
+        <rect x="145" y="325" width="275" height="45" fill="rgba(16,163,74,0.3)" rx="6"/>
+        <text x="160" y="344" fill="white" font-size="13" font-weight="700">📦 Model / Domain</text>
+        <text x="160" y="361" fill="#a7f3d0" font-size="10">AgregatDKB · Kepemilikan · StrukturUmur · User</text>
+
+        <rect x="435" y="325" width="280" height="45" fill="rgba(124,58,237,0.3)" rx="6"/>
+        <text x="450" y="344" fill="white" font-size="13" font-weight="700">🔌 Service + Import</text>
+        <text x="450" y="361" fill="#ddd6fe" font-size="10">ExternalApi · KtpApi · perekaman · 45 Excel Import</text>
+
+        <!-- L1: Database (basement) -->
+        <rect x="145" y="385" width="570" height="48" fill="rgba(0,0,0,0.35)" rx="6"/>
+        <text x="160" y="407" fill="white" font-size="13" font-weight="700">🗄️ Data Layer — MySQL Database</text>
+        <text x="160" y="426" fill="#94a3b8" font-size="10">58 tabel · rumahdata.sql · Eloquent ORM · Migrations · Seeders</text>
+
+        <!-- Main Door -->
+        <rect x="370" y="436" width="120" height="64" fill="#1e3a8a" rx="4"/>
+        <rect x="380" y="436" width="50" height="64" fill="#1d4ed8" rx="3"/>
+        <rect x="435" y="436" width="50" height="64" fill="#1d4ed8" rx="3"/>
+        <!-- Door handle -->
+        <circle cx="432" cy="470" r="3" fill="#fbbf24"/>
+        <circle cx="428" cy="470" r="3" fill="#fbbf24"/>
+        <!-- Sign above door -->
+        <rect x="360" y="425" width="140" height="14" fill="#fbbf24" rx="3"/>
+        <text x="430" y="436" text-anchor="middle" fill="#1a2f5e" font-size="9" font-weight="800">LOGIN / MASUK</text>
+
+        <!-- Pillars -->
+        <rect x="145" y="420" width="18" height="20" fill="#93c5fd" rx="2"/>
+        <rect x="697" y="420" width="18" height="20" fill="#93c5fd" rx="2"/>
+
+        <!-- Cloud decorations -->
+        <ellipse cx="80"  cy="60" rx="45" ry="20" fill="white" opacity="0.7"/>
+        <ellipse cx="110" cy="55" rx="35" ry="18" fill="white" opacity="0.7"/>
+        <ellipse cx="760" cy="70" rx="50" ry="22" fill="white" opacity="0.7"/>
+        <ellipse cx="790" cy="65" rx="35" ry="18" fill="white" opacity="0.7"/>
+
+        <!-- User stick figure -->
+        <circle cx="430" cy="480" r="10" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+        <line x1="430" y1="490" x2="430" y2="520" stroke="#d97706" stroke-width="2.5"/>
+        <line x1="430" y1="500" x2="415" y2="510" stroke="#d97706" stroke-width="2.5"/>
+        <line x1="430" y1="500" x2="445" y2="510" stroke="#d97706" stroke-width="2.5"/>
+        <line x1="430" y1="520" x2="420" y2="540" stroke="#d97706" stroke-width="2.5"/>
+        <line x1="430" y1="520" x2="440" y2="540" stroke="#d97706" stroke-width="2.5"/>
+        <text x="430" y="555" text-anchor="middle" fill="#92400e" font-size="11" font-weight="700">Pengguna</text>
+
+      </svg>
+    </div>
+    <p style="text-align:center; font-size:12px; color:#94a3b8; margin-top:8px;">
+      Ilustrasi metafor "Gedung Kantor Data Kependudukan Digital" — setiap lantai mewakili lapisan arsitektur sistem
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 8. REKOMENDASI -->
+  <div class="section-title">
+    <div class="icon" style="background:#d1fae5">🎯</div>
+    8. Rekomendasi Model Arsitektur
+    <div class="line"></div>
+  </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#eff6ff,#f0fdf4); border:2px solid #3b82f6;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+      <div>
+        <h3 style="color:#1e4fa3; font-size:18px; margin-bottom:12px;">🏆 Monolithic Modular Laravel MVC</h3>
+        <p style="font-size:13px; color:#475569; line-height:1.8; margin-bottom:12px;">
+          Sistem tetap berada dalam satu aplikasi Laravel, namun setiap domain data dipisahkan menjadi
+          modul yang jelas. Struktur folder mengikuti domain: <code>Agregat DKB</code>, <code>Kepemilikan</code>,
+          <code>Struktur Umur</code>, dan <code>Laporan Pelayanan</code>.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="background:#dbeafe; border-radius:8px; padding:8px 12px; font-size:12px; color:#1e4fa3; font-weight:700;">
+            ✅ Sesuai dengan struktur project saat ini
+          </div>
+          <div style="background:#dcfce7; border-radius:8px; padding:8px 12px; font-size:12px; color:#16a34a; font-weight:700;">
+            ✅ Cocok dengan siklus iterasi XP yang pendek
+          </div>
+          <div style="background:#fef3c7; border-radius:8px; padding:8px 12px; font-size:12px; color:#d97706; font-weight:700;">
+            🔄 Siap dikembangkan ke modular tanpa perombakan besar
+          </div>
+          <div style="background:#ede9fe; border-radius:8px; padding:8px 12px; font-size:12px; color:#7c3aed; font-weight:700;">
+            🔮 API layer sudah tersedia untuk evolusi ke SPA
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:#1e4fa3; font-size:14px; margin-bottom:10px;">📌 Stack Teknologi yang Diputuskan</h3>
+        <table style="width:100%; font-size:12px; border-collapse:collapse;">
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Framework</td>
+            <td style="padding:6px; color:#1e293b;">Laravel 10 (PHP 8.1)</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Database</td>
+            <td style="padding:6px; color:#1e293b;">MySQL via Eloquent ORM</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Autentikasi</td>
+            <td style="padding:6px; color:#1e293b;">Session + Passport + Sanctum</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Otorisasi</td>
+            <td style="padding:6px; color:#1e293b;">spatie/laravel-permission</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Import Data</td>
+            <td style="padding:6px; color:#1e293b;">Maatwebsite Excel 3.1</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">Frontend</td>
+            <td style="padding:6px; color:#1e293b;">Blade + TailwindCSS + Vite</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;">
+            <td style="padding:6px; color:#64748b; font-weight:600;">HTTP Client</td>
+            <td style="padding:6px; color:#1e293b;">Guzzle 7.x</td>
+          </tr>
+          <tr>
+            <td style="padding:6px; color:#64748b; font-weight:600;">Deployment</td>
+            <td style="padding:6px; color:#1e293b;">XAMPP lokal / Docker (Nginx)</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>📐 Metafor Model Arsitektur — Rumah Data 2.0 &nbsp;|&nbsp; XP (Extreme Programming) Architecture Modelling</p>
+  <p style="margin-top:4px;">Dibuat berdasarkan analisis struktur project: Laravel 10 · PHP 8.1 · MySQL · Maatwebsite Excel · Spatie Permission</p>
+</footer>
+
+</body>
+</html>

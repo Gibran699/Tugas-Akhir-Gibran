@@ -98,13 +98,15 @@
                     detailsTable.empty();
 
                     users.forEach((user) => {
-                        let percentage =
-                            ((user.count / total) * 100).toFixed(2) + "%";
+                        const pctStr = (total > 0
+                            ? ((user.count / total) * 100).toFixed(2)
+                            : '0.00') + '%';
+                        const pctPadded = pctStr.padStart(7);
                         detailsTable.append(`
                             <tr>
                                 <td>${user.username}</td>
                                 <td>${user.count}</td>
-                                <td>${percentage}</td>
+                                <td><code class="pct-cell">${pctPadded}</code></td>
                             </tr>
                         `);
                     });

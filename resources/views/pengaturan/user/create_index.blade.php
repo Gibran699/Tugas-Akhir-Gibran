@@ -24,6 +24,7 @@
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th>Contact</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -39,10 +40,24 @@
                                         <td>{{ $item->contact }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td class="text-center">
+                                            <span class="badge badge-status {{ $item->is_active ? 'badge-success' : 'badge-danger' }}"
+                                                  id="badge-{{ $item->id }}">
+                                                {{ $item->is_active ? 'Active' : 'Inactive' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
                                             <button type="button" class="btn btn-danger deleteUser"
                                                 data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
                                             <button class="btn btn-warning editUser" data-id="{{ $item->id }}"><i
                                                     class="fas fa-pencil-alt"></i></button>
+                                            <button type="button"
+                                                class="btn {{ $item->is_active ? 'btn-secondary' : 'btn-success' }} toggleUser"
+                                                data-id="{{ $item->id }}"
+                                                id="toggle-btn-{{ $item->id }}"
+                                                title="{{ $item->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                                <i class="{{ $item->is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off' }}"
+                                                   id="toggle-icon-{{ $item->id }}"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach

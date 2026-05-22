@@ -18,9 +18,12 @@ class MainController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-        $validasiAccount = User::where('email', $request->email)->exists();
-        if (!$validasiAccount) {
-            return response()->json(['error' => 'email tidak terdaftar!'], 404);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['error' => 'Email tidak terdaftar!'], 404);
+        }
+        if (!$user->is_active) {
+            return response()->json(['error' => 'Akun Anda telah dinonaktifkan. Hubungi administrator.'], 403);
         }
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();

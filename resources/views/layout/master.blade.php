@@ -46,6 +46,78 @@
     <script src="{{ asset('vendor/owl-carousel/owl.carousel.js') }}" type="text/javascript"></script>
     {{-- sweet alert --}}
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
+    {{-- SwalProgress: custom progress bar — bar + pct + cycling msg, no confirm button --}}
+    <script>
+    (function () {
+        if (!window.Swal) return;
+        var _iv = null;
+
+        var _MSGS = [
+            'Menginisialisasi...',
+            'Mengambil data...',
+            'Memproses...',
+            'Hampir selesai...',
+            'Finalisasi...'
+        ];
+
+        var _HTML =
+            '<div style="margin:12px 0 4px;font-size:13px;color:#666;">' +
+            'Progress: <strong id="_sp_pct">0</strong>%</div>' +
+            '<div style="background:#e9ecef;border-radius:8px;height:12px;' +
+            'overflow:hidden;margin-top:6px;">' +
+            '<div id="_sp_bar" style="height:100%;width:0%;' +
+            'background:linear-gradient(90deg,#6c63ff,#a78bfa);' +
+            'border-radius:8px;transition:width 0.3s ease;"></div></div>' +
+            '<div id="_sp_msg" style="margin-top:10px;font-size:13px;color:#888;">' +
+            'Memulai proses...</div>';
+
+        function _didOpen() {
+            var bar  = document.getElementById('_sp_bar');
+            var pct  = document.getElementById('_sp_pct');
+            var msg  = document.getElementById('_sp_msg');
+            var prog = 0;
+            clearInterval(_iv);
+            _iv = setInterval(function () {
+                prog += Math.random() * 8 + 4;
+                if (prog > 88) prog = 88;
+                if (bar) bar.style.width = prog + '%';
+                if (pct) pct.textContent = Math.round(prog);
+                if (msg) msg.textContent = _MSGS[
+                    Math.min(Math.floor(prog / 22), _MSGS.length - 1)
+                ];
+            }, 150);
+        }
+
+        function _willClose() { clearInterval(_iv); }
+
+        /* Intercept Swal.fire — replace loading calls with progress bar pattern */
+        var _oFire = Swal.fire.bind(Swal);
+        Swal.fire = function () {
+            clearInterval(_iv);
+            var a = arguments[0];
+            /* Loading call: object with didOpen but no icon/type */
+            if (a && typeof a === 'object' && a.didOpen && !a.icon && !a.type) {
+                var opts = Object.assign({}, a, {
+                    html: _HTML,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    didOpen:    _didOpen,
+                    willClose:  _willClose,
+                });
+                delete opts.text;
+                return _oFire.call(Swal, opts);
+            }
+            return _oFire.apply(Swal, arguments);
+        };
+
+        /* Fallback: direct Swal.showLoading() calls */
+        Swal.showLoading = function () {
+            var actions = document.querySelector('.swal2-actions');
+            if (actions) actions.style.display = 'none';
+            _didOpen();
+        };
+    })();
+    </script>
     {{-- select 2 --}}
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
     {{-- datatables --}}
@@ -193,8 +265,7 @@
     <script src="{{ asset('js/deznav-init.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/neon-splash.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/loading-animation.js') }}" type="text/javascript"></script>
-</body>
-@yield('scripts')
+    @yield('scripts')
 </body>
 
 </html>

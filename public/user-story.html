@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>User Story & XP Iterations — Rumah Data 2.0</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    padding: 52px 32px 80px;
+    color: #1e293b;
+  }
+
+  /* ── Title ── */
+  .title-block { text-align:center; margin-bottom:48px; }
+  .eyebrow {
+    display:inline-block; font-size:11px; font-weight:700;
+    letter-spacing:1.4px; text-transform:uppercase;
+    color:#64748b; background:#e2e8f0; border-radius:20px;
+    padding:4px 14px; margin-bottom:14px;
+  }
+  .title-block h1 {
+    font-size:28px; font-weight:800; color:#0f172a;
+    letter-spacing:-0.5px; margin-bottom:10px;
+  }
+  .title-block p { font-size:13px; color:#64748b; line-height:1.7; }
+
+  /* ── Section header ── */
+  .section-title {
+    display:flex; align-items:center; gap:12px;
+    margin:48px 0 24px;
+  }
+  .section-title .phase-badge {
+    font-size:11px; font-weight:800; letter-spacing:1.2px;
+    text-transform:uppercase; padding:5px 14px;
+    border-radius:20px; white-space:nowrap;
+  }
+  .section-title h2 {
+    font-size:20px; font-weight:700; color:#0f172a;
+  }
+  .section-title .divider {
+    flex:1; height:1px; background:#e2e8f0;
+  }
+
+  /* ── Category label (colored pill header) ── */
+  .cat-label {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11.5px; font-weight:700; letter-spacing:0.6px;
+    text-transform:uppercase; padding:5px 14px;
+    border-radius:20px; margin-bottom:12px;
+  }
+  .cat-label .dot {
+    width:7px; height:7px; border-radius:50%; flex-shrink:0;
+  }
+
+  /* ── User Story Card ── */
+  .story-group { margin-bottom:32px; }
+  .story-table {
+    width:100%; border-collapse:collapse;
+    background:#fff; border-radius:16px; overflow:hidden;
+    box-shadow:0 2px 16px rgba(15,23,42,0.07);
+  }
+  .story-table thead tr {
+    background:#f8fafc;
+  }
+  .story-table thead th {
+    padding:10px 14px; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.8px;
+    color:#94a3b8; text-align:left; border-bottom:1px solid #f1f5f9;
+  }
+  .story-table tbody tr {
+    border-bottom:1px solid #f8fafc;
+    transition:background .15s;
+  }
+  .story-table tbody tr:last-child { border-bottom:none; }
+  .story-table tbody tr:hover { background:#fafbff; }
+  .story-table td {
+    padding:12px 14px; font-size:13px; vertical-align:top;
+  }
+  .id-badge {
+    display:inline-block; font-size:11px; font-weight:700;
+    font-family:monospace; padding:3px 8px; border-radius:6px;
+    white-space:nowrap;
+  }
+  .role-badge {
+    display:inline-block; font-size:11px; font-weight:600;
+    padding:2px 8px; border-radius:10px; white-space:nowrap;
+    background:#f1f5f9; color:#475569;
+  }
+  .prio {
+    display:inline-block; font-size:11px; font-weight:700;
+    padding:2px 8px; border-radius:10px; white-space:nowrap;
+  }
+  .prio-high   { background:#fee2e2; color:#991b1b; }
+  .prio-medium { background:#fef3c7; color:#92400e; }
+  .prio-low    { background:#e0f2fe; color:#0369a1; }
+  .story-text { color:#334155; line-height:1.5; }
+  .story-text em { color:#64748b; font-style:normal; }
+
+  /* ── Iteration Timeline ── */
+  .iter-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap:20px;
+    margin-bottom:16px;
+  }
+  .iter-card {
+    background:#fff; border-radius:16px;
+    box-shadow:0 2px 16px rgba(15,23,42,0.07);
+    overflow:hidden;
+  }
+  .iter-card-head {
+    padding:14px 18px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .iter-num {
+    font-size:13px; font-weight:800; letter-spacing:-0.2px;
+  }
+  .iter-date {
+    font-size:11px; font-weight:600; color:#fff;
+    background:rgba(255,255,255,0.25); border-radius:10px;
+    padding:2px 10px;
+  }
+  .iter-body { padding:14px 18px 16px; }
+  .iter-focus {
+    font-size:11px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.8px; color:#94a3b8; margin-bottom:10px;
+  }
+  .iter-stories {
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;
+  }
+  .iter-chip {
+    font-size:11px; font-weight:600;
+    padding:3px 9px; border-radius:8px;
+    background:#f1f5f9; color:#475569;
+  }
+  .iter-desc { font-size:12px; color:#64748b; line-height:1.5; }
+
+  /* ── Planning card ── */
+  .plan-card {
+    background:#fff; border-radius:16px;
+    box-shadow:0 2px 16px rgba(15,23,42,0.07);
+    overflow:hidden; margin-bottom:32px;
+  }
+  .plan-card-head {
+    padding:16px 22px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .plan-card-head .title { font-size:16px; font-weight:700; }
+  .plan-card-head .date  { font-size:12px; font-weight:600;
+    background:rgba(255,255,255,0.25); border-radius:10px; padding:3px 12px; color:#fff; }
+  .plan-body { padding:16px 22px 20px; }
+  .plan-list { list-style:none; }
+  .plan-list li {
+    display:flex; gap:10px; align-items:flex-start;
+    padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:13px; color:#334155;
+  }
+  .plan-list li:last-child { border-bottom:none; }
+  .plan-list .step-dot {
+    width:22px; height:22px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:800; color:#fff; margin-top:1px;
+  }
+
+  /* ── Summary bar ── */
+  .summary-bar {
+    display:flex; gap:16px; flex-wrap:wrap;
+    background:#fff; border-radius:16px;
+    box-shadow:0 2px 16px rgba(15,23,42,0.07);
+    padding:20px 28px; margin-bottom:40px;
+  }
+  .sum-item {
+    display:flex; flex-direction:column; gap:2px;
+    padding-right:24px; border-right:1px solid #f1f5f9;
+  }
+  .sum-item:last-child { border-right:none; }
+  .sum-val { font-size:28px; font-weight:800; color:#0f172a; letter-spacing:-1px; }
+  .sum-key { font-size:11px; font-weight:600; text-transform:uppercase;
+             letter-spacing:0.8px; color:#94a3b8; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ TITLE ═══════════════════════ -->
+<div class="title-block">
+  <div class="eyebrow">Extreme Programming — XP Lifecycle</div>
+  <h1>User Story &amp; Rencana Iterasi — Rumah Data 2.0</h1>
+  <p>
+    Berdasarkan <em>Fundamentals of Software Architecture</em> Richards &amp; Ford (2020)<br/>
+    Fitur diidentifikasi dari codebase aktual · Timeline: Desember 2024 – Mei 2025
+  </p>
+</div>
+
+<!-- ═══════════════════════ SUMMARY ═══════════════════════ -->
+<div class="summary-bar">
+  <div class="sum-item"><span class="sum-val">37</span><span class="sum-key">Total User Story</span></div>
+  <div class="sum-item"><span class="sum-val">24</span><span class="sum-key">Minggu Aktif</span></div>
+  <div class="sum-item"><span class="sum-val">2</span><span class="sum-key">Minggu Planning</span></div>
+  <div class="sum-item"><span class="sum-val">11</span><span class="sum-key">Iterasi @ 2 Minggu</span></div>
+  <div class="sum-item"><span class="sum-val">6</span><span class="sum-key">Kategori Fitur</span></div>
+  <div class="sum-item"><span class="sum-val">Des–Mei</span><span class="sum-key">Periode Pengembangan</span></div>
+</div>
+
+<!-- ═══════════════════════ PHASE 1: PLANNING ═══════════════════════ -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#1e3a8a;color:#fff;">Fase 1</span>
+  <h2>Planning Phase</h2>
+  <div class="divider"></div>
+  <span style="font-size:12px;font-weight:600;color:#94a3b8;">1 Des – 14 Des 2024 &nbsp;·&nbsp; 2 Minggu</span>
+</div>
+
+<div class="plan-card">
+  <div class="plan-card-head" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">
+    <span class="title" style="color:#fff;">Release Planning</span>
+    <span class="date">Desember Minggu 1–2</span>
+  </div>
+  <div class="plan-body">
+    <p style="font-size:13px;color:#64748b;margin-bottom:14px;">
+      Pada fase ini tim dan customer melakukan <strong>Exploration</strong>, <strong>Commitment</strong>, dan <strong>Steering</strong>
+      untuk menetapkan scope release pertama berdasarkan prioritas business value.
+    </p>
+    <ul class="plan-list">
+      <li>
+        <span class="step-dot" style="background:#3b82f6;">1</span>
+        <div><strong>Exploration</strong> — Customer menuliskan user stories; tim mengestimasi story points setiap fitur berdasarkan kompleksitas teknis dan data aktual project.</div>
+      </li>
+      <li>
+        <span class="step-dot" style="background:#6366f1;">2</span>
+        <div><strong>Commitment</strong> — Customer memilih dan memprioritaskan user stories untuk masuk ke release; tim menyanggupi berdasarkan kapasitas (velocity).</div>
+      </li>
+      <li>
+        <span class="step-dot" style="background:#8b5cf6;">3</span>
+        <div><strong>Steering</strong> — Tim menyusun rencana iterasi; customer dapat mengubah prioritas story selama perencanaan berlangsung.</div>
+      </li>
+      <li>
+        <span class="step-dot" style="background:#a855f7;">4</span>
+        <div><strong>Output</strong> — Daftar 37 user stories terklasifikasi, rencana 11 iterasi @ 2 minggu, dan definisi "Done" untuk setiap story.</div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════ USER STORIES ═══════════════════════ -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#0f172a;color:#fff;">User Stories</span>
+  <h2>Daftar User Story</h2>
+  <div class="divider"></div>
+  <span style="font-size:12px;font-weight:600;color:#94a3b8;">37 stories · 9 kategori</span>
+</div>
+
+<!-- ─── 1. AUTH & AKSES ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#ede9fe;color:#4c1d95;">
+    <span class="dot" style="background:#7c3aed;"></span>
+    Auth &amp; Akses Pengguna
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th>
+      <th style="width:100px;">Role</th>
+      <th>User Story</th>
+      <th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-01</span></td>
+        <td><span class="role-badge">Pengguna</span></td>
+        <td class="story-text">Sebagai <strong>pengguna</strong>, saya ingin <strong>login dengan email &amp; password</strong>, sehingga <em>saya dapat mengakses sistem secara aman</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-02</span></td>
+        <td><span class="role-badge">Pengguna</span></td>
+        <td class="story-text">Sebagai <strong>pengguna</strong>, saya ingin <strong>logout dari sistem</strong>, sehingga <em>sesi saya berakhir dengan aman</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-03</span></td>
+        <td><span class="role-badge">Pengguna</span></td>
+        <td class="story-text">Sebagai <strong>pengguna</strong>, saya ingin <strong>mengganti password akun saya</strong>, sehingga <em>keamanan akun tetap terjaga</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-04</span></td>
+        <td><span class="role-badge">Admin</span></td>
+        <td class="story-text">Sebagai <strong>Admin</strong>, saya ingin <strong>mengelola data pengguna (tambah, ubah, hapus, aktif/nonaktif)</strong>, sehingga <em>akses sistem dapat dikontrol</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-05</span></td>
+        <td><span class="role-badge">Admin</span></td>
+        <td class="story-text">Sebagai <strong>Admin</strong>, saya ingin <strong>mengelola role &amp; permission pengguna</strong>, sehingga <em>hak akses setiap petugas teratur dan terkontrol</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ede9fe;color:#5b21b6;">US-06</span></td>
+        <td><span class="role-badge">API Client</span></td>
+        <td class="story-text">Sebagai <strong>sistem eksternal (developer/api_smart_rt)</strong>, saya ingin <strong>login via API dan mendapat Bearer Token (Passport)</strong>, sehingga <em>sistem eksternal dapat mengakses data secara programatik</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 2. DASHBOARD ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#dbeafe;color:#1e40af;">
+    <span class="dot" style="background:#2563eb;"></span>
+    Dashboard
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#dbeafe;color:#1e40af;">US-07</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat dashboard dengan ringkasan data kependudukan</strong> (jumlah penduduk, KK, grafik bulanan), sehingga <em>saya mendapat gambaran data secara cepat</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#dbeafe;color:#1e40af;">US-08</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>mengimpor data kependudukan dari file Excel</strong> (45 format data), sehingga <em>proses input data massal menjadi efisien</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 3. AGREGAT DKB ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#bbf7d0;color:#14532d;">
+    <span class="dot" style="background:#16a34a;"></span>
+    Agregat Data Kependudukan (DKB)
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#bbf7d0;color:#15803d;">US-09</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data agregat penduduk per kelurahan berdasarkan jenis kelamin, agama, golongan darah, pekerjaan, dan hubungan keluarga</strong>, sehingga <em>saya dapat menganalisis distribusi penduduk</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#bbf7d0;color:#15803d;">US-10</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepala keluarga per wilayah</strong>, sehingga <em>saya dapat memonitor jumlah dan distribusi KK</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#bbf7d0;color:#15803d;">US-11</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data penduduk penyandang disabilitas per wilayah</strong>, sehingga <em>saya dapat memonitor dan merencanakan layanan bagi difabel</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#bbf7d0;color:#15803d;">US-12</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data penduduk berdasarkan tingkat pendidikan</strong>, sehingga <em>saya dapat menganalisis profil pendidikan masyarakat</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#bbf7d0;color:#15803d;">US-13</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data penduduk berdasarkan status perkawinan per kelurahan</strong>, sehingga <em>saya dapat menganalisis profil sosial masyarakat</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 4. KEPEMILIKAN DOKUMEN ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#ffedd5;color:#9a3412;">
+    <span class="dot" style="background:#f97316;"></span>
+    Kepemilikan Dokumen Kependudukan
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-14</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan KTP per kelurahan</strong>, sehingga <em>saya dapat memonitor cakupan kepemilikan KTP</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-15</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan Kartu Keluarga per wilayah</strong>, sehingga <em>saya dapat memonitor cakupan dokumen KK</em></td>
+        <td><span class="prio prio-high">Tinggi</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-16</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan KIA (Kartu Identitas Anak)</strong>, sehingga <em>saya dapat memonitor identitas anak</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-17</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan Akta Kelahiran per kelurahan</strong>, sehingga <em>saya dapat memonitor cakupan akta</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-18</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan Akta Kawin (sipil &amp; agama) per kelurahan</strong>, sehingga <em>saya dapat memonitor dokumen perkawinan</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#ffedd5;color:#9a3412;">US-19</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat data kepemilikan Akta Cerai (sipil &amp; agama) per kelurahan</strong>, sehingga <em>saya dapat memonitor dokumen perceraian</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 5. STRUKTUR UMUR ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#fce7f3;color:#831843;">
+    <span class="dot" style="background:#db2777;"></span>
+    Struktur Umur Penduduk
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#fce7f3;color:#831843;">US-20</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat distribusi penduduk berdasarkan kelompok umur &amp; jenis kelamin</strong>, sehingga <em>saya dapat menganalisis piramida penduduk</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fce7f3;color:#831843;">US-21</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat struktur umur penduduk berdasarkan agama</strong>, sehingga <em>saya dapat menganalisis profil keagamaan per kelompok umur</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fce7f3;color:#831843;">US-22</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat struktur umur berdasarkan golongan darah</strong>, sehingga <em>saya dapat membantu perencanaan kebutuhan medis komunitas</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fce7f3;color:#831843;">US-23</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat struktur umur penyandang disabilitas</strong>, sehingga <em>saya dapat merencanakan layanan yang tepat sasaran</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fce7f3;color:#831843;">US-24</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat struktur umur kepala keluarga</strong>, sehingga <em>saya dapat menganalisis usia produktif kepala keluarga di wilayah</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 6. LAPORAN PELAYANAN ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#fecaca;color:#7f1d1d;">
+    <span class="dot" style="background:#dc2626;"></span>
+    Laporan Pelayanan
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#fee2e2;color:#991b1b;">US-25</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat laporan pelayanan e-KTP</strong> (cetak &amp; perekaman), sehingga <em>saya dapat memonitor kinerja pelayanan KTP</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fee2e2;color:#991b1b;">US-26</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat laporan pelayanan pencatatan sipil (Capil)</strong>, sehingga <em>saya dapat memonitor kinerja pencatatan sipil</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fee2e2;color:#991b1b;">US-27</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat laporan pendaftaran penduduk (Dafduk)</strong>, sehingga <em>saya dapat memonitor pendaftaran penduduk baru</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fee2e2;color:#991b1b;">US-28</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat laporan perekaman biometrik</strong> (dari API ektp.samarindakota.go.id), sehingga <em>saya dapat memonitor progres perekaman KTP-el</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#fee2e2;color:#991b1b;">US-29</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>melihat laporan pelayanan online</strong>, sehingga <em>saya dapat memonitor tren penggunaan layanan digital</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 7. CUSTOM DATE RANGE ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#cffafe;color:#164e63;">
+    <span class="dot" style="background:#0891b2;"></span>
+    Laporan Rentang Tanggal (Custom Date Range)
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#cffafe;color:#164e63;">US-30</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>memfilter laporan penduduk berdasarkan rentang tanggal yang saya tentukan</strong>, sehingga <em>saya dapat menganalisis data secara periodik fleksibel</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#cffafe;color:#164e63;">US-31</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>memfilter laporan disabilitas &amp; pendidikan berdasarkan rentang tanggal</strong>, sehingga <em>saya dapat analisis data sosial secara periodik</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#cffafe;color:#164e63;">US-32</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>memfilter data golongan darah, kepala keluarga, dan status kawin berdasarkan rentang tanggal</strong>, sehingga <em>saya dapat laporan periodik komprehensif</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 8. PENCARIAN & PENGATURAN ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#f1f5f9;color:#334155;">
+    <span class="dot" style="background:#64748b;"></span>
+    Pencarian &amp; Pengaturan Sistem
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#f1f5f9;color:#334155;">US-33</span></td>
+        <td><span class="role-badge">Admin/Petugas</span></td>
+        <td class="story-text">Sebagai <strong>Admin/Petugas</strong>, saya ingin <strong>mencari data kependudukan berdasarkan jenis data tertentu</strong>, sehingga <em>saya dapat menemukan informasi spesifik dengan cepat</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#f1f5f9;color:#334155;">US-34</span></td>
+        <td><span class="role-badge">Admin</span></td>
+        <td class="story-text">Sebagai <strong>Admin</strong>, saya ingin <strong>mengelola data wilayah kelurahan</strong>, sehingga <em>data referensi wilayah selalu akurat dan terkini</em></td>
+        <td><span class="prio prio-medium">Sedang</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── 9. INTEGRASI API ─── -->
+<div class="story-group">
+  <div class="cat-label" style="background:#e0e7ff;color:#3730a3;">
+    <span class="dot" style="background:#4f46e5;"></span>
+    Integrasi API (Internal &amp; Eksternal)
+  </div>
+  <table class="story-table">
+    <thead><tr>
+      <th style="width:80px;">ID</th><th style="width:100px;">Role</th>
+      <th>User Story</th><th style="width:80px;">Prioritas</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="id-badge" style="background:#e0e7ff;color:#3730a3;">US-35</span></td>
+        <td><span class="role-badge">API Client</span></td>
+        <td class="story-text">Sebagai <strong>sistem eksternal</strong>, saya ingin <strong>mengambil daftar jenis data (GET /api/list/jenis_data) dan mencari data (POST /api/search_data)</strong>, sehingga <em>integrasi antar sistem berjalan otomatis</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#e0e7ff;color:#3730a3;">US-36</span></td>
+        <td><span class="role-badge">Sistem</span></td>
+        <td class="story-text">Sebagai <strong>sistem</strong>, saya ingin <strong>mengambil data cetak e-KTP dari API Dukcapil (ektp.samarindakota.go.id) via KtpApiService</strong>, sehingga <em>data KTP selalu sinkron dengan sistem Dukcapil</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+      <tr>
+        <td><span class="id-badge" style="background:#e0e7ff;color:#3730a3;">US-37</span></td>
+        <td><span class="role-badge">Sistem</span></td>
+        <td class="story-text">Sebagai <strong>sistem</strong>, saya ingin <strong>mengambil data perekaman biometrik dari API Dukcapil via perekamanService</strong>, sehingga <em>laporan perekaman selalu menampilkan data terkini</em></td>
+        <td><span class="prio prio-low">Rendah</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════ PHASE 2: ITERATIONS ═══════════════════════ -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#15803d;color:#fff;">Fase 2</span>
+  <h2>Iterations to Release Phase</h2>
+  <div class="divider"></div>
+  <span style="font-size:12px;font-weight:600;color:#94a3b8;">15 Des 2024 – 17 Mei 2025 &nbsp;·&nbsp; 11 Iterasi × 2 Minggu</span>
+</div>
+
+<div class="iter-grid">
+
+  <!-- Iteration 1 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);">
+      <span class="iter-num" style="color:#fff;">Iterasi 1 — Fondasi Auth &amp; Manajemen Akses</span>
+      <span class="iter-date">15–28 Des 2024</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Core Infrastructure</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-01 Login</span>
+        <span class="iter-chip">US-02 Logout</span>
+        <span class="iter-chip">US-03 Ganti Password</span>
+        <span class="iter-chip">US-04 Manajemen User</span>
+        <span class="iter-chip">US-05 Role &amp; Permission</span>
+        <span class="iter-chip">US-34 Wilayah Kelurahan</span>
+      </div>
+      <p class="iter-desc">Membangun fondasi sistem: autentikasi sesi, manajemen pengguna, role &amp; permission (Spatie), dan data referensi wilayah. Tanpa fondasi ini tidak ada fitur lain yang bisa berjalan.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 2 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">
+      <span class="iter-num" style="color:#fff;">Iterasi 2 — Dashboard &amp; Import Data</span>
+      <span class="iter-date">29 Des – 11 Jan 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Core Feature — Data Entry</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-07 Dashboard Utama</span>
+        <span class="iter-chip">US-08 Import Excel (45 format)</span>
+      </div>
+      <p class="iter-desc">Dashboard sebagai halaman utama pengguna &amp; pipeline import Excel (Maatwebsite) — dua fitur bernilai bisnis tertinggi setelah login, karena semua data laporan bergantung pada import.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 3 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#15803d,#22c55e);">
+      <span class="iter-num" style="color:#fff;">Iterasi 3 — Agregat DKB: Data Penduduk</span>
+      <span class="iter-date">12–25 Jan 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Domain Data — Penduduk</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-09 Agregat Penduduk</span>
+        <span class="iter-chip">US-10 Kepala Keluarga</span>
+      </div>
+      <p class="iter-desc">Fitur data penduduk (jenis kelamin, agama, pekerjaan, golongan darah, hubungan keluarga) dan kepala keluarga per kelurahan — data inti yang paling sering diakses petugas.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 4 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#166534,#4ade80);">
+      <span class="iter-num" style="color:#fff;">Iterasi 4 — Agregat DKB: Data Sosial</span>
+      <span class="iter-date">26 Jan – 8 Feb 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Domain Data — Sosial</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-11 Disabilitas</span>
+        <span class="iter-chip">US-12 Pendidikan</span>
+        <span class="iter-chip">US-13 Status Kawin</span>
+      </div>
+      <p class="iter-desc">Melengkapi modul Agregat DKB dengan data sosial: disabilitas, pendidikan, dan status kawin. Ketiga data ini mendukung perencanaan program sosial daerah.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 5 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#9a3412,#fb923c);">
+      <span class="iter-num" style="color:#fff;">Iterasi 5 — Kepemilikan: Dokumen Identitas</span>
+      <span class="iter-date">9–22 Feb 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Domain Data — Dokumen Identitas</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-14 KTP</span>
+        <span class="iter-chip">US-15 Kartu Keluarga</span>
+        <span class="iter-chip">US-16 KIA</span>
+      </div>
+      <p class="iter-desc">Laporan kepemilikan dokumen identitas utama: KTP, Kartu Keluarga, dan KIA. Data ini langsung berkaitan dengan target nasional cakupan dokumen kependudukan.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 6 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#c2410c,#f97316);">
+      <span class="iter-num" style="color:#fff;">Iterasi 6 — Kepemilikan: Dokumen Akta</span>
+      <span class="iter-date">23 Feb – 8 Mar 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Domain Data — Akta Sipil</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-17 Akta Kelahiran</span>
+        <span class="iter-chip">US-18 Akta Kawin</span>
+        <span class="iter-chip">US-19 Akta Cerai</span>
+      </div>
+      <p class="iter-desc">Melengkapi modul kepemilikan dokumen dengan akta sipil: kelahiran, kawin (sipil &amp; agama), dan cerai (sipil &amp; agama). Total 6 jenis dokumen akta.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 7 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#9d174d,#ec4899);">
+      <span class="iter-num" style="color:#fff;">Iterasi 7 — Struktur Umur Penduduk</span>
+      <span class="iter-date">9–22 Mar 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Domain Data — Demografi Umur</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-20 Struktur Umur Penduduk</span>
+        <span class="iter-chip">US-21 Per Agama</span>
+        <span class="iter-chip">US-22 Gol. Darah</span>
+        <span class="iter-chip">US-23 Disabilitas</span>
+        <span class="iter-chip">US-24 Kepala Keluarga</span>
+      </div>
+      <p class="iter-desc">Modul piramida penduduk &amp; distribusi umur berdasarkan berbagai dimensi: agama, golongan darah, disabilitas, dan kepala keluarga. Mendukung analisis demografis mendalam.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 8 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#991b1b,#f87171);">
+      <span class="iter-num" style="color:#fff;">Iterasi 8 — Laporan Pelayanan Bagian I</span>
+      <span class="iter-date">23 Mar – 5 Apr 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Kinerja Layanan</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-25 Laporan e-KTP</span>
+        <span class="iter-chip">US-26 Laporan Capil</span>
+        <span class="iter-chip">US-27 Laporan Dafduk</span>
+      </div>
+      <p class="iter-desc">Laporan kinerja pelayanan: e-KTP (cetak), pencatatan sipil (Capil), dan pendaftaran penduduk (Dafduk). Data diambil dari database import Excel.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 9 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#0e7490,#22d3ee);">
+      <span class="iter-num" style="color:#fff;">Iterasi 9 — Laporan &amp; Custom Date Range</span>
+      <span class="iter-date">6–19 Apr 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Laporan Fleksibel</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-28 Laporan Perekaman</span>
+        <span class="iter-chip">US-29 Laporan Online</span>
+        <span class="iter-chip">US-30 Custom Range Penduduk</span>
+        <span class="iter-chip">US-31 Custom Range Disabilitas</span>
+        <span class="iter-chip">US-32 Custom Range Lainnya</span>
+      </div>
+      <p class="iter-desc">Melengkapi modul laporan pelayanan (perekaman &amp; online) dan menambahkan fitur filter rentang tanggal kustom di seluruh laporan utama.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 10 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#374151,#6b7280);">
+      <span class="iter-num" style="color:#fff;">Iterasi 10 — Pencarian &amp; API Internal</span>
+      <span class="iter-date">20 Apr – 3 Mei 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: Interoperabilitas</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-33 Pencarian Data</span>
+        <span class="iter-chip">US-06 API Login Passport</span>
+        <span class="iter-chip">US-35 API list/search</span>
+      </div>
+      <p class="iter-desc">Fitur pencarian master data lintas jenis, serta pembukaan akses API internal (Passport) untuk sistem eksternal: endpoint login, list jenis data, dan search data.</p>
+    </div>
+  </div>
+
+  <!-- Iteration 11 -->
+  <div class="iter-card">
+    <div class="iter-card-head" style="background:linear-gradient(135deg,#312e81,#6366f1);">
+      <span class="iter-num" style="color:#fff;">Iterasi 11 — Integrasi API Eksternal (Dukcapil)</span>
+      <span class="iter-date">4–17 Mei 2025</span>
+    </div>
+    <div class="iter-body">
+      <div class="iter-focus">Focus: External Integration</div>
+      <div class="iter-stories">
+        <span class="iter-chip">US-36 KtpApiService</span>
+        <span class="iter-chip">US-37 perekamanService</span>
+      </div>
+      <p class="iter-desc">Integrasi dengan API Dukcapil (ektp.samarindakota.go.id): sinkronisasi data cetak e-KTP via KtpApiService dan data perekaman biometrik via perekamanService menggunakan Guzzle HTTP.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Buffer note -->
+<div style="background:#fff;border-radius:16px;padding:18px 24px;
+            box-shadow:0 2px 16px rgba(15,23,42,0.07);
+            display:flex;align-items:center;gap:14px;margin-top:4px;">
+  <span style="font-size:22px;">📦</span>
+  <div>
+    <div style="font-size:13px;font-weight:700;color:#0f172a;">18–31 Mei 2025 — Buffer Release &amp; Testing</div>
+    <div style="font-size:12px;color:#64748b;margin-top:3px;">
+      Regression testing, user acceptance testing (UAT) bersama customer, perbaikan bug, dan persiapan deployment ke lingkungan produksi.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

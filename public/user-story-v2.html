@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>User Story & XP Iterations — Rumah Data 2.0</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'Segoe UI',Arial,sans-serif; background:#f0f4f8; min-height:100vh; padding:52px 32px 80px; color:#1e293b; font-size:13px; }
+  .title-block { text-align:center; margin-bottom:36px; }
+  .eyebrow { display:inline-block; font-size:11px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:#64748b; background:#e2e8f0; border-radius:20px; padding:4px 14px; margin-bottom:12px; }
+  .title-block h1 { font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.5px; margin-bottom:8px; }
+  .title-block p  { font-size:13px; color:#64748b; line-height:1.7; }
+  .summary-bar { display:flex; background:#fff; border-radius:14px; box-shadow:0 2px 16px rgba(15,23,42,.07); margin-bottom:40px; overflow:hidden; }
+  .sum-item { flex:1; padding:16px 20px; border-right:1px solid #f1f5f9; text-align:center; }
+  .sum-item:last-child { border-right:none; }
+  .sum-val { font-size:24px; font-weight:800; color:#0f172a; display:block; }
+  .sum-key { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:#94a3b8; display:block; margin-top:2px; }
+  .section-title { display:flex; align-items:center; gap:12px; margin:40px 0 18px; }
+  .phase-badge { font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; padding:5px 14px; border-radius:20px; white-space:nowrap; }
+  .section-title h2 { font-size:18px; font-weight:700; color:#0f172a; }
+  .divider { flex:1; height:1px; background:#e2e8f0; }
+  .section-date { font-size:11px; font-weight:600; color:#94a3b8; white-space:nowrap; }
+  .cat-label { display:inline-flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; padding:5px 14px; border-radius:20px; margin-bottom:10px; margin-top:4px; }
+  .cat-label .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .story-group { margin-bottom:24px; }
+  .tbl { width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 14px rgba(15,23,42,.07); }
+  .tbl thead th { padding:11px 14px; font-size:12px; font-weight:800; font-style:italic; color:#1e293b; text-align:left; background:#f8fafc; border-bottom:2px solid #e2e8f0; }
+  .tbl tbody tr { border-bottom:1px solid #f8fafc; }
+  .tbl tbody tr:last-child { border-bottom:none; }
+  .tbl tbody tr:hover { background:#fafbff; }
+  .tbl td { padding:10px 14px; vertical-align:top; line-height:1.5; }
+  .tbl td:nth-child(3){ color:#1e293b; }
+  .tbl td:nth-child(4){ color:#64748b; font-style:italic; }
+  .code-c { font-family:monospace; font-size:11px; font-weight:700; display:inline-block; padding:3px 8px; border-radius:6px; white-space:nowrap; }
+  .persona-c { font-size:11px; font-weight:600; color:#475569; background:#f1f5f9; display:inline-block; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+  /* Iteration */
+  .iter-block { margin-bottom:24px; }
+  .iter-head { border-radius:14px 14px 0 0; padding:13px 20px; display:flex; justify-content:space-between; align-items:center; }
+  .iter-head .it { font-size:13px; font-weight:800; color:#fff; }
+  .iter-head .id { font-size:11px; font-weight:700; color:rgba(255,255,255,.85); background:rgba(255,255,255,.18); border-radius:10px; padding:3px 12px; }
+  .iter-tbl { width:100%; border-collapse:collapse; background:#fff; border-radius:0 0 14px 14px; overflow:hidden; box-shadow:0 4px 14px rgba(15,23,42,.07); }
+  .iter-tbl thead th { padding:10px 14px; font-size:12px; font-weight:800; font-style:italic; color:#1e293b; text-align:left; background:#f8fafc; border-bottom:2px solid #e2e8f0; }
+  .iter-tbl thead th:nth-child(3),
+  .iter-tbl thead th:nth-child(4) { text-align:center; }
+  .iter-tbl tbody tr { border-bottom:1px solid #f8fafc; }
+  .iter-tbl tbody tr:last-child { border-bottom:none; }
+  .iter-tbl tbody tr:hover { background:#fafbff; }
+  .iter-tbl td { padding:10px 14px; vertical-align:middle; line-height:1.5; }
+  .iter-tbl td:nth-child(3),
+  .iter-tbl td:nth-child(4) { text-align:center; }
+  .sp { display:inline-block; font-size:12px; font-weight:800; width:28px; height:28px; border-radius:50%; line-height:28px; text-align:center; background:#f1f5f9; color:#334155; }
+  .pn { display:inline-block; font-size:12px; font-weight:700; width:24px; height:24px; border-radius:50%; line-height:24px; text-align:center; }
+  .p1{background:#fee2e2;color:#991b1b;} .p2{background:#fef3c7;color:#92400e;} .p3{background:#dcfce7;color:#166534;} .p4{background:#e0f2fe;color:#0369a1;}
+  .plan-card { background:#fff; border-radius:14px; box-shadow:0 2px 14px rgba(15,23,42,.07); overflow:hidden; margin-bottom:24px; }
+  .plan-head { padding:15px 22px; display:flex; justify-content:space-between; align-items:center; }
+  .plan-head .t { font-size:14px; font-weight:700; color:#fff; } .plan-head .d { font-size:11px; font-weight:700; color:rgba(255,255,255,.85); background:rgba(255,255,255,.2); border-radius:10px; padding:3px 12px; }
+  .plan-body { padding:14px 22px 18px; }
+  .plan-list { list-style:none; }
+  .plan-list li { display:flex; gap:10px; align-items:flex-start; padding:8px 0; border-bottom:1px solid #f1f5f9; }
+  .plan-list li:last-child { border-bottom:none; }
+  .sn { width:22px; height:22px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; color:#fff; margin-top:1px; }
+  .plan-list li p { font-size:13px; color:#334155; line-height:1.5; }
+  .buf { background:#fff; border-radius:14px; box-shadow:0 2px 14px rgba(15,23,42,.07); padding:16px 22px; display:flex; align-items:center; gap:14px; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="eyebrow">Extreme Programming — XP Lifecycle</div>
+  <h1>User Story &amp; Rencana Iterasi — Rumah Data 2.0</h1>
+  <p>Berdasarkan eksplorasi seluruh Controller, Model &amp; Routes aktual project<br/><em>Fundamentals of Software Architecture</em> · Richards &amp; Ford (2020) · Timeline: Desember 2024 – Mei 2025</p>
+</div>
+
+<div class="summary-bar">
+  <div class="sum-item"><span class="sum-val">77</span><span class="sum-key">Total User Story</span></div>
+  <div class="sum-item"><span class="sum-val">24</span><span class="sum-key">Minggu Aktif</span></div>
+  <div class="sum-item"><span class="sum-val">2</span><span class="sum-key">Minggu Planning</span></div>
+  <div class="sum-item"><span class="sum-val">7</span><span class="sum-key">Iterasi × 2 Minggu</span></div>
+  <div class="sum-item"><span class="sum-val">~220</span><span class="sum-key">Total Story Point</span></div>
+  <div class="sum-item"><span class="sum-val">~31</span><span class="sum-key">SP / Iterasi</span></div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#1e3a8a;color:#fff;">Fase 1</span>
+  <h2>Planning Phase</h2><div class="divider"></div>
+  <span class="section-date">1 Des – 14 Des 2024 · 2 Minggu</span>
+</div>
+<div class="plan-card">
+  <div class="plan-head" style="background:linear-gradient(135deg,#1e40af,#3b82f6);">
+    <span class="t">Release Planning — Exploration · Commitment · Steering</span>
+    <span class="d">Des Minggu 1–2</span>
+  </div>
+  <div class="plan-body">
+    <ul class="plan-list">
+      <li><span class="sn" style="background:#3b82f6;">1</span><p><strong>Exploration</strong> — Customer menuliskan semua user stories; tim mengestimasi story points (Fibonacci: 1,2,3,5,8,13) berdasarkan kompleksitas teknis setiap fitur dari codebase aktual.</p></li>
+      <li><span class="sn" style="background:#6366f1;">2</span><p><strong>Commitment</strong> — Customer memprioritaskan user stories (1=kritis, 4=enhancement); tim menyanggupi scope release berdasarkan velocity ~20 SP/iterasi.</p></li>
+      <li><span class="sn" style="background:#8b5cf6;">3</span><p><strong>Steering</strong> — Tim menyusun 11 iterasi @ 2 minggu; customer dapat menggeser prioritas story sebelum iterasi dimulai.</p></li>
+      <li><span class="sn" style="background:#a855f7;">4</span><p><strong>Output</strong> — 77 user stories terklasifikasi dalam 9 kategori, rencana 11 iterasi, dan definisi "Done" tiap story.</p></li>
+    </ul>
+  </div>
+</div>
+
+<!-- USER STORIES -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#0f172a;color:#fff;">User Stories</span>
+  <h2>Daftar User Story</h2><div class="divider"></div>
+  <span class="section-date">77 stories · 9 kategori · dari kode aktual</span>
+</div>
+
+<!-- 1. AUTH -->
+<div class="story-group">
+  <div class="cat-label" style="background:#ede9fe;color:#4c1d95;"><span class="dot" style="background:#7c3aed;"></span>Autentikasi &amp; Manajemen Akses</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-01</span></td><td><span class="persona-c">Pengguna</span></td><td>login ke sistem menggunakan email dan password</td><td>sistem dapat mengidentifikasi dan mengautentikasi pengguna secara aman</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-02</span></td><td><span class="persona-c">Pengguna</span></td><td>logout dari sistem melalui tombol keluar</td><td>sesi aktif berakhir dan akun tidak dapat diakses orang lain</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-03</span></td><td><span class="persona-c">Pengguna</span></td><td>mengganti password dengan memverifikasi password lama terlebih dahulu</td><td>keamanan akun terjaga dan hanya pemilik yang dapat mengubah password</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-04</span></td><td><span class="persona-c">Admin</span></td><td>melihat daftar seluruh pengguna beserta NIK, nama, email, kontak, dan status aktif</td><td>saya dapat memantau dan mengaudit seluruh akses pengguna sistem</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-05</span></td><td><span class="persona-c">Admin</span></td><td>menambah pengguna baru dengan mengisi NIK, nama, email, nomor kontak, instansi, dan role</td><td>petugas baru dapat diberikan akses ke sistem sesuai jabatannya</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-06</span></td><td><span class="persona-c">Admin</span></td><td>mengedit data pengguna dan mengubah role yang dimilikinya</td><td>informasi dan hak akses pengguna dapat diperbarui bila ada perubahan jabatan</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-07</span></td><td><span class="persona-c">Admin</span></td><td>menghapus akun pengguna dari sistem</td><td>akses pengguna yang tidak lagi bekerja dapat dicabut sepenuhnya</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-08</span></td><td><span class="persona-c">Admin</span></td><td>mengaktifkan atau menonaktifkan akun pengguna tanpa menghapusnya</td><td>pengguna yang berhalangan dapat diblokir sementara tanpa kehilangan data</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-09</span></td><td><span class="persona-c">Admin</span></td><td>membuat role baru dan menetapkan permission yang dimilikinya</td><td>kelompok akses baru dapat didefinisikan sesuai struktur organisasi</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-10</span></td><td><span class="persona-c">Admin</span></td><td>mengedit nama role dan menyinkronkan ulang daftar permission-nya</td><td>hak akses setiap kelompok pengguna dapat disesuaikan dengan kebijakan terbaru</td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-11</span></td><td><span class="persona-c">Admin</span></td><td>menghapus role yang sudah tidak digunakan</td><td>daftar role tetap bersih dan tidak membingungkan administrator</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 2. DASHBOARD -->
+<div class="story-group">
+  <div class="cat-label" style="background:#dbeafe;color:#1e40af;"><span class="dot" style="background:#2563eb;"></span>Dashboard &amp; Import Data</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-12</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat ringkasan statistik utama (total penduduk, kepala keluarga, penduduk 0–17, wajib KTP) pada halaman dashboard</td><td>mendapat gambaran kondisi kependudukan terkini secara cepat</td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-13</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat grafik top 10 pekerjaan, distribusi pendidikan, dan status kawin pada dashboard</td><td>dapat menganalisis profil demografis masyarakat secara visual</td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-14</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat ringkasan kepemilikan dokumen (KTP, KK, Akta, KIA) dan piramida kelompok umur pada dashboard</td><td>dapat memantau cakupan dokumen dan struktur umur secara sekilas</td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-15</span></td><td><span class="persona-c">Admin</span></td><td>mengimpor data kependudukan dari file Excel (xlsx/xls/csv, maks 20MB) dengan memilih semester dan tahun</td><td>data massal dari 45 format laporan Dukcapil dapat dimasukkan ke sistem secara efisien</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 3. AGREGAT DKB -->
+<div class="story-group">
+  <div class="cat-label" style="background:#bbf7d0;color:#14532d;"><span class="dot" style="background:#16a34a;"></span>Agregat DKB — Penduduk, Kepala Keluarga, Status Kawin, Pendidikan, Disabilitas</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-16</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data agregat penduduk per kelurahan berdasarkan jenis kelamin</td><td>dapat menganalisis distribusi gender penduduk di tiap wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-17</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data agregat penduduk per kelurahan berdasarkan agama</td><td>dapat menganalisis profil keagamaan masyarakat untuk perencanaan layanan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-18</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data agregat penduduk per kelurahan berdasarkan golongan darah</td><td>mendukung kebutuhan analisis kesehatan dan ketersediaan donor darah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-19</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data agregat penduduk per kelurahan berdasarkan jenis pekerjaan</td><td>dapat menganalisis profil pekerjaan masyarakat untuk perencanaan ekonomi daerah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-20</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data agregat penduduk per kelurahan berdasarkan hubungan dalam keluarga</td><td>dapat memahami komposisi peran anggota keluarga di tiap wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-21</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepala keluarga per kelurahan berdasarkan jenis kelamin</td><td>dapat memantau proporsi kepala keluarga laki-laki dan perempuan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-22</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepala keluarga per kelurahan berdasarkan agama</td><td>dapat menganalisis profil keagamaan kepala keluarga di wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-23</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepala keluarga per kelurahan berdasarkan tingkat pendidikan</td><td>dapat menganalisis profil pendidikan KK untuk program pemberdayaan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-24</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepala keluarga per kelurahan berdasarkan jenis pekerjaan</td><td>dapat menganalisis profil pekerjaan KK untuk program ekonomi</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-25</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepala keluarga per kelurahan berdasarkan status perkawinan</td><td>dapat memahami kondisi sosial kepala keluarga di tiap wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-26</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi status kawin (belum/kawin/cerai hidup/cerai mati) per kelurahan berdasarkan jenis kelamin</td><td>dapat menganalisis profil sosial perkawinan masyarakat per wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-27</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data status kawin per kelurahan berdasarkan agama</td><td>dapat memahami pola perkawinan berdasarkan latar belakang keagamaan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-28</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data status kawin per kelurahan berdasarkan pekerjaan</td><td>dapat memahami hubungan antara pekerjaan dan status perkawinan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-29</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data tingkat pendidikan penduduk per kelurahan berdasarkan jenis kelamin</td><td>dapat menganalisis pemerataan pendidikan antara laki-laki dan perempuan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-30</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data tingkat pendidikan per kelurahan berdasarkan golongan darah</td><td>dapat memahami profil pendidikan lintas golongan darah</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-31</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data tingkat pendidikan per kelurahan berdasarkan pekerjaan</td><td>dapat menganalisis korelasi antara tingkat pendidikan dan jenis pekerjaan</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-32</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data penyandang disabilitas per kelurahan berdasarkan jenis kelamin</td><td>dapat memantau distribusi difabel untuk perencanaan layanan inklusif</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-33</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data penyandang disabilitas per kelurahan berdasarkan pekerjaan</td><td>dapat merencanakan program kerja yang tepat sasaran bagi difabel</td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-34</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data penyandang disabilitas per kelurahan berdasarkan tingkat pendidikan</td><td>dapat merencanakan layanan pendidikan inklusif yang sesuai kebutuhan</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 4. KEPEMILIKAN -->
+<div class="story-group">
+  <div class="cat-label" style="background:#ffedd5;color:#9a3412;"><span class="dot" style="background:#f97316;"></span>Kepemilikan Dokumen Kependudukan</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-35</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan KTP dan jumlah wajib KTP per kelurahan</td><td>dapat memantau cakupan KTP dan menarget wilayah dengan kesenjangan tertinggi</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-36</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Kartu Keluarga per kelurahan</td><td>dapat memantau cakupan kepemilikan KK di setiap wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-37</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan KIA (Kartu Identitas Anak) per kelurahan</td><td>dapat memantau cakupan identitas anak usia 0–17 tahun</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-38</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Akta Kelahiran per kelurahan</td><td>dapat memantau cakupan akta kelahiran dan menarget upaya peningkatan</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-39</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Akta Kawin Sipil per kelurahan</td><td>dapat memantau cakupan legalitas perkawinan sipil di wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-40</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Akta Kawin Agama per kelurahan</td><td>dapat memantau cakupan legalitas perkawinan berdasarkan agama</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-41</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Akta Cerai Sipil per kelurahan</td><td>dapat memantau dan mencatat dokumen perceraian sipil di tiap wilayah</td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-42</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat data kepemilikan Akta Cerai Agama per kelurahan</td><td>dapat memantau dokumen perceraian berbasis agama per wilayah</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 5. STRUKTUR UMUR -->
+<div class="story-group">
+  <div class="cat-label" style="background:#fce7f3;color:#831843;"><span class="dot" style="background:#db2777;"></span>Struktur Umur Penduduk (Penduduk, KK, Disabilitas, Agama, Gol. Darah)</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-43</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk berdasarkan kelompok umur (0–4 s.d. 75+) per kelurahan</td><td>dapat menganalisis piramida penduduk dan merencanakan layanan per kelompok usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-44</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk berdasarkan umur tunggal (per tahun) per kelurahan</td><td>mendapatkan analisis demografis yang lebih granular untuk perencanaan detail</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-45</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi status kawin penduduk berdasarkan kelompok umur per kelurahan</td><td>dapat memahami hubungan antara kelompok usia dan status perkawinan</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-46</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi status kawin penduduk berdasarkan umur tunggal per kelurahan</td><td>dapat menganalisis usia perkawinan penduduk secara detail</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-47</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat kategorisasi penduduk usia muda, produktif, dan tua per kelurahan</td><td>dapat mendukung perencanaan program lintas generasi (pemuda, tenaga kerja, lansia)</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-48</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk usia sekolah per kelurahan</td><td>dapat mendukung perencanaan kebutuhan fasilitas pendidikan daerah</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-49</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi kepala keluarga berdasarkan kelompok umur per kelurahan</td><td>dapat menganalisis profil usia kepala keluarga untuk program pemberdayaan</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-50</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi status kawin kepala keluarga berdasarkan kelompok umur</td><td>dapat menganalisis kondisi sosial KK lintas kelompok usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-51</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi kepala keluarga berdasarkan umur tunggal per kelurahan</td><td>mendapatkan analisis usia kepala keluarga yang lebih granular</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-52</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penyandang disabilitas berdasarkan kelompok umur per kelurahan</td><td>dapat merencanakan layanan difabel yang tepat sasaran per kelompok usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-53</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi disabilitas berdasarkan pendidikan dan umur tunggal</td><td>dapat menganalisis profil pendidikan difabel untuk program inklusif berbasis usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-54</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penyandang disabilitas berdasarkan umur tunggal</td><td>mendapatkan data difabel yang lebih detail untuk perencanaan anggaran</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-55</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penyandang disabilitas pada usia sekolah per kelurahan</td><td>dapat mendukung perencanaan pendidikan inklusif untuk anak difabel</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-56</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk berdasarkan agama per kelompok umur</td><td>dapat menganalisis profil keagamaan per kelompok usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-57</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk berdasarkan golongan darah per kelompok umur</td><td>dapat mendukung perencanaan kebutuhan donor darah per kelompok usia</td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-58</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat distribusi penduduk berdasarkan golongan darah per umur tunggal</td><td>mendapatkan data golongan darah yang lebih granular untuk keperluan medis</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 6. LAPORAN -->
+<div class="story-group">
+  <div class="cat-label" style="background:#fecaca;color:#7f1d1d;"><span class="dot" style="background:#dc2626;"></span>Laporan Pelayanan &amp; Custom Date Range</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-59</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat laporan pelayanan cetak e-KTP per periode (semester/tahun)</td><td>dapat memantau kinerja pelayanan pencetakan KTP elektronik di Dukcapil</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-60</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat laporan perekaman biometrik (dari API ektp.samarindakota.go.id) per periode</td><td>dapat memantau progres perekaman KTP-el dan kelurahan dengan serapan rendah</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-61</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat laporan kinerja pelayanan pencatatan sipil (Capil) per periode</td><td>dapat memantau volume dan jenis layanan Capil kepada masyarakat</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-62</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat laporan pendaftaran penduduk (Dafduk) per periode</td><td>dapat memantau arus perpindahan dan pendaftaran penduduk baru</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-63</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>melihat laporan layanan online Dukcapil per periode</td><td>dapat memantau tren adopsi layanan digital oleh masyarakat</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-64</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data penduduk berdasarkan rentang tanggal yang saya tentukan</td><td>dapat menganalisis data kependudukan secara periodik dan fleksibel</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-65</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data disabilitas berdasarkan rentang tanggal</td><td>dapat menganalisis tren data difabel secara periodik untuk evaluasi program</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-66</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data disabilitas &amp; pendidikan berdasarkan rentang tanggal</td><td>dapat mengevaluasi perkembangan program pendidikan inklusif secara periodik</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-67</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data golongan darah berdasarkan rentang tanggal</td><td>dapat memantau perubahan distribusi golongan darah penduduk secara berkala</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-68</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data kepala keluarga berdasarkan rentang tanggal</td><td>dapat menganalisis dinamika perubahan jumlah KK secara periodik</td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-69</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>memfilter laporan data status kawin berdasarkan rentang tanggal</td><td>dapat memantau tren perubahan status perkawinan masyarakat secara periodik</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 7. PENCARIAN & WILAYAH -->
+<div class="story-group">
+  <div class="cat-label" style="background:#f1f5f9;color:#334155;"><span class="dot" style="background:#64748b;"></span>Pencarian Data &amp; Referensi Wilayah</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#f1f5f9;color:#334155;">US-70</span></td><td><span class="persona-c">Admin/Petugas</span></td><td>mencari dan memfilter data kependudukan berdasarkan jenis data yang saya pilih</td><td>dapat menemukan informasi spesifik dengan cepat tanpa membuka seluruh laporan</td></tr>
+      <tr><td><span class="code-c" style="background:#f1f5f9;color:#334155;">US-71</span></td><td><span class="persona-c">Admin</span></td><td>melihat daftar seluruh kelurahan beserta informasi kecamatannya</td><td>dapat memverifikasi dan mengelola data referensi wilayah yang dipakai di seluruh laporan</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 8. API INTERNAL -->
+<div class="story-group">
+  <div class="cat-label" style="background:#e0e7ff;color:#3730a3;"><span class="dot" style="background:#4f46e5;"></span>API Internal (Passport / Sanctum)</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-72</span></td><td><span class="persona-c">API Client</span></td><td>melakukan login via POST /api/login dan menerima Bearer Token Passport (berlaku 7 hari)</td><td>sistem eksternal dapat mengautentikasi diri dan mengakses endpoint API yang dilindungi</td></tr>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-73</span></td><td><span class="persona-c">API Client</span></td><td>mengakses GET /api/list/jenis_data untuk mendapatkan daftar tipe data yang tersedia</td><td>sistem eksternal mengetahui parameter yang dapat digunakan dalam pencarian data</td></tr>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-74</span></td><td><span class="persona-c">API Client</span></td><td>melakukan pencarian via POST /api/search_data/{jenisData} dengan autentikasi Bearer Token</td><td>sistem eksternal dapat mengambil data kependudukan secara programatik dan terautentikasi</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 9. API EKSTERNAL -->
+<div class="story-group">
+  <div class="cat-label" style="background:#fef9c3;color:#713f12;"><span class="dot" style="background:#ca8a04;"></span>Integrasi API Eksternal — ektp.samarindakota.go.id</div>
+  <table class="tbl">
+    <thead><tr><th style="width:76px;"><em>Code</em></th><th style="width:100px;"><em>Persona</em></th><th><em>I want to</em></th><th style="width:240px;"><em>So that can</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-75</span></td><td><span class="persona-c">Sistem</span></td><td>melakukan authenticated request (GET/POST/PUT/DELETE) ke API eksternal dengan token yang di-cache 1 jam via ExternalApiService</td><td>koneksi ke layanan eksternal efisien tanpa berulang-ulang melakukan autentikasi</td></tr>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-76</span></td><td><span class="persona-c">Sistem</span></td><td>mengambil data cetak e-KTP dari ektp.samarindakota.go.id via KtpApiService berdasarkan rentang tanggal</td><td>laporan pelayanan cetak KTP selalu menampilkan data terkini dari sistem Dukcapil Samarinda</td></tr>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-77</span></td><td><span class="persona-c">Sistem</span></td><td>mengambil data perekaman biometrik dari ektp.samarindakota.go.id via perekamanService berdasarkan rentang tanggal</td><td>laporan perekaman KTP-el selalu menampilkan data aktual dari server Dukcapil secara otomatis</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PHASE 2: ITERATIONS -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#15803d;color:#fff;">Fase 2</span>
+  <h2>Iterations to Release Phase</h2><div class="divider"></div>
+  <span class="section-date">15 Des 2024 – 22 Mar 2025 · 7 Iterasi × 2 Minggu · Total ~220 SP</span>
+</div>
+
+<!-- ITER 1 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);">
+    <span class="it">Iterasi 1 — Autentikasi, Manajemen Pengguna, Role &amp; Dashboard</span><span class="id">15–28 Des 2024 · 2 Minggu · 40 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-01</span></td><td>Pengguna melakukan login ke sistem menggunakan email dan password</td><td><span class="pn p1">1</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-02</span></td><td>Pengguna keluar dari sistem melalui tombol logout</td><td><span class="pn p1">1</span></td><td><span class="sp">1</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-03</span></td><td>Pengguna melakukan perubahan password dengan verifikasi password lama</td><td><span class="pn p1">1</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-04</span></td><td>Admin melihat daftar seluruh pengguna beserta NIK, email, kontak, dan status aktif</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-05</span></td><td>Admin menambahkan pengguna baru dengan data NIK, nama, email, instansi, dan role</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-06</span></td><td>Admin mengedit data pengguna dan mengubah role-nya</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-07</span></td><td>Admin menghapus akun pengguna dari sistem</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-08</span></td><td>Admin mengaktifkan atau menonaktifkan status pengguna tanpa menghapus akun</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-09</span></td><td>Admin membuat role baru dan menetapkan permission-nya</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-10</span></td><td>Admin mengedit nama role dan menyinkronkan ulang permission-nya</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ede9fe;color:#5b21b6;">US-11</span></td><td>Admin menghapus role yang sudah tidak digunakan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#f1f5f9;color:#334155;">US-71</span></td><td>Admin melihat daftar seluruh kelurahan dan kecamatan sebagai referensi wilayah</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-12</span></td><td>Admin/Petugas melihat ringkasan statistik utama kependudukan pada halaman dashboard</td><td><span class="pn p1">1</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-13</span></td><td>Admin/Petugas melihat grafik top 10 pekerjaan, pendidikan, dan status kawin pada dashboard</td><td><span class="pn p1">1</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-14</span></td><td>Admin/Petugas melihat ringkasan kepemilikan dokumen dan kelompok umur pada dashboard</td><td><span class="pn p1">1</span></td><td><span class="sp">3</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 2 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#0e7490,#06b6d4);">
+    <span class="it">Iterasi 2 — Import Data &amp; Agregat DKB Penduduk &amp; Kepala Keluarga</span><span class="id">29 Des – 11 Jan 2025 · 2 Minggu · 32 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#dbeafe;color:#1e40af;">US-15</span></td><td>Admin mengimpor file Excel (xlsx/xls/csv, maks 20MB) data kependudukan dengan memilih semester dan tahun</td><td><span class="pn p1">1</span></td><td><span class="sp">8</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-16</span></td><td>Admin/Petugas melihat data agregat penduduk per kelurahan berdasarkan jenis kelamin</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-17</span></td><td>Admin/Petugas melihat data agregat penduduk per kelurahan berdasarkan agama</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-18</span></td><td>Admin/Petugas melihat data agregat penduduk per kelurahan berdasarkan golongan darah</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-19</span></td><td>Admin/Petugas melihat data agregat penduduk per kelurahan berdasarkan pekerjaan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-20</span></td><td>Admin/Petugas melihat data agregat penduduk berdasarkan hubungan dalam keluarga</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-21</span></td><td>Admin/Petugas melihat data kepala keluarga per kelurahan berdasarkan jenis kelamin</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-22</span></td><td>Admin/Petugas melihat data kepala keluarga per kelurahan berdasarkan agama</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-23</span></td><td>Admin/Petugas melihat data kepala keluarga per kelurahan berdasarkan pendidikan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-24</span></td><td>Admin/Petugas melihat data kepala keluarga per kelurahan berdasarkan pekerjaan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-25</span></td><td>Admin/Petugas melihat data kepala keluarga per kelurahan berdasarkan status kawin</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 3 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#15803d,#22c55e);">
+    <span class="it">Iterasi 3 — Agregat Status Kawin, Pendidikan, Disabilitas &amp; Kepemilikan Identitas</span><span class="id">12–25 Jan 2025 · 2 Minggu · 29 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-26</span></td><td>Admin/Petugas melihat distribusi status kawin penduduk berdasarkan jenis kelamin</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-27</span></td><td>Admin/Petugas melihat data status kawin per kelurahan berdasarkan agama</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-28</span></td><td>Admin/Petugas melihat data status kawin per kelurahan berdasarkan pekerjaan</td><td><span class="pn p4">4</span></td><td><span class="sp">1</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-29</span></td><td>Admin/Petugas melihat data tingkat pendidikan penduduk berdasarkan jenis kelamin</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-30</span></td><td>Admin/Petugas melihat data tingkat pendidikan per kelurahan berdasarkan golongan darah</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-31</span></td><td>Admin/Petugas melihat data tingkat pendidikan per kelurahan berdasarkan pekerjaan</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-32</span></td><td>Admin/Petugas melihat data penyandang disabilitas berdasarkan jenis kelamin</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-33</span></td><td>Admin/Petugas melihat data disabilitas per kelurahan berdasarkan pekerjaan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#bbf7d0;color:#15803d;">US-34</span></td><td>Admin/Petugas melihat data disabilitas per kelurahan berdasarkan pendidikan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-35</span></td><td>Admin/Petugas melihat data kepemilikan KTP dan wajib KTP per kelurahan</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-36</span></td><td>Admin/Petugas melihat data kepemilikan Kartu Keluarga per kelurahan</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-37</span></td><td>Admin/Petugas melihat data kepemilikan KIA (Kartu Identitas Anak) per kelurahan</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-38</span></td><td>Admin/Petugas melihat data kepemilikan Akta Kelahiran per kelurahan</td><td><span class="pn p2">2</span></td><td><span class="sp">2</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 4 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#9a3412,#fb923c);">
+    <span class="it">Iterasi 4 — Kepemilikan Akta, Pencarian &amp; Struktur Umur Penduduk</span><span class="id">26 Jan – 8 Feb 2025 · 2 Minggu · 35 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-39</span></td><td>Admin/Petugas melihat data kepemilikan Akta Kawin Sipil per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-40</span></td><td>Admin/Petugas melihat data kepemilikan Akta Kawin Agama per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-41</span></td><td>Admin/Petugas melihat data kepemilikan Akta Cerai Sipil per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#ffedd5;color:#9a3412;">US-42</span></td><td>Admin/Petugas melihat data kepemilikan Akta Cerai Agama per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#f1f5f9;color:#334155;">US-70</span></td><td>Admin/Petugas melakukan pencarian data kependudukan berdasarkan jenis data yang dipilih</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-43</span></td><td>Admin/Petugas melihat distribusi penduduk berdasarkan kelompok umur (0–4 s.d. 75+) per kelurahan</td><td><span class="pn p2">2</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-44</span></td><td>Admin/Petugas melihat distribusi penduduk berdasarkan umur tunggal per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-45</span></td><td>Admin/Petugas melihat distribusi status kawin penduduk berdasarkan kelompok umur</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-46</span></td><td>Admin/Petugas melihat distribusi status kawin penduduk berdasarkan umur tunggal</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-47</span></td><td>Admin/Petugas melihat kategorisasi penduduk usia muda, produktif, dan tua per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-48</span></td><td>Admin/Petugas melihat distribusi penduduk pada usia sekolah per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 5 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#9d174d,#ec4899);">
+    <span class="it">Iterasi 5 — Struktur Umur KK, Disabilitas, Agama &amp; Golongan Darah</span><span class="id">9–22 Feb 2025 · 2 Minggu · 22 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-49</span></td><td>Admin/Petugas melihat distribusi kepala keluarga berdasarkan kelompok umur per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-50</span></td><td>Admin/Petugas melihat distribusi status kawin kepala keluarga berdasarkan kelompok umur</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-51</span></td><td>Admin/Petugas melihat distribusi kepala keluarga berdasarkan umur tunggal per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-52</span></td><td>Admin/Petugas melihat distribusi disabilitas berdasarkan kelompok umur per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-53</span></td><td>Admin/Petugas melihat distribusi disabilitas berdasarkan pendidikan dan umur tunggal</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-54</span></td><td>Admin/Petugas melihat distribusi disabilitas berdasarkan umur tunggal per kelurahan</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-55</span></td><td>Admin/Petugas melihat distribusi disabilitas pada usia sekolah per kelurahan</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-56</span></td><td>Admin/Petugas melihat distribusi penduduk berdasarkan agama per kelompok umur</td><td><span class="pn p4">4</span></td><td><span class="sp">1</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-57</span></td><td>Admin/Petugas melihat distribusi penduduk berdasarkan golongan darah per kelompok umur</td><td><span class="pn p4">4</span></td><td><span class="sp">1</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fce7f3;color:#831843;">US-58</span></td><td>Admin/Petugas melihat distribusi penduduk berdasarkan golongan darah per umur tunggal</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 6 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#991b1b,#f87171);">
+    <span class="it">Iterasi 6 — Laporan Pelayanan &amp; Custom Date Range</span><span class="id">23 Feb – 8 Mar 2025 · 2 Minggu · 34 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-59</span></td><td>Admin/Petugas melihat laporan pelayanan cetak e-KTP per semester dan tahun</td><td><span class="pn p2">2</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-60</span></td><td>Admin/Petugas melihat laporan perekaman biometrik dari API Dukcapil per periode</td><td><span class="pn p2">2</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-61</span></td><td>Admin/Petugas melihat laporan kinerja pelayanan pencatatan sipil (Capil) per periode</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-62</span></td><td>Admin/Petugas melihat laporan pendaftaran penduduk (Dafduk) per periode</td><td><span class="pn p2">2</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-63</span></td><td>Admin/Petugas melihat laporan layanan online Dukcapil per periode</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-64</span></td><td>Admin/Petugas memfilter laporan data penduduk berdasarkan rentang tanggal yang ditentukan</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-65</span></td><td>Admin/Petugas memfilter laporan data disabilitas berdasarkan rentang tanggal</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-66</span></td><td>Admin/Petugas memfilter laporan disabilitas dan pendidikan berdasarkan rentang tanggal</td><td><span class="pn p3">3</span></td><td><span class="sp">3</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-67</span></td><td>Admin/Petugas memfilter laporan data golongan darah berdasarkan rentang tanggal</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-68</span></td><td>Admin/Petugas memfilter laporan data kepala keluarga berdasarkan rentang tanggal</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fee2e2;color:#991b1b;">US-69</span></td><td>Admin/Petugas memfilter laporan data status kawin berdasarkan rentang tanggal</td><td><span class="pn p4">4</span></td><td><span class="sp">2</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ITER 7 -->
+<div class="iter-block">
+  <div class="iter-head" style="background:linear-gradient(135deg,#312e81,#6366f1);">
+    <span class="it">Iterasi 7 — API Internal &amp; Integrasi API Eksternal Dukcapil</span><span class="id">9–22 Mar 2025 · 2 Minggu · 28 SP</span>
+  </div>
+  <table class="iter-tbl">
+    <thead><tr><th style="width:110px;"><em>User Story Code</em></th><th><em>Task Description</em></th><th style="width:75px;"><em>Priority</em></th><th style="width:85px;"><em>Story Point</em></th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-72</span></td><td>Sistem eksternal melakukan login via POST /api/login dan menerima Bearer Token Passport</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-73</span></td><td>Sistem eksternal mengakses GET /api/list/jenis_data untuk mendapat daftar tipe data</td><td><span class="pn p3">3</span></td><td><span class="sp">2</span></td></tr>
+      <tr><td><span class="code-c" style="background:#e0e7ff;color:#3730a3;">US-74</span></td><td>Sistem eksternal melakukan pencarian data via POST /api/search_data/{jenisData} dengan Bearer Token</td><td><span class="pn p3">3</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-75</span></td><td>Sistem melakukan authenticated request ke API eksternal dengan token di-cache 1 jam (ExternalApiService)</td><td><span class="pn p4">4</span></td><td><span class="sp">8</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-76</span></td><td>Sistem mengambil data cetak e-KTP dari ektp.samarindakota.go.id via KtpApiService</td><td><span class="pn p4">4</span></td><td><span class="sp">5</span></td></tr>
+      <tr><td><span class="code-c" style="background:#fef9c3;color:#713f12;">US-77</span></td><td>Sistem mengambil data perekaman biometrik dari ektp.samarindakota.go.id via perekamanService</td><td><span class="pn p4">4</span></td><td><span class="sp">6</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- BUFFER -->
+<div class="buf">
+  <span style="font-size:22px;">📦</span>
+  <div>
+    <div style="font-size:13px;font-weight:700;color:#0f172a;">23 Mar – 17 Mei 2025 — Buffer, Testing &amp; Deployment</div>
+    <div style="font-size:12px;color:#64748b;margin-top:3px;">Sisa 8 minggu digunakan untuk regression testing, User Acceptance Testing (UAT) bersama customer, perbaikan bug, refinement, dan persiapan deployment produksi.</div>
+  </div>
+</div>
+
+</body>
+</html>

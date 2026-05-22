@@ -8,6 +8,7 @@
     <title>Rumah Data 2.0 Kota Samarinda - Login</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('vendor/swiper/css/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/login-slider.css') }}" rel="stylesheet" type="text/css" />
@@ -43,17 +44,34 @@
                 </svg>
             </div>
 
-            <!-- Weather and Clock Widget -->
-            <div class="weather-clock-widget">
-                <div class="weather-info">
-                    <div class="weather-icon" id="weatherIcon">🌤️</div>
-                    <div>
-                        <div class="weather-temp" id="weatherTemp">25°C</div>
-                        <div class="weather-desc" id="weatherDesc">hujan rintas-rintas</div>
+            <!-- Weather Card (KSAplay inspired) -->
+            <div class="wx-card">
+                <div class="wx-top">
+                    <div class="wx-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        Samarinda, Kaltim
                     </div>
+                    <div class="wx-date" id="wxDate">–</div>
                 </div>
-                <div class="clock-info" id="clockTime">18:43 WITA</div>
-                <div class="location-info">Samarinda, Kalimantan Timur</div>
+                <div class="wx-main">
+                    <div>
+                        <div class="wx-temp" id="weatherTemp">--°</div>
+                        <div class="wx-desc-text" id="weatherDesc">Memuat cuaca…</div>
+                    </div>
+                    <div class="wx-icon" id="weatherIcon"><i class="fas fa-cloud-sun"></i></div>
+                </div>
+                <div class="wx-divider"></div>
+                <div class="wx-footer">
+                    <div class="wx-stat">
+                        <span><i class="fas fa-droplet"></i></span><span id="wxHumidity">--%</span>
+                    </div>
+                    <div class="wx-stat">
+                        <span><i class="fas fa-wind"></i></span><span id="wxWind">-- km/h</span>
+                    </div>
+                    <div class="wx-clock" id="clockTime">--:-- WITA</div>
+                </div>
             </div>
 
             <!-- Swiper Container -->
@@ -150,47 +168,92 @@
                 }
             });
 
-            // Weather API Configuration
-            const WEATHER_API_KEY = '8c3e8e8a8f3e4b5a9c2d1e0f7g8h9i0j'; // Ganti dengan API key Anda dari OpenWeatherMap
-            const CITY_NAME = 'Samarinda';
-            const COUNTRY_CODE = 'ID';
+            // Open-Meteo API — free, no API key required
+            const SAMARINDA_LAT = -0.5022;
+            const SAMARINDA_LON = 117.1536;
 
-            // Weather Icons Mapping
-            const weatherIcons = {
-                '01d': '☀️', '01n': '🌙',
-                '02d': '⛅', '02n': '☁️',
-                '03d': '☁️', '03n': '☁️',
-                '04d': '☁️', '04n': '☁️',
-                '09d': '🌧️', '09n': '🌧️',
-                '10d': '🌦️', '10n': '🌧️',
-                '11d': '⛈️', '11n': '⛈️',
-                '13d': '❄️', '13n': '❄️',
-                '50d': '🌫️', '50n': '🌫️'
+            // WMO Weather Code → { description (Indonesian), day icon class, night icon class }
+            const WMO_MAP = {
+                0:  { desc:'Cerah',                      day:'fas fa-sun', night:'fas fa-moon' },
+                1:  { desc:'Sebagian Cerah',             day:'fas fa-cloud-sun', night:'fas fa-moon' },
+                2:  { desc:'Berawan Sebagian',           day:'fas fa-cloud-sun', night:'fas fa-cloud' },
+                3:  { desc:'Berawan',                    day:'fas fa-cloud', night:'fas fa-cloud' },
+                45: { desc:'Berkabut',                   day:'fas fa-smog', night:'fas fa-smog' },
+                48: { desc:'Kabut Tebal',                day:'fas fa-smog', night:'fas fa-smog' },
+                51: { desc:'Gerimis Ringan',             day:'fas fa-cloud-sun-rain', night:'fas fa-cloud-rain' },
+                53: { desc:'Gerimis Sedang',             day:'fas fa-cloud-sun-rain', night:'fas fa-cloud-rain' },
+                55: { desc:'Gerimis Lebat',              day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                56: { desc:'Gerimis Dingin Ringan',      day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                57: { desc:'Gerimis Dingin Lebat',       day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                61: { desc:'Hujan Ringan',               day:'fas fa-cloud-sun-rain', night:'fas fa-cloud-rain' },
+                63: { desc:'Hujan Sedang',               day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                65: { desc:'Hujan Lebat',                day:'fas fa-cloud-showers-heavy', night:'fas fa-cloud-showers-heavy' },
+                66: { desc:'Hujan Es Ringan',            day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                67: { desc:'Hujan Es Lebat',             day:'fas fa-cloud-showers-heavy', night:'fas fa-cloud-showers-heavy' },
+                71: { desc:'Salju Ringan',               day:'fas fa-snowflake', night:'fas fa-snowflake' },
+                73: { desc:'Salju Sedang',               day:'fas fa-snowflake', night:'fas fa-snowflake' },
+                75: { desc:'Salju Lebat',                day:'fas fa-snowflake', night:'fas fa-snowflake' },
+                77: { desc:'Butiran Salju',              day:'fas fa-snowflake', night:'fas fa-snowflake' },
+                80: { desc:'Hujan Ringan Sesaat',        day:'fas fa-cloud-sun-rain', night:'fas fa-cloud-rain' },
+                81: { desc:'Hujan Sedang Sesaat',        day:'fas fa-cloud-rain', night:'fas fa-cloud-rain' },
+                82: { desc:'Hujan Lebat Sesaat',         day:'fas fa-cloud-showers-heavy', night:'fas fa-cloud-showers-heavy' },
+                85: { desc:'Hujan Salju Ringan',         day:'fas fa-cloud-meatball', night:'fas fa-cloud-meatball' },
+                86: { desc:'Hujan Salju Lebat',          day:'fas fa-cloud-meatball', night:'fas fa-cloud-meatball' },
+                95: { desc:'Hujan Petir',                day:'fas fa-bolt', night:'fas fa-bolt' },
+                96: { desc:'Hujan Petir & Hujan Es',     day:'fas fa-poo-storm', night:'fas fa-poo-storm' },
+                99: { desc:'Hujan Petir & Hujan Es Lebat', day:'fas fa-poo-storm', night:'fas fa-poo-storm' },
             };
 
-            // Fetch Weather Data
+            function isDay() {
+                const now = new Date();
+                const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+                const wita = new Date(utc + 8 * 3600000);
+                const h = wita.getHours();
+                return h >= 6 && h < 18;
+            }
+
+            function resolveWmo(code) {
+                const entry = WMO_MAP[code] || WMO_MAP[3];
+                return {
+                    desc: entry.desc,
+                    iconClass: isDay() ? entry.day : entry.night,
+                };
+            }
+
+            // Update date display (Indonesian format)
+            function updateDate() {
+                const now = new Date();
+                const utc  = now.getTime() + now.getTimezoneOffset() * 60000;
+                const wita = new Date(utc + 8 * 3600000);
+                const days  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                const el = document.getElementById('wxDate');
+                if (el) el.textContent = `${days[wita.getDay()]}, ${wita.getDate()} ${months[wita.getMonth()]} ${wita.getFullYear()}`;
+            }
+
+            // Fetch Weather Data from Open-Meteo (free, no API key)
             function fetchWeather() {
-                const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${CITY_NAME},${COUNTRY_CODE}&appid=${WEATHER_API_KEY}&units=metric&lang=id`;
-                
+                const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${SAMARINDA_LAT}&longitude=${SAMARINDA_LON}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia/Makassar`;
+
                 fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.cod === 200) {
-                            const temp = Math.round(data.main.temp);
-                            const description = data.weather[0].description;
-                            const iconCode = data.weather[0].icon;
-                            const icon = weatherIcons[iconCode] || '🌤️';
+                        if (data && data.current) {
+                            const temp     = Math.round(data.current.temperature_2m);
+                            const humidity = data.current.relative_humidity_2m;
+                            const wmoCode  = data.current.weather_code;
+                            const wind     = Math.round(data.current.wind_speed_10m);
+                            const w        = resolveWmo(wmoCode);
 
-                            document.getElementById('weatherTemp').textContent = `${temp}°C`;
-                            document.getElementById('weatherDesc').textContent = description;
-                            document.getElementById('weatherIcon').textContent = icon;
-                        } else {
-                            console.warn('Weather API error:', data.message);
+                            document.getElementById('weatherTemp').textContent  = `${temp}°`;
+                            document.getElementById('weatherDesc').textContent  = w.desc;
+                            document.getElementById('weatherIcon').innerHTML    = `<i class="${w.iconClass}"></i>`;
+                            document.getElementById('wxHumidity').textContent   = `${humidity}%`;
+                            document.getElementById('wxWind').textContent       = `${wind} km/h`;
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching weather:', error);
-                        // Keep default values on error
+                        console.error('Gagal mengambil data cuaca:', error);
                     });
             }
 
@@ -210,15 +273,54 @@
                 document.getElementById('clockTime').textContent = `${hours}:${minutes}:${seconds} WITA`;
             }
 
-            // Initialize Weather and Clock
+            // Initialize Weather, Date, and Clock
             fetchWeather();
             updateClock();
+            updateDate();
 
             // Update clock every second
             setInterval(updateClock, 1000);
 
             // Update weather every 10 minutes
             setInterval(fetchWeather, 600000);
+
+            // Update date every minute (handles midnight rollover)
+            setInterval(updateDate, 60000);
+        });
+    </script>
+
+    <!-- Anime.js v4 (local): splitText clone animation — "RUMAH DATA KOTA SAMARINDA" -->
+    <script type="module">
+        import { createTimeline, stagger, splitText }
+            from '{{ asset("vendor/animejs/anime.esm.min.js") }}';
+
+        window.addEventListener('load', function () {
+            /* Small delay so Swiper finishes creating all slide clones */
+            setTimeout(function () {
+                document.querySelectorAll('.slide-title').forEach(function (titleEl) {
+                    /* Flatten <br> so splitText gets a plain text node */
+                    titleEl.innerHTML = titleEl.innerHTML.replace(/<br\s*\/?>/gi, ' ');
+
+                    try {
+                        var result = splitText(titleEl, {
+                            chars: { wrap: 'clip', clone: 'bottom' },
+                        });
+
+                        if (!result || !result.chars || !result.chars.length) return;
+
+                        createTimeline()
+                            .add(result.chars, {
+                                y: '-100%',
+                                loop: true,
+                                loopDelay: 3500,
+                                duration: 700,
+                                ease: 'inOut(2)',
+                            }, stagger(55, { from: 'first' }));
+                    } catch (err) {
+                        console.warn('[anime.js] splitText error:', err);
+                    }
+                });
+            }, 250);
         });
     </script>
 </body>

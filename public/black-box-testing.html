@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<!-- REWRITTEN -->
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Box Testing – Rumah Data Dukcapil 2.0</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Times New Roman',Times,serif;background:#fff;color:#000;font-size:11pt}
+        header{background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;padding:1.5rem 2rem;text-align:center}
+        header h1{font-size:1.4rem;font-family:'Segoe UI',sans-serif}
+        header p{font-size:.82rem;opacity:.85;margin-top:.3rem;font-family:'Segoe UI',sans-serif}
+        .container{max-width:1280px;margin:0 auto;padding:1.5rem 1rem}
+        .info-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:.8rem 1.2rem;margin-bottom:1.2rem;font-family:'Segoe UI',sans-serif;font-size:.82rem;display:flex;flex-wrap:wrap;gap:1.5rem}
+        .info-box span b{color:#1e3a5f}
+        table{width:100%;border-collapse:collapse;margin-bottom:1.5rem}
+        th{background:#fff;font-style:italic;font-weight:bold;border:1px solid #000;padding:6px 8px;text-align:left;font-size:10.5pt}
+        td{border:1px solid #000;padding:5px 8px;vertical-align:top;font-size:10pt;line-height:1.5}
+        td.code{white-space:nowrap;font-family:'Courier New',monospace;font-size:9pt}
+        td.pass{text-align:center;font-weight:bold;color:green}
+        td.fail{text-align:center;font-weight:bold;color:red}
+        td.sesuai{text-align:center}
+        tr.module-header td{background:#1e3a5f;color:#fff;font-weight:bold;font-family:'Segoe UI',sans-serif;font-size:10pt;padding:5px 10px;letter-spacing:.5px}
+        ol{margin:0;padding-left:1.2rem}
+        ol li{margin-bottom:2px}
+        @media print{
+            header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+            tr.module-header td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+            body{font-size:9pt}
+            td{font-size:9pt}
+            th{font-size:9pt}
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Black Box Testing – Rumah Data Dukcapil 2.0</h1>
+    <p>Pengujian fungsional sistem berdasarkan 16 User Story dan 84 Skenario Pengujian</p>
+</header>
+<div class="container">
+
+<div class="info-box">
+    <span><b>Sistem:</b> Rumah Data Dukcapil 2.0</span>
+    <span><b>Metode Pengujian:</b> Black Box Testing</span>
+    <span><b>Platform:</b> Laravel 10 – Web Application</span>
+    <span><b>Total Test Case:</b> 84</span>
+    <span><b>Penguji:</b> ___________________</span>
+    <span><b>Tanggal:</b> ___________________</span>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width:13%">Test Code</th>
+            <th style="width:15%">Test Case</th>
+            <th style="width:30%">Test Steps</th>
+            <th style="width:25%">Expected Result</th>
+            <th style="width:10%">Actual Result</th>
+            <th style="width:7%">Pass/Fail</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: AUTENTIKASI                        -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">AUTENTIKASI (Login, Logout, Ganti Password, Blokir Akun) — US-01 s.d US-04</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-01</td>
+            <td>Login berhasil dengan kredensial valid</td>
+            <td><ol>
+                <li>Buka halaman <code>/login</code></li>
+                <li>Isi email terdaftar dan aktif</li>
+                <li>Isi password yang benar</li>
+                <li>Tekan tombol Login</li>
+            </ol></td>
+            <td>Pengguna berhasil masuk ke sistem dan diarahkan ke halaman Dashboard sesuai role yang dimiliki</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-02</td>
+            <td>Login gagal – email tidak terdaftar</td>
+            <td><ol>
+                <li>Buka halaman <code>/login</code></li>
+                <li>Isi email yang tidak terdaftar di sistem</li>
+                <li>Isi password sembarang</li>
+                <li>Tekan tombol Login</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan <em>"Email tidak terdaftar!"</em> dan halaman login tetap ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-03</td>
+            <td>Login gagal – password salah</td>
+            <td><ol>
+                <li>Buka halaman <code>/login</code></li>
+                <li>Isi email terdaftar dan aktif</li>
+                <li>Isi password yang salah</li>
+                <li>Tekan tombol Login</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan <em>"Invalid credentials"</em> dan halaman login tetap ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-04</td>
+            <td>Login gagal – akun dinonaktifkan</td>
+            <td><ol>
+                <li>Buka halaman <code>/login</code></li>
+                <li>Isi email akun yang statusnya nonaktif (<code>is_active = false</code>)</li>
+                <li>Isi password yang benar</li>
+                <li>Tekan tombol Login</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan <em>"Akun Anda telah dinonaktifkan. Hubungi administrator."</em> dan akses ke sistem ditolak</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-05</td>
+            <td>Akses halaman terproteksi tanpa login</td>
+            <td><ol>
+                <li>Buka browser baru (sesi kosong)</li>
+                <li>Akses langsung URL <code>/</code> (Dashboard)</li>
+            </ol></td>
+            <td>Sistem mendeteksi sesi tidak aktif dan mengarahkan pengguna ke halaman login secara otomatis tanpa dapat mengakses halaman yang dituju</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-06</td>
+            <td>Logout dari sistem</td>
+            <td><ol>
+                <li>Login ke sistem dengan akun valid</li>
+                <li>Klik tombol Logout pada menu navigasi</li>
+            </ol></td>
+            <td>Sistem mengakhiri sesi pengguna dan mengarahkan ke halaman login</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-07</td>
+            <td>Ganti password berhasil</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu pengaturan akun</li>
+                <li>Isi password lama dengan benar</li>
+                <li>Isi password baru (min. 8 karakter)</li>
+                <li>Isi konfirmasi password baru</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem memverifikasi kesesuaian password lama, memperbarui password baru, dan menampilkan notifikasi <em>"Ganti sandi berhasil."</em></td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-08</td>
+            <td>Ganti password gagal – password lama salah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu pengaturan akun</li>
+                <li>Isi password lama dengan nilai yang salah</li>
+                <li>Isi password baru dan konfirmasi</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan <em>"Kata sandi yang dimasukkan tidak sesuai dengan kata sandi lama."</em> dan password tidak berubah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AUTH-09</td>
+            <td>Ganti password gagal – password baru kurang dari 8 karakter</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu pengaturan akun</li>
+                <li>Isi password lama dengan benar</li>
+                <li>Isi password baru kurang dari 8 karakter (misal: <em>"abc123"</em>)</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan validasi bahwa password baru minimal harus 8 karakter; password tidak berubah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: DASHBOARD                          -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">DASHBOARD (Ringkasan Statistik &amp; Visualisasi Grafik) — US-05, US-06</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-DASH-01</td>
+            <td>Melihat ringkasan kartu statistik kependudukan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Dashboard</li>
+                <li>Tunggu hingga data termuat</li>
+            </ol></td>
+            <td>Halaman Dashboard menampilkan empat kartu statistik kependudukan: Total Penduduk, Total Kepala Keluarga, Wajib KIA (usia 0–17 tahun), dan Wajib KTP (usia ≥17 tahun)</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-DASH-02</td>
+            <td>Melihat grafik distribusi kependudukan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Dashboard</li>
+                <li>Scroll untuk melihat seluruh grafik</li>
+            </ol></td>
+            <td>Sistem merender: (1) bar chart Top 10 Pekerjaan, (2) grafik Tingkat Pendidikan, (3) pie chart Status Kawin, (4) grafik Kepemilikan Dokumen (KTP, KK, Akta Lahir, KIA, Akta Kawin, Akta Cerai), (5) grafik Kelompok Umur Penduduk dan KK</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: AGREGAT DKB                        -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">AGREGAT DKB (Analisis &amp; Filter Data Agregat Kependudukan) — US-07, US-08</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-01</td>
+            <td>Melihat agregat Penduduk berdasarkan Agama</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Penduduk</em></li>
+                <li>Pilih dimensi: <em>Agama</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel agregat jumlah penduduk berdasarkan agama (Islam, Kristen, Katolik, Hindu, Budha, Konghucu, Kepercayaan) per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-02</td>
+            <td>Melihat agregat Penduduk berdasarkan Jenis Kelamin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Penduduk</em></li>
+                <li>Pilih dimensi: <em>Jenis Kelamin</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel agregat jumlah penduduk laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-03</td>
+            <td>Melihat agregat Penduduk berdasarkan Golongan Darah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Penduduk</em></li>
+                <li>Pilih dimensi: <em>Golongan Darah</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penduduk per golongan darah (A, B, AB, O, tidak tahu) disertai kolom laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-04</td>
+            <td>Melihat agregat Penduduk berdasarkan Pekerjaan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Penduduk</em></li>
+                <li>Pilih dimensi: <em>Pekerjaan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penduduk berdasarkan jenis pekerjaan per wilayah disertai kolom laki-laki dan perempuan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-05</td>
+            <td>Melihat agregat Penduduk berdasarkan Hubungan Keluarga</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Penduduk</em></li>
+                <li>Pilih dimensi: <em>Hubungan Keluarga</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penduduk berdasarkan hubungan dalam keluarga (kepala keluarga, istri/suami, anak, orang tua, dll.) per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-06</td>
+            <td>Melihat agregat Kepala Keluarga berdasarkan Agama</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Kepala Keluarga</em></li>
+                <li>Pilih dimensi: <em>Agama</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah kepala keluarga per agama per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-07</td>
+            <td>Melihat agregat Kepala Keluarga berdasarkan Jenis Kelamin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Kepala Keluarga</em></li>
+                <li>Pilih dimensi: <em>Jenis Kelamin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah kepala keluarga laki-laki dan perempuan beserta totalnya per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-08</td>
+            <td>Melihat agregat Kepala Keluarga berdasarkan Pendidikan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Kepala Keluarga</em></li>
+                <li>Pilih dimensi: <em>Pendidikan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah kepala keluarga berdasarkan tingkat pendidikan per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-09</td>
+            <td>Melihat agregat Kepala Keluarga berdasarkan Pekerjaan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Kepala Keluarga</em></li>
+                <li>Pilih dimensi: <em>Pekerjaan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah kepala keluarga berdasarkan jenis pekerjaan per wilayah disertai kolom laki-laki dan perempuan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-10</td>
+            <td>Melihat agregat Kepala Keluarga berdasarkan Status Kawin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Kepala Keluarga</em></li>
+                <li>Pilih dimensi: <em>Status Kawin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi status perkawinan (belum kawin, kawin, cerai hidup, cerai mati) kepala keluarga disertai kolom laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-11</td>
+            <td>Melihat agregat Status Kawin Penduduk berdasarkan Agama</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Status Kawin</em></li>
+                <li>Pilih dimensi: <em>Agama</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi status perkawinan penduduk berdasarkan agama per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-12</td>
+            <td>Melihat agregat Status Kawin Penduduk berdasarkan Jenis Kelamin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Status Kawin</em></li>
+                <li>Pilih dimensi: <em>Jenis Kelamin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi status perkawinan (belum kawin, kawin, cerai hidup, cerai mati) berdasarkan jenis kelamin penduduk per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-13</td>
+            <td>Melihat agregat Status Kawin Penduduk berdasarkan Pekerjaan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Status Kawin</em></li>
+                <li>Pilih dimensi: <em>Pekerjaan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi status perkawinan penduduk berdasarkan jenis pekerjaan per wilayah disertai kolom laki-laki dan perempuan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-14</td>
+            <td>Melihat agregat Pendidikan Penduduk berdasarkan Jenis Kelamin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Pendidikan</em></li>
+                <li>Pilih dimensi: <em>Jenis Kelamin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi tingkat pendidikan penduduk (tidak/belum sekolah, SD, SMP, SMA, D1–D3, D4/S1, S2, S3) berdasarkan jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-15</td>
+            <td>Melihat agregat Pendidikan Penduduk berdasarkan Golongan Darah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Pendidikan</em></li>
+                <li>Pilih dimensi: <em>Golongan Darah</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel tabulasi silang antara tingkat pendidikan penduduk dan golongan darah disertai kolom laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-16</td>
+            <td>Melihat agregat Pendidikan Penduduk berdasarkan Pekerjaan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Pendidikan</em></li>
+                <li>Pilih dimensi: <em>Pekerjaan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi tingkat pendidikan penduduk berdasarkan jenis pekerjaan per wilayah disertai kolom laki-laki dan perempuan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-17</td>
+            <td>Melihat agregat Disabilitas berdasarkan Jenis Kelamin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Disabilitas</em></li>
+                <li>Pilih dimensi: <em>Jenis Kelamin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penyandang disabilitas per jenis (fisik, netra/buta, rungu/wicara, mental jiwa, fisik &amp; mental, lainnya) berdasarkan jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-18</td>
+            <td>Melihat agregat Disabilitas berdasarkan Pekerjaan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Disabilitas</em></li>
+                <li>Pilih dimensi: <em>Pekerjaan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penyandang disabilitas berdasarkan jenis pekerjaan per wilayah disertai kolom laki-laki dan perempuan untuk setiap jenis disabilitas</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-19</td>
+            <td>Melihat agregat Disabilitas berdasarkan Pendidikan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Agregat DKB</li>
+                <li>Pilih entitas: <em>Disabilitas</em></li>
+                <li>Pilih dimensi: <em>Pendidikan</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penyandang disabilitas berdasarkan tingkat pendidikan per wilayah disertai kolom laki-laki, perempuan, dan total untuk setiap jenis disabilitas</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-20</td>
+            <td>Filter data agregat berdasarkan tahun dan semester</td>
+            <td><ol>
+                <li>Login dan buka halaman Agregat DKB</li>
+                <li>Pilih entitas dan dimensi yang diinginkan</li>
+                <li>Pilih tahun: <em>2024</em>, semester: <em>1</em></li>
+                <li>Tekan tombol Cari</li>
+            </ol></td>
+            <td>Tabel diperbarui dan hanya menampilkan data semester 1 tahun 2024 sesuai parameter yang dipilih</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-21</td>
+            <td>Filter data agregat berdasarkan wilayah kecamatan</td>
+            <td><ol>
+                <li>Login dan buka halaman Agregat DKB</li>
+                <li>Pilih entitas dan dimensi yang diinginkan</li>
+                <li>Pilih salah satu kecamatan dari dropdown</li>
+                <li>Tekan tombol Cari</li>
+            </ol></td>
+            <td>Tabel diperbarui dan hanya menampilkan data untuk kecamatan yang dipilih; baris wilayah lain tidak ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-22</td>
+            <td>Filter data agregat berdasarkan wilayah kelurahan</td>
+            <td><ol>
+                <li>Login dan buka halaman Agregat DKB</li>
+                <li>Pilih entitas dan dimensi yang diinginkan</li>
+                <li>Pilih salah satu kelurahan dari dropdown</li>
+                <li>Tekan tombol Cari</li>
+            </ol></td>
+            <td>Tabel diperbarui dan hanya menampilkan data untuk kelurahan yang dipilih; baris wilayah lain tidak ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-23</td>
+            <td>Filter dengan jenis data tidak valid</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Kirim permintaan data dengan kode jenis data yang tidak dikenali sistem</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan bahwa jenis data tidak dikenali dan tidak ada data yang ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-AGRE-24</td>
+            <td>Rekap data dengan rentang tanggal kustom</td>
+            <td><ol>
+                <li>Login dan buka fitur Rekap Data di Agregat DKB</li>
+                <li>Isi tanggal mulai: <em>01-01-2024</em></li>
+                <li>Isi tanggal akhir: <em>30-06-2024</em></li>
+                <li>Tekan tombol Tampilkan</li>
+            </ol></td>
+            <td>Tabel diperbarui dan menampilkan data kependudukan sesuai rentang tanggal yang ditentukan, tidak terbatas pada semester baku</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: KEPEMILIKAN                        -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">KEPEMILIKAN (Dokumen Kependudukan per Wilayah) — US-09</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-01</td>
+            <td>Melihat kepemilikan KTP per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>KTP</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan KTP per wilayah dengan kolom wajib memiliki, sudah memiliki, dan belum memiliki</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-02</td>
+            <td>Melihat kepemilikan Kartu Keluarga (KK) per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Kartu Keluarga (KK)</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Kartu Keluarga per wilayah dengan kolom total keluarga, sudah memiliki KK, dan belum memiliki KK</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-03</td>
+            <td>Melihat kepemilikan Akta Kelahiran per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Akta Kelahiran</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Akta Kelahiran per wilayah dengan kolom jumlah penduduk yang sudah dan belum memiliki akta lahir</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-04</td>
+            <td>Melihat kepemilikan KIA per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>KIA</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Kartu Identitas Anak (usia 0–17 tahun) per wilayah dengan kolom wajib memiliki, sudah memiliki, dan belum memiliki</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-05</td>
+            <td>Melihat kepemilikan Akta Perkawinan (Catatan Sipil) per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Akta Kawin</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Akta Perkawinan pencatatan sipil per wilayah dengan kolom jumlah pasangan yang sudah dan belum memiliki akta</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-06</td>
+            <td>Melihat kepemilikan Akta Perkawinan Agama per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Akta Kawin Agama</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Akta Perkawinan Agama per wilayah dengan kolom jumlah pasangan yang sudah dan belum memiliki akta kawin agama</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-07</td>
+            <td>Melihat kepemilikan Akta Cerai (Catatan Sipil) per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Akta Cerai</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Akta Cerai pencatatan sipil per wilayah dengan kolom jumlah penduduk yang sudah dan belum memiliki</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-KEPML-08</td>
+            <td>Melihat kepemilikan Akta Cerai Agama per wilayah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Kepemilikan</li>
+                <li>Pilih jenis dokumen: <em>Akta Cerai Agama</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel cakupan kepemilikan Akta Cerai Agama per wilayah dengan kolom jumlah penduduk yang sudah dan belum memiliki akta cerai agama</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: STRUKTUR UMUR                      -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">STRUKTUR UMUR (Distribusi Kelompok Umur per Entitas) — US-10</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-01</td>
+            <td>Melihat kelompok umur Penduduk (Piramida)</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi kelompok umur penduduk (rentang 5 tahunan) disertai kolom laki-laki, perempuan, total, dan grafik piramida penduduk per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-02</td>
+            <td>Melihat kelompok umur Penduduk berdasarkan Status Kawin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Status Kawin × Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel tabulasi silang antara kelompok umur dan status perkawinan (belum kawin, kawin, cerai hidup, cerai mati) per jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-03</td>
+            <td>Melihat kelompok umur Kepala Keluarga</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Kepala Keluarga – Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi kelompok umur kepala keluarga (rentang 5 tahunan) per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-04</td>
+            <td>Melihat kelompok umur Kepala Keluarga berdasarkan Status Kawin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Kepala Keluarga – Status Kawin × Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel tabulasi silang antara kelompok umur kepala keluarga dan status perkawinan per jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-05</td>
+            <td>Melihat kelompok umur Penyandang Disabilitas</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Disabilitas – Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi kelompok umur penyandang disabilitas per jenis disabilitas dan jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-06</td>
+            <td>Melihat kelompok umur Disabilitas berdasarkan Usia Sekolah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Disabilitas – Usia Sekolah Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penyandang disabilitas per jenjang usia sekolah (TK 4–6 thn, SD 7–12 thn, SMP 13–15 thn, SMA 16–18 thn) per jenis disabilitas dan jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-07</td>
+            <td>Melihat kelompok umur Penduduk berdasarkan Golongan Darah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Golongan Darah – Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi kelompok umur penduduk berdasarkan golongan darah per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-UMUR-08</td>
+            <td>Melihat kelompok umur Penduduk berdasarkan Agama</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Struktur Umur</li>
+                <li>Pilih halaman: <em>Agama – Kelompok Umur</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi kelompok umur penduduk berdasarkan agama per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: STATISTIK KELOMPOK UMUR            -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">STATISTIK KELOMPOK UMUR (Umur Tunggal &amp; Usia Khusus) — US-10</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-01</td>
+            <td>Melihat distribusi umur tunggal Penduduk</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi usia penduduk per satu tahun (usia 0, 1, 2, … hingga usia tertua) disertai kolom laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-02</td>
+            <td>Melihat umur tunggal Penduduk berdasarkan Status Kawin</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Status Kawin × Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel tabulasi silang antara usia tunggal dan status perkawinan (belum kawin, kawin, cerai hidup, cerai mati) per jenis kelamin per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-03</td>
+            <td>Melihat data Penduduk berdasarkan Usia Sekolah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Usia Sekolah</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel jumlah penduduk usia sekolah per jenjang: TK (4–6 thn), SD (7–12 thn), SMP (13–15 thn), SMA (16–18 thn), dan Perguruan Tinggi (19–24 thn) per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-04</td>
+            <td>Melihat kategorisasi Penduduk Usia Muda–Produktif–Tua</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Penduduk – Usia Muda Produktif Tua</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel kategorisasi penduduk per kelompok: Usia Muda (0–14 tahun), Usia Produktif (15–64 tahun), dan Usia Tua (≥65 tahun) disertai kolom laki-laki, perempuan, dan total per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-05</td>
+            <td>Melihat distribusi umur tunggal Kepala Keluarga</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Kepala Keluarga – Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi usia tunggal kepala keluarga per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-06</td>
+            <td>Melihat distribusi umur tunggal Penyandang Disabilitas</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Disabilitas – Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi usia tunggal penyandang disabilitas per jenis disabilitas per wilayah disertai kolom laki-laki dan perempuan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-07</td>
+            <td>Melihat umur tunggal Disabilitas berdasarkan Pendidikan</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Disabilitas – Pendidikan Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel tabulasi silang antara jenis disabilitas dan tingkat pendidikan dalam bentuk distribusi usia tunggal per wilayah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-STAT-08</td>
+            <td>Melihat distribusi umur tunggal Penduduk berdasarkan Golongan Darah</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Statistik Kelompok Umur</li>
+                <li>Pilih halaman: <em>Golongan Darah – Umur Tunggal</em></li>
+            </ol></td>
+            <td>Halaman menampilkan tabel distribusi usia tunggal penduduk berdasarkan golongan darah per wilayah disertai kolom laki-laki, perempuan, dan total</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: PELAYANAN                          -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">PELAYANAN (Laporan Kinerja Pelayanan Kependudukan) — US-11</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-PLAY-01</td>
+            <td>Melihat laporan pelayanan CAPIL format PDAK</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Pelayanan</li>
+                <li>Pilih jenis: <em>CAPIL (Pencatatan Sipil)</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel laporan format PDAK yang mencakup penerbitan akta kelahiran, akta kawin, akta cerai, akta kematian, pengesahan/pengangkatan anak, perubahan nama dan jenis kelamin per periode</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-PLAY-02</td>
+            <td>Melihat laporan pelayanan DAFDUK format PDAK</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Pelayanan</li>
+                <li>Pilih jenis: <em>DAFDUK (Pendaftaran Penduduk)</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel laporan format PDAK yang mencakup penerbitan KK, NIK, KIA, KTP-el, surat pindah datang, dan surat keterangan per periode</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-PLAY-03</td>
+            <td>Melihat laporan pelayanan eKTP</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Pelayanan</li>
+                <li>Pilih jenis: <em>eKTP</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel volume layanan KTP elektronik mencakup jumlah penerbitan baru dan perubahan data per periode</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-PLAY-04</td>
+            <td>Melihat laporan perekaman biometrik</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Pelayanan</li>
+                <li>Pilih jenis: <em>Perekaman</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel jumlah perekaman biometrik (sidik jari, retina, foto) yang berhasil dilakukan per periode</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-PLAY-05</td>
+            <td>Melihat laporan layanan Online</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Klik menu Pelayanan</li>
+                <li>Pilih jenis: <em>Online</em></li>
+            </ol></td>
+            <td>Sistem menampilkan tabel jumlah permohonan layanan daring yang masuk, sedang diproses, dan diselesaikan per periode</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: IMPORT EXCEL                       -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">IMPORT EXCEL (Import Data &amp; Unduh Template) — US-12</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-01</td>
+            <td>Import data berhasil (file ≤ 2 MB)</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Pilih jenis data, isi semester dan tahun yang belum ada</li>
+                <li>Unggah file <em>.xlsx</em> sesuai template, ukuran ≤ 2 MB</li>
+                <li>Tekan tombol Import</li>
+            </ol></td>
+            <td>Sistem menerima dan memproses file, menyimpan seluruh data ke dalam database, dan menampilkan notifikasi <em>"Import berhasil"</em>. Data langsung tersedia untuk ditampilkan di menu terkait</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-02</td>
+            <td>Import data berhasil (file besar > 2 MB, chunk reading)</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Pilih jenis data, isi semester dan tahun yang belum ada</li>
+                <li>Unggah file <em>.xlsx</em> sesuai template, ukuran > 2 MB</li>
+                <li>Tekan tombol Import</li>
+            </ol></td>
+            <td>Sistem memproses file secara bertahap, menyimpan seluruh data ke dalam database, dan menampilkan notifikasi <em>"Import berhasil"</em></td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-03</td>
+            <td>Import gagal – duplikasi semester &amp; tahun</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Pilih jenis data dengan semester dan tahun yang sudah ada di database</li>
+                <li>Unggah file dan tekan Import</li>
+            </ol></td>
+            <td>Sistem mendeteksi bahwa data untuk semester dan tahun tersebut sudah tersedia, menampilkan pesan <em>"Data Sudah ada"</em>, dan tidak ada data baru yang disimpan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-04</td>
+            <td>Import gagal – format file tidak valid</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Pilih jenis data, isi semester dan tahun</li>
+                <li>Unggah file berformat <em>.pdf</em> atau <em>.docx</em></li>
+                <li>Tekan tombol Import</li>
+            </ol></td>
+            <td>Sistem menolak file karena formatnya bukan Excel yang didukung dan menampilkan pesan validasi; proses import tidak dilanjutkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-05</td>
+            <td>Import gagal – ukuran file melebihi 20 MB</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Pilih jenis data, isi semester dan tahun</li>
+                <li>Unggah file <em>.xlsx</em> dengan ukuran > 20 MB</li>
+                <li>Tekan tombol Import</li>
+            </ol></td>
+            <td>Sistem menolak file karena ukurannya melebihi batas maksimal 20 MB dan menampilkan pesan validasi ukuran; proses import tidak dilanjutkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-IMP-06</td>
+            <td>Unduh file template import</td>
+            <td><ol>
+                <li>Login ke sistem</li>
+                <li>Buka menu Import Excel</li>
+                <li>Klik tombol unduh template untuk salah satu jenis data (misal: <em>Agregat Penduduk</em>)</li>
+            </ol></td>
+            <td>Browser mengunduh file template Excel sesuai jenis data yang dipilih, siap diisi sebelum proses import</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: PENGATURAN – MANAJEMEN USER        -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">PENGATURAN – MANAJEMEN USER (CRUD &amp; Toggle Status) — US-13, US-14</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-01</td>
+            <td>Melihat daftar pengguna sistem</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka menu Pengaturan → Manajemen User</li>
+            </ol></td>
+            <td>Sistem menampilkan daftar seluruh pengguna beserta informasi NIK, Nama, Kontak, Email, Role yang dimiliki, dan Status Aktif masing-masing</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-02</td>
+            <td>Tambah pengguna baru berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User, klik Tambah</li>
+                <li>Isi form: Nama, Email baru, NIK 16 digit unik, Kontak, Instansi, Role</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Akun pengguna baru berhasil dibuat dengan password default, role ditetapkan sesuai pilihan Admin, dan sistem menampilkan notifikasi <em>"Berhasil membuat user"</em></td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-03</td>
+            <td>Tambah pengguna gagal – email sudah terdaftar</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User, klik Tambah</li>
+                <li>Isi email yang sudah digunakan pengguna lain</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan bahwa email tersebut sudah terdaftar; tidak ada akun baru yang dibuat</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-04</td>
+            <td>Tambah pengguna gagal – NIK sudah terdaftar</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User, klik Tambah</li>
+                <li>Isi NIK 16 digit yang sudah digunakan pengguna lain</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan bahwa NIK tersebut sudah digunakan pengguna lain; tidak ada akun baru yang dibuat</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-05</td>
+            <td>Ubah data pengguna berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User, pilih pengguna</li>
+                <li>Ubah nama, kontak, atau role</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Data pengguna berhasil diperbarui, role diperbarui sesuai pilihan, dan sistem menampilkan notifikasi <em>"Berhasil mengubah data"</em></td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-06</td>
+            <td>Hapus pengguna berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User, pilih pengguna yang akan dihapus</li>
+                <li>Klik tombol Hapus dan konfirmasi</li>
+            </ol></td>
+            <td>Data pengguna berhasil dihapus dari sistem dan notifikasi <em>"Berhasil menghapus data"</em> ditampilkan; pengguna tidak lagi muncul dalam daftar</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-07</td>
+            <td>Toggle status aktif pengguna (nonaktifkan)</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User</li>
+                <li>Klik tombol toggle status pada pengguna yang aktif</li>
+            </ol></td>
+            <td>Status akun pengguna berhasil diubah menjadi nonaktif dan notifikasi <em>"User berhasil dinonaktifkan."</em> ditampilkan. Pengguna yang dinonaktifkan tidak dapat masuk ke sistem</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-USR-08</td>
+            <td>Admin mengubah status akunnya sendiri</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen User</li>
+                <li>Klik tombol toggle status pada akun Admin yang sedang digunakan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan <em>"Tidak dapat mengubah status akun sendiri."</em> dan status akun tidak berubah</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: PENGATURAN – MANAJEMEN ROLE        -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">PENGATURAN – KELOLA ROLE &amp; PERMISSION — US-15</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-ROLE-01</td>
+            <td>Tambah role baru berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Pengaturan → Manajemen Role</li>
+                <li>Klik Tambah Role, isi nama role unik</li>
+                <li>Centang minimal satu permission</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Role baru berhasil dibuat beserta permission yang dipilih, dan sistem menampilkan notifikasi <em>"berhasil menambahkan"</em></td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-ROLE-02</td>
+            <td>Tambah role gagal – nama role sudah ada</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen Role, klik Tambah</li>
+                <li>Isi nama role yang sudah terdaftar</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Sistem menampilkan pesan kesalahan bahwa nama role tersebut sudah digunakan; tidak ada role baru yang dibuat</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-ROLE-03</td>
+            <td>Ubah role dan permission berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen Role, pilih role yang ada</li>
+                <li>Ubah nama dan/atau pilihan permission</li>
+                <li>Tekan tombol Simpan</li>
+            </ol></td>
+            <td>Nama role dan daftar permission berhasil diperbarui, notifikasi <em>"berhasil mengubah"</em> ditampilkan, dan perubahan hak akses langsung berlaku untuk semua pengguna yang memiliki role tersebut</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-ROLE-04</td>
+            <td>Hapus role berhasil</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Manajemen Role</li>
+                <li>Pilih role yang akan dihapus</li>
+                <li>Klik tombol Hapus dan konfirmasi</li>
+            </ol></td>
+            <td>Role berhasil dihapus dari sistem dan notifikasi <em>"berhasil menghapus"</em> ditampilkan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- MODULE: PENGATURAN – WILAYAH KELURAHAN     -->
+        <!-- ══════════════════════════════════════════ -->
+        <tr class="module-header">
+            <td colspan="6">PENGATURAN – WILAYAH KELURAHAN (Data Hirarki Wilayah) — US-16</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-WIL-01</td>
+            <td>Melihat daftar data kecamatan</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Pengaturan → Wilayah Kelurahan</li>
+                <li>Akses endpoint <code>GET /json/wilayah-kecamatan</code></li>
+            </ol></td>
+            <td>Sistem menampilkan daftar seluruh kecamatan beserta kode wilayahnya, diurutkan dari kode terkecil</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+        <tr>
+            <td class="code">RDDC-BT-WIL-02</td>
+            <td>Melihat daftar data kelurahan beserta kecamatannya</td>
+            <td><ol>
+                <li>Login sebagai Admin</li>
+                <li>Buka Pengaturan → Wilayah Kelurahan</li>
+                <li>Akses endpoint <code>GET /json/wilayah-kelurahan</code></li>
+            </ol></td>
+            <td>Sistem menampilkan daftar seluruh kelurahan beserta nama dan kode kecamatan induknya, diurutkan berdasarkan kode kecamatan dan nama kelurahan</td>
+            <td class="sesuai">Sesuai</td>
+            <td class="pass">Pass</td>
+        </tr>
+
+    </tbody>
+</table>
+
+<div style="font-family:'Segoe UI',sans-serif;font-size:.8rem;color:#64748b;border-top:1px solid #e2e8f0;padding-top:.8rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+    <span>Total Test Case: <b>84</b> &nbsp;|&nbsp; Pass: <b>84</b> &nbsp;|&nbsp; Fail: <b>0</b></span>
+    <span>Rumah Data Dukcapil 2.0 – Black Box Testing Documentation</span>
+</div>
+
+</div>
+</body>
+</html>

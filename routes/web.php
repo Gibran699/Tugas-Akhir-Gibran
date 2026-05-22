@@ -26,7 +26,7 @@ Route::get('login', function () {
 })->name('login')->middleware(['guest']);
 Route::post('login', [\App\Http\Controllers\Auth\MainController::class, 'login'])->name('action_login');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'user.active'])->group(function () {
     Route::get('/', function () {
         return view('dashboard.home');
     })->name('home');
@@ -46,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+    Route::patch('user/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('user.toggle_status');
     //auth
     Route::post('logout', [AuthMainController::class, 'logout'])->name('logout');
     Route::post('change-password', [AuthMainController::class, 'changePassword'])->name('change_password');

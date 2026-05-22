@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tools & Teknologi — Rumah Data 2.0</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'Segoe UI',Arial,sans-serif; background:#f0f4f8; min-height:100vh; padding:52px 32px 80px; color:#1e293b; font-size:13px; }
+  .title-block { text-align:center; margin-bottom:36px; }
+  .eyebrow { display:inline-block; font-size:11px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:#64748b; background:#e2e8f0; border-radius:20px; padding:4px 14px; margin-bottom:12px; }
+  .title-block h1 { font-size:24px; font-weight:800; color:#0f172a; letter-spacing:-0.5px; margin-bottom:8px; }
+  .title-block p  { font-size:13px; color:#64748b; line-height:1.7; }
+  .summary-bar { display:flex; background:#fff; border-radius:14px; box-shadow:0 2px 16px rgba(15,23,42,.07); margin-bottom:40px; overflow:hidden; }
+  .sum-item { flex:1; padding:16px 20px; border-right:1px solid #f1f5f9; text-align:center; }
+  .sum-item:last-child { border-right:none; }
+  .sum-val { font-size:24px; font-weight:800; color:#0f172a; display:block; }
+  .sum-key { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:#94a3b8; display:block; margin-top:2px; }
+  .section-title { display:flex; align-items:center; gap:12px; margin:40px 0 18px; }
+  .phase-badge { font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; padding:5px 14px; border-radius:20px; white-space:nowrap; }
+  .section-title h2 { font-size:18px; font-weight:700; color:#0f172a; }
+  .divider { flex:1; height:1px; background:#e2e8f0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; margin-bottom:24px; }
+  .card { background:#fff; border-radius:14px; box-shadow:0 2px 14px rgba(15,23,42,.07); overflow:hidden; }
+  .card-head { padding:13px 18px; display:flex; align-items:center; gap:10px; }
+  .card-head .icon { font-size:18px; }
+  .card-head .ch { font-size:13px; font-weight:800; color:#fff; }
+  .card-head .cs { font-size:11px; font-weight:600; color:rgba(255,255,255,.8); margin-top:1px; }
+  .card-body { padding:0; }
+  .tbl { width:100%; border-collapse:collapse; }
+  .tbl thead tr th { padding:8px 16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:#94a3b8; background:#f8fafc; border-bottom:1px solid #f1f5f9; text-align:left; }
+  .tbl tbody tr { border-bottom:1px solid #f8fafc; }
+  .tbl tbody tr:last-child { border-bottom:none; }
+  .tbl tbody td { padding:10px 16px; vertical-align:middle; }
+  .pkg { font-size:12px; font-weight:700; color:#0f172a; }
+  .desc { font-size:11px; color:#64748b; margin-top:2px; line-height:1.45; }
+  .ver { display:inline-block; font-family:monospace; font-size:11px; font-weight:700; padding:3px 9px; border-radius:7px; white-space:nowrap; }
+  .ver-green { background:#dcfce7; color:#15803d; }
+  .ver-blue  { background:#dbeafe; color:#1e40af; }
+  .ver-purple{ background:#ede9fe; color:#5b21b6; }
+  .ver-orange{ background:#ffedd5; color:#9a3412; }
+  .ver-pink  { background:#fce7f3; color:#9d174d; }
+  .ver-gray  { background:#f1f5f9; color:#475569; }
+  .ver-yellow{ background:#fef9c3; color:#713f12; }
+  .role-badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; padding:2px 8px; border-radius:6px; }
+  .r-core   { background:#dbeafe; color:#1e40af; }
+  .r-auth   { background:#ede9fe; color:#5b21b6; }
+  .r-data   { background:#dcfce7; color:#15803d; }
+  .r-api    { background:#ffedd5; color:#9a3412; }
+  .r-ui     { background:#fce7f3; color:#9d174d; }
+  .r-dev    { background:#f1f5f9; color:#475569; }
+  .r-db     { background:#fef9c3; color:#713f12; }
+  .arch-card { background:#fff; border-radius:14px; box-shadow:0 2px 14px rgba(15,23,42,.07); padding:20px 24px; margin-bottom:16px; }
+  .arch-card h3 { font-size:14px; font-weight:800; color:#0f172a; margin-bottom:12px; }
+  .flow { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+  .flow-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:8px 14px; text-align:center; min-width:110px; }
+  .flow-box .fb-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:#94a3b8; }
+  .flow-box .fb-val   { font-size:12px; font-weight:800; color:#0f172a; margin-top:2px; }
+  .arrow { color:#94a3b8; font-size:16px; font-weight:700; }
+  .note-box { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:14px 18px; margin-top:16px; font-size:12px; color:#713f12; line-height:1.6; }
+  .note-box strong { font-weight:800; }
+</style>
+</head>
+<body>
+
+<div class="title-block">
+  <div class="eyebrow">Analisis Teknologi — Rumah Data 2.0</div>
+  <h1>Tools &amp; Teknologi yang Digunakan</h1>
+  <p>Berdasarkan <code>composer.json</code>, <code>composer.lock</code>, dan <code>package.json</code> aktual project<br/>
+  Versi yang tertera adalah versi <em>terinstal aktual</em> dari <code>composer.lock</code></p>
+</div>
+
+<div class="summary-bar">
+  <div class="sum-item"><span class="sum-val">PHP 8.1</span><span class="sum-key">Bahasa Utama</span></div>
+  <div class="sum-item"><span class="sum-val">Laravel 10</span><span class="sum-key">Framework</span></div>
+  <div class="sum-item"><span class="sum-val">MySQL</span><span class="sum-key">Database</span></div>
+  <div class="sum-item"><span class="sum-val">Vite 4</span><span class="sum-key">Build Tool</span></div>
+  <div class="sum-item"><span class="sum-val">10+</span><span class="sum-key">Package Utama</span></div>
+  <div class="sum-item"><span class="sum-val">XAMPP</span><span class="sum-key">Server Lokal</span></div>
+</div>
+
+<!-- SERVER & RUNTIME -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#0f172a;color:#fff;">01</span>
+  <h2>Server &amp; Runtime Environment</h2><div class="divider"></div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);">
+      <span class="icon">🖥️</span>
+      <div><div class="ch">Server Stack</div><div class="cs">Infrastruktur pengembangan lokal</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Komponen</th><th>Versi / Info</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">XAMPP</div><div class="desc">Apache + MySQL + PHP bundled</div></td><td><span class="ver ver-purple">v8.x</span></td><td><span class="role-badge r-core">Server</span></td></tr>
+          <tr><td><div class="pkg">Apache HTTP Server</div><div class="desc">Web server lokal via XAMPP</div></td><td><span class="ver ver-gray">2.4.x</span></td><td><span class="role-badge r-core">HTTP</span></td></tr>
+          <tr><td><div class="pkg">PHP</div><div class="desc">Runtime bahasa utama backend</div></td><td><span class="ver ver-purple">^8.1</span></td><td><span class="role-badge r-core">Runtime</span></td></tr>
+          <tr><td><div class="pkg">MySQL</div><div class="desc">Database relasional via XAMPP</div></td><td><span class="ver ver-yellow">8.0.x</span></td><td><span class="role-badge r-db">Database</span></td></tr>
+          <tr><td><div class="pkg">Composer</div><div class="desc">Dependency manager PHP</div></td><td><span class="ver ver-gray">2.x</span></td><td><span class="role-badge r-dev">Package Mgr</span></td></tr>
+          <tr><td><div class="pkg">Node.js</div><div class="desc">Runtime JS untuk build frontend</div></td><td><span class="ver ver-green">18.x / 20.x</span></td><td><span class="role-badge r-dev">Build</span></td></tr>
+          <tr><td><div class="pkg">NPM</div><div class="desc">Package manager JavaScript</div></td><td><span class="ver ver-gray">9.x / 10.x</span></td><td><span class="role-badge r-dev">Package Mgr</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- BACKEND FRAMEWORK -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#1d4ed8;color:#fff;">02</span>
+  <h2>Backend Framework &amp; Core Libraries</h2><div class="divider"></div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">
+      <span class="icon">⚙️</span>
+      <div><div class="ch">Laravel Core</div><div class="cs">Framework MVC utama project</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi Aktual</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">laravel/framework</div><div class="desc">Framework MVC PHP utama</div></td><td><span class="ver ver-blue">v10.48.27</span></td><td><span class="role-badge r-core">Core</span></td></tr>
+          <tr><td><div class="pkg">laravel/tinker</div><div class="desc">REPL interaktif artisan</div></td><td><span class="ver ver-gray">^2.8</span></td><td><span class="role-badge r-dev">Dev Tool</span></td></tr>
+          <tr><td><div class="pkg">doctrine/dbal</div><div class="desc">Abstraksi skema database, dibutuhkan untuk rename/drop kolom</div></td><td><span class="ver ver-blue">3.9.4</span></td><td><span class="role-badge r-db">Database</span></td></tr>
+          <tr><td><div class="pkg">laravelcollective/html</div><div class="desc">Helper Form &amp; HTML Blade</div></td><td><span class="ver ver-blue">^6.4</span></td><td><span class="role-badge r-ui">UI Helper</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#0e7490,#06b6d4);">
+      <span class="icon">📊</span>
+      <div><div class="ch">Data &amp; HTTP</div><div class="cs">Import Excel &amp; HTTP Client</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi Aktual</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">maatwebsite/excel</div><div class="desc">Import/Export Excel (xlsx, xls, csv) dengan chunk reading &amp; memory limit</div></td><td><span class="ver ver-blue">3.1.62</span></td><td><span class="role-badge r-data">Import</span></td></tr>
+          <tr><td><div class="pkg">guzzlehttp/guzzle</div><div class="desc">HTTP client untuk request ke API eksternal Dukcapil (ektp.samarindakota.go.id)</div></td><td><span class="ver ver-blue">7.9.3</span></td><td><span class="role-badge r-api">HTTP Client</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH & SECURITY -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#7c3aed;color:#fff;">03</span>
+  <h2>Autentikasi &amp; Keamanan</h2><div class="divider"></div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">
+      <span class="icon">🔐</span>
+      <div><div class="ch">Auth Stack</div><div class="cs">Session, API Token &amp; Role/Permission</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi Aktual</th><th>Mekanisme</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">Laravel Session Auth</div><div class="desc">Autentikasi berbasis session bawaan Laravel untuk akses web (login, logout, change password)</div></td><td><span class="ver ver-purple">Built-in</span></td><td><span class="role-badge r-auth">Session</span></td></tr>
+          <tr><td><div class="pkg">laravel/passport</div><div class="desc">OAuth2 server — menerbitkan Bearer Token untuk akses API internal (/api/login, /api/search_data)</div></td><td><span class="ver ver-purple">v12.4.2</span></td><td><span class="role-badge r-auth">OAuth2 API</span></td></tr>
+          <tr><td><div class="pkg">laravel/sanctum</div><div class="desc">Token-based auth ringan (disertakan sebagai dependency, route /user menggunakan auth:sanctum)</div></td><td><span class="ver ver-purple">v3.3.3</span></td><td><span class="role-badge r-auth">SPA Token</span></td></tr>
+          <tr><td><div class="pkg">spatie/laravel-permission</div><div class="desc">Manajemen Role &amp; Permission berbasis UUID; digunakan di UserController, RoleController, dan cek role API</div></td><td><span class="ver ver-purple">6.12.0</span></td><td><span class="role-badge r-auth">RBAC</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FRONTEND -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#9d174d;color:#fff;">04</span>
+  <h2>Frontend &amp; Build Tools</h2><div class="divider"></div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#9d174d,#ec4899);">
+      <span class="icon">🎨</span>
+      <div><div class="ch">CSS Framework &amp; Build</div><div class="cs">Styling, bundler, dan asset pipeline</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi Aktual</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">vite</div><div class="desc">Bundler &amp; dev server modern, menggantikan Laravel Mix/Webpack</div></td><td><span class="ver ver-pink">^4.0.0</span></td><td><span class="role-badge r-ui">Bundler</span></td></tr>
+          <tr><td><div class="pkg">laravel-vite-plugin</div><div class="desc">Integrasi Vite dengan Laravel (hot reload, asset versioning)</div></td><td><span class="ver ver-pink">^0.7.2</span></td><td><span class="role-badge r-ui">Integration</span></td></tr>
+          <tr><td><div class="pkg">tailwindcss</div><div class="desc">Utility-first CSS framework untuk styling komponen UI</div></td><td><span class="ver ver-pink">^3.4.17</span></td><td><span class="role-badge r-ui">CSS</span></td></tr>
+          <tr><td><div class="pkg">postcss</div><div class="desc">Prosesor CSS, diperlukan oleh Tailwind</div></td><td><span class="ver ver-pink">^8.4.49</span></td><td><span class="role-badge r-ui">CSS Proc</span></td></tr>
+          <tr><td><div class="pkg">autoprefixer</div><div class="desc">Otomatis tambah vendor prefix CSS</div></td><td><span class="ver ver-pink">^10.4.20</span></td><td><span class="role-badge r-ui">CSS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#9a3412,#fb923c);">
+      <span class="icon">⚡</span>
+      <div><div class="ch">JavaScript Libraries</div><div class="cs">Interaktivitas dan HTTP client sisi klien</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi Aktual</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">jquery</div><div class="desc">Manipulasi DOM, event handling, dan AJAX pada halaman data</div></td><td><span class="ver ver-orange">^3.7.1</span></td><td><span class="role-badge r-ui">DOM/AJAX</span></td></tr>
+          <tr><td><div class="pkg">axios</div><div class="desc">HTTP client JS (promise-based) untuk request API dari sisi browser</div></td><td><span class="ver ver-orange">^1.1.2</span></td><td><span class="role-badge r-api">HTTP Client</span></td></tr>
+          <tr><td><div class="pkg">animejs</div><div class="desc">Library animasi JavaScript ringan untuk transisi dan efek visual UI</div></td><td><span class="ver ver-orange">^4.3.6</span></td><td><span class="role-badge r-ui">Animation</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- DEV TOOLS -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#374151;color:#fff;">05</span>
+  <h2>Development &amp; Testing Tools</h2><div class="divider"></div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-head" style="background:linear-gradient(135deg,#374151,#6b7280);">
+      <span class="icon">🧪</span>
+      <div><div class="ch">Dev Tools (require-dev)</div><div class="cs">Hanya digunakan pada environment development</div></div>
+    </div>
+    <div class="card-body">
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Versi</th><th>Peran</th></tr></thead>
+        <tbody>
+          <tr><td><div class="pkg">phpunit/phpunit</div><div class="desc">Framework unit testing PHP utama</div></td><td><span class="ver ver-gray">^10.0</span></td><td><span class="role-badge r-dev">Testing</span></td></tr>
+          <tr><td><div class="pkg">fakerphp/faker</div><div class="desc">Generasi data palsu untuk database seeder &amp; factory</div></td><td><span class="ver ver-gray">^1.9.1</span></td><td><span class="role-badge r-dev">Seeder</span></td></tr>
+          <tr><td><div class="pkg">laravel/pint</div><div class="desc">Code style fixer otomatis (PSR-12)</div></td><td><span class="ver ver-gray">^1.0</span></td><td><span class="role-badge r-dev">Linter</span></td></tr>
+          <tr><td><div class="pkg">laravel/sail</div><div class="desc">Docker dev environment untuk Laravel</div></td><td><span class="ver ver-gray">^1.18</span></td><td><span class="role-badge r-dev">Docker</span></td></tr>
+          <tr><td><div class="pkg">mockery/mockery</div><div class="desc">Mock object framework untuk unit test</div></td><td><span class="ver ver-gray">^1.4.4</span></td><td><span class="role-badge r-dev">Testing</span></td></tr>
+          <tr><td><div class="pkg">nunomaduro/collision</div><div class="desc">Error reporting yang lebih jelas di terminal</div></td><td><span class="ver ver-gray">^7.0</span></td><td><span class="role-badge r-dev">Debug</span></td></tr>
+          <tr><td><div class="pkg">spatie/laravel-ignition</div><div class="desc">Halaman error interaktif di browser (dev only)</div></td><td><span class="ver ver-gray">^2.0</span></td><td><span class="role-badge r-dev">Debug</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ARSITEKTUR ALUR -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#15803d;color:#fff;">06</span>
+  <h2>Arsitektur Alur Teknologi</h2><div class="divider"></div>
+</div>
+<div class="arch-card">
+  <h3>Request Flow — Web (Session Auth)</h3>
+  <div class="flow">
+    <div class="flow-box"><div class="fb-label">Browser</div><div class="fb-val">HTML/JS</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Apache</div><div class="fb-val">XAMPP</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">PHP 8.1</div><div class="fb-val">Laravel 10</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Middleware</div><div class="fb-val">Auth + Can</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Controller</div><div class="fb-val">MVC</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Eloquent</div><div class="fb-val">MySQL</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Blade View</div><div class="fb-val">Tailwind</div></div>
+  </div>
+</div>
+<div class="arch-card">
+  <h3>Request Flow — API (Passport OAuth2)</h3>
+  <div class="flow">
+    <div class="flow-box"><div class="fb-label">Client Ext.</div><div class="fb-val">POST /api/login</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Passport</div><div class="fb-val">Bearer Token</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Middleware</div><div class="fb-val">auth:api</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Role Check</div><div class="fb-val">Spatie</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Controller</div><div class="fb-val">API</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Response</div><div class="fb-val">JSON</div></div>
+  </div>
+</div>
+<div class="arch-card">
+  <h3>Request Flow — External API (Outbound via Guzzle)</h3>
+  <div class="flow">
+    <div class="flow-box"><div class="fb-label">Controller</div><div class="fb-val">Laravel</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Service</div><div class="fb-val">KtpApiService / perekamanService</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">GuzzleHTTP</div><div class="fb-val">7.9.3</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">API Dukcapil</div><div class="fb-val">ektp.samarindakota.go.id</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Response</div><div class="fb-val">JSON → View</div></div>
+  </div>
+</div>
+<div class="arch-card">
+  <h3>Import Data Flow (Excel → Database)</h3>
+  <div class="flow">
+    <div class="flow-box"><div class="fb-label">Upload</div><div class="fb-val">xlsx/xls/csv</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Maatwebsite</div><div class="fb-val">Excel 3.1.62</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Chunk Read</div><div class="fb-val">memory_limit++</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">Duplicate Check</div><div class="fb-val">Eloquent</div></div>
+    <span class="arrow">→</span>
+    <div class="flow-box"><div class="fb-label">MySQL</div><div class="fb-val">Insert Batch</div></div>
+  </div>
+</div>
+
+<!-- REKAP TABEL -->
+<div class="section-title">
+  <span class="phase-badge" style="background:#312e81;color:#fff;">07</span>
+  <h2>Rekapitulasi Lengkap Versi Aktual</h2><div class="divider"></div>
+</div>
+<div class="card" style="margin-bottom:24px;">
+  <div class="card-head" style="background:linear-gradient(135deg,#312e81,#6366f1);">
+    <span class="icon">📋</span>
+    <div><div class="ch">Semua Package — Versi Terinstal (composer.lock &amp; package.json)</div></div>
+  </div>
+  <div class="card-body">
+    <table class="tbl">
+      <thead><tr><th>Package</th><th>Versi Terinstal</th><th>Kategori</th><th>Keterangan Singkat</th></tr></thead>
+      <tbody>
+        <tr><td class="pkg">PHP</td><td><span class="ver ver-purple">^8.1</span></td><td><span class="role-badge r-core">Runtime</span></td><td class="desc">Bahasa backend utama, mendukung fitur modern seperti Enums, Fibers, Named Arguments</td></tr>
+        <tr><td class="pkg">laravel/framework</td><td><span class="ver ver-blue">v10.48.27</span></td><td><span class="role-badge r-core">Framework</span></td><td class="desc">Versi LTS Laravel 10 — basis MVC, routing, Eloquent ORM, Queue, Cache</td></tr>
+        <tr><td class="pkg">laravel/passport</td><td><span class="ver ver-purple">v12.4.2</span></td><td><span class="role-badge r-auth">Auth</span></td><td class="desc">OAuth2 server, digunakan untuk menerbitkan Bearer Token pada endpoint API internal</td></tr>
+        <tr><td class="pkg">laravel/sanctum</td><td><span class="ver ver-purple">v3.3.3</span></td><td><span class="role-badge r-auth">Auth</span></td><td class="desc">Token auth ringan, route /user menggunakan middleware auth:sanctum</td></tr>
+        <tr><td class="pkg">spatie/laravel-permission</td><td><span class="ver ver-purple">6.12.0</span></td><td><span class="role-badge r-auth">RBAC</span></td><td class="desc">Manajemen role &amp; permission berbasis UUID, integrasi hasRole() dan can() middleware</td></tr>
+        <tr><td class="pkg">maatwebsite/excel</td><td><span class="ver ver-blue">3.1.62</span></td><td><span class="role-badge r-data">Import</span></td><td class="desc">Import file Excel/CSV besar dengan chunk reading untuk efisiensi memori</td></tr>
+        <tr><td class="pkg">guzzlehttp/guzzle</td><td><span class="ver ver-blue">7.9.3</span></td><td><span class="role-badge r-api">HTTP</span></td><td class="desc">HTTP client untuk outbound request ke API ektp.samarindakota.go.id (KTP &amp; Perekaman)</td></tr>
+        <tr><td class="pkg">doctrine/dbal</td><td><span class="ver ver-blue">3.9.4</span></td><td><span class="role-badge r-db">Database</span></td><td class="desc">Abstraksi skema DB, diperlukan Laravel untuk operasi ALTER TABLE (rename/drop kolom)</td></tr>
+        <tr><td class="pkg">laravelcollective/html</td><td><span class="ver ver-blue">^6.4</span></td><td><span class="role-badge r-ui">UI</span></td><td class="desc">Helper Form::open(), Form::input() pada template Blade</td></tr>
+        <tr><td class="pkg">vite</td><td><span class="ver ver-pink">^4.0.0</span></td><td><span class="role-badge r-ui">Build</span></td><td class="desc">Bundler frontend generasi baru, pengganti Webpack/Mix — hot reload development</td></tr>
+        <tr><td class="pkg">tailwindcss</td><td><span class="ver ver-pink">^3.4.17</span></td><td><span class="role-badge r-ui">CSS</span></td><td class="desc">Utility-first CSS framework untuk semua komponen UI project</td></tr>
+        <tr><td class="pkg">jquery</td><td><span class="ver ver-orange">^3.7.1</span></td><td><span class="role-badge r-ui">JS Lib</span></td><td class="desc">Manipulasi DOM dan AJAX pada halaman data kependudukan</td></tr>
+        <tr><td class="pkg">axios</td><td><span class="ver ver-orange">^1.1.2</span></td><td><span class="role-badge r-api">HTTP JS</span></td><td class="desc">HTTP client sisi browser (promise-based) untuk request API</td></tr>
+        <tr><td class="pkg">animejs</td><td><span class="ver ver-orange">^4.3.6</span></td><td><span class="role-badge r-ui">Animation</span></td><td class="desc">Animasi JavaScript ringan untuk transisi UI dan efek visual halaman</td></tr>
+        <tr><td class="pkg">phpunit/phpunit</td><td><span class="ver ver-gray">^10.0</span></td><td><span class="role-badge r-dev">Testing</span></td><td class="desc">Framework unit &amp; feature testing PHP (dev only)</td></tr>
+        <tr><td class="pkg">laravel/pint</td><td><span class="ver ver-gray">^1.0</span></td><td><span class="role-badge r-dev">Linter</span></td><td class="desc">Code style fixer otomatis berbasis PHP-CS-Fixer (dev only)</td></tr>
+        <tr><td class="pkg">spatie/laravel-ignition</td><td><span class="ver ver-gray">^2.0</span></td><td><span class="role-badge r-dev">Debug</span></td><td class="desc">Halaman error interaktif, stack trace rapi di browser (dev only)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="note-box">
+  <strong>Catatan Versi:</strong> Versi yang tercatat di atas diambil langsung dari <code>composer.lock</code> (versi <em>pinned</em> aktual terinstal) dan <code>package.json</code> (constraint NPM). Versi PHP, MySQL, dan server (Apache/XAMPP/Node.js) diidentifikasi dari path instalasi XAMPP di <code>/Applications/XAMPP/xamppfiles/htdocs/</code> dan constraint <code>composer.json</code> (<code>"php": "^8.1"</code>).
+</div>
+
+</body>
+</html>
