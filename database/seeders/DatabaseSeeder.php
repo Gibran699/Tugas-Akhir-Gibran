@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            WilayahSeeder::class,    // master data wilayah (mstr_kecamatan, mstr_kelurahan)
             PermissionSeeder::class, // harus sebelum UserSeeder agar role sudah ada
             UserSeeder::class,
         ]);
