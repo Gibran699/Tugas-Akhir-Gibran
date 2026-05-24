@@ -78,9 +78,12 @@ class MainController extends Controller
         return abort(404, 'View not found');
     }
 
-    public function dataDashBoard()
+    public function dataDashBoard(Request $request)
     {
-        $tahunSemester = config('dataArray.dataDashboard');
+        $tahunSemester = [
+            'semester' => $request->get('semester', config('dataArray.dataDashboard.semester')),
+            'tahun'    => $request->get('tahun',    config('dataArray.dataDashboard.tahun')),
+        ];
         //data
         $jumlahPenduduk = $this->penduduk($tahunSemester);
         $jumlahKepalaKeluarga = $this->kepalaKeluarga($tahunSemester);

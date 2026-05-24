@@ -1,15 +1,45 @@
 @extends('layout.master')
 @section('content')
     <div class="container-fluid">
-        <div class="form-head mb-sm-5 mb-3 d-flex flex-wrap align-items-center">
-            <h2 class="font-w600 title mb-2 me-auto " style="direction: ltr;">Dashboard</h2>
+        <div class="form-head mb-3 d-flex flex-wrap align-items-center">
+            <h2 class="font-w600 title mb-2 me-auto" style="direction: ltr;">Dashboard</h2>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body py-3">
+                <div class="row align-items-end g-2">
+                    <div class="col-md-3 col-sm-6">
+                        <label class="form-label mb-1 small text-muted">Semester</label>
+                        <select id="filterSemester" class="form-control filter-select">
+                            <option value="1">Semester I</option>
+                            <option value="2">Semester II</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label class="form-label mb-1 small text-muted">Tahun</label>
+                        <select id="filterTahun" class="form-control filter-select"></select>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="d-flex align-items-center flex-wrap mt-sm-0 mt-2" style="gap:10px">
+                            <button id="btnFilterDashboard" class="btn btn-primary">
+                                <i class="fas fa-filter me-1"></i> Tampilkan
+                            </button>
+                            <span id="activePeriodLabel" class="badge badge-primary px-3 py-2" style="font-size:0.82rem;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         @include('dashboard.component.card_content_penduduk')
         @include('dashboard.component.chart')
         @include('dashboard.component.card_content_kepemilikan')
         @include('dashboard.component.table_kelompok_umur')
     </div>
+    <script src="{{ asset('js/global_func.js') }}"></script>
     <script>
+        const DEFAULT_SEMESTER = '{{ config("dataArray.dataDashboard.semester") }}';
+        const DEFAULT_TAHUN = '{{ config("dataArray.dataDashboard.tahun") }}';
+        let workChart = null, maritalChart = null, educationChart = null;
+
         /**
          * Configuration constants for charts and tables
          * @constant
@@ -340,10 +370,11 @@
          */
         const renderWorkStatusChart = (data) => {
             if (!checkElementExists(CHART_CONFIG.barCanvasId, 'Work status chart')) return;
+            if (workChart) { workChart.destroy(); workChart = null; }
             const context = document.getElementById('top10Work').getContext('2d');
             const { labels, values } = processData(data, [], 'top10_pekerjaan');
             if (labels.length && values.length) {
-                initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
+                workChart = initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
             } else {
                 console.warn('No valid data for work status chart');
             }
@@ -355,9 +386,10 @@
          */
         const renderMaritalStatusChart = (data) => {
             if (!checkElementExists(CHART_CONFIG.pieMaritalCanvasId, 'Marital status chart')) return;
+            if (maritalChart) { maritalChart.destroy(); maritalChart = null; }
             const context = document.getElementById('statusKawin').getContext('2d');
             const { labels, values } = processData(data, CHART_CONFIG.maritalLabels, 'status_kawin');
-            initializePieChart(context, labels, values, CHART_CONFIG.pieColors.slice(0, 4));
+            maritalChart = initializePieChart(context, labels, values, CHART_CONFIG.pieColors.slice(0, 4));
         };
 
         /**
@@ -366,9 +398,10 @@
          */
         const renderEducationChart = (data) => {
             if (!checkElementExists(CHART_CONFIG.barEducationCanvasId, 'Education chart')) return;
+            if (educationChart) { educationChart.destroy(); educationChart = null; }
             const context = document.getElementById('statusPendidikan').getContext('2d');
             const { labels, values } = processData(data, CHART_CONFIG.pendidikanLabels, 'pendidikan');
-            initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
+            educationChart = initializeBarChart(context, labels, values, CHART_CONFIG.barColors);
         };
 
         /**
@@ -418,13 +451,17 @@
         /**
          * Fetch dashboard data and update UI
          */
-        const fetchDataDashboard = () => {
+        const fetchDataDashboard = (semester, tahun) => {
+            const smstr = semester || DEFAULT_SEMESTER;
+            const thn   = tahun    || DEFAULT_TAHUN;
+            const semLabel = smstr === '1' ? 'Semester I' : 'Semester II';
             $.ajax({
                 url: '/data_json/dashboard',
                 type: 'GET',
+                data: { semester: smstr, tahun: thn },
                 dataType: 'json',
                 success: (data) => {
-                    console.log('Dashboard data:', data); // Debug log
+                    $('#activePeriodLabel').text(semLabel + ' - ' + thn);
                     updateCardContent(data);
                     renderWorkStatusChart(data);
                     renderMaritalStatusChart(data);
@@ -439,6 +476,21 @@
         };
 
         /* Initialize dashboard */
-        $(document).ready(() => fetchDataDashboard());
+        $(document).ready(() => {
+            generateYearOptions('filterTahun');
+            $('#filterSemester, #filterTahun').selectpicker({ container: 'body' });
+            $('#filterTahun').val(DEFAULT_TAHUN).selectpicker('refresh');
+            $('#filterSemester').val(DEFAULT_SEMESTER).selectpicker('refresh');
+            fetchDataDashboard(DEFAULT_SEMESTER, DEFAULT_TAHUN);
+            $('#btnFilterDashboard').on('click', function () {
+                const semester = $('#filterSemester').val();
+                const tahun    = $('#filterTahun').val();
+                if (!semester || !tahun) {
+                    alert('Silakan pilih semester dan tahun terlebih dahulu.');
+                    return;
+                }
+                fetchDataDashboard(semester, tahun);
+            });
+        });
     </script>
 @endsection
