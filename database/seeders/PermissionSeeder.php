@@ -12,29 +12,31 @@ class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
         // Daftar permission sesuai yang dipakai di routes dan sidebar
-        $permissions = [
+        $permissionNames = [
             'pengaturan',
             'import_data',
             'web_service',
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(
-                ['name' => $permission, 'guard_name' => 'web'],
+        // Buat permissions dan simpan objeknya langsung
+        $permissionObjects = [];
+        foreach ($permissionNames as $name) {
+            $permissionObjects[] = Permission::firstOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
                 ['uuid' => Str::uuid()]
             );
         }
 
-        // Buat role admin dengan semua permission
+        // Reset cache SETELAH buat permissions agar sinkron
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        // Buat role admin, assign via objek (bukan string) — bypass findByName cache
         $adminRole = Role::firstOrCreate(
             ['name' => 'admin', 'guard_name' => 'web'],
             ['uuid' => Str::uuid()]
         );
-        $adminRole->givePermissionTo($permissions);
+        $adminRole->syncPermissions($permissionObjects);
 
         // Buat role operator: hanya bisa lihat data, tanpa permission khusus
         Role::firstOrCreate(

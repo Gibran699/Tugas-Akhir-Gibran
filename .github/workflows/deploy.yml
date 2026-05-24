@@ -225,9 +225,10 @@ jobs:
           3. \`$COMPOSER install --no-dev --optimize-autoloader\`
           4. \`cp .env.example .env && nano .env\`
           5. \`php artisan key:generate && php artisan migrate --force\`
-          6. \`php artisan storage:link\`
-          7. \`sudo chown -R www:www . && sudo find storage -type d -exec chmod 775 {} +\`
-          8. \`sudo systemctl restart ${{ env.P_SERVICE }}\`
+          6. \`php artisan db:seed --class=PermissionSeeder\`
+          7. \`php artisan storage:link\`
+          8. \`sudo chown -R www:www . && sudo find storage -type d -exec chmod 775 {} +\`
+          9. \`sudo systemctl restart ${{ env.P_SERVICE }}\`
           " )
 
           <details><summary>📄 Lihat Log Raw Server</summary>
