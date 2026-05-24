@@ -8,7 +8,7 @@
 	
 	var handleSelectPicker = function(){
 		if(jQuery('.default-select').length > 0 ){
-			jQuery('.default-select').selectpicker();
+			jQuery('.default-select').selectpicker({container: 'body'});
 		}
 	}
 

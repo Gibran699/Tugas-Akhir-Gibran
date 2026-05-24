@@ -13,6 +13,14 @@ function generateYearOptions(selectId, startYear = 2017) {
         const tahun = tahunSekarang - i;
         return `<option value="${tahun}">${tahun}</option>`;
     }).join('');
+
+    // Refresh bootstrap-select jika sudah diinisialisasi
+    if (typeof jQuery !== 'undefined') {
+        var $el = jQuery('#' + selectId);
+        if ($el.hasClass('selectpicker') || $el.next('.bootstrap-select').length > 0) {
+            $el.selectpicker('refresh');
+        }
+    }
 }
 function dataTableBasic() {
     "use strict";
