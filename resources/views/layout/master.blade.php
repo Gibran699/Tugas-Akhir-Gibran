@@ -48,73 +48,78 @@
     <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
     {{-- SwalProgress: custom progress bar — bar + pct + cycling msg, no confirm button --}}
     <script>
+    /* SweetAlert2 v7 compatibility shim + SwalProgress bar */
     (function () {
         if (!window.Swal) return;
-        var _iv = null;
 
-        var _MSGS = [
-            'Menginisialisasi...',
-            'Mengambil data...',
-            'Memproses...',
-            'Hampir selesai...',
-            'Finalisasi...'
-        ];
+        /* --- v10+ → v7 param translation --- */
+        function _compat(opts) {
+            if (!opts || typeof opts !== 'object') return opts;
+            var o = Object.assign({}, opts);
+            /* icon → type */
+            if (o.icon  && !o.type)  { o.type  = o.icon;  delete o.icon; }
+            /* didOpen → onOpen */
+            if (o.didOpen   && !o.onOpen)  { o.onOpen  = o.didOpen;   delete o.didOpen; }
+            /* willClose → onClose */
+            if (o.willClose && !o.onClose) { o.onClose = o.willClose; delete o.willClose; }
+            /* onBeforeOpen → onOpen alias */
+            if (o.onBeforeOpen && !o.onOpen) { o.onOpen = o.onBeforeOpen; delete o.onBeforeOpen; }
+            return o;
+        }
 
+        /* --- Progress bar for loading dialogs --- */
+        var _iv   = null;
+        var _MSGS = ['Menginisialisasi...','Mengambil data...','Memproses...','Hampir selesai...','Finalisasi...'];
         var _HTML =
             '<div style="margin:12px 0 4px;font-size:13px;color:#666;">' +
             'Progress: <strong id="_sp_pct">0</strong>%</div>' +
-            '<div style="background:#e9ecef;border-radius:8px;height:12px;' +
-            'overflow:hidden;margin-top:6px;">' +
-            '<div id="_sp_bar" style="height:100%;width:0%;' +
-            'background:linear-gradient(90deg,#6c63ff,#a78bfa);' +
+            '<div style="background:#e9ecef;border-radius:8px;height:12px;overflow:hidden;margin-top:6px;">' +
+            '<div id="_sp_bar" style="height:100%;width:0%;background:linear-gradient(90deg,#6c63ff,#a78bfa);' +
             'border-radius:8px;transition:width 0.3s ease;"></div></div>' +
-            '<div id="_sp_msg" style="margin-top:10px;font-size:13px;color:#888;">' +
-            'Memulai proses...</div>';
+            '<div id="_sp_msg" style="margin-top:10px;font-size:13px;color:#888;">Memulai proses...</div>';
 
-        function _didOpen() {
-            var bar  = document.getElementById('_sp_bar');
-            var pct  = document.getElementById('_sp_pct');
-            var msg  = document.getElementById('_sp_msg');
-            var prog = 0;
+        function _startProgress() {
+            var bar = document.getElementById('_sp_bar'), pct = document.getElementById('_sp_pct'),
+                msg = document.getElementById('_sp_msg'), prog = 0;
             clearInterval(_iv);
             _iv = setInterval(function () {
                 prog += Math.random() * 8 + 4;
                 if (prog > 88) prog = 88;
                 if (bar) bar.style.width = prog + '%';
                 if (pct) pct.textContent = Math.round(prog);
-                if (msg) msg.textContent = _MSGS[
-                    Math.min(Math.floor(prog / 22), _MSGS.length - 1)
-                ];
+                if (msg) msg.textContent = _MSGS[Math.min(Math.floor(prog / 22), _MSGS.length - 1)];
             }, 150);
         }
+        function _stopProgress() { clearInterval(_iv); }
 
-        function _willClose() { clearInterval(_iv); }
-
-        /* Intercept Swal.fire — replace loading calls with progress bar pattern */
+        /* --- Intercept Swal.fire --- */
         var _oFire = Swal.fire.bind(Swal);
         Swal.fire = function () {
             clearInterval(_iv);
-            var a = arguments[0];
-            /* Loading call: object with didOpen but no icon/type */
-            if (a && typeof a === 'object' && a.didOpen && !a.icon && !a.type) {
+            var a = _compat(arguments[0]);
+            /* Loading call: has onOpen but no type → show progress bar */
+            if (a && typeof a === 'object' && a.onOpen && !a.type) {
                 var opts = Object.assign({}, a, {
                     html: _HTML,
                     showConfirmButton: false,
                     allowOutsideClick: false,
-                    didOpen:    _didOpen,
-                    willClose:  _willClose,
+                    onOpen:  _startProgress,
+                    onClose: _stopProgress,
                 });
                 delete opts.text;
                 return _oFire.call(Swal, opts);
             }
+            /* Normal call — just apply compat translation */
+            if (a && typeof a === 'object') {
+                return _oFire.call(Swal, a);
+            }
             return _oFire.apply(Swal, arguments);
         };
 
-        /* Fallback: direct Swal.showLoading() calls */
         Swal.showLoading = function () {
             var actions = document.querySelector('.swal2-actions');
             if (actions) actions.style.display = 'none';
-            _didOpen();
+            _startProgress();
         };
     })();
     </script>
