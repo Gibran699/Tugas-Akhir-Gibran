@@ -1,6 +1,6 @@
 <?php
 // app/Services/KtpApiService.php
-namespace App\Services;
+namespace App\services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
