@@ -32,8 +32,9 @@ class ExternalApiService
             // }
 
             // Tambahkan environment check untuk keamanan
-            $verifySSL = app()->environment('production')
-                ? storage_path('certs/cacert.pem')
+            $certPath = storage_path('certs/cacert.pem');
+            $verifySSL = (app()->environment('production') && file_exists($certPath))
+                ? $certPath
                 : false;
 
             $response = Http::timeout(30)
@@ -114,8 +115,9 @@ class ExternalApiService
 
     public function makeAuthenticatedRequest($method, $endpoint, $data = [])
     {
-        $verifySSL = app()->environment('production')
-            ? storage_path('certs/cacert.pem')
+        $certPath = storage_path('certs/cacert.pem');
+        $verifySSL = (app()->environment('production') && file_exists($certPath))
+            ? $certPath
             : false;
         try {
             $token = $this->authenticate();
