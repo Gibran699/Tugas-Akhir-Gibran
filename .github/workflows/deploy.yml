@@ -15,6 +15,7 @@ on:
     branches:
       - main
       - master
+      - Skripsi
     paths-ignore:
       - '**.md'
       - '.github/**'

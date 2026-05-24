@@ -14,13 +14,20 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'id' => Str::uuid(),
-            'name' => 'Zukaro',
-            'email' => 'admin@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password123'),
-            'remember_token' => Str::random(10),
-        ]);
+        $user = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'id'                => Str::uuid(),
+                'name'              => 'Zukaro',
+                'email_verified_at' => now(),
+                'password'          => Hash::make('password123'),
+                'remember_token'    => Str::random(10),
+            ]
+        );
+
+        // Pastikan user admin selalu punya role admin
+        if ($user->roles->isEmpty()) {
+            $user->assignRole('admin');
+        }
     }
 }
