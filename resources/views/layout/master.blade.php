@@ -19,6 +19,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logos/logo_pemkot.png') }}">
 
     {{-- page level css --}}
+    {{-- CSS libs previously @imported in style.css via ../vendor/ - loaded explicitly to guarantee correct path --}}
+    <link href="{{ asset('libs/animate/animate.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/aos/css/aos.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('libs/chartist/css/chartist.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('libs/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
@@ -263,6 +268,8 @@
     ***********************************-->
     <script src="{{ asset('libs/global/global.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/perfect-scrollbar/js/perfect-scrollbar.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/deznav/deznav.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('libs/metismenu/js/metisMenu.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('libs/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
 
