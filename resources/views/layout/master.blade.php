@@ -257,6 +257,7 @@
         Scripts
     ***********************************-->
     <script src="{{ asset('libs/global/global.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('libs/metismenu/js/metisMenu.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('libs/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
 
