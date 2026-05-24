@@ -34,19 +34,17 @@ Route::middleware(['auth', 'user.active'])->group(function () {
     Route::get('data_json/dashboard',[MainController::class,'dataDashboard']);
     //layout view side bar
     Route::get('{codeView}/index-rumah-data', [MainController::class, 'index'])->name('index_rumah_data');
-    // Route::group(['middleware' => ['can:pengaturan']], function () {
-        // system import
+    Route::group(['middleware' => ['can:import_data']], function () {
         Route::get('/form-import', function () {
             return view('pengaturan.import_data.form_input');
         })->name('import_data_excel');
         Route::post('system/import-data', [SystemMainController::class, 'importData'])->name('import_data');
-    // });
-    Route::group(['middleware' => ['can:pengaturan']], function () {
-        //management user
     });
-    Route::resource('role', RoleController::class);
-    Route::resource('user', UserController::class);
-    Route::patch('user/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('user.toggle_status');
+    Route::group(['middleware' => ['can:pengaturan']], function () {
+        Route::resource('role', RoleController::class);
+        Route::resource('user', UserController::class);
+        Route::patch('user/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('user.toggle_status');
+    });
     //auth
     Route::post('logout', [AuthMainController::class, 'logout'])->name('logout');
     Route::post('change-password', [AuthMainController::class, 'changePassword'])->name('change_password');

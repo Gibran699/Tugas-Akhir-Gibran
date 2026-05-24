@@ -36,12 +36,11 @@ class PermissionSeeder extends Seeder
         );
         $adminRole->givePermissionTo($permissions);
 
-        // Buat role operator dengan permission terbatas
-        $operatorRole = Role::firstOrCreate(
+        // Buat role operator: hanya bisa lihat data, tanpa permission khusus
+        Role::firstOrCreate(
             ['name' => 'operator', 'guard_name' => 'web'],
             ['uuid' => Str::uuid()]
         );
-        $operatorRole->givePermissionTo(['import_data', 'web_service']);
 
         // Assign role admin ke user pertama (admin@gmail.com) jika sudah ada
         $adminUser = User::where('email', 'admin@gmail.com')->first();
