@@ -19,14 +19,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logos/logo_pemkot.png') }}">
 
     {{-- page level css --}}
-    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/chartist/css/chartist.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet"
+    <link href="{{ asset('libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/chartist/css/chartist.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/owl-carousel/owl.carousel.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet"
     type="text/css" />
-    <link href="{{ asset('vendor/select2/css/select2.min.css') }}" rel="stylesheet"
+    <link href="{{ asset('libs/select2/css/select2.min.css') }}" rel="stylesheet"
     type="text/css" />
-    <link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     {{-- global style css --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/neon-buttons.css') }}" rel="stylesheet" type="text/css" />
@@ -39,13 +39,13 @@
     @vite(['resources/css/app.css'])
     {{-- package js --}}
     {{-- jquery --}}
-    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/chart.js/Chart.bundle.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/peity/jquery.peity.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/apexchart/apexchart.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/owl-carousel/owl.carousel.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('libs/chart.js/Chart.bundle.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/peity/jquery.peity.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/apexchart/apexchart.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/owl-carousel/owl.carousel.js') }}" type="text/javascript"></script>
     {{-- sweet alert --}}
-    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
     {{-- SwalProgress: custom progress bar — bar + pct + cycling msg, no confirm button --}}
     <script>
     (function () {
@@ -119,9 +119,9 @@
     })();
     </script>
     {{-- select 2 --}}
-    <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
     {{-- datatables --}}
-    <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/datatables/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 
 
 </head>
@@ -256,8 +256,8 @@
     <!--**********************************
         Scripts
     ***********************************-->
-    <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/global/global.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
 
     {{-- <script src="{{ asset('js/plugins-init/select2-init.js') }}" type="text/javascript"></script> --}}
 

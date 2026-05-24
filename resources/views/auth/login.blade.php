@@ -9,11 +9,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('vendor/swiper/css/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/swiper/css/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/login-slider.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('libs/sweetalert2/dist/sweetalert2.min.js') }}" type="text/javascript"></script>
 </head>
 
 <body class="vh-100">
@@ -136,9 +136,9 @@
 
     <script src="{{asset('js/auth/login.js')}}" type="text/javascript"></script>
 
-    <script src="{{ asset('vendor/global/global.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('vendor/swiper/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/global/global.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/bootstrap-select/dist/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('libs/swiper/js/swiper-bundle.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/custom.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/deznav-init.js') }}" type="text/javascript"></script>
 
