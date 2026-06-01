@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blueprint Sistem — Rumah Data Dukcapil 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:    #06111f;
+  --navy2:   #0b1e34;
+  --navy3:   #0f2744;
+  --line:    rgba(56,189,248,0.12);
+  --lineb:   rgba(56,189,248,0.22);
+  --cyan:    #38bdf8;
+  --cyan2:   #7dd3fc;
+  --yellow:  #fbbf24;
+  --white:   #f0f9ff;
+  --muted:   #7fb6d4;
+  --green:   #34d399;
+  --violet:  #a78bfa;
+  --orange:  #fb923c;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  /* blueprint grid */
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── WRAPPER ─── */
+.page { max-width: 1200px; margin: 0 auto; padding: 56px 28px 96px; }
+
+/* ─── STAMP / TITLE BLOCK ─── */
+.stamp {
+  border: 2px solid var(--cyan);
+  border-radius: 4px;
+  padding: 32px 36px 28px;
+  margin-bottom: 52px;
+  position: relative;
+  background: rgba(6,17,31,0.85);
+}
+.stamp::before {
+  content: 'BLUEPRINT';
+  position: absolute; top: -11px; left: 28px;
+  font-size: 10px; font-weight: 800; letter-spacing: 3px;
+  background: var(--navy); color: var(--cyan); padding: 0 10px;
+}
+.stamp-inner {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+.stamp-left h1 {
+  font-size: 36px; font-weight: 900; letter-spacing: -1px;
+  color: var(--white); line-height: 1.1; margin-bottom: 10px;
+}
+.stamp-left h1 span { color: var(--cyan); }
+.stamp-left p { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 480px; }
+.stamp-meta {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.5px;
+}
+.stamp-meta .meta-row { display: flex; gap: 8px; align-items: center; }
+.meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); flex-shrink: 0; }
+.stamp-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 4px; padding: 4px 12px; font-size: 10.5px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--cyan);
+  margin-top: 12px;
+}
+.corner-mark {
+  position: absolute;
+  width: 16px; height: 16px;
+  border-color: var(--cyan); border-style: solid;
+  opacity: 0.6;
+}
+.corner-mark.tl { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+.corner-mark.tr { top: 6px; right: 6px; border-width: 2px 2px 0 0; }
+.corner-mark.bl { bottom: 6px; left: 6px; border-width: 0 0 2px 2px; }
+.corner-mark.br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+
+/* ─── SECTION LABEL ─── */
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; margin-top: 48px;
+}
+.section-label .lnum {
+  font-size: 9px; font-weight: 800; letter-spacing: 2px;
+  color: var(--cyan); background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.25); border-radius: 3px;
+  padding: 3px 8px;
+}
+.section-label h2 {
+  font-size: 16px; font-weight: 800; color: var(--yellow); letter-spacing: 0.5px;
+}
+.section-label .line { flex: 1; height: 1px; background: var(--lineb); }
+
+/* ─── STAT STRIP ─── */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  border: 1px solid var(--lineb); border-radius: 6px; overflow: hidden;
+  margin-bottom: 0;
+}
+.stat-cell {
+  background: var(--navy2);
+  padding: 20px 16px;
+  text-align: center;
+  border-right: 1px solid var(--lineb);
+  position: relative;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-cell:nth-child(1)::before { background: var(--cyan); }
+.stat-cell:nth-child(2)::before { background: var(--green); }
+.stat-cell:nth-child(3)::before { background: var(--yellow); }
+.stat-cell:nth-child(4)::before { background: var(--violet); }
+.stat-num {
+  font-size: 34px; font-weight: 900; letter-spacing: -2px;
+  line-height: 1; margin-bottom: 6px;
+}
+.stat-cell:nth-child(1) .stat-num { color: var(--cyan); }
+.stat-cell:nth-child(2) .stat-num { color: var(--green); }
+.stat-cell:nth-child(3) .stat-num { color: var(--yellow); }
+.stat-cell:nth-child(4) .stat-num { color: var(--violet); }
+.stat-label { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px; }
+
+/* ─── WHO SECTION ─── */
+.who-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+}
+.who-card {
+  background: var(--navy2);
+  border: 1px solid var(--lineb);
+  border-radius: 8px; padding: 22px 20px;
+  position: relative; overflow: hidden;
+}
+.who-card::after {
+  content: ''; position: absolute; bottom: -30px; right: -30px;
+  width: 90px; height: 90px; border-radius: 50%; opacity: 0.07;
+}
+.who-card:nth-child(1)::after { background: var(--cyan); }
+.who-card:nth-child(2)::after { background: var(--yellow); }
+.who-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+.who-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+.who-card:nth-child(1) .who-title { color: var(--cyan); }
+.who-card:nth-child(2) .who-title { color: var(--yellow); }
+.who-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+.who-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.who-item {
+  font-size: 10.5px; font-weight: 600; padding: 3px 10px;
+  border-radius: 3px; border: 1px dashed;
+}
+.who-card:nth-child(1) .who-item { color: var(--cyan); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06); }
+.who-card:nth-child(2) .who-item { color: var(--yellow); border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.06); }
+
+/* ─── MODULE GRID ─── */
+.module-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.module-card {
+  background: var(--navy2);
+  border: 1px solid var(--lineb);
+  border-radius: 8px; padding: 20px 18px 18px;
+  position: relative;
+}
+.module-card::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  border-radius: 8px 0 0 8px;
+}
+.mc-1::before { background: var(--cyan); }
+.mc-2::before { background: var(--green); }
+.mc-3::before { background: var(--yellow); }
+.mc-4::before { background: var(--violet); }
+.mc-5::before { background: var(--orange); }
+.mc-wide { grid-column: span 3; }
+.mc-wide::before { width: 100%; height: 3px; bottom: auto; border-radius: 8px 8px 0 0; }
+.module-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+.module-name { font-size: 13px; font-weight: 800; margin-bottom: 5px; color: var(--white); }
+.module-desc { font-size: 11px; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
+.module-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.mpill {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 3px; border: 1px solid;
+}
+.mc-1 .mpill { color: var(--cyan2); border-color: rgba(56,189,248,0.25); background: rgba(56,189,248,0.07); }
+.mc-2 .mpill { color: var(--green); border-color: rgba(52,211,153,0.25); background: rgba(52,211,153,0.07); }
+.mc-3 .mpill { color: var(--yellow); border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.07); }
+.mc-4 .mpill { color: var(--violet); border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.07); }
+.mc-5 .mpill { color: var(--orange); border-color: rgba(251,146,60,0.25); background: rgba(251,146,60,0.07); }
+.mc-wide .mpill { color: var(--muted); border-color: rgba(127,182,212,0.25); background: rgba(127,182,212,0.07); }
+
+/* wide card inner grid */
+.mc-wide .mc-inner {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.mc-inner-block .ib-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--muted); margin-bottom: 8px;
+}
+
+/* ─── HOW IT WORKS (3 steps) ─── */
+.how-grid {
+  display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr; align-items: center; gap: 0;
+}
+.how-step {
+  background: var(--navy2); border: 1px solid var(--lineb); border-radius: 8px;
+  padding: 24px 20px; text-align: center;
+}
+.how-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  font-size: 14px; font-weight: 900; margin: 0 auto 14px;
+  border: 2px solid;
+}
+.how-step:nth-child(1) .how-num { color: var(--cyan); border-color: rgba(56,189,248,0.4); background: rgba(56,189,248,0.08); }
+.how-step:nth-child(3) .how-num { color: var(--green); border-color: rgba(52,211,153,0.4); background: rgba(52,211,153,0.08); }
+.how-step:nth-child(5) .how-num { color: var(--yellow); border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.08); }
+.how-icon { font-size: 28px; display: block; margin-bottom: 10px; }
+.how-title { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.how-desc { font-size: 11.5px; color: var(--muted); line-height: 1.55; }
+.how-arrow {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.how-arrow svg { width: 32px; height: 14px; }
+.how-arrow-label { font-size: 8.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #334155; }
+
+/* ─── OUTPUT SECTION (what users see) ─── */
+.output-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+.out-card {
+  background: var(--navy2); border: 1px solid var(--lineb);
+  border-radius: 8px; padding: 18px 14px; text-align: center;
+}
+.out-icon { font-size: 28px; display: block; margin-bottom: 10px; }
+.out-name { font-size: 12px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.out-desc { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
+
+/* ─── COVERAGE ─── */
+.coverage-box {
+  background: var(--navy2); border: 1px solid var(--lineb);
+  border-radius: 8px; padding: 24px 24px;
+  display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; gap: 0;
+  align-items: center;
+}
+.cov-divider { background: var(--lineb); height: 60px; }
+.cov-item { text-align: center; padding: 0 20px; }
+.cov-num { font-size: 40px; font-weight: 900; letter-spacing: -2px; color: var(--cyan); margin-bottom: 4px; }
+.cov-sub { font-size: 11px; font-weight: 600; color: var(--muted); }
+
+/* ─── FOOTER STAMP ─── */
+.footer-stamp {
+  margin-top: 52px;
+  border-top: 1px solid var(--lineb);
+  padding-top: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-stamp .fs-left { font-size: 11px; color: var(--muted); line-height: 1.7; }
+.footer-stamp .fs-right {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(56,189,248,0.4); text-align: right;
+}
+
+/* ─── ANNOTATION LINES ─── */
+.annot {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.8px;
+  color: rgba(56,189,248,0.35); text-transform: uppercase;
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  .module-grid { grid-template-columns: 1fr; }
+  .mc-wide { grid-column: span 1; }
+  .mc-wide .mc-inner { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .how-arrow { transform: rotate(90deg); margin: 4px auto; }
+  .output-grid { grid-template-columns: repeat(2, 1fr); }
+  .coverage-box { grid-template-columns: 1fr; }
+  .cov-divider { display: none; }
+  .who-grid { grid-template-columns: 1fr; }
+  .stamp-inner { flex-direction: column; }
+  .stamp-meta { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════
+       TITLE STAMP
+  ══════════════════════════════════════ -->
+  <div class="stamp">
+    <div class="corner-mark tl"></div>
+    <div class="corner-mark tr"></div>
+    <div class="corner-mark bl"></div>
+    <div class="corner-mark br"></div>
+    <div class="stamp-inner">
+      <div class="stamp-left">
+        <h1>Rumah Data<br/><span>Dukcapil 2.0</span></h1>
+        <p>Sistem informasi terpusat untuk pengelolaan, visualisasi, dan pelaporan data kependudukan Kota Samarinda secara real-time oleh Dinas Kependudukan dan Pencatatan Sipil.</p>
+        <div class="stamp-tag">⚡ Sistem Informasi Kependudukan</div>
+      </div>
+      <div class="stamp-meta">
+        <div class="meta-row"><div class="meta-dot"></div> Kota Samarinda, Kalimantan Timur</div>
+        <div class="meta-row"><div class="meta-dot"></div> Dinas Dukcapil Kota Samarinda</div>
+        <div class="meta-row"><div class="meta-dot"></div> Versi 2.0 — 2025 / 2026</div>
+        <div class="meta-row"><div class="meta-dot"></div> Platform: Web Application</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STATS
+  ══════════════════════════════════════ -->
+  <div class="section-label" style="margin-top:0">
+    <span class="lnum">§ 01</span>
+    <h2>Gambaran Umum Sistem</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-cell">
+      <div class="stat-num">62</div>
+      <div class="stat-label">Kategori Data</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Modul Fitur Utama</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Kecamatan Terpantau</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">59</div>
+      <div class="stat-label">Kelurahan Terpantau</div>
+    </div>
+  </div>
+  <div class="annot" style="margin-top:10px; text-align:right">Data coverage — Kota Samarinda</div>
+
+  <!-- ══════════════════════════════════════
+       WHO USES IT
+  ══════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="lnum">§ 02</span>
+    <h2>Pengguna Sistem</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="who-grid">
+    <div class="who-card">
+      <span class="who-icon">🧑‍💼</span>
+      <div class="who-title">Admin</div>
+      <div class="who-desc">Pengelola utama sistem. Bertanggung jawab atas manajemen pengguna, pengaturan akses, dan memastikan semua data tersedia serta akurat.</div>
+      <div class="who-list">
+        <span class="who-item">Kelola akun pengguna</span>
+        <span class="who-item">Atur hak akses fitur</span>
+        <span class="who-item">Import &amp; hapus data</span>
+        <span class="who-item">Lihat semua laporan</span>
+        <span class="who-item">Pantau aktivitas sistem</span>
+      </div>
+    </div>
+    <div class="who-card">
+      <span class="who-icon">🧑‍💻</span>
+      <div class="who-title">Operator</div>
+      <div class="who-desc">Petugas lapangan Disdukcapil yang bertugas menginput dan memvalidasi data kependudukan berdasarkan wilayah kerjanya masing-masing.</div>
+      <div class="who-list">
+        <span class="who-item">Upload data Excel</span>
+        <span class="who-item">Lihat data wilayah</span>
+        <span class="who-item">Cetak laporan</span>
+        <span class="who-item">Pantau statistik</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MODULES
+  ══════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="lnum">§ 03</span>
+    <h2>Modul Fitur Sistem</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="module-grid">
+
+    <!-- Agregat DKB -->
+    <div class="module-card mc-1">
+      <span class="module-icon">📊</span>
+      <div class="module-name">Agregat DKB</div>
+      <div class="module-desc">Rekapitulasi data demografis penduduk mencakup jenis kelamin, agama, pekerjaan, pendidikan, status perkawinan, golongan darah, dan disabilitas.</div>
+      <div class="module-pills">
+        <span class="mpill">Penduduk</span>
+        <span class="mpill">Kepala Keluarga</span>
+        <span class="mpill">Pendidikan</span>
+        <span class="mpill">Disabilitas</span>
+        <span class="mpill">Status Kawin</span>
+      </div>
+    </div>
+
+    <!-- Kepemilikan Dokumen -->
+    <div class="module-card mc-2">
+      <span class="module-icon">📄</span>
+      <div class="module-name">Kepemilikan Dokumen</div>
+      <div class="module-desc">Pantau tingkat kepemilikan dokumen kependudukan oleh masyarakat Samarinda per kelurahan dan kecamatan.</div>
+      <div class="module-pills">
+        <span class="mpill">KTP</span>
+        <span class="mpill">Kartu Keluarga</span>
+        <span class="mpill">KIA</span>
+        <span class="mpill">Akta Kelahiran</span>
+        <span class="mpill">Akta Nikah</span>
+        <span class="mpill">Akta Cerai</span>
+      </div>
+    </div>
+
+    <!-- Struktur Umur -->
+    <div class="module-card mc-3">
+      <span class="module-icon">📈</span>
+      <div class="module-name">Struktur Umur Penduduk</div>
+      <div class="module-desc">Distribusi penduduk berdasarkan kelompok usia, mencakup analisis piramida penduduk, kepala keluarga, agama, golongan darah, dan disabilitas per rentang umur.</div>
+      <div class="module-pills">
+        <span class="mpill">Kelompok Umur</span>
+        <span class="mpill">Umur Tunggal</span>
+        <span class="mpill">Status Kawin</span>
+        <span class="mpill">Disabilitas</span>
+      </div>
+    </div>
+
+    <!-- Statistik Kelompok Umur -->
+    <div class="module-card mc-4">
+      <span class="module-icon">🔢</span>
+      <div class="module-name">Statistik Kelompok Umur</div>
+      <div class="module-desc">Analisis data per usia tunggal (1 tahun) dengan filter rentang umur kustom. Data dihitung otomatis dari data umur tunggal yang telah diimport.</div>
+      <div class="module-pills">
+        <span class="mpill">Rentang Umur Kustom</span>
+        <span class="mpill">Penduduk</span>
+        <span class="mpill">Kepala Keluarga</span>
+        <span class="mpill">Disabilitas</span>
+      </div>
+    </div>
+
+    <!-- Pelayanan -->
+    <div class="module-card mc-5">
+      <span class="module-icon">🏛️</span>
+      <div class="module-name">Pelayanan Dukcapil</div>
+      <div class="module-desc">Monitoring data layanan administrasi kependudukan secara online maupun langsung, termasuk perekaman dan pencetakan e-KTP.</div>
+      <div class="module-pills">
+        <span class="mpill">Pelayanan Online</span>
+        <span class="mpill">Cetak e-KTP</span>
+        <span class="mpill">Perekaman KTP</span>
+        <span class="mpill">Kinerja Capil</span>
+        <span class="mpill">Kinerja Dafduk</span>
+      </div>
+    </div>
+
+    <!-- Wide: Sistem & Manajemen -->
+    <div class="module-card mc-wide">
+      <div class="mc-inner">
+        <div class="mc-inner-block">
+          <div class="ib-label">⚙️ Manajemen Sistem</div>
+          <div class="module-desc">Kelola akun pengguna, atur peran dan hak akses per fitur, pantau log aktivitas, serta reset password.</div>
+          <div class="module-pills">
+            <span class="mpill">Kelola Pengguna</span>
+            <span class="mpill">Peran &amp; Hak Akses</span>
+            <span class="mpill">Status Aktif / Nonaktif</span>
+          </div>
+        </div>
+        <div class="mc-inner-block">
+          <div class="ib-label">📥 Import Data</div>
+          <div class="module-desc">Unggah data kependudukan dari file Excel (.xlsx) sesuai template resmi. Sistem memvalidasi dan menyimpan data otomatis.</div>
+          <div class="module-pills">
+            <span class="mpill">Format Excel .xlsx</span>
+            <span class="mpill">Template Resmi</span>
+            <span class="mpill">Validasi Otomatis</span>
+            <span class="mpill">Pilih Semester &amp; Tahun</span>
+          </div>
+        </div>
+        <div class="mc-inner-block">
+          <div class="ib-label">🔗 Integrasi Eksternal</div>
+          <div class="module-desc">Mengambil data pelayanan dari sistem eksternal Disdukcapil secara otomatis menggunakan koneksi API aman.</div>
+          <div class="module-pills">
+            <span class="mpill">API Pelayanan Online</span>
+            <span class="mpill">API e-KTP Samarinda</span>
+            <span class="mpill">Token Otomatis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end module-grid -->
+
+  <!-- ══════════════════════════════════════
+       HOW IT WORKS
+  ══════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="lnum">§ 04</span>
+    <h2>Cara Kerja Sistem</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <span class="how-icon">📥</span>
+      <div class="how-title">Masukkan Data</div>
+      <div class="how-desc">Operator mengunggah file Excel data kependudukan atau memilih periode semester &amp; tahun. Data pelayanan diambil otomatis dari sistem eksternal.</div>
+    </div>
+
+    <div class="how-arrow">
+      <svg viewBox="0 0 32 14" fill="none">
+        <path d="M1 7 H24" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <path d="M20 2 L31 7 L20 12" stroke="#334155" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="how-arrow-label">Proses</div>
+    </div>
+
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <span class="how-icon">⚙️</span>
+      <div class="how-title">Sistem Memproses</div>
+      <div class="how-desc">Sistem memvalidasi data, menyimpan ke database, lalu menghitung agregasi dan statistik per kelurahan dan kecamatan secara otomatis.</div>
+    </div>
+
+    <div class="how-arrow">
+      <svg viewBox="0 0 32 14" fill="none">
+        <path d="M1 7 H24" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <path d="M20 2 L31 7 L20 12" stroke="#334155" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="how-arrow-label">Tampilkan</div>
+    </div>
+
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <span class="how-icon">📊</span>
+      <div class="how-title">Lihat Hasil</div>
+      <div class="how-desc">Data tersaji dalam bentuk tabel interaktif, grafik, dan ringkasan yang bisa difilter per wilayah, semester, atau tahun sesuai kebutuhan.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       OUTPUT / WHAT USERS SEE
+  ══════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="lnum">§ 05</span>
+    <h2>Tampilan yang Dihasilkan</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="output-grid">
+    <div class="out-card">
+      <span class="out-icon">🗂️</span>
+      <div class="out-name">Dashboard Ringkasan</div>
+      <div class="out-desc">Grafik interaktif ringkasan data kependudukan terkini di seluruh kota</div>
+    </div>
+    <div class="out-card">
+      <span class="out-icon">📋</span>
+      <div class="out-name">Tabel Per Wilayah</div>
+      <div class="out-desc">Data terperinci per kelurahan dan kecamatan yang bisa dicari dan diurutkan</div>
+    </div>
+    <div class="out-card">
+      <span class="out-icon">📉</span>
+      <div class="out-name">Grafik Statistik</div>
+      <div class="out-desc">Visualisasi piramida umur, perbandingan kategori, dan tren antar periode</div>
+    </div>
+    <div class="out-card">
+      <span class="out-icon">🖨️</span>
+      <div class="out-name">Laporan &amp; Cetak</div>
+      <div class="out-desc">Data siap cetak atau ekspor untuk keperluan pelaporan dinas</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       COVERAGE
+  ══════════════════════════════════════ -->
+  <div class="section-label">
+    <span class="lnum">§ 06</span>
+    <h2>Cakupan Wilayah</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="coverage-box">
+    <div class="cov-item">
+      <div class="cov-num">1</div>
+      <div class="cov-sub">Kota Samarinda<br/>Kalimantan Timur</div>
+    </div>
+    <div class="cov-divider"></div>
+    <div class="cov-item">
+      <div class="cov-num">10</div>
+      <div class="cov-sub">Kecamatan<br/>Terpantau</div>
+    </div>
+    <div class="cov-divider"></div>
+    <div class="cov-item">
+      <div class="cov-num">59</div>
+      <div class="cov-sub">Kelurahan<br/>Terpantau</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <div class="footer-stamp">
+    <div class="fs-left">
+      <strong style="color:var(--cyan)">Rumah Data Dukcapil 2.0</strong><br/>
+      Dinas Kependudukan dan Pencatatan Sipil Kota Samarinda<br/>
+      Dokumen Blueprint Sistem — Gambaran Fungsional
+    </div>
+    <div class="fs-right">
+      BLUEPRINT REV. 2.0<br/>
+      SAMARINDA · 2026
+    </div>
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>

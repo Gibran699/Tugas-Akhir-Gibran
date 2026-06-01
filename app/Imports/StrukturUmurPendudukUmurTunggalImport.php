@@ -5,9 +5,11 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Penduduk\UmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -29,5 +31,15 @@ class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow
             'pr' => $row['pr'],
             'jumlah' => $row['jumlah'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

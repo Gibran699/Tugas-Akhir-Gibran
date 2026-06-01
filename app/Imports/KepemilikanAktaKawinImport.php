@@ -5,9 +5,11 @@ namespace App\Imports;
 use App\Models\Kepemilikan\AktaKawin;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class KepemilikanAktaKawinImport implements ToModel, WithHeadingRow
+class KepemilikanAktaKawinImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -35,5 +37,15 @@ class KepemilikanAktaKawinImport implements ToModel, WithHeadingRow
             'belum_memiliki_akta_kawin_pr' => $row['belum_memiliki_akta_kawin_pr'],
             'belum_memiliki_akta_kawin_jml' => $row['belum_memiliki_akta_kawin_jml'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

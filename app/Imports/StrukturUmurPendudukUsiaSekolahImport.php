@@ -5,9 +5,12 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Penduduk\UsiaSekolah;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukUsiaSekolahImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukUsiaSekolahImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, SkipsEmptyRows
 {
 
     protected $tahun;
@@ -21,15 +24,30 @@ class StrukturUmurPendudukUsiaSekolahImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
+        // Skip baris kosong atau baris total/footer (kode_wilayah tidak ada)
+        if (empty($row['kode_wilayah'])) {
+            return null;
+        }
+
         return new UsiaSekolah([
             'uuid' => Str::uuid(),
             'semester' => $this->semester,
             'tahun' => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'usia_sd_sederajat' => $row['usia_sd_sederajat'],
-            'usia_sltp_sederajat' => $row['usia_sltp_sederajat'],
-            'usia_slta_sederajat' => $row['usia_slta_sederajat'],
-            'usia_perguruan_tinggi' => $row['usia_perguruan_tinggi'],
+            'usia_sd_sederajat' => isset($row['usia_sd_sederajat']) && $row['usia_sd_sederajat'] !== '' ? (int) $row['usia_sd_sederajat'] : 0,
+            'usia_sltp_sederajat' => isset($row['usia_sltp_sederajat']) && $row['usia_sltp_sederajat'] !== '' ? (int) $row['usia_sltp_sederajat'] : 0,
+            'usia_slta_sederajat' => isset($row['usia_slta_sederajat']) && $row['usia_slta_sederajat'] !== '' ? (int) $row['usia_slta_sederajat'] : 0,
+            'usia_perguruan_tinggi' => isset($row['usia_perguruan_tinggi']) && $row['usia_perguruan_tinggi'] !== '' ? (int) $row['usia_perguruan_tinggi'] : 0,
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

@@ -6,8 +6,10 @@ use App\Models\StrukturUmur\GolonganDarah\UmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class StrukturUmurGolonganDarahUmurTunggalImport implements ToModel, WithHeadingRow
+class StrukturUmurGolonganDarahUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -32,6 +34,16 @@ class StrukturUmurGolonganDarahUmurTunggalImport implements ToModel, WithHeading
             $data[$key] = $row[$key] ?? null;
         }
         return new UmurTunggal($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }
 

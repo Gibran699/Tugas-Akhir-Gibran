@@ -6,6 +6,7 @@ use App\Http\Controllers\System\CalculateDataController;
 use App\Http\Controllers\System\MainController as SystemMainController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\UserController;
+use App\Http\Controllers\System\DataAvailabilityController;
 use App\Http\Controllers\System\WilayahController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,18 @@ Route::middleware(['auth', 'user.active'])->group(function () {
     //auth
     Route::post('logout', [AuthMainController::class, 'logout'])->name('logout');
     Route::post('change-password', [AuthMainController::class, 'changePassword'])->name('change_password');
+    // ── Data Availability ───────────────────────────────────────────────────
+    // check: semua user login (respons disesuaikan berdasarkan role di controller)
+    Route::get('data-availability/check', [DataAvailabilityController::class, 'check'])
+        ->name('data_availability.check');
+    // dashboard & summary: admin only (can:pengaturan)
+    Route::group(['middleware' => ['can:pengaturan']], function () {
+        Route::get('data-availability/dashboard', [DataAvailabilityController::class, 'dashboard'])
+            ->name('data_availability.dashboard');
+        Route::get('data-availability/summary', [DataAvailabilityController::class, 'summary'])
+            ->name('data_availability.summary');
+    });
+    // ── Wilayah ─────────────────────────────────────────────────────────────
     //wilayah kelurahan
     Route::get('json/wilayah-kecamatan', [WilayahController::class, 'indexKecamatan']);
     Route::get('json/wilayah-kelurahan',  [WilayahController::class, 'indexKelurahan']);

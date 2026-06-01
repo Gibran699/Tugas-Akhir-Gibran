@@ -5,13 +5,14 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Penduduk\StatusKawinKelompokUmur;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukStatusKawinKelompokUmurImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukStatusKawinKelompokUmurImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
-
 
     public function __construct($tahun, $semester)
     {
@@ -32,5 +33,15 @@ class StrukturUmurPendudukStatusKawinKelompokUmurImport implements ToModel, With
             $data[$key] = $row[$key] ?? null;
         }
         return new StatusKawinKelompokUmur($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

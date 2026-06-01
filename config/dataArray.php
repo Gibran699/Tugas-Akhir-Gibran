@@ -53,6 +53,62 @@ return [
         '45' => 'App\Imports\KepemilikanKtpImport',
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | listFileImportLabel
+    |--------------------------------------------------------------------------
+    | Label yang ditampilkan di dropdown "Pilih Data Import".
+    | Key harus cocok dengan key pada 'listFileImport' di atas.
+    */
+    'listFileImportLabel' => [
+        '1'  => 'Disabilitas - Jenis Kelamin',
+        '2'  => 'Disabilitas - Pekerjaan',
+        '3'  => 'Disabilitas - Pendidikan',
+        '4'  => 'Kepala Keluarga - Jenis Kelamin',
+        '5'  => 'Kepala Keluarga - Agama',
+        '6'  => 'Kepala Keluarga - Pekerjaan',
+        '7'  => 'Kepala Keluarga - Pendidikan',
+        '8'  => 'Kepala Keluarga - Status Kawin',
+        '9'  => 'Pendidikan - Golongan Darah',
+        '10' => 'Pendidikan - Jenis Kelamin',
+        '11' => 'Penduduk - Jenis Kelamin',
+        '12' => 'Penduduk - Agama',
+        '13' => 'Penduduk - Golongan Darah',
+        '14' => 'Penduduk - Hubungan Keluarga',
+        '15' => 'Penduduk - Pekerjaan',
+        '16' => 'Kepemilikan Akta Cerai',
+        '17' => 'Kepemilikan Akta Kawin',
+        '18' => 'Kepemilikan Akta Kelahiran',
+        '19' => 'Kepemilikan Kartu Keluarga',
+        '20' => 'Kepemilikan KIA',
+        '21' => 'Kepemilikan Akta Cerai - Agama',
+        '22' => 'Kepemilikan Akta Kawin - Agama',
+        '23' => 'Struktur Umur - Agama (Kelompok Umur)',
+        '24' => 'Struktur Umur - Disabilitas (Kelompok Umur)',
+        '25' => 'Struktur Umur - Disabilitas Pendidikan (Umur Tunggal)',
+        '26' => 'Struktur Umur - Disabilitas (Umur Tunggal)',
+        '27' => 'Struktur Umur - Disabilitas Usia Sekolah (Kelompok Umur)',
+        '28' => 'Struktur Umur - Golongan Darah (Kelompok Umur)',
+        '29' => 'Struktur Umur - Golongan Darah (Umur Tunggal)',
+        '30' => 'Struktur Umur - Kepala Keluarga (Kelompok Umur)',
+        '31' => 'Struktur Umur - Kepala Keluarga Status Kawin (Kelompok Umur)',
+        '32' => 'Struktur Umur - Kepala Keluarga (Umur Tunggal)',
+        '33' => 'Struktur Umur - Penduduk (Kelompok Umur)',
+        '34' => 'Struktur Umur - Penduduk Status Kawin (Kelompok Umur)',
+        '35' => 'Struktur Umur - Penduduk Status Kawin (Umur Tunggal)',
+        '36' => 'Struktur Umur - Penduduk (Umur Tunggal)',
+        '37' => 'Struktur Umur - Penduduk Usia Muda Produktif',
+        '38' => 'Struktur Umur - Penduduk Usia Sekolah',
+        '39' => 'Status Kawin Penduduk - Agama',
+        '40' => 'Status Kawin Penduduk - Jenis Kelamin',
+        '41' => 'Status Kawin Penduduk - Pekerjaan',
+        '42' => 'Laporan Kinerja CAPIL (Format PDAK)',
+        '43' => 'Laporan Kinerja DAFDUK (Format PDAK)',
+        '44' => 'Pendidikan - Pekerjaan',
+        '45' => 'Kepemilikan KTP',
+    ],
+
     'listFileModel' => [
         '1' => 'App\Models\AgregatDKB\Disabilitas\JenisKelamin',
         '2' => 'App\Models\AgregatDKB\Disabilitas\Pekerjaan',
@@ -155,6 +211,86 @@ return [
         '3XwN7zYqF1' => 'dateRangeAgeKepalaKeluargaUmur',
         'L9bJk5rV2e' => 'dateRangeAgePendudukUmur',
         'J5nR8yR3sK' => 'dateRangeAgePendudukStatKawin',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | codeViewAvailability
+    |--------------------------------------------------------------------------
+    | Mapping codeView → konfigurasi pengecekan ketersediaan data.
+    | Digunakan oleh SystemMainController::searchData() untuk memberi
+    | peringatan otomatis ketika data tidak tersedia di periode tertentu.
+    |
+    | - feature/entity/dimension : harus cocok dengan registry config('data_availability')
+    | - label                    : nama ramah pengguna untuk pesan
+    | - skip_check               : true = lewati pengecekan (untuk fitur non-agregat
+    |                              seperti pelayanan online, perekaman, ektp)
+    */
+    'codeViewAvailability' => [
+        // ── Data DKB - Penduduk ─────────────────────────────────────────────
+        'CV8V59hUCF' => ['feature' => 'data_dkb', 'entity' => 'penduduk', 'dimension' => 'jenis_kelamin',     'label' => 'Penduduk - Jenis Kelamin'],
+        'MupFCfSa6a' => ['feature' => 'data_dkb', 'entity' => 'penduduk', 'dimension' => 'agama',             'label' => 'Penduduk - Agama'],
+        'aPH7zF09S1' => ['feature' => 'data_dkb', 'entity' => 'penduduk', 'dimension' => 'golongan_darah',    'label' => 'Penduduk - Golongan Darah'],
+        'bfl4aaeCTi' => ['feature' => 'data_dkb', 'entity' => 'penduduk', 'dimension' => 'hubungan_keluarga', 'label' => 'Penduduk - Hubungan Keluarga'],
+        'fFKZKP7AnA' => ['feature' => 'data_dkb', 'entity' => 'penduduk', 'dimension' => 'pekerjaan',         'label' => 'Penduduk - Pekerjaan'],
+
+        // ── Data DKB - Kepala Keluarga ──────────────────────────────────────
+        'nYtZCUxdr6' => ['feature' => 'data_dkb', 'entity' => 'kepala_keluarga', 'dimension' => 'agama',         'label' => 'Kepala Keluarga - Agama'],
+        'MNJiVyMrxR' => ['feature' => 'data_dkb', 'entity' => 'kepala_keluarga', 'dimension' => 'jenis_kelamin', 'label' => 'Kepala Keluarga - Jenis Kelamin'],
+        'gblPf8pfSp' => ['feature' => 'data_dkb', 'entity' => 'kepala_keluarga', 'dimension' => 'pendidikan',    'label' => 'Kepala Keluarga - Pendidikan'],
+        'aQIpF1uiEO' => ['feature' => 'data_dkb', 'entity' => 'kepala_keluarga', 'dimension' => 'pekerjaan',     'label' => 'Kepala Keluarga - Pekerjaan'],
+        'ZvGL0vPJLC' => ['feature' => 'data_dkb', 'entity' => 'kepala_keluarga', 'dimension' => 'status_kawin',  'label' => 'Kepala Keluarga - Status Kawin'],
+
+        // ── Data DKB - Status Kawin ─────────────────────────────────────────
+        '2XSDKgCQJH' => ['feature' => 'data_dkb', 'entity' => 'status_kawin', 'dimension' => 'agama',         'label' => 'Status Kawin - Agama'],
+        'oqhOV9WfkB' => ['feature' => 'data_dkb', 'entity' => 'status_kawin', 'dimension' => 'jenis_kelamin', 'label' => 'Status Kawin - Jenis Kelamin'],
+        'AWn2KmOLao' => ['feature' => 'data_dkb', 'entity' => 'status_kawin', 'dimension' => 'pekerjaan',     'label' => 'Status Kawin - Pekerjaan'],
+
+        // ── Data DKB - Pendidikan ───────────────────────────────────────────
+        'XYPtrXHZkf' => ['feature' => 'data_dkb', 'entity' => 'pendidikan', 'dimension' => 'jenis_kelamin',  'label' => 'Pendidikan - Jenis Kelamin'],
+        'eRPt22HZkf' => ['feature' => 'data_dkb', 'entity' => 'pendidikan', 'dimension' => 'pekerjaan',      'label' => 'Pendidikan - Pekerjaan'],
+        'XYPt22HZkf' => ['feature' => 'data_dkb', 'entity' => 'pendidikan', 'dimension' => 'golongan_darah', 'label' => 'Pendidikan - Golongan Darah'],
+
+        // ── Data DKB - Disabilitas ──────────────────────────────────────────
+        'trg1Xxialt' => ['feature' => 'data_dkb', 'entity' => 'disabilitas', 'dimension' => 'jenis_kelamin', 'label' => 'Disabilitas - Jenis Kelamin'],
+        'iXnbXnoUnq' => ['feature' => 'data_dkb', 'entity' => 'disabilitas', 'dimension' => 'pekerjaan',     'label' => 'Disabilitas - Pekerjaan'],
+        '8sfHKi6GHS' => ['feature' => 'data_dkb', 'entity' => 'disabilitas', 'dimension' => 'pendidikan',    'label' => 'Disabilitas - Pendidikan'],
+
+        // ── Kepemilikan Dokumen ─────────────────────────────────────────────
+        '6D6A18O1Hm' => ['feature' => 'kepemilikan', 'entity' => 'akta_kelahiran',   'dimension' => 'default', 'label' => 'Akta Kelahiran'],
+        'CJY6qXue82' => ['feature' => 'kepemilikan', 'entity' => 'akta_kawin',       'dimension' => 'default', 'label' => 'Akta Perkawinan'],
+        'PKf3FqywDa' => ['feature' => 'kepemilikan', 'entity' => 'akta_kawin_agama', 'dimension' => 'default', 'label' => 'Akta Perkawinan - Agama'],
+        'goKsHUTCOG' => ['feature' => 'kepemilikan', 'entity' => 'akta_cerai',       'dimension' => 'default', 'label' => 'Akta Perceraian'],
+        'eCnoaOxtiS' => ['feature' => 'kepemilikan', 'entity' => 'akta_cerai_agama', 'dimension' => 'default', 'label' => 'Akta Perceraian - Agama'],
+        '2ovlKZBzGU' => ['feature' => 'kepemilikan', 'entity' => 'kia',              'dimension' => 'default', 'label' => 'KIA'],
+        '6DFxmctALZ' => ['feature' => 'kepemilikan', 'entity' => 'kartu_keluarga',   'dimension' => 'default', 'label' => 'Kartu Keluarga'],
+        'hsdtkgPeS5' => ['feature' => 'kepemilikan', 'entity' => 'ktp',              'dimension' => 'default', 'label' => 'KTP'],
+
+        // ── Struktur Umur ───────────────────────────────────────────────────
+        'OqF8P0knI7' => ['feature' => 'struktur_umur', 'entity' => 'agama',           'dimension' => 'kelompok_umur',    'label' => 'Struktur Umur Agama - Kelompok Umur'],
+        'VtDkcpu8FN' => ['feature' => 'struktur_umur', 'entity' => 'disabilitas',     'dimension' => 'kelompok_umur',    'label' => 'Struktur Umur Disabilitas - Kelompok Umur'],
+        'nx8eUW4TWq' => ['feature' => 'struktur_umur', 'entity' => 'disabilitas',     'dimension' => 'pendidikan',       'label' => 'Struktur Umur Disabilitas - Pendidikan'],
+        '3WjgN9m6aS' => ['feature' => 'struktur_umur', 'entity' => 'disabilitas',     'dimension' => 'umur_tunggal',     'label' => 'Struktur Umur Disabilitas - Umur Tunggal'],
+        'FIZKE9hOxo' => ['feature' => 'struktur_umur', 'entity' => 'disabilitas',     'dimension' => 'usia_sekolah',     'label' => 'Struktur Umur Disabilitas - Usia Sekolah'],
+        'dRgHdz0S5A' => ['feature' => 'struktur_umur', 'entity' => 'golongan_darah',  'dimension' => 'kelompok_umur',    'label' => 'Struktur Umur Golongan Darah - Kelompok Umur'],
+        'eRkbPisQHv' => ['feature' => 'struktur_umur', 'entity' => 'golongan_darah',  'dimension' => 'umur_tunggal',     'label' => 'Struktur Umur Golongan Darah - Umur Tunggal'],
+        'svFaBJRBLQ' => ['feature' => 'struktur_umur', 'entity' => 'kepala_keluarga', 'dimension' => 'kelompok_umur',    'label' => 'Struktur Umur Kepala Keluarga - Kelompok Umur'],
+        'lo4z2cDrRC' => ['feature' => 'struktur_umur', 'entity' => 'kepala_keluarga', 'dimension' => 'umur_tunggal',     'label' => 'Struktur Umur Kepala Keluarga - Umur Tunggal'],
+        'EJpy2qXC3z' => ['feature' => 'struktur_umur', 'entity' => 'kepala_keluarga', 'dimension' => 'status_kawin',     'label' => 'Struktur Umur Kepala Keluarga - Status Kawin'],
+        'Byxp2PxZK2' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'umur_tunggal_jk',  'label' => 'Struktur Umur Penduduk - Umur Tunggal Jenis Kelamin'],
+        '4riLDLsE6q' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'umur_tunggal_sk',  'label' => 'Struktur Umur Penduduk - Umur Tunggal Status Kawin'],
+        'gWNOWEQuYC' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'kelompok_umur_jk', 'label' => 'Struktur Umur Penduduk - Kelompok Umur Jenis Kelamin'],
+        'RIvQj7G1XZ' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'kelompok_umur_sk', 'label' => 'Struktur Umur Penduduk - Kelompok Umur Status Kawin'],
+        'ObqRhsP78G' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'usia_sekolah',     'label' => 'Struktur Umur Penduduk - Usia Sekolah'],
+        '7fKa0gsKtH' => ['feature' => 'struktur_umur', 'entity' => 'penduduk',        'dimension' => 'demografi_usia',   'label' => 'Struktur Umur Penduduk - Demografi Usia'],
+
+        // ── Statistik Kelompok Umur (Date Range) ────────────────────────────
+        'B5nR8yT3sK' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'disabilitas',            'dimension' => 'default', 'label' => 'Statistik Disabilitas'],
+        '7fGk2pQ9Lm' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'disabilitas_pendidikan', 'dimension' => 'default', 'label' => 'Statistik Disabilitas Pendidikan'],
+        'aD4vH9jM6P' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'golongan_darah',         'dimension' => 'default', 'label' => 'Statistik Golongan Darah'],
+        '3XwN7zYqF1' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'kepala_keluarga',        'dimension' => 'default', 'label' => 'Statistik Kepala Keluarga'],
+        'L9bJk5rV2e' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'penduduk',               'dimension' => 'default', 'label' => 'Statistik Penduduk'],
+        'J5nR8yR3sK' => ['feature' => 'statistik_kelompok_umur', 'entity' => 'penduduk_status_kawin',  'dimension' => 'default', 'label' => 'Statistik Penduduk Status Kawin'],
     ],
     'categoryEducationDisabilites' => [
         'fisik_tidak_belum_sekolah_l',

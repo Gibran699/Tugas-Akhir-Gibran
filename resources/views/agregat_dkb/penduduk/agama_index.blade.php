@@ -45,6 +45,15 @@
                 </div>
             </div>
         </div>
+        {{-- Indikator ketersediaan data — ditampilkan oleh DataAvailability.check() --}}
+        <x-data-empty-state
+            feature="data_dkb"
+            entity="penduduk"
+            dimension="agama"
+            container-id="dataContentArea"
+        />
+
+        <div id="dataContentArea">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -143,10 +152,58 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>{{-- /dataContentArea --}}
+    </div>{{-- /container-fluid --}}
+
     <script src="{{ asset('js/global_func.js') }}"></script>
+    <script src="{{ asset('js/system/data_availability.js') }}"></script>
     <script>
         generateYearOptions('tahun');
     </script>
     <script src="{{ asset('js/index/agregat_dkb/penduduk/agama.js') }}"></script>
+    <script>
+    /**
+     * Interception: cek ketersediaan data sebelum fetch.
+     * Tambahkan pola serupa di JS file fitur lainnya.
+     */
+    (function () {
+        var originalClickHandler = null;
+        var btn = document.getElementById('submitSearch');
+        if (!btn) return;
+
+        // Kita clone button untuk mengganti event listener lama
+        var newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', function () {
+            var tahun    = document.getElementById('tahun') ? document.getElementById('tahun').value : '';
+            var semester = document.getElementById('semester') ? document.getElementById('semester').value : '';
+
+            if (!tahun || !semester) {
+                // Biarkan validasi bawaan berjalan
+                if (typeof submitSearchPendudukAgama === 'function') submitSearchPendudukAgama();
+                return;
+            }
+
+            DataAvailability.check({
+                feature:   'data_dkb',
+                entity:    'penduduk',
+                dimension: 'agama',
+                tahun:     tahun,
+                semester:  semester,
+            }, 'dataContentArea').then(function (result) {
+                if (result.canDisplay) {
+                    // Picu event click asli / panggil fungsi search yang sudah ada
+                    if (typeof window.doSearchPendudukAgama === 'function') {
+                        window.doSearchPendudukAgama();
+                    } else {
+                        // Fallback: trigger submit form
+                        document.getElementById('formSearchPendudukAgama') &&
+                            document.getElementById('formSearchPendudukAgama').dispatchEvent(new Event('submit-data'));
+                    }
+                }
+            });
+        });
+    }());
+    </script>
 @endsection

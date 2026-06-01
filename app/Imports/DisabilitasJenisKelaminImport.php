@@ -6,9 +6,10 @@ use App\Models\AgregatDKB\Disabilitas\JenisKelamin;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-
-class DisabilitasJenisKelaminImport implements ToModel, WithHeadingRow
+class DisabilitasJenisKelaminImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -45,5 +46,15 @@ class DisabilitasJenisKelaminImport implements ToModel, WithHeadingRow
             'disabilitas_lainnya_pr' => $row['disabilitas_lainnya_pr'],
             'disabilitas_lainnya_jml' => $row['disabilitas_lainnya_jml'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

@@ -5,10 +5,11 @@ namespace App\Imports;
 use App\Models\AgregatDKB\KepalaKeluarga\Pekerjaan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-
-class KepalaKeluargaPekerjaanImport implements ToModel, WithHeadingRow
+class KepalaKeluargaPekerjaanImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -33,5 +34,15 @@ class KepalaKeluargaPekerjaanImport implements ToModel, WithHeadingRow
             $data[$key] = $row[$key] ?? null;
         }
         return new Pekerjaan($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

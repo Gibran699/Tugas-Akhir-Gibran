@@ -6,9 +6,12 @@ use App\Models\AgregatDKB\Disabilitas\Pekerjaan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class DisabilitasPekerjaanImport implements ToModel, WithHeadingRow
+class DisabilitasPekerjaanImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
+
     protected $tahun;
     protected $semester;
 
@@ -35,5 +38,15 @@ class DisabilitasPekerjaanImport implements ToModel, WithHeadingRow
         }
 
         return new Pekerjaan($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

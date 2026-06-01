@@ -5,9 +5,11 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Penduduk\UsiaMudaProduktifTua;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukUsiaMudaProduktifImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukUsiaMudaProduktifImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -28,5 +30,15 @@ class StrukturUmurPendudukUsiaMudaProduktifImport implements ToModel, WithHeadin
             'usia_produktif' => $row['usia_produktif'],
             'usia_tua' => $row['usia_tua'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

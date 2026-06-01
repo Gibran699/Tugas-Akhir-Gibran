@@ -5,9 +5,11 @@ namespace App\Imports;
 use App\Models\AgregatDKB\Penduduk\GolonganDarah;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class PendudukGolonganDarahImport implements ToModel, WithHeadingRow
+class PendudukGolonganDarahImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -30,5 +32,15 @@ class PendudukGolonganDarahImport implements ToModel, WithHeadingRow
             $data[$key] = $row[$key] ?? null;
         }
         return new GolonganDarah($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

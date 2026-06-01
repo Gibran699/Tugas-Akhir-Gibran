@@ -278,6 +278,10 @@
     <script src="{{ asset('js/deznav-init.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/neon-splash.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/loading-animation.js') }}" type="text/javascript"></script>
+    {{-- Global handler: SweetAlert seragam untuk respons "data tidak tersedia" --}}
+    <script src="{{ asset('js/system/data_not_found_handler.js') }}" type="text/javascript"></script>
+    {{-- Global filter helper: dropdown Kecamatan & Kelurahan otomatis di setiap DataTable --}}
+    <script src="{{ asset('js/system/datatable_filter.js') }}" type="text/javascript"></script>
     @yield('scripts')
 </body>
 

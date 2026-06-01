@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Alur Lengkap Fitur Impor Data — Rumah Data 2.0</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+    :root {
+        --orange: #ea580c;
+        --orange-dark: #9a3412;
+        --orange-light: #fff7ed;
+        --bg: #fafaf9;
+        --card: #ffffff;
+        --border: #e7e5e4;
+        --text: #292524;
+        --muted: #78716c;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.65;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* Hero */
+    .hero {
+        background: linear-gradient(135deg, #14532d 0%, #166534 50%, #16a34a 100%);
+        border-radius: 18px;
+        padding: 32px 36px;
+        color: #fff;
+        margin-bottom: 32px;
+        box-shadow: 0 16px 36px rgba(22, 101, 52, .22);
+        position: relative;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: ''; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; border-radius: 50%;
+        background: rgba(255,255,255,.06);
+    }
+    .hero h1 { margin: 0 0 8px; font-size: 28px; font-weight: 800; }
+    .hero p { margin: 0; opacity: .9; font-size: 15px; }
+    .hero .badges { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .hero .badge {
+        background: rgba(255,255,255,.15);
+        border: 1px solid rgba(255,255,255,.20);
+        padding: 5px 12px; border-radius: 8px;
+        font-size: 12px; font-weight: 600;
+    }
+
+    /* Section */
+    section { margin-bottom: 36px; }
+    h2 {
+        font-size: 22px; font-weight: 800;
+        margin: 0 0 14px; padding-bottom: 10px;
+        border-bottom: 2px solid var(--orange);
+        color: var(--orange-dark);
+    }
+    h2 .num {
+        display: inline-block;
+        background: var(--orange);
+        color: #fff;
+        width: 30px; height: 30px;
+        line-height: 30px; text-align: center;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    h3 {
+        font-size: 17px; font-weight: 700;
+        margin: 22px 0 10px;
+        color: var(--orange-dark);
+    }
+
+    /* Card */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 4px 14px rgba(15,23,42,.05);
+    }
+    .card p { margin: 0 0 12px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Mermaid */
+    .mermaid {
+        text-align: center;
+        padding: 12px;
+        background: #fff;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    /* Step list */
+    .steps {
+        counter-reset: step;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .steps li {
+        counter-increment: step;
+        padding: 14px 16px 14px 54px;
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 14px; top: 14px;
+        width: 28px; height: 28px;
+        background: var(--orange);
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 28px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .steps li strong { color: var(--orange-dark); }
+
+    /* Tip box */
+    .tip-box {
+        background: var(--orange-light);
+        border: 1px solid #fed7aa;
+        border-left: 4px solid var(--orange);
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+    }
+    .tip-box strong { color: var(--orange-dark); }
+
+    .info-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-left: 4px solid #3b82f6;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+    }
+    .info-box strong { color: #1e40af; }
+
+    .warn-box {
+        background: #fef9c3;
+        border: 1px solid #fde68a;
+        border-left: 4px solid #d97706;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+    }
+    .warn-box strong { color: #854d0e; }
+
+    /* Result badges */
+    .res-success { background: #dcfce7; color: #166534; }
+    .res-warning { background: #fef9c3; color: #854d0e; }
+    .res-error   { background: #fee2e2; color: #991b1b; }
+    .res {
+        display: inline-block;
+        padding: 3px 10px; border-radius: 8px;
+        font-size: 11px; font-weight: 700;
+    }
+
+    /* Lanes */
+    .lanes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+    }
+    .lane {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        border-top: 4px solid var(--orange);
+    }
+    .lane-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--orange-dark);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+    .lane ul { padding-left: 18px; margin: 0; font-size: 13.5px; }
+    .lane li { margin-bottom: 4px; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        font-size: 14px;
+    }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: #f5f5f4; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: 11px; font-weight: 700; }
+    tr:hover td { background: #fafaf9; }
+
+    /* TOC */
+    .toc {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+    }
+    .toc-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+    .toc ul { padding-left: 0; margin: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4px; }
+    .toc a { color: var(--orange-dark); text-decoration: none; font-size: 14px; padding: 4px 0; display: block; }
+    .toc a:hover { color: var(--orange); text-decoration: underline; }
+
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 13px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<div class="hero">
+    <h1>📥 Alur Lengkap Fitur Impor Data</h1>
+    <p>Cara petugas memasukkan data dari file Excel ke dalam sistem — Rumah Data 2.0 Kota Samarinda</p>
+    <div class="badges">
+        <span class="badge">Workflow Lengkap</span>
+        <span class="badge">Bahasa Sederhana</span>
+        <span class="badge">End-to-End</span>
+    </div>
+</div>
+
+<!-- ── DAFTAR ISI ───────────────────────────────────── -->
+<div class="toc">
+    <div class="toc-title">📑 Isi Dokumen</div>
+    <ul>
+        <li><a href="#bagian1">1. Apa Itu Impor Data?</a></li>
+        <li><a href="#bagian2">2. Pemain dalam Sistem</a></li>
+        <li><a href="#bagian3">3. Persiapan Sebelum Impor</a></li>
+        <li><a href="#bagian4">4. Alur Lengkap End-to-End</a></li>
+        <li><a href="#bagian5">5. Tahap Demi Tahap</a></li>
+        <li><a href="#bagian6">6. Apa yang Sistem Periksa</a></li>
+        <li><a href="#bagian7">7. Hasil Akhir Impor</a></li>
+        <li><a href="#bagian8">8. Skenario Lengkap</a></li>
+        <li><a href="#bagian9">9. Penanganan Masalah</a></li>
+    </ul>
+</div>
+
+<!-- ── 1. APA ITU IMPOR DATA ────────────────────────── -->
+<section id="bagian1">
+    <h2><span class="num">1</span>Apa Itu Impor Data?</h2>
+    <div class="card">
+        <p>Bayangkan kantor punya banyak data wilayah dalam bentuk file Excel — misalnya jumlah penduduk laki-laki perempuan per kelurahan. Daripada mengetik ulang satu-satu ke sistem, kita pakai fitur <strong>Impor Data</strong>.</p>
+
+        <p>Cukup pilih file Excel-nya, sistem otomatis baca semua isinya dan masukkan ke database — sekali klik selesai untuk ratusan baris.</p>
+
+        <div class="tip-box">
+            🎯 <strong>Manfaat utama:</strong> hemat waktu, tidak salah ketik, dan satu file Excel bisa berisi data ratusan wilayah sekaligus.
+        </div>
+    </div>
+</section>
+
+<!-- ── 2. PEMAIN DALAM SISTEM ───────────────────────── -->
+<section id="bagian2">
+    <h2><span class="num">2</span>Pemain dalam Sistem</h2>
+    <div class="card">
+        <div class="lanes">
+            <div class="lane">
+                <div class="lane-title">👨‍💼 Petugas Admin</div>
+                <ul>
+                    <li>Punya hak akses Impor Data</li>
+                    <li>Menyiapkan file Excel</li>
+                    <li>Memilih jenis data, tahun, semester</li>
+                    <li>Klik tombol Impor</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">📄 File Excel</div>
+                <ul>
+                    <li>Format harus sesuai template</li>
+                    <li>Harus berisi kolom wilayah</li>
+                    <li>Harus berisi data wilayah per baris</li>
+                    <li>Maksimal 20 MB</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">⚙️ Sistem Pembaca</div>
+                <ul>
+                    <li>Buka file Excel</li>
+                    <li>Baca isi tiap baris</li>
+                    <li>Cek kelengkapan data</li>
+                    <li>Simpan ke database</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">💾 Database</div>
+                <ul>
+                    <li>Tempat data tersimpan permanen</li>
+                    <li>Diatur per jenis data</li>
+                    <li>Pisah per tahun + semester</li>
+                    <li>Tidak boleh duplikasi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 3. PERSIAPAN ─────────────────────────────────── -->
+<section id="bagian3">
+    <h2><span class="num">3</span>Persiapan Sebelum Impor</h2>
+    <div class="card">
+        <p>Sebelum melakukan impor, pastikan beberapa hal berikut:</p>
+
+        <ol class="steps">
+            <li><strong>Login sebagai admin</strong> yang punya hak akses Impor Data.</li>
+            <li><strong>Siapkan file Excel</strong> dengan format yang sesuai template. Template bisa diunduh dari halaman Impor Data lewat tombol <em>"Format File Import Excel"</em>.</li>
+            <li><strong>Pastikan isi file benar</strong> — kolom wilayah terisi semua, angka ditulis sebagai angka (bukan teks), tidak ada baris kosong di tengah.</li>
+            <li><strong>Tahu jenis data apa</strong> yang akan diimpor — misalnya "Penduduk Jenis Kelamin" atau "Disabilitas Pekerjaan".</li>
+            <li><strong>Pastikan periode benar</strong> — semester dan tahun yang akan diimpor.</li>
+            <li><strong>Cek halaman Data Tersedia</strong> dulu untuk lihat apakah data tersebut sudah pernah diimpor sebelumnya.</li>
+        </ol>
+
+        <div class="warn-box">
+            ⚠️ <strong>Penting:</strong> kalau data dengan kombinasi <em>jenis + tahun + semester</em> yang sama sudah ada di database, sistem akan menolak impor untuk mencegah data ganda.
+        </div>
+    </div>
+</section>
+
+<!-- ── 4. ALUR LENGKAP END-TO-END ───────────────────── -->
+<section id="bagian4">
+    <h2><span class="num">4</span>Alur Lengkap dari Awal sampai Akhir</h2>
+    <div class="card">
+        <p>Berikut alur menyeluruh dari saat petugas mulai sampai data berhasil masuk ke database:</p>
+
+        <div class="mermaid">
+flowchart TD
+    Start([👤 Petugas mulai])
+    Start --> Login[Login ke sistem]
+    Login --> Buka[Buka halaman Impor Data<br/>via menu sidebar]
+
+    Buka --> Pilih[Petugas pilih:<br/>1. Jenis Data<br/>2. Tahun<br/>3. Semester<br/>4. File Excel]
+
+    Pilih --> Klik[Klik tombol Impor]
+    Klik --> Konfirm{Muncul jendela<br/>konfirmasi}
+    Konfirm -- Batal --> Selesai0([❌ Dibatalkan])
+    Konfirm -- Ya, Impor --> Kirim[⚙️ Sistem terima file dan data]
+
+    Kirim --> CekForm{Cek kelengkapan form}
+    CekForm -- Ada yang kosong --> Err1[❌ Tampil pesan:<br/>field belum lengkap]
+
+    CekForm -- Lengkap --> CekFile{Cek file Excel}
+    CekFile -- Salah format --> Err2[❌ Pesan:<br/>format file salah]
+    CekFile -- File terlalu besar --> Err3[❌ Pesan:<br/>file melebihi 20 MB]
+
+    CekFile -- OK --> CekDup{Cek apakah data<br/>sudah ada di database<br/>untuk periode ini}
+    CekDup -- Sudah ada --> Err4[⚠️ Pesan:<br/>Data sudah ada]
+
+    CekDup -- Belum ada --> Mulai[⚙️ Mulai proses impor]
+    Mulai --> BukaDB[Buka transaksi database]
+    BukaDB --> Baca[Baca file Excel<br/>baris per baris]
+    Baca --> ValidasiBaris{Cek tiap baris}
+    ValidasiBaris -- Bermasalah --> Rollback[❌ Batalkan semua<br/>data yang sudah dibaca]
+    Rollback --> Err5[❌ Tampil pesan error<br/>+ catat di log sistem]
+
+    ValidasiBaris -- OK --> Simpan[Simpan data ke database]
+    Simpan --> SemuaSelesai{Semua baris<br/>selesai?}
+    SemuaSelesai -- Belum --> Baca
+    SemuaSelesai -- Sudah --> Commit[Konfirmasi simpan<br/>tutup transaksi]
+
+    Commit --> Sukses[✅ Pesan: Import Berhasil]
+    Sukses --> Refresh[Halaman di-refresh]
+    Refresh --> Selesai1([🎉 Selesai])
+
+    Err1 --> SelesaiErr([Petugas perbaiki])
+    Err2 --> SelesaiErr
+    Err3 --> SelesaiErr
+    Err4 --> SelesaiErr
+    Err5 --> SelesaiErr
+    SelesaiErr --> Pilih
+
+    style Start fill:#bbf7d0,stroke:#166534,stroke-width:2px
+    style Selesai1 fill:#dcfce7,stroke:#166534,stroke-width:2px
+    style Selesai0 fill:#f5f5f4,stroke:#78716c
+    style Sukses fill:#dcfce7,stroke:#166534
+    style Mulai fill:#fff7ed,stroke:#ea580c
+    style BukaDB fill:#fff7ed,stroke:#ea580c
+    style Baca fill:#fff7ed,stroke:#ea580c
+    style Simpan fill:#fff7ed,stroke:#ea580c
+    style Commit fill:#fff7ed,stroke:#ea580c
+    style Rollback fill:#fee2e2,stroke:#991b1b
+    style Err1 fill:#fee2e2,stroke:#991b1b
+    style Err2 fill:#fee2e2,stroke:#991b1b
+    style Err3 fill:#fee2e2,stroke:#991b1b
+    style Err4 fill:#fef9c3,stroke:#854d0e
+    style Err5 fill:#fee2e2,stroke:#991b1b
+        </div>
+
+        <div class="tip-box">
+            💡 <strong>Cara baca:</strong> mulai dari kotak hijau "Petugas mulai" di paling atas. Ikuti panah ke bawah. Kotak oranye adalah pekerjaan otomatis sistem. Kotak merah adalah error yang membatalkan proses. Kotak kuning adalah peringatan (data sudah ada).
+        </div>
+    </div>
+</section>
+
+<!-- ── 5. TAHAP DEMI TAHAP ──────────────────────────── -->
+<section id="bagian5">
+    <h2><span class="num">5</span>Tahap Demi Tahap Secara Detail</h2>
+
+    <h3>📍 Tahap 1 — Membuka Halaman Impor</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Petugas <strong>login</strong> ke sistem dengan akun yang punya hak akses Impor Data.</li>
+            <li>Klik menu <strong>Import Excel</strong> di sidebar (di bagian "Import").</li>
+            <li>Halaman terbuka dengan form yang berisi: pilih tahun, pilih semester, pilih file, dan pilih jenis data.</li>
+            <li>Di pojok kanan ada tombol <strong>"Format File Import Excel"</strong> untuk mengunduh template.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 2 — Mengisi Form Impor</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Petugas pilih <strong>Tahun</strong> dari dropdown (tahun-tahun yang tersedia).</li>
+            <li>Petugas pilih <strong>Semester</strong> — Semester I (1) atau Semester II (2).</li>
+            <li>Klik tombol <strong>Choose File</strong>, pilih file Excel dari komputer.</li>
+            <li>Petugas pilih <strong>Jenis Data</strong> dari dropdown — misalnya "Disabilitas Pekerjaan".</li>
+            <li>Setelah semua terisi, klik tombol <strong>Impor</strong>.</li>
+        </ol>
+
+        <div class="info-box">
+            ℹ️ <strong>Daftar jenis data yang bisa diimpor</strong> ada banyak — dari Disabilitas, Kepala Keluarga, Penduduk, Kepemilikan Akta, hingga Struktur Umur. Total sekitar 45 jenis berbeda.
+        </div>
+    </div>
+
+    <h3>📍 Tahap 3 — Konfirmasi Impor</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Sistem tampilkan jendela <strong>"Konfirmasi"</strong> dengan pesan:<br><em>"Apakah Anda yakin ingin menyimpan data ini?"</em></li>
+            <li>Petugas pilih <strong>Simpan</strong> untuk lanjut, atau <strong>Batal</strong> untuk membatalkan.</li>
+            <li>Kalau klik Batal — muncul pesan "Pembatalan, Data tidak disimpan", proses berhenti.</li>
+            <li>Kalau klik Simpan — sistem mulai proses impor.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 4 — Pengecekan Awal oleh Sistem</h3>
+    <div class="card">
+        <p>Sebelum membaca file, sistem cek beberapa hal:</p>
+        <ol class="steps">
+            <li><strong>Apakah semua field terisi?</strong> Tahun, semester, dan file harus ada.</li>
+            <li><strong>Apakah file ekstensinya benar?</strong> Hanya .xlsx, .xls, atau .csv yang diterima.</li>
+            <li><strong>Apakah ukuran file di bawah 20 MB?</strong> Kalau lebih, ditolak.</li>
+            <li><strong>Apakah jenis data yang dipilih valid?</strong> Sistem cek di daftar jenis data yang dikenal.</li>
+            <li><strong>Apakah data sudah ada?</strong> Sistem cek database — kalau untuk kombinasi jenis + tahun + semester sudah ada data, ditolak agar tidak ganda.</li>
+        </ol>
+
+        <div class="warn-box">
+            ⚠️ <strong>Penting:</strong> kalau ada satu pengecekan yang gagal, proses langsung berhenti dan muncul pesan error. File belum dibaca, database belum disentuh.
+        </div>
+    </div>
+
+    <h3>📍 Tahap 5 — Membaca dan Menyimpan File</h3>
+    <div class="card">
+        <p>Kalau pengecekan awal lolos, sistem mulai proses inti:</p>
+        <ol class="steps">
+            <li>Sistem buka <strong>"transaksi database"</strong> — semacam kotak pengaman untuk memastikan data tersimpan utuh atau tidak sama sekali.</li>
+            <li>Untuk file <strong>besar (lebih dari 2 MB)</strong>, sistem alokasikan memori lebih dan waktu lebih lama.</li>
+            <li>Sistem buka file Excel dan <strong>baca baris per baris</strong>.</li>
+            <li>Untuk setiap baris, sistem ambil isi kolom dan <strong>simpan ke database</strong>.</li>
+            <li>Setelah semua baris selesai dibaca, sistem <strong>tutup transaksi</strong> — data resmi tersimpan permanen.</li>
+        </ol>
+
+        <div class="info-box">
+            ℹ️ <strong>Apa itu transaksi database?</strong> Bayangkan seperti membuat kontrak — kalau ada satu pasal yang gagal, seluruh kontrak dibatalkan. Begitu juga dengan impor: kalau ada satu baris gagal disimpan, semua baris yang sudah disimpan ikut dibatalkan. Database tetap bersih.
+        </div>
+    </div>
+
+    <h3>📍 Tahap 6 — Hasil Akhir</h3>
+    <div class="card">
+        <p>Setelah proses selesai, ada 3 kemungkinan hasil:</p>
+
+        <table>
+            <thead>
+                <tr><th style="width:140px;">Hasil</th><th>Apa yang Terjadi</th><th>Pesan ke Petugas</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="res res-success">BERHASIL</span></td>
+                    <td>Semua data sudah masuk ke database</td>
+                    <td>"Import Berhasil!" lalu halaman di-refresh</td>
+                </tr>
+                <tr>
+                    <td><span class="res res-warning">DATA SUDAH ADA</span></td>
+                    <td>Tidak ada perubahan di database</td>
+                    <td>"Data sudah ada" — petugas perlu hapus dulu data lama atau pilih periode lain</td>
+                </tr>
+                <tr>
+                    <td><span class="res res-error">GAGAL</span></td>
+                    <td>Tidak ada data yang tersimpan (otomatis dibatalkan)</td>
+                    <td>"Terjadi kesalahan server" + petugas perlu cek file lalu coba lagi</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ── 6. APA YANG SISTEM PERIKSA ───────────────────── -->
+<section id="bagian6">
+    <h2><span class="num">6</span>Apa Saja yang Sistem Periksa?</h2>
+    <div class="card">
+        <p>Sistem melakukan beberapa lapis pengecekan untuk menjaga kualitas data:</p>
+
+        <div class="mermaid">
+flowchart LR
+    File[📄 File Excel masuk] --> L1[Lapisan 1<br/>Cek formulir<br/>tahun, semester, file]
+    L1 --> L2[Lapisan 2<br/>Cek file<br/>format dan ukuran]
+    L2 --> L3[Lapisan 3<br/>Cek jenis data<br/>valid atau tidak]
+    L3 --> L4[Lapisan 4<br/>Cek duplikasi<br/>data sudah ada?]
+    L4 --> L5[Lapisan 5<br/>Cek isi file<br/>kolom dan baris]
+    L5 --> Hasil[✅ Data masuk database]
+
+    style File fill:#dcfce7,stroke:#166534
+    style Hasil fill:#dcfce7,stroke:#166534
+    style L1 fill:#fff7ed,stroke:#ea580c
+    style L2 fill:#fff7ed,stroke:#ea580c
+    style L3 fill:#fff7ed,stroke:#ea580c
+    style L4 fill:#fff7ed,stroke:#ea580c
+    style L5 fill:#fff7ed,stroke:#ea580c
+        </div>
+
+        <table style="margin-top:16px;">
+            <thead>
+                <tr><th style="width:130px;">Lapisan</th><th>Yang Diperiksa</th><th>Kalau Gagal</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Formulir</td>
+                    <td>Semua field harus terisi: tahun, semester, file, jenis data</td>
+                    <td>Pesan: field belum lengkap</td>
+                </tr>
+                <tr>
+                    <td>2. File</td>
+                    <td>Format harus .xlsx, .xls, atau .csv. Ukuran maksimal 20 MB</td>
+                    <td>Pesan: format atau ukuran file salah</td>
+                </tr>
+                <tr>
+                    <td>3. Jenis Data</td>
+                    <td>Harus salah satu dari 45 jenis yang dikenal sistem</td>
+                    <td>Pesan: jenis data tidak valid</td>
+                </tr>
+                <tr>
+                    <td>4. Duplikasi</td>
+                    <td>Belum ada data dengan kombinasi jenis + tahun + semester yang sama</td>
+                    <td>Pesan: data sudah ada</td>
+                </tr>
+                <tr>
+                    <td>5. Isi File</td>
+                    <td>Kolom-kolom dalam file sesuai template, isi tiap baris benar</td>
+                    <td>Pesan error + semua data dibatalkan</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ── 7. HASIL AKHIR ───────────────────────────────── -->
+<section id="bagian7">
+    <h2><span class="num">7</span>Hasil Akhir Setelah Impor Berhasil</h2>
+    <div class="card">
+        <p>Begitu impor berhasil, ada beberapa hal yang langsung berubah:</p>
+
+        <div class="mermaid">
+flowchart TD
+    Sukses([✅ Impor berhasil])
+    Sukses --> H1[Database bertambah<br/>Data baru tersimpan permanen]
+    Sukses --> H2[Halaman Impor di-refresh<br/>Form kembali kosong]
+    Sukses --> H3[Halaman Data Tersedia berubah<br/>Status jadi LENGKAP atau SEBAGIAN]
+    Sukses --> H4[Halaman Laporan & Grafik<br/>Bisa tampilkan data baru]
+
+    H1 --> Selesai([🎉 Petugas bisa lanjut<br/>impor jenis data berikutnya])
+    H2 --> Selesai
+    H3 --> Selesai
+    H4 --> Selesai
+
+    style Sukses fill:#dcfce7,stroke:#166534,stroke-width:2px
+    style Selesai fill:#bbf7d0,stroke:#166534,stroke-width:2px
+        </div>
+
+        <div class="tip-box">
+            💡 <strong>Catatan:</strong> setelah impor berhasil, petugas bisa langsung cek <em>halaman Data Tersedia</em> untuk melihat status terbaru. Statusnya akan otomatis berubah dari "Belum Ada" menjadi "Lengkap" (kalau semua wilayah sudah lengkap) atau "Sebagian" (kalau masih ada wilayah yang belum).
+        </div>
+    </div>
+</section>
+
+<!-- ── 8. SKENARIO LENGKAP ──────────────────────────── -->
+<section id="bagian8">
+    <h2><span class="num">8</span>Skenario Lengkap dari Awal sampai Akhir</h2>
+
+    <h3>🎬 Skenario A — Impor Berhasil</h3>
+    <div class="card">
+        <div class="mermaid">
+sequenceDiagram
+    actor P as 👨‍💼 Petugas
+    participant H as 📥 Halaman Impor
+    participant Sis as ⚙️ Sistem
+    participant DB as 💾 Database
+
+    P->>H: Login dan buka halaman Impor
+    P->>H: Pilih: Disabilitas Pekerjaan
+    P->>H: Pilih Tahun 2025, Semester 1
+    P->>H: Upload file disabilitas_pekerjaan.xlsx
+    P->>H: Klik tombol Impor
+    H-->>P: "Apakah Anda yakin ingin menyimpan?"
+    P->>H: Klik Simpan
+
+    H->>Sis: Kirim file dan data form
+    Sis->>Sis: Cek formulir lengkap ✓
+    Sis->>Sis: Cek format file ✓
+    Sis->>Sis: Cek jenis data valid ✓
+    Sis->>DB: Cek duplikasi
+    DB-->>Sis: Belum ada data periode ini
+    Sis->>Sis: Buka transaksi database
+    Sis->>Sis: Baca file Excel baris per baris
+    Sis->>DB: Simpan tiap baris
+    DB-->>Sis: Sukses simpan
+    Sis->>Sis: Tutup transaksi
+    Sis-->>H: Pesan: Import berhasil!
+    H-->>P: Tampil pesan "Import Berhasil!"
+    Note over P: Halaman di-refresh otomatis<br/>petugas bisa lanjut impor data lain
+        </div>
+    </div>
+
+    <h3>🎬 Skenario B — Data Sudah Ada</h3>
+    <div class="card">
+        <div class="mermaid">
+sequenceDiagram
+    actor P as 👨‍💼 Petugas
+    participant H as 📥 Halaman Impor
+    participant Sis as ⚙️ Sistem
+    participant DB as 💾 Database
+
+    P->>H: Pilih jenis, tahun, semester, file
+    P->>H: Klik Impor → konfirm Simpan
+    H->>Sis: Kirim file dan data
+    Sis->>Sis: Cek formulir ✓
+    Sis->>Sis: Cek file ✓
+    Sis->>DB: Cek apakah data sudah ada<br/>untuk periode ini?
+    DB-->>Sis: Ya, sudah ada!
+    Sis-->>H: Pesan: Data sudah ada
+    H-->>P: ⚠️ Tampil "Data sudah ada"
+    Note over P: Petugas perlu pilih periode lain<br/>atau hapus data lama dulu
+        </div>
+    </div>
+
+    <h3>🎬 Skenario C — File Bermasalah</h3>
+    <div class="card">
+        <div class="mermaid">
+sequenceDiagram
+    actor P as 👨‍💼 Petugas
+    participant H as 📥 Halaman Impor
+    participant Sis as ⚙️ Sistem
+    participant DB as 💾 Database
+
+    P->>H: Upload file dengan kolom tidak sesuai
+    P->>H: Klik Impor → konfirm Simpan
+    H->>Sis: Kirim file
+    Sis->>Sis: Cek formulir ✓
+    Sis->>Sis: Cek file ✓
+    Sis->>DB: Cek duplikasi → belum ada
+    Sis->>Sis: Buka transaksi
+    Sis->>Sis: Mulai baca file...
+    Sis->>Sis: ❌ Kolom tidak ditemukan!
+    Sis->>DB: Batalkan semua perubahan
+    DB-->>Sis: Database kembali bersih
+    Sis-->>H: Pesan: Proses gagal + alasan
+    H-->>P: ❌ Tampil pesan error
+    Note over P: Petugas perlu cek file Excel,<br/>perbaiki kolom yang salah,<br/>lalu coba impor lagi
+        </div>
+    </div>
+</section>
+
+<!-- ── 9. PENANGANAN MASALAH ────────────────────────── -->
+<section id="bagian9">
+    <h2><span class="num">9</span>Penanganan Masalah yang Sering Terjadi</h2>
+    <div class="card">
+        <table>
+            <thead>
+                <tr><th style="width:230px;">Masalah</th><th>Penyebab Mungkin</th><th>Cara Mengatasi</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pesan "Data Sudah Ada"</td>
+                    <td>Kombinasi jenis + tahun + semester sudah pernah diimpor sebelumnya</td>
+                    <td>Cek di Halaman Data Tersedia. Kalau memang ingin ganti, hapus data lama dulu via menu manajemen data</td>
+                </tr>
+                <tr>
+                    <td>Pesan "Format file tidak didukung"</td>
+                    <td>File yang dipilih bukan Excel atau CSV</td>
+                    <td>Pastikan file punya ekstensi .xlsx, .xls, atau .csv. Konversi kalau perlu</td>
+                </tr>
+                <tr>
+                    <td>Pesan "Ukuran file melebihi 20 MB"</td>
+                    <td>File terlalu besar</td>
+                    <td>Pisah file Excel jadi beberapa bagian (per kecamatan misalnya), impor satu-satu</td>
+                </tr>
+                <tr>
+                    <td>Proses impor lama sekali</td>
+                    <td>File besar (>2 MB) atau koneksi lambat</td>
+                    <td>Sabar tunggu — sistem otomatis kasih waktu sampai 10 menit untuk file besar. Jangan tutup halaman</td>
+                </tr>
+                <tr>
+                    <td>Data masuk tapi nilainya semua nol</td>
+                    <td>Nama kolom di file Excel tidak sama dengan template</td>
+                    <td>Unduh template terbaru lewat tombol "Format File Import Excel", samakan nama kolom persis</td>
+                </tr>
+                <tr>
+                    <td>Pesan error tidak jelas</td>
+                    <td>Ada baris di file yang nilainya kosong padahal harus terisi</td>
+                    <td>Buka file Excel, cek baris-baris yang nilainya kosong, isi atau hapus baris kosong di akhir</td>
+                </tr>
+                <tr>
+                    <td>Tombol Impor tidak merespon</td>
+                    <td>JavaScript belum dimuat atau ada error di browser</td>
+                    <td>Refresh halaman dengan Ctrl+Shift+R untuk muat ulang dari awal</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="warn-box">
+            ⚠️ <strong>Tips umum:</strong> selalu unduh template terbaru sebelum mengisi data. Jangan ubah nama kolom, jangan tambah kolom baru, jangan hapus kolom yang ada. Sistem mengandalkan nama kolom yang persis sama dengan template untuk membaca isi file.
+        </div>
+    </div>
+</section>
+
+<footer>
+    Rumah Data 2.0 — Disdukcapil Kota Samarinda<br>
+    <small>Dokumen alur lengkap fitur Impor Data dengan bahasa sehari-hari</small>
+</footer>
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            primaryColor:        '#fff7ed',
+            primaryBorderColor:  '#ea580c',
+            primaryTextColor:    '#292524',
+            lineColor:           '#9a3412',
+            secondaryColor:      '#ffedd5',
+            tertiaryColor:       '#fafaf9',
+            fontFamily:          '-apple-system, BlinkMacSystemFont, sans-serif',
+            fontSize:            '13px',
+        },
+        flowchart: { curve: 'basis', padding: 14, nodeSpacing: 38, rankSpacing: 48 },
+        sequence:  { actorMargin: 60, boxMargin: 10, mirrorActors: false },
+    });
+</script>
+</body>
+</html>

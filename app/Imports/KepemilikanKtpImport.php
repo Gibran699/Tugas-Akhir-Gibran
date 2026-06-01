@@ -6,8 +6,10 @@ use App\Models\Kepemilikan\Ktp;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class KepemilikanKtpImport implements ToModel, WithHeadingRow
+class KepemilikanKtpImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -40,5 +42,15 @@ class KepemilikanKtpImport implements ToModel, WithHeadingRow
             'blm_ktp_pr' => $row['blm_ktp_pr'],
             'blm_ktp_jml' => $row['blm_ktp_jml']
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

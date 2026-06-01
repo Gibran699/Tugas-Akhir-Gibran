@@ -5,11 +5,13 @@ namespace App\Imports;
 use App\Models\AgregatDKB\StatusKawin\Pekerjaan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-
-class StatusKawinPendudukPekerjaanImport implements ToModel, WithHeadingRow
+class StatusKawinPendudukPekerjaanImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
+
     protected $tahun;
     protected $semester;
 
@@ -18,19 +20,30 @@ class StatusKawinPendudukPekerjaanImport implements ToModel, WithHeadingRow
         $this->tahun = $tahun;
         $this->semester = $semester;
     }
+
     public function model(array $row)
     {
         $categoryJob = config('dataArray.categoryJob');
-        $data =[
-            'uuid' => Str::uuid(),
-            'semester' => $this->semester,
-            'tahun' => $this->tahun,
+        $data = [
+            'uuid'         => Str::uuid(),
+            'semester'     => $this->semester,
+            'tahun'        => $this->tahun,
             'kode_wilayah' => $row['kode_wilayah'],
-            'keterangan' => $row['keterangan']
+            'keterangan'   => $row['keterangan'],
         ];
         foreach ($categoryJob as $key) {
             $data[$key] = $row[$key] ?? null;
         }
         return new Pekerjaan($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

@@ -6,8 +6,10 @@ use App\Models\Kepemilikan\AktaCerai;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class KepemilikanAktaCeraiImport implements ToModel, WithHeadingRow
+class KepemilikanAktaCeraiImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -34,5 +36,15 @@ class KepemilikanAktaCeraiImport implements ToModel, WithHeadingRow
             'belum_memiliki_akta_cerai_pr' => $row['belum_memiliki_akta_cerai_pr'],
             'belum_memiliki_akta_cerai_lk' => $row['belum_memiliki_akta_cerai_lk'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

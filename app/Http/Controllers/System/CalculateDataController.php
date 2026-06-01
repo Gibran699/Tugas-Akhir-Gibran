@@ -1023,6 +1023,21 @@ class CalculateDataController extends Controller
     public function dataKepemilikanAktaKelahiran($request)
     {
         $categoryAktaKelahiranOwnerShip = config('dataArray.categoryAktaKelahiranOwnerShip');
+
+        // ── Map nilai dropdown (angka) ke kemungkinan format keterangan di database ──
+        // Karena kolom `keterangan` bertipe string, file Excel saat import bisa
+        // berisi format berbeda (angka 1-5 atau teks "0-1", "0-5 Tahun", "Semua Usia").
+        // Pencarian disesuaikan supaya match semua kemungkinan format.
+        $keteranganValue = $request['keterangan'] ?? null;
+        $keteranganMap = [
+            '1' => ['1', 'Semua Usia', 'SEMUA USIA', 'semua usia'],
+            '2' => ['2', '0-1', '0-1 Tahun', '0-1 tahun'],
+            '3' => ['3', '0-4', '0-4 Tahun', '0-4 tahun'],
+            '4' => ['4', '0-5', '0-5 Tahun', '0-5 tahun'],
+            '5' => ['5', '0-18', '0-18 Tahun', '0-18 tahun', '0-18 Tahun Kurang 1 Hari'],
+        ];
+        $keteranganCandidates = $keteranganMap[$keteranganValue] ?? [$keteranganValue];
+
         $dataPerkelurahan = KepemilikanAktaKelahiran::select(
             array_merge(
                 [
@@ -1036,12 +1051,12 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
                         CASE
-                            WHEN keterangan = 1 THEN 'Semua Usia'
-                            WHEN keterangan = 2 THEN '0-1 Tahun'
-                            WHEN keterangan = 3 THEN '0-4 Tahun'
-                            WHEN keterangan = 4 THEN '0-5 Tahun'
-                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
-                            ELSE 'Tidak Diketahui'
+                            WHEN keterangan IN ('1','Semua Usia','SEMUA USIA','semua usia') THEN 'Semua Usia'
+                            WHEN keterangan IN ('2','0-1','0-1 Tahun','0-1 tahun') THEN '0-1 Tahun'
+                            WHEN keterangan IN ('3','0-4','0-4 Tahun','0-4 tahun') THEN '0-4 Tahun'
+                            WHEN keterangan IN ('4','0-5','0-5 Tahun','0-5 tahun') THEN '0-5 Tahun'
+                            WHEN keterangan IN ('5','0-18','0-18 Tahun','0-18 tahun','0-18 Tahun Kurang 1 Hari') THEN '0-18 Tahun Kurang 1 Hari'
+                            ELSE keterangan
                         END as keterangan
                     ")
                 ],
@@ -1052,7 +1067,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kelahiran.semester', $request['semester'])
             ->where('akta_kelahiran.tahun', $request['tahun'])
-            ->where('akta_kelahiran.keterangan', $request['keterangan'])
+            ->whereIn('akta_kelahiran.keterangan', $keteranganCandidates)
             ->groupBy('mstr_kelurahan.nama', 'mstr_kecamatan.nama', 'mstr_kecamatan.kode', 'keterangan')
             ->orderBy('mstr_kecamatan.kode', 'asc')
             ->get();
@@ -1067,22 +1082,22 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
-                CASE
-                        WHEN keterangan = 1 THEN 'Semua Usia'
-                            WHEN keterangan = 2 THEN '0-1 Tahun'
-                            WHEN keterangan = 3 THEN '0-4 Tahun'
-                            WHEN keterangan = 4 THEN '0-5 Tahun'
-                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
-                    ELSE 'Tidak Diketahui'
-                END as keterangan
-            ")
+                        CASE
+                            WHEN keterangan IN ('1','Semua Usia','SEMUA USIA','semua usia') THEN 'Semua Usia'
+                            WHEN keterangan IN ('2','0-1','0-1 Tahun','0-1 tahun') THEN '0-1 Tahun'
+                            WHEN keterangan IN ('3','0-4','0-4 Tahun','0-4 tahun') THEN '0-4 Tahun'
+                            WHEN keterangan IN ('4','0-5','0-5 Tahun','0-5 tahun') THEN '0-5 Tahun'
+                            WHEN keterangan IN ('5','0-18','0-18 Tahun','0-18 tahun','0-18 Tahun Kurang 1 Hari') THEN '0-18 Tahun Kurang 1 Hari'
+                            ELSE keterangan
+                        END as keterangan
+                    ")
                 ],
                 array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryAktaKelahiranOwnerShip)
             )
         )
             ->where('semester', $request['semester'])
             ->where('tahun', $request['tahun'])
-            ->where('keterangan', $request['keterangan'])
+            ->whereIn('keterangan', $keteranganCandidates)
             ->groupBy('keterangan')
             ->get();
         $dataPerkecamatan = KepemilikanAktaKelahiran::select(
@@ -1096,15 +1111,15 @@ class CalculateDataController extends Controller
                     DB::raw('IF(SUM(wajib_akta_awal_jml) = 0, 0, (SUM(memiliki_awal_jml) / SUM(wajib_akta_awal_jml)) * 100) as persen_awal'),
                     DB::raw('IF(SUM(wajib_akta_dinamis_jml) = 0, 0, (SUM(memiliki_dinamis_jml) / SUM(wajib_akta_dinamis_jml)) * 100) as persen_dinamis'),
                     DB::raw("
-                            CASE
-                                WHEN keterangan = 1 THEN 'Semua Usia'
-                            WHEN keterangan = 2 THEN '0-1 Tahun'
-                            WHEN keterangan = 3 THEN '0-4 Tahun'
-                            WHEN keterangan = 4 THEN '0-5 Tahun'
-                            WHEN keterangan = 5 THEN '0-18 Tahun Kurang 1 Hari'
-                                ELSE 'Tidak Diketahui'
-                            END as keterangan
-                        ")
+                        CASE
+                            WHEN keterangan IN ('1','Semua Usia','SEMUA USIA','semua usia') THEN 'Semua Usia'
+                            WHEN keterangan IN ('2','0-1','0-1 Tahun','0-1 tahun') THEN '0-1 Tahun'
+                            WHEN keterangan IN ('3','0-4','0-4 Tahun','0-4 tahun') THEN '0-4 Tahun'
+                            WHEN keterangan IN ('4','0-5','0-5 Tahun','0-5 tahun') THEN '0-5 Tahun'
+                            WHEN keterangan IN ('5','0-18','0-18 Tahun','0-18 tahun','0-18 Tahun Kurang 1 Hari') THEN '0-18 Tahun Kurang 1 Hari'
+                            ELSE keterangan
+                        END as keterangan
+                    ")
                 ],
                 array_map(fn($item) => DB::raw("COALESCE(SUM($item), 0) as $item"), $categoryAktaKelahiranOwnerShip)
             )
@@ -1113,7 +1128,7 @@ class CalculateDataController extends Controller
             ->join('mstr_kecamatan', 'mstr_kecamatan.kode', '=', 'mstr_kelurahan.kec_id')
             ->where('akta_kelahiran.semester', $request['semester'])
             ->where('akta_kelahiran.tahun', $request['tahun'])
-            ->where('akta_kelahiran.keterangan', $request['keterangan'])
+            ->whereIn('akta_kelahiran.keterangan', $keteranganCandidates)
             ->groupBy('mstr_kecamatan.kode', 'mstr_kecamatan.nama', 'keterangan')
             ->orderBy('mstr_kecamatan.kode', 'ASC')
             ->get();
@@ -1121,8 +1136,8 @@ class CalculateDataController extends Controller
             'semester' => $request['semester'],
             'tahun' => $request['tahun'],
         ];
-        if (!$dataPerkelurahan) {
-            return response()->json(['message' => 'data tidak ditemukan'], 404);
+        if ($dataPerkelurahan->isEmpty()) {
+            return response()->json(['message' => 'Data tidak ditemukan untuk periode dan kategori usia yang dipilih.'], 404);
         }
         return response()->json(['dataPerkelurahan' => $dataPerkelurahan, 'dataKeseluruhan' => $dataKeseluruhan, 'dataPerkecamatan' => $dataPerkecamatan, 'dataTitle' => $dataTitle], 200);
     }

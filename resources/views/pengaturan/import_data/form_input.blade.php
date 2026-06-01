@@ -10,13 +10,32 @@
 
         <div class="col-xl-12 col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Form Import Data</h4>
-                    <button class="btn btn-success text-right" data-bs-toggle="modal"
-                        data-bs-target=".listFileExcelFormatImport"><i class="fa fa-file-excel"></i> Format file import
-                        excel</button>
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h4 class="card-title mb-0">Form Import Data</h4>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ route('data_availability.dashboard') }}" class="btn btn-outline-primary">
+                            <i class="fa fa-chart-simple me-1"></i> Data Tersedia
+                        </a>
+                        <button class="btn btn-success" data-bs-toggle="modal"
+                            data-bs-target=".listFileExcelFormatImport">
+                            <i class="fa fa-file-excel me-1"></i> Format File Import Excel
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
+                    {{-- Tip box: saran convert ke CSV untuk file besar --}}
+                    <div class="alert d-flex align-items-start gap-3 mb-4"
+                         style="background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #ea580c;border-radius:10px;padding:14px 16px;">
+                        <i class="fa fa-lightbulb fa-lg" style="color:#ea580c;margin-top:2px;flex-shrink:0;"></i>
+                        <div style="font-size:13.5px;color:#9a3412;line-height:1.55;">
+                            <strong>Tips untuk file besar:</strong>
+                            untuk file dengan <strong>lebih dari 3000 baris</strong>, kami sarankan
+                            <strong>convert ke CSV terlebih dahulu</strong> agar proses import jauh lebih cepat.
+                            <br>
+                            <span style="color:#7c2d12;">Cara: buka file Excel → <em>File</em> → <em>Save As</em> → pilih format <strong>CSV (Comma delimited)</strong> → Save.</span>
+                        </div>
+                    </div>
+
                     <div class="basic-form">
                         {!! Form::open([
                             'id' => 'formImport',
@@ -48,7 +67,8 @@
                                     <option value="" disabled selected>--PILIHAN DATA--</option>
                                     @foreach (config('dataArray.listFileImport') as $key => $value)
                                         <option value="{{ $key }}">
-                                            {{ preg_replace('/(?<!^)([A-Z])/', ' $1', str_replace(['App\Imports\\', 'Import'], '', $value)) }}
+                                            {{ config('dataArray.listFileImportLabel')[$key]
+                                                ?? preg_replace('/(?<!^)([A-Z])/', ' $1', str_replace(['App\Imports\\', 'Import'], '', $value)) }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -77,6 +97,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    {{-- Tip box dalam modal: saran format CSV --}}
+                    <div class="alert d-flex align-items-start gap-3 mb-3"
+                         style="background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #ea580c;border-radius:10px;padding:14px 16px;">
+                        <i class="fa fa-info-circle fa-lg" style="color:#ea580c;margin-top:2px;flex-shrink:0;"></i>
+                        <div style="font-size:13px;color:#9a3412;line-height:1.55;">
+                            <strong>Catatan:</strong> file template di bawah ini berformat <code>.xlsx</code>.
+                            Untuk file dengan <strong>lebih dari 3000 baris</strong>, kami sarankan
+                            <strong>convert ke CSV terlebih dahulu</strong>
+                            (<em>Excel → Save As → CSV</em>) agar import lebih cepat.
+                        </div>
+                    </div>
+
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">

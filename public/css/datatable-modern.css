@@ -136,7 +136,50 @@ table.dataTable.no-footer {
 .dataTables_wrapper {
     padding: 0;
     border-radius: 10px;
-    overflow: hidden;
+    /* Jangan overflow:hidden — mematikan scroll horizontal DataTable */
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* ── Horizontal scroll wrapper ───────────────────────────────────── */
+/* Pastikan area scroll horizontal aktif & berfungsi di semua tabel */
+.dataTables_wrapper .dataTables_scroll {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+}
+.dataTables_wrapper .dataTables_scrollHead,
+.dataTables_wrapper .dataTables_scrollBody,
+.dataTables_wrapper .dataTables_scrollFoot {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+.dataTables_wrapper .dataTables_scrollBody {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+.dataTables_wrapper .dataTables_scrollHead {
+    overflow: hidden !important;
+}
+
+/* Bootstrap .table-responsive di dalam DataTable — biarkan scroll bekerja */
+.table-responsive {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* DataTable di dalam .table-responsive — pastikan bisa lebih lebar dari container */
+.table-responsive table.dataTable {
+    width: max-content !important;
+    min-width: 100% !important;
+}
+
+/* Pastikan tbody td tidak wrap teks → biar scroll horizontal punya konten */
+table.dataTable tbody td {
+    white-space: nowrap;
 }
 
 /* ── Top controls bar (length + filter) ─────────────────────────── */
@@ -312,24 +355,39 @@ table.dataTable.no-footer {
 }
 
 /* ── Scrollbar styling ───────────────────────────────────────────── */
-.dataTables_scrollBody::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+.dataTables_scrollBody::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+    height: 10px;
+    width: 8px;
 }
-.dataTables_scrollBody::-webkit-scrollbar-track {
+.dataTables_scrollBody::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track {
     background: #f0f2f9;
+    border-radius: 6px;
 }
-.dataTables_scrollBody::-webkit-scrollbar-thumb {
+.dataTables_scrollBody::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
     background: #b0b8d4;
-    border-radius: 4px;
+    border-radius: 6px;
 }
-.dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+.dataTables_scrollBody::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover {
     background: #434E78;
 }
 
 /* ── Table card wrapper ──────────────────────────────────────────── */
+/* Card body yang berisi DataTable: izinkan overflow agar scroll terlihat */
+.card-body {
+    overflow-x: auto;
+}
 .card .dataTables_wrapper {
     border-radius: 0;
+}
+/* Khusus card yang memuat tabel besar — pastikan tidak memotong scroll */
+.card-body > .table-responsive,
+.card-body > .dataTables_wrapper {
+    width: 100%;
+    max-width: 100%;
 }
 
 /* ── Responsive column toggle icons ─────────────────────────────── */

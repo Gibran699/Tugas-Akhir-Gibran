@@ -15,7 +15,7 @@ class JenisKelamin extends Model
     const UPDATED_AT = 'updated_at';
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'uuid','kode_wilayah',
+        'uuid', 'kode_wilayah', 'keterangan',
         'belum_kawin_lk',
         'belum_kawin_pr',
         'kawin_lk',

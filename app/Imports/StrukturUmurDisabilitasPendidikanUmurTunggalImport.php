@@ -6,9 +6,10 @@ use App\Models\StrukturUmur\Disabilitas\PendidikanUmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading
+class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -39,6 +40,11 @@ class StrukturUmurDisabilitasPendidikanUmurTunggalImport implements ToModel, Wit
 
     public function chunkSize(): int
     {
-        return 100; // Process 100 rows at a time
+        return 500; // Process 500 rows at a time
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

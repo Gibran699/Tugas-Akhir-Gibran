@@ -1,7 +1,21 @@
 @extends('layout.master')
 @section('content')
     @php
-        $religious = config('dataArray.categoryReligious');
+        // Header tabel pakai daftar kolom status kawin (kawin_lk, belum_kawin_lk, dll)
+        // sesuai struktur tabel `status_kawin_penduduk_jenis_kelamin`.
+        $marriageStatus = config('dataArray.categoryMarriageStatus');
+
+        // Label rapi untuk header tabel
+        $marriageLabels = [
+            'kawin_lk'       => 'Kawin (L)',
+            'kawin_pr'       => 'Kawin (P)',
+            'belum_kawin_lk' => 'Belum Kawin (L)',
+            'belum_kawin_pr' => 'Belum Kawin (P)',
+            'cerai_hidup_lk' => 'Cerai Hidup (L)',
+            'cerai_hidup_pr' => 'Cerai Hidup (P)',
+            'cerai_mati_lk'  => 'Cerai Mati (L)',
+            'cerai_mati_pr'  => 'Cerai Mati (P)',
+        ];
     @endphp
     <div class="container-fluid">
         <div class="row page-titles">
@@ -78,8 +92,8 @@
                                 <thead class="thead-primary">
                                     <tr>
                                         <th>Kecamatan</th>
-                                        @foreach ($religious as $item)
-                                            <th class="text-uppercase">{{ $item }}</th>
+                                        @foreach ($marriageStatus as $item)
+                                            <th class="text-uppercase">{{ $marriageLabels[$item] ?? str_replace('_', ' ', $item) }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -100,8 +114,8 @@
                                     <tr>
                                         <th>Kecamatan</th>
                                         <th>Kelurahan</th>
-                                        @foreach ($religious as $item)
-                                            <th class="text-uppercase">{{ $item }}</th>
+                                        @foreach ($marriageStatus as $item)
+                                            <th class="text-uppercase">{{ $marriageLabels[$item] ?? str_replace('_', ' ', $item) }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>

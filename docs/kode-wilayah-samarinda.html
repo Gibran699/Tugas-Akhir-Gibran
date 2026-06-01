@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Daftar Kode Wilayah Kelurahan - Kota Samarinda</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    :root {
+        --orange-50: #fff7ed;
+        --orange-100: #ffedd5;
+        --orange-200: #fed7aa;
+        --orange-500: #f97316;
+        --orange-600: #ea580c;
+        --orange-700: #c2410c;
+        --gray-50:  #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #374151;
+        --gray-900: #111827;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        background: var(--gray-50);
+        color: var(--gray-900);
+        line-height: 1.5;
+    }
+    header {
+        background: linear-gradient(135deg, var(--orange-600), var(--orange-500));
+        color: #fff;
+        padding: 32px 24px;
+        text-align: center;
+    }
+    header h1 {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    header p {
+        margin: 0;
+        opacity: 0.92;
+        font-size: 15px;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 16px 80px 16px;
+    }
+    .info-card {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-left: 4px solid var(--orange-500);
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+    }
+    .info-card h3 {
+        margin: 0 0 8px 0;
+        font-size: 15px;
+        color: var(--orange-700);
+    }
+    .info-card p {
+        margin: 4px 0;
+        font-size: 14px;
+        color: var(--gray-700);
+    }
+    .info-card code {
+        background: var(--orange-50);
+        color: var(--orange-700);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    .stat-box {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+    }
+    .stat-box .num {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--orange-600);
+        display: block;
+    }
+    .stat-box .label {
+        font-size: 13px;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .search-box {
+        position: sticky;
+        top: 0;
+        background: var(--gray-50);
+        padding: 12px 0;
+        margin-bottom: 16px;
+        z-index: 10;
+    }
+    .search-box input {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 15px;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        background: #fff;
+        outline: none;
+        transition: border 0.15s;
+    }
+    .search-box input:focus {
+        border-color: var(--orange-500);
+    }
+    .kecamatan-block {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+    .kecamatan-header {
+        background: var(--orange-50);
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--orange-100);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .kecamatan-header h2 {
+        margin: 0;
+        font-size: 17px;
+        color: var(--orange-700);
+        font-weight: 700;
+    }
+    .kecamatan-header .kode-kec {
+        background: var(--orange-100);
+        color: var(--orange-700);
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+    thead {
+        background: var(--gray-100);
+    }
+    th, td {
+        padding: 10px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    th {
+        font-weight: 600;
+        color: var(--gray-700);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+    tbody tr:hover {
+        background: var(--gray-50);
+    }
+    .kode-cell {
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+        font-weight: 600;
+        color: var(--gray-900);
+    }
+    .kode-titik {
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+        font-size: 13px;
+        color: var(--gray-500);
+    }
+    .copy-btn {
+        background: var(--orange-50);
+        color: var(--orange-700);
+        border: 1px solid var(--orange-200);
+        padding: 4px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.15s;
+    }
+    .copy-btn:hover {
+        background: var(--orange-500);
+        color: #fff;
+        border-color: var(--orange-500);
+    }
+    .copy-btn.copied {
+        background: #10b981;
+        color: #fff;
+        border-color: #10b981;
+    }
+    .no-result {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray-500);
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+    .footer {
+        text-align: center;
+        padding: 24px 16px;
+        color: var(--gray-500);
+        font-size: 13px;
+    }
+    @media (max-width: 600px) {
+        th:nth-child(3), td:nth-child(3) { display: none; }
+        .container { padding: 16px 12px; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Daftar Kode Wilayah Kelurahan</h1>
+    <p>Kota Samarinda &mdash; Disdukcapil</p>
+</header>
+
+<div class="container">
+
+    <div class="info-card">
+        <h3>📌 Catatan Penting Format Kode Wilayah</h3>
+        <p>Saat <strong>import data</strong>, kode wilayah harus ditulis <strong>tanpa tanda titik</strong>.</p>
+        <p>✅ Format BENAR: <code>6472011001</code></p>
+        <p>❌ Format SALAH: <code>64.72.01.1001</code></p>
+        <p style="margin-top:8px;color:var(--gray-500);font-size:13px;">Jika file Excel terlanjur ada titik, sistem akan membersihkan otomatis. Tetapi sebaiknya gunakan format tanpa titik agar pencarian dan pencocokan data berjalan lancar.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <span class="num">10</span>
+            <span class="label">Kecamatan</span>
+        </div>
+        <div class="stat-box">
+            <span class="num">59</span>
+            <span class="label">Kelurahan</span>
+        </div>
+        <div class="stat-box">
+            <span class="num">6472</span>
+            <span class="label">Kode Kota</span>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Cari kelurahan / kecamatan / kode wilayah...">
+    </div>
+
+    <div id="content"></div>
+
+    <div class="footer">
+        Sumber: <code>database/seeders/WilayahSeeder.php</code><br>
+        Klik tombol &ldquo;Salin&rdquo; untuk menyalin kode wilayah ke clipboard.
+    </div>
+</div>
+
+<script>
+const data = [
+    {
+        kode: '647201', nama: 'PALARAN',
+        kelurahan: [
+            { kode: '6472011001', nama: 'RAWA MAKMUR' },
+            { kode: '6472011002', nama: 'HANDIL BAKTI' },
+            { kode: '6472011003', nama: 'BUKUAN' },
+            { kode: '6472011004', nama: 'SIMPANG PASIR' },
+            { kode: '6472011005', nama: 'BANTUAS' },
+        ]
+    },
+    {
+        kode: '647202', nama: 'SAMARINDA SEBERANG',
+        kelurahan: [
+            { kode: '6472021001', nama: 'SUNGAI KELEDANG' },
+            { kode: '6472021002', nama: 'BAQA' },
+            { kode: '6472021003', nama: 'MESJID' },
+            { kode: '6472021009', nama: 'MANGKUPALAS' },
+            { kode: '6472021010', nama: 'TENUN SAMARINDA' },
+            { kode: '6472021011', nama: 'GUNUNG PANJANG' },
+        ]
+    },
+    {
+        kode: '647203', nama: 'SAMARINDA ULU',
+        kelurahan: [
+            { kode: '6472031001', nama: 'TELUK LERONG ILIR' },
+            { kode: '6472031002', nama: 'JAWA' },
+            { kode: '6472031004', nama: 'AIR PUTIH' },
+            { kode: '6472031005', nama: 'SIDODADI' },
+            { kode: '6472031006', nama: 'AIR HITAM' },
+            { kode: '6472031007', nama: 'DADIMULYA' },
+            { kode: '6472031008', nama: 'GUNUNG KELUA' },
+            { kode: '6472031009', nama: 'BUKIT PINANG' },
+        ]
+    },
+    {
+        kode: '647204', nama: 'SAMARINDA ILIR',
+        kelurahan: [
+            { kode: '6472041001', nama: 'SELILI' },
+            { kode: '6472041002', nama: 'SUNGAI DAMA' },
+            { kode: '6472041003', nama: 'SIDODAMAI' },
+            { kode: '6472041013', nama: 'SIDOMULYO' },
+            { kode: '6472041014', nama: 'PELITA' },
+        ]
+    },
+    {
+        kode: '647205', nama: 'SAMARINDA UTARA',
+        kelurahan: [
+            { kode: '6472051002', nama: 'SEMPAJA SELATAN' },
+            { kode: '6472051003', nama: 'LEMPAKE' },
+            { kode: '6472051004', nama: 'SUNGAI SIRING' },
+            { kode: '6472051010', nama: 'SEMPAJA UTARA' },
+            { kode: '6472051011', nama: 'TANAH MERAH' },
+            { kode: '6472051012', nama: 'SEMPAJA BARAT' },
+            { kode: '6472051013', nama: 'SEMPAJA TIMUR' },
+            { kode: '6472051014', nama: 'BUDAYA PAMPANG' },
+        ]
+    },
+    {
+        kode: '647206', nama: 'SUNGAI KUNJANG',
+        kelurahan: [
+            { kode: '6472061001', nama: 'LOA BAKUNG' },
+            { kode: '6472061002', nama: 'LOA BUAH' },
+            { kode: '6472061003', nama: 'KARANG ASAM ULU' },
+            { kode: '6472061004', nama: 'LOK BAHU' },
+            { kode: '6472061005', nama: 'TELUK LERONG ULU' },
+            { kode: '6472061006', nama: 'KARANG ASAM ILIR' },
+            { kode: '6472061007', nama: 'KARANG ANYAR' },
+        ]
+    },
+    {
+        kode: '647207', nama: 'SAMBUTAN',
+        kelurahan: [
+            { kode: '6472071001', nama: 'SUNGAI KAPIH' },
+            { kode: '6472071002', nama: 'SAMBUTAN' },
+            { kode: '6472071003', nama: 'MAKROMAN' },
+            { kode: '6472071004', nama: 'SINDANG SARI' },
+            { kode: '6472071005', nama: 'PULAU ATAS' },
+        ]
+    },
+    {
+        kode: '647208', nama: 'SUNGAI PINANG',
+        kelurahan: [
+            { kode: '6472081001', nama: 'TEMINDUNG PERMAI' },
+            { kode: '6472081002', nama: 'SUNGAI PINANG DALAM' },
+            { kode: '6472081003', nama: 'GUNUNG LINGAI' },
+            { kode: '6472081004', nama: 'MUGIREJO' },
+            { kode: '6472081005', nama: 'BANDARA' },
+        ]
+    },
+    {
+        kode: '647209', nama: 'SAMARINDA KOTA',
+        kelurahan: [
+            { kode: '6472091001', nama: 'KARANG MUMUS' },
+            { kode: '6472091002', nama: 'PELABUHAN' },
+            { kode: '6472091003', nama: 'PASAR PAGI' },
+            { kode: '6472091004', nama: 'BUGIS' },
+            { kode: '6472091005', nama: 'SUNGAI PINANG LUAR' },
+        ]
+    },
+    {
+        kode: '647210', nama: 'LOA JANAN ILIR',
+        kelurahan: [
+            { kode: '6472101001', nama: 'SIMPANG TIGA' },
+            { kode: '6472101002', nama: 'TANI AMAN' },
+            { kode: '6472101003', nama: 'SENGKOTEK' },
+            { kode: '6472101004', nama: 'HARAPAN BARU' },
+            { kode: '6472101005', nama: 'RAPAK DALAM' },
+        ]
+    },
+];
+
+function formatTitik(kode) {
+    // 6472011001 -> 64.72.01.1001
+    if (kode.length === 10) {
+        return kode.substr(0,2) + '.' + kode.substr(2,2) + '.' + kode.substr(4,2) + '.' + kode.substr(6,4);
+    }
+    if (kode.length === 6) {
+        return kode.substr(0,2) + '.' + kode.substr(2,2) + '.' + kode.substr(4,2);
+    }
+    return kode;
+}
+
+function render(filter = '') {
+    const container = document.getElementById('content');
+    const f = filter.toLowerCase().trim();
+    let html = '';
+    let totalShown = 0;
+
+    data.forEach(kec => {
+        const kecMatch = !f || kec.nama.toLowerCase().includes(f) || kec.kode.includes(f);
+        const filteredKels = kec.kelurahan.filter(k => {
+            if (!f) return true;
+            if (kecMatch) return true;
+            return k.nama.toLowerCase().includes(f) || k.kode.includes(f) || formatTitik(k.kode).includes(f);
+        });
+
+        if (filteredKels.length === 0) return;
+        totalShown += filteredKels.length;
+
+        html += `
+        <div class="kecamatan-block">
+            <div class="kecamatan-header">
+                <h2>Kec. ${kec.nama}</h2>
+                <span class="kode-kec">Kode: ${kec.kode}</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:35%">Kelurahan</th>
+                        <th style="width:25%">Kode (Tanpa Titik)</th>
+                        <th style="width:25%">Format Lama (Dengan Titik)</th>
+                        <th style="width:15%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredKels.map(k => `
+                        <tr>
+                            <td>${k.nama}</td>
+                            <td class="kode-cell">${k.kode}</td>
+                            <td class="kode-titik">${formatTitik(k.kode)}</td>
+                            <td><button class="copy-btn" data-kode="${k.kode}">Salin</button></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>`;
+    });
+
+    if (totalShown === 0) {
+        html = '<div class="no-result">Tidak ada kelurahan yang cocok dengan pencarian.</div>';
+    }
+
+    container.innerHTML = html;
+
+    // Attach copy handlers
+    container.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const kode = btn.getAttribute('data-kode');
+            navigator.clipboard.writeText(kode).then(() => {
+                btn.textContent = '✓ Disalin';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Salin';
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        });
+    });
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+    render(e.target.value);
+});
+
+render();
+</script>
+
+</body>
+</html>

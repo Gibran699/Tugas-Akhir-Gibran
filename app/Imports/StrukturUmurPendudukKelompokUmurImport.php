@@ -6,8 +6,10 @@ use App\Models\StrukturUmur\Penduduk\KelompokUmur;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class StrukturUmurPendudukKelompokUmurImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukKelompokUmurImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -31,5 +33,15 @@ class StrukturUmurPendudukKelompokUmurImport implements ToModel, WithHeadingRow
             $data[$key] = $row[$key] ?? null;
         }
         return new KelompokUmur($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

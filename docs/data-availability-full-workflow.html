@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Alur Lengkap Fitur Data Tersedia — Rumah Data 2.0</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+    :root {
+        --orange: #ea580c;
+        --orange-dark: #9a3412;
+        --orange-light: #fff7ed;
+        --bg: #fafaf9;
+        --card: #ffffff;
+        --border: #e7e5e4;
+        --text: #292524;
+        --muted: #78716c;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.65;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* Hero */
+    .hero {
+        background: linear-gradient(135deg, #431407 0%, #7c2d12 50%, #c2410c 100%);
+        border-radius: 18px;
+        padding: 32px 36px;
+        color: #fff;
+        margin-bottom: 32px;
+        box-shadow: 0 16px 36px rgba(194, 65, 12, .22);
+        position: relative;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: ''; position: absolute; top: -60px; right: -60px;
+        width: 220px; height: 220px; border-radius: 50%;
+        background: rgba(255,255,255,.06);
+    }
+    .hero h1 { margin: 0 0 8px; font-size: 28px; font-weight: 800; }
+    .hero p { margin: 0; opacity: .9; font-size: 15px; }
+    .hero .badges { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .hero .badge {
+        background: rgba(255,255,255,.15);
+        border: 1px solid rgba(255,255,255,.20);
+        padding: 5px 12px; border-radius: 8px;
+        font-size: 12px; font-weight: 600;
+    }
+
+    /* Section */
+    section { margin-bottom: 36px; }
+    h2 {
+        font-size: 22px; font-weight: 800;
+        margin: 0 0 14px; padding-bottom: 10px;
+        border-bottom: 2px solid var(--orange);
+        color: var(--orange-dark);
+    }
+    h2 .num {
+        display: inline-block;
+        background: var(--orange);
+        color: #fff;
+        width: 30px; height: 30px;
+        line-height: 30px; text-align: center;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    h3 {
+        font-size: 17px; font-weight: 700;
+        margin: 22px 0 10px;
+        color: var(--orange-dark);
+    }
+
+    /* Card */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 4px 14px rgba(15,23,42,.05);
+    }
+    .card p { margin: 0 0 12px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Mermaid */
+    .mermaid {
+        text-align: center;
+        padding: 12px;
+        background: #fff;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    /* Step list */
+    .steps {
+        counter-reset: step;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .steps li {
+        counter-increment: step;
+        padding: 14px 16px 14px 54px;
+        position: relative;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 14px; top: 14px;
+        width: 28px; height: 28px;
+        background: var(--orange);
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 28px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .steps li strong { color: var(--orange-dark); }
+
+    /* Tip box */
+    .tip-box {
+        background: var(--orange-light);
+        border: 1px solid #fed7aa;
+        border-left: 4px solid var(--orange);
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 14px;
+    }
+    .tip-box strong { color: var(--orange-dark); }
+
+    /* Status badges */
+    .st-available { background: #dcfce7; color: #166534; }
+    .st-partial   { background: #fef9c3; color: #854d0e; }
+    .st-missing   { background: #fee2e2; color: #991b1b; }
+    .st-unknown   { background: #f5f5f4; color: #78716c; }
+    .st {
+        display: inline-block;
+        padding: 3px 10px; border-radius: 8px;
+        font-size: 11px; font-weight: 700;
+    }
+
+    /* Lane visualization */
+    .lanes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+    }
+    .lane {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        border-top: 4px solid var(--orange);
+    }
+    .lane-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--orange-dark);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+    .lane ul { padding-left: 18px; margin: 0; font-size: 13.5px; }
+    .lane li { margin-bottom: 4px; }
+
+    /* Footer */
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    /* Quick nav */
+    .toc {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+    }
+    .toc-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+    .toc ul { padding-left: 0; margin: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4px; }
+    .toc a { color: var(--orange-dark); text-decoration: none; font-size: 14px; padding: 4px 0; display: block; }
+    .toc a:hover { color: var(--orange); text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<div class="hero">
+    <h1>🗂️ Alur Lengkap Fitur Data Tersedia</h1>
+    <p>Penjelasan menyeluruh dari awal sampai akhir — siapa, apa, kapan, dan bagaimana</p>
+    <div class="badges">
+        <span class="badge">Workflow Lengkap</span>
+        <span class="badge">End-to-End</span>
+        <span class="badge">Bahasa Sederhana</span>
+    </div>
+</div>
+
+<!-- ── DAFTAR ISI ───────────────────────────────────── -->
+<div class="toc">
+    <div class="toc-title">📑 Isi Dokumen</div>
+    <ul>
+        <li><a href="#bagian1">1. Gambaran Umum</a></li>
+        <li><a href="#bagian2">2. Pemain dalam Sistem</a></li>
+        <li><a href="#bagian3">3. Alur Lengkap End-to-End</a></li>
+        <li><a href="#bagian4">4. Tahap Demi Tahap (Detail)</a></li>
+        <li><a href="#bagian5">5. Alur Per Pengguna</a></li>
+        <li><a href="#bagian6">6. Hubungan dengan Fitur Lain</a></li>
+        <li><a href="#bagian7">7. Skenario Lengkap</a></li>
+        <li><a href="#bagian8">8. Penanganan Masalah</a></li>
+    </ul>
+</div>
+
+<!-- ── 1. GAMBARAN UMUM ─────────────────────────────── -->
+<section id="bagian1">
+    <h2><span class="num">1</span>Gambaran Umum</h2>
+    <div class="card">
+        <p><strong>Fitur Data Tersedia</strong> adalah halaman yang membantu petugas memantau kelengkapan data di sistem Rumah Data. Ibarat papan kontrol di pos petugas, halaman ini menunjukkan:</p>
+        <ul>
+            <li>Jenis data apa saja yang dikelola sistem</li>
+            <li>Kapan periode datanya (semester dan tahun)</li>
+            <li>Wilayah mana yang sudah terisi datanya</li>
+            <li>Wilayah mana yang masih perlu dilengkapi</li>
+        </ul>
+        <p>Dengan begitu, petugas tidak perlu mengecek satu-satu — semuanya tampil di satu halaman.</p>
+
+        <div class="tip-box">
+            🎯 <strong>Tujuan utama:</strong> agar tidak ada wilayah yang terlewat saat input data, dan agar pengguna laporan tidak melihat halaman kosong.
+        </div>
+    </div>
+</section>
+
+<!-- ── 2. PEMAIN DALAM SISTEM ───────────────────────── -->
+<section id="bagian2">
+    <h2><span class="num">2</span>Pemain dalam Sistem</h2>
+    <div class="card">
+        <p>Ada beberapa pihak yang terlibat dalam alur ini:</p>
+
+        <div class="lanes">
+            <div class="lane">
+                <div class="lane-title">👨‍💼 Admin</div>
+                <ul>
+                    <li>Punya akses penuh ke menu Pengaturan</li>
+                    <li>Bisa lihat ringkasan semua data</li>
+                    <li>Bisa lihat detail wilayah yang belum lengkap</li>
+                    <li>Bisa langsung impor data dari halaman ini</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">👤 Pengguna Biasa</div>
+                <ul>
+                    <li>Sudah login ke sistem</li>
+                    <li>Cuma bisa cek status data per jenis</li>
+                    <li>Tidak melihat detail wilayah</li>
+                    <li>Dapat info kalau data belum tersedia</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">⚙️ Sistem Otomatis</div>
+                <ul>
+                    <li>Cek database setiap kali halaman dibuka</li>
+                    <li>Hitung selisih antara wilayah seharusnya dan yang sebenarnya ada</li>
+                    <li>Tentukan status: Lengkap, Sebagian, Belum Ada</li>
+                    <li>Update tampilan secara otomatis</li>
+                </ul>
+            </div>
+            <div class="lane">
+                <div class="lane-title">📋 Daftar Pengaturan</div>
+                <ul>
+                    <li>Berisi daftar semua jenis data yang dipantau</li>
+                    <li>Mencatat tabel database mana yang harus dicek</li>
+                    <li>Diatur sekali oleh admin sistem</li>
+                    <li>Jadi rujukan untuk semua pengecekan</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 3. ALUR LENGKAP END-TO-END ───────────────────── -->
+<section id="bagian3">
+    <h2><span class="num">3</span>Alur Lengkap dari Awal sampai Akhir</h2>
+    <div class="card">
+        <p>Berikut alur menyeluruh dari saat pengguna login sampai data berhasil dilengkapi:</p>
+
+        <div class="mermaid">
+flowchart TD
+    Start([🚪 Pengguna Login ke Sistem])
+    Start --> CekRole{Pengguna<br/>jenis apa?}
+
+    CekRole -->|Admin| AdminMenu[Lihat menu Pengaturan<br/>di sidebar]
+    CekRole -->|Pengguna Biasa| UserHal[Buka halaman laporan<br/>tertentu]
+
+    AdminMenu --> KlikData[Klik tombol Data Tersedia]
+    KlikData --> BukaHal[Halaman Data Tersedia terbuka]
+
+    BukaHal --> SistemCek1[⚙️ Sistem cek tahun yang ada di database<br/>untuk dropdown filter]
+    SistemCek1 --> Pilih[Admin pilih:<br/>Semester + Tahun + Jenis Data]
+
+    Pilih --> SistemCek2[⚙️ Sistem cek satu per satu<br/>setiap jenis data ke database]
+    SistemCek2 --> Hitung[⚙️ Sistem hitung berapa wilayah<br/>yang sudah punya data]
+
+    Hitung --> Status{Hasil<br/>pengecekan}
+    Status -->|Semua wilayah ada| Lengkap[✅ Status: LENGKAP]
+    Status -->|Sebagian wilayah ada| Sebagian[⚠️ Status: SEBAGIAN]
+    Status -->|Tidak ada satupun| Kosong[❌ Status: BELUM ADA]
+    Status -->|Pengaturan salah| TakDiketahui[❓ Status: TIDAK DIKETAHUI]
+
+    Lengkap --> TampilHasil[📊 Tampilkan kartu warna<br/>+ tabel detail wilayah]
+    Sebagian --> TampilHasil
+    Kosong --> TampilHasil
+    TakDiketahui --> TampilHasil
+
+    TampilHasil --> AdminLihat{Admin lihat<br/>ada yang kurang?}
+    AdminLihat -->|Ya| KlikImpor[Klik tombol Impor Data<br/>di halaman ini]
+    AdminLihat -->|Tidak| Selesai1([✅ Selesai pemantauan])
+
+    KlikImpor --> HalImpor[Buka halaman Impor Data]
+    HalImpor --> UploadFile[Upload file Excel<br/>+ pilih semester/tahun]
+    UploadFile --> SimpanDB[⚙️ Sistem simpan ke database]
+    SimpanDB --> Notif[Tampil pesan berhasil]
+    Notif --> KembaliHal[Kembali ke Halaman Data Tersedia]
+    KembaliHal --> SistemCek2
+
+    UserHal --> AjaxCek[⚙️ Sistem cek otomatis di belakang layar:<br/>data periode ini ada atau tidak?]
+    AjaxCek --> CekUser{Status<br/>data?}
+    CekUser -->|Ada| TampilGrafik[📈 Tampilkan grafik dan tabel]
+    CekUser -->|Belum ada| PesanUser[💬 Tampil pesan:<br/>Data periode ini belum tersedia]
+    TampilGrafik --> Selesai2([✅ Selesai melihat laporan])
+    PesanUser --> Selesai2
+
+    style Start fill:#fed7aa,stroke:#9a3412,stroke-width:2px
+    style Selesai1 fill:#dcfce7,stroke:#166534,stroke-width:2px
+    style Selesai2 fill:#dcfce7,stroke:#166534,stroke-width:2px
+    style Lengkap fill:#dcfce7,stroke:#166534
+    style Sebagian fill:#fef9c3,stroke:#854d0e
+    style Kosong fill:#fee2e2,stroke:#991b1b
+    style TakDiketahui fill:#f5f5f4,stroke:#78716c
+    style SistemCek1 fill:#fff7ed,stroke:#ea580c
+    style SistemCek2 fill:#fff7ed,stroke:#ea580c
+    style Hitung fill:#fff7ed,stroke:#ea580c
+    style SimpanDB fill:#fff7ed,stroke:#ea580c
+    style AjaxCek fill:#fff7ed,stroke:#ea580c
+        </div>
+
+        <div class="tip-box">
+            💡 <strong>Cara baca diagram di atas:</strong> mulai dari kotak hijau muda <em>Pengguna Login</em>. Ikuti panah sesuai jenis pengguna (admin atau biasa). Kotak warna oranye terang adalah pekerjaan otomatis sistem. Kotak warna hijau, kuning, merah, dan abu adalah hasil status data.
+        </div>
+    </div>
+</section>
+
+<!-- ── 4. TAHAP DEMI TAHAP ──────────────────────────── -->
+<section id="bagian4">
+    <h2><span class="num">4</span>Tahap Demi Tahap Secara Detail</h2>
+
+    <h3>📍 Tahap 1 — Persiapan Awal</h3>
+    <div class="card">
+        <ol class="steps">
+            <li><strong>Pengguna login</strong> ke sistem dengan akun masing-masing.</li>
+            <li>Sistem mengenali <strong>jenis pengguna</strong> dari hak aksesnya — admin atau pengguna biasa.</li>
+            <li>Menu yang muncul di sidebar disesuaikan dengan hak akses tersebut.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 2 — Membuka Halaman Data Tersedia (Admin)</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Admin klik menu <strong>Pengaturan</strong> di sidebar kiri.</li>
+            <li>Sebuah jendela kecil muncul berisi pilihan: User, Role, Wilayah Kelurahan, dan <strong>Data Tersedia</strong>.</li>
+            <li>Admin klik tombol <strong>Data Tersedia</strong>.</li>
+            <li>Halaman terbuka dengan tampilan kartu ringkasan dan tabel detail.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 3 — Sistem Mengisi Filter Otomatis</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Sistem baca semua tabel data di database.</li>
+            <li>Sistem cari <strong>tahun-tahun mana saja</strong> yang sudah punya data — ini jadi pilihan dropdown tahun.</li>
+            <li>Pilihan semester sudah tetap: Semester I dan Semester II.</li>
+            <li>Pilihan jenis data diambil dari daftar pengaturan internal sistem.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 4 — Pengecekan Kelengkapan Data</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Admin pilih <strong>Semester</strong> dan <strong>Tahun</strong> yang ingin dicek.</li>
+            <li>Bisa juga difilter berdasarkan <strong>Jenis Data tertentu</strong> kalau hanya ingin lihat satu jenis.</li>
+            <li>Sistem mulai cek <strong>satu per satu jenis data</strong> ke database.</li>
+            <li>Untuk setiap jenis, sistem ambil <strong>daftar wilayah seharusnya</strong> (semua kelurahan aktif).</li>
+            <li>Sistem ambil <strong>daftar wilayah yang sebenarnya</strong> sudah punya data di periode itu.</li>
+            <li>Sistem hitung <strong>selisihnya</strong> — itulah wilayah yang masih kosong.</li>
+        </ol>
+
+        <div class="tip-box">
+            💡 <strong>Contoh hitung-hitungan:</strong> Misalnya Kota Samarinda punya 53 kelurahan. Untuk Data Penduduk Agama Semester 1 Tahun 2025, sistem cek di database — ternyata baru 45 kelurahan yang punya data. Berarti masih ada <strong>8 wilayah</strong> yang belum lengkap.
+        </div>
+    </div>
+
+    <h3>📍 Tahap 5 — Penentuan Status</h3>
+    <div class="card">
+        <p>Berdasarkan hasil hitungan tadi, sistem memberi tanda:</p>
+        <ul>
+            <li>Kalau <strong>semua wilayah</strong> sudah ada datanya → tanda <span class="st st-available">LENGKAP</span></li>
+            <li>Kalau <strong>sebagian saja</strong> yang ada → tanda <span class="st st-partial">SEBAGIAN</span></li>
+            <li>Kalau <strong>tidak ada satupun</strong> → tanda <span class="st st-missing">BELUM ADA</span></li>
+            <li>Kalau ada <strong>masalah teknis</strong> → tanda <span class="st st-unknown">TIDAK DIKETAHUI</span></li>
+        </ul>
+    </div>
+
+    <h3>📍 Tahap 6 — Tampilan ke Layar</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Bagian atas: <strong>4 kartu warna</strong> berisi total Lengkap, Sebagian, Belum Ada, dan Total Dimensi.</li>
+            <li>Di bawahnya: <strong>filter</strong> untuk drill-down.</li>
+            <li>Lalu: <strong>tabel detail</strong> berisi setiap jenis data dengan statusnya masing-masing.</li>
+            <li>Untuk baris yang berstatus Sebagian atau Belum Ada, ada baris tambahan menampilkan <strong>nama-nama wilayah</strong> yang belum.</li>
+            <li>Setiap baris yang belum lengkap punya tombol untuk langsung <strong>impor data</strong>.</li>
+        </ol>
+    </div>
+
+    <h3>📍 Tahap 7 — Tindak Lanjut Admin</h3>
+    <div class="card">
+        <ol class="steps">
+            <li>Admin lihat ada wilayah yang belum lengkap.</li>
+            <li>Klik tombol <strong>Impor Data</strong> di header tabel atau di baris tertentu.</li>
+            <li>Pindah ke halaman impor, isi formulir, dan upload file Excel.</li>
+            <li>Sistem simpan ke database, beri pesan berhasil.</li>
+            <li>Admin kembali ke Halaman Data Tersedia.</li>
+            <li>Status data <strong>langsung berubah</strong> — Belum Ada jadi Lengkap atau Sebagian.</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ── 5. ALUR PER PENGGUNA ─────────────────────────── -->
+<section id="bagian5">
+    <h2><span class="num">5</span>Alur Berbeda untuk Setiap Pengguna</h2>
+
+    <h3>👨‍💼 Alur untuk Admin</h3>
+    <div class="card">
+        <div class="mermaid">
+flowchart LR
+    A1[Login sebagai Admin] --> A2[Buka menu Pengaturan]
+    A2 --> A3[Klik Data Tersedia]
+    A3 --> A4[Pilih semester + tahun]
+    A4 --> A5[Sistem tampilkan ringkasan<br/>dan tabel detail]
+    A5 --> A6{Ada yang<br/>belum lengkap?}
+    A6 -->|Ya| A7[Lihat daftar wilayah belum]
+    A6 -->|Tidak| A8([Selesai pantau])
+    A7 --> A9[Klik tombol Impor Data]
+    A9 --> A10[Upload file Excel]
+    A10 --> A11[Sistem simpan data]
+    A11 --> A12[Refresh halaman]
+    A12 --> A5
+
+    style A1 fill:#fed7aa,stroke:#9a3412
+    style A8 fill:#dcfce7,stroke:#166534
+    style A11 fill:#fff7ed,stroke:#ea580c
+        </div>
+    </div>
+
+    <h3>👤 Alur untuk Pengguna Biasa</h3>
+    <div class="card">
+        <div class="mermaid">
+flowchart LR
+    B1[Login sebagai Pengguna] --> B2[Buka halaman laporan/grafik]
+    B2 --> B3[⚙️ Sistem cek otomatis<br/>di belakang layar]
+    B3 --> B4{Data periode<br/>ini ada?}
+    B4 -->|Ada| B5[📈 Tampilkan grafik]
+    B4 -->|Belum| B6[💬 Pesan: Data belum tersedia]
+    B5 --> B7([Selesai melihat])
+    B6 --> B8[Pengguna tahu harus<br/>pilih periode lain]
+    B8 --> B7
+
+    style B1 fill:#fed7aa,stroke:#9a3412
+    style B7 fill:#dcfce7,stroke:#166534
+    style B3 fill:#fff7ed,stroke:#ea580c
+        </div>
+    </div>
+</section>
+
+<!-- ── 6. HUBUNGAN DENGAN FITUR LAIN ────────────────── -->
+<section id="bagian6">
+    <h2><span class="num">6</span>Hubungan dengan Fitur Lain di Sistem</h2>
+    <div class="card">
+        <p>Halaman Data Tersedia tidak berdiri sendiri — terhubung dengan beberapa bagian sistem:</p>
+
+        <div class="mermaid">
+flowchart TB
+    subgraph Inti[" 📂 Halaman Data Tersedia "]
+        D[Halaman Data Tersedia]
+    end
+
+    subgraph Sumber[" 📥 Sumber Data "]
+        Input[Halaman Impor Data]
+        DB[(💾 Database Agregat)]
+        Wilayah[(🗺️ Database Wilayah Kelurahan)]
+    end
+
+    subgraph Konsumen[" 📤 Pemakai Hasil "]
+        Laporan[Halaman Laporan]
+        Grafik[Halaman Grafik]
+        Pengaturan[Menu Pengaturan]
+    end
+
+    Input -->|simpan data| DB
+    DB -->|baca data| D
+    Wilayah -->|baca daftar wilayah| D
+    Pengaturan -->|akses| D
+    D -->|tombol Impor| Input
+    D -->|status info| Laporan
+    D -->|status info| Grafik
+
+    style D fill:#fed7aa,stroke:#9a3412,stroke-width:3px
+    style Input fill:#fff7ed,stroke:#ea580c
+    style DB fill:#fafaf9,stroke:#78716c
+    style Wilayah fill:#fafaf9,stroke:#78716c
+    style Laporan fill:#dcfce7,stroke:#166534
+    style Grafik fill:#dcfce7,stroke:#166534
+    style Pengaturan fill:#dcfce7,stroke:#166534
+        </div>
+
+        <div class="tip-box">
+            🔗 <strong>Singkatnya:</strong> Halaman Data Tersedia membaca dari <em>database agregat</em> dan <em>database wilayah</em>, lalu memberikan info status ke <em>halaman laporan dan grafik</em>. Tombol impor data langsung mengarahkan ke halaman impor.
+        </div>
+    </div>
+</section>
+
+<!-- ── 7. SKENARIO LENGKAP ──────────────────────────── -->
+<section id="bagian7">
+    <h2><span class="num">7</span>Skenario Lengkap dari Awal sampai Akhir</h2>
+
+    <h3>🎬 Skenario: Petugas mengisi data baru untuk Semester 1 Tahun 2025</h3>
+    <div class="card">
+        <div class="mermaid">
+sequenceDiagram
+    actor A as 👨‍💼 Admin Petugas
+    participant Sis as ⚙️ Sistem
+    participant DB as 💾 Database
+    participant Hal as 📊 Halaman Data Tersedia
+    participant Imp as 📥 Halaman Impor
+
+    A->>Sis: Login ke sistem
+    Sis-->>A: Halaman dashboard utama
+
+    A->>Hal: Buka menu Pengaturan → Data Tersedia
+    Hal->>DB: Cek semua tahun yang ada
+    DB-->>Hal: Tahun 2023, 2024, 2025
+    Hal-->>A: Tampil halaman dengan dropdown filter
+
+    A->>Hal: Pilih Semester 1, Tahun 2025
+    Hal->>DB: Cek setiap jenis data
+    DB-->>Hal: Hasil: banyak yang BELUM ADA
+    Hal-->>A: Tampil tabel: 49 jenis data, 30 belum ada
+
+    Note over A: Admin lihat banyak yang merah
+    A->>Hal: Klik tombol Impor Data
+    Hal->>Imp: Pindah ke halaman impor
+
+    A->>Imp: Pilih jenis: Penduduk Jenis Kelamin
+    A->>Imp: Pilih Semester 1, Tahun 2025
+    A->>Imp: Upload file Excel
+    A->>Imp: Klik Import
+    Imp->>Sis: Validasi data
+    Sis->>DB: Simpan ke database
+    DB-->>Sis: Berhasil
+    Sis-->>A: Pesan: 53 baris berhasil diimpor
+
+    A->>Hal: Kembali ke Data Tersedia
+    Hal->>DB: Cek ulang status
+    DB-->>Hal: Status berubah
+    Hal-->>A: Penduduk Jenis Kelamin sekarang LENGKAP
+
+    Note over A: Admin lanjut impor jenis<br/>data berikutnya
+    Note over A: Ulangi sampai semua selesai
+        </div>
+
+        <div class="tip-box">
+            🎯 <strong>Hasil akhir:</strong> setelah semua jenis data diimpor, halaman Data Tersedia menampilkan semua status hijau (LENGKAP). Pengguna laporan bisa melihat grafik tanpa kendala "data belum tersedia".
+        </div>
+    </div>
+</section>
+
+<!-- ── 8. PENANGANAN MASALAH ────────────────────────── -->
+<section id="bagian8">
+    <h2><span class="num">8</span>Penanganan Masalah Umum</h2>
+    <div class="card">
+        <p>Beberapa masalah yang mungkin terjadi dan cara menanganinya:</p>
+
+        <div class="mermaid">
+flowchart TD
+    Masalah{Status data<br/>tidak normal}
+
+    Masalah --> M1[Status TIDAK DIKETAHUI]
+    Masalah --> M2[Wilayah berkurang dari biasanya]
+    Masalah --> M3[Tahun yang dipilih tidak muncul]
+
+    M1 --> S1[Hubungi admin sistem<br/>kemungkinan ada masalah pengaturan]
+    M2 --> S2[Cek apakah ada wilayah baru<br/>yang ditambahkan / dinonaktifkan]
+    M3 --> S3[Pastikan sudah ada data<br/>di tahun tersebut sebelumnya]
+
+    S1 --> Selesai([Masalah selesai])
+    S2 --> Selesai
+    S3 --> Selesai
+
+    style Masalah fill:#fed7aa,stroke:#9a3412,stroke-width:2px
+    style Selesai fill:#dcfce7,stroke:#166534
+    style M1 fill:#f5f5f4,stroke:#78716c
+    style M2 fill:#fef9c3,stroke:#854d0e
+    style M3 fill:#fef9c3,stroke:#854d0e
+        </div>
+
+        <table style="margin-top:16px;">
+            <thead>
+                <tr><th style="width:200px;">Gejala</th><th>Penyebab Mungkin</th><th>Cara Menangani</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Status <span class="st st-unknown">TIDAK DIKETAHUI</span></td>
+                    <td>Tabel data hilang atau pengaturan internal salah</td>
+                    <td>Hubungi admin sistem untuk pengecekan</td>
+                </tr>
+                <tr>
+                    <td>Wilayah yang muncul kurang dari yang seharusnya</td>
+                    <td>Ada wilayah yang baru ditambah atau dinonaktifkan</td>
+                    <td>Cek menu Wilayah Kelurahan, pastikan data sudah lengkap</td>
+                </tr>
+                <tr>
+                    <td>Tahun tidak muncul di dropdown</td>
+                    <td>Belum ada data sama sekali untuk tahun itu</td>
+                    <td>Impor data terlebih dahulu, dropdown akan terisi otomatis</td>
+                </tr>
+                <tr>
+                    <td>Status tidak berubah setelah impor</td>
+                    <td>Halaman belum di-refresh</td>
+                    <td>Reload halaman atau filter ulang</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer>
+    Rumah Data 2.0 — Disdukcapil Kota Samarinda<br>
+    <small>Dokumen alur lengkap fitur Data Tersedia dengan bahasa sehari-hari</small>
+</footer>
+
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            primaryColor:        '#fff7ed',
+            primaryBorderColor:  '#ea580c',
+            primaryTextColor:    '#292524',
+            lineColor:           '#9a3412',
+            secondaryColor:      '#ffedd5',
+            tertiaryColor:       '#fafaf9',
+            fontFamily:          '-apple-system, BlinkMacSystemFont, sans-serif',
+            fontSize:            '13px',
+        },
+        flowchart: { curve: 'basis', padding: 14, nodeSpacing: 38, rankSpacing: 48 },
+        sequence:  { actorMargin: 60, boxMargin: 10, mirrorActors: false },
+    });
+</script>
+</body>
+</html>

@@ -6,8 +6,10 @@ use Illuminate\Support\Str;
 use App\Models\LaporanKinerjaFormatPdak\Capil;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class LaporanKinerjaCapilFormatPdakImport implements ToModel, WithHeadingRow
+class LaporanKinerjaCapilFormatPdakImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tanggal_laporan;
 
@@ -50,5 +52,15 @@ class LaporanKinerjaCapilFormatPdakImport implements ToModel, WithHeadingRow
             $data[$key] = $row[$key] ?? null;
         }
         return new Capil($data);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }

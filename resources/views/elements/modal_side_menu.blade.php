@@ -486,7 +486,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="row g-3">
+                <div class="row g-3 pengaturan-floating-menu">
                     {{-- USER --}}
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <a href="{{ route('user.index') }}" class="text-decoration-none">

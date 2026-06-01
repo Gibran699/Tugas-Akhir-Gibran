@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arsitektur Sistem — Rumah Data Dukcapil 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #0b0e14;
+    --surface:   #131720;
+    --surface2:  #1a2030;
+    --border:    rgba(255,255,255,0.07);
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --subtle:    #334155;
+
+    --c1:  #a78bfa; /* violet  – Input */
+    --c1b: #7c3aed;
+    --c1bg:#1e1530;
+
+    --c2:  #38bdf8; /* sky     – Aplikasi */
+    --c2b: #0369a1;
+    --c2bg:#0c1e2e;
+
+    --c3:  #34d399; /* emerald – Data */
+    --c3b: #065f46;
+    --c3bg:#0a1f19;
+
+    --c4:  #fbbf24; /* amber   – Presentasi */
+    --c4b: #92400e;
+    --c4bg:#1e1707;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 56px 28px 96px;
+    color: var(--text);
+  }
+
+  /* ────────── HEADER ────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+  .header .eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 5px 14px; margin-bottom: 18px;
+  }
+  .header .eyebrow span { width:6px; height:6px; border-radius:50%; background:var(--c1); display:inline-block; }
+  .header h1 {
+    font-size: 30px; font-weight: 900; letter-spacing: -1px;
+    background: linear-gradient(135deg, #e2e8f0 30%, #94a3b8);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+  .header p { font-size: 13px; color: var(--muted); letter-spacing: 0.3px; }
+  .header .tech-row {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px;
+  }
+  .header .tech-pill {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.4px;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ────────── LAYER GRID ────────── */
+  .layers-wrap {
+    display: grid;
+    grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr;
+    align-items: stretch;
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  /* ────────── LAYER CARD ────────── */
+  .layer-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 18px 22px;
+    display: flex; flex-direction: column; align-items: stretch;
+    position: relative; overflow: hidden;
+  }
+  .layer-col::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .layer-1::before { background: linear-gradient(90deg, var(--c1), #ec4899); }
+  .layer-2::before { background: linear-gradient(90deg, var(--c2), #818cf8); }
+  .layer-3::before { background: linear-gradient(90deg, var(--c3), #06b6d4); }
+  .layer-4::before { background: linear-gradient(90deg, var(--c4), #f97316); }
+
+  /* glow dot top-right */
+  .layer-col::after {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 140px; height: 140px; border-radius: 50%;
+    opacity: 0.06; pointer-events: none;
+  }
+  .layer-1::after { background: var(--c1); }
+  .layer-2::after { background: var(--c2); }
+  .layer-3::after { background: var(--c3); }
+  .layer-4::after { background: var(--c4); }
+
+  /* ────────── LAYER HEADER ────────── */
+  .layer-head {
+    display: flex; flex-direction: column; align-items: center;
+    margin-bottom: 22px; gap: 8px;
+  }
+  .layer-num-badge {
+    font-size: 9px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .layer-title {
+    font-size: 13px; font-weight: 800; letter-spacing: 0.2px;
+    padding: 6px 18px; border-radius: 999px;
+  }
+  .layer-1 .layer-title { background: var(--c1bg); color: var(--c1); border: 1px solid rgba(167,139,250,0.25); }
+  .layer-2 .layer-title { background: var(--c2bg); color: var(--c2); border: 1px solid rgba(56,189,248,0.25); }
+  .layer-3 .layer-title { background: var(--c3bg); color: var(--c3); border: 1px solid rgba(52,211,153,0.25); }
+  .layer-4 .layer-title { background: var(--c4bg); color: var(--c4); border: 1px solid rgba(251,191,36,0.25); }
+
+  /* ────────── COMPONENT CARD ────────── */
+  .comp {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 14px 13px;
+    margin-bottom: 10px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .comp:last-child { margin-bottom: 0; }
+
+  .comp-icon {
+    font-size: 26px; line-height: 1;
+    display: block; margin-bottom: 9px;
+  }
+  .comp-name {
+    font-size: 12px; font-weight: 700; color: #f1f5f9;
+    margin-bottom: 5px; letter-spacing: -0.1px;
+  }
+  .comp-desc {
+    font-size: 10.5px; color: var(--muted); line-height: 1.55;
+    margin-bottom: 8px;
+  }
+
+  /* ────────── TAGS ────────── */
+  .tags {
+    display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+  }
+  .tag {
+    font-size: 9.5px; font-weight: 600; padding: 2px 8px;
+    border-radius: 999px; border: 1px solid transparent;
+  }
+  .layer-1 .tag { background: var(--c1bg); color: var(--c1); border-color: rgba(167,139,250,0.2); }
+  .layer-2 .tag { background: var(--c2bg); color: var(--c2); border-color: rgba(56,189,248,0.2); }
+  .layer-3 .tag { background: var(--c3bg); color: var(--c3); border-color: rgba(52,211,153,0.2); }
+  .layer-4 .tag { background: var(--c4bg); color: var(--c4); border-color: rgba(251,191,36,0.2); }
+
+  /* ────────── INNER SEPARATOR ────────── */
+  .sep {
+    text-align: center; color: var(--subtle);
+    font-size: 11px; margin: 4px 0; flex-shrink: 0;
+  }
+
+  /* ────────── ARROW CONNECTOR ────────── */
+  .arrow-col {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; gap: 5px;
+  }
+  .arrow-label {
+    font-size: 8.5px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--subtle);
+    text-align: center; line-height: 1.4; white-space: nowrap;
+  }
+  .arrow-svg { width: 36px; height: 16px; flex-shrink: 0; }
+
+  /* ────────── FLOW BAR ────────── */
+  .flow-bar {
+    max-width: 1280px; margin: 32px auto 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 22px 26px;
+  }
+  .flow-title {
+    font-size: 9.5px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--subtle); margin-bottom: 14px;
+  }
+  .flow-row {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    font-size: 11.5px; line-height: 2;
+  }
+  .flow-chip {
+    padding: 3px 11px; border-radius: 999px; font-weight: 600;
+    border: 1px solid transparent;
+  }
+  .fc-v  { background: var(--c1bg); color: var(--c1); border-color: rgba(167,139,250,0.2); }
+  .fc-b  { background: var(--c2bg); color: var(--c2); border-color: rgba(56,189,248,0.2); }
+  .fc-g  { background: var(--c3bg); color: var(--c3); border-color: rgba(52,211,153,0.2); }
+  .fc-y  { background: var(--c4bg); color: var(--c4); border-color: rgba(251,191,36,0.2); }
+  .flow-arrow { color: var(--subtle); font-size: 13px; }
+  .flow-divider {
+    border: none; border-top: 1px solid var(--border); margin: 12px 0;
+  }
+
+  /* ────────── FOOTER ────────── */
+  .footer {
+    max-width: 1280px; margin: 24px auto 0;
+    text-align: center; font-size: 11px; color: var(--subtle); line-height: 1.7;
+  }
+
+  /* ────────── RESPONSIVE ────────── */
+  @media (max-width: 960px) {
+    .layers-wrap {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    .arrow-col {
+      flex-direction: row; height: 36px;
+      justify-content: center;
+    }
+    .arrow-svg { transform: rotate(90deg); }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ════════════ HEADER ════════════ -->
+<div class="header">
+  <div class="eyebrow"><span></span> Perancangan Sistem</div>
+  <h1>Arsitektur Sistem<br/>Rumah Data Dukcapil 2.0</h1>
+  <p>Dinas Kependudukan dan Pencatatan Sipil &nbsp;·&nbsp; Kota Samarinda</p>
+  <div class="tech-row">
+    <span class="tech-pill">Laravel 10 MVC</span>
+    <span class="tech-pill">MySQL 8</span>
+    <span class="tech-pill">Spatie Permission</span>
+    <span class="tech-pill">Maatwebsite Excel</span>
+    <span class="tech-pill">GuzzleHTTP</span>
+    <span class="tech-pill">ApexCharts</span>
+    <span class="tech-pill">DataTables.js</span>
+  </div>
+</div>
+
+<!-- ════════════ LAYERS ════════════ -->
+<div class="layers-wrap">
+
+  <!-- ─── LAYER 1 : INPUT ─── -->
+  <div class="layer-col layer-1">
+    <div class="layer-head">
+      <span class="layer-num-badge">Layer 01</span>
+      <span class="layer-title">Lapisan Input</span>
+    </div>
+
+    <div class="comp">
+      <span class="comp-icon">📊</span>
+      <div class="comp-name">File Excel Import</div>
+      <div class="comp-desc">Operator mengunggah file .xlsx sesuai template yang disediakan sistem</div>
+      <div class="tags">
+        <span class="tag">Maatwebsite Excel</span>
+        <span class="tag">WithHeadingRow</span>
+      </div>
+    </div>
+
+    <div class="sep">· · ·</div>
+
+    <div class="comp">
+      <span class="comp-icon">🌐</span>
+      <div class="comp-name">External API</div>
+      <div class="comp-desc">Data pelayanan dari sistem eksternal Disdukcapil Samarinda</div>
+      <div class="tags">
+        <span class="tag">Pelayanan Online</span>
+        <span class="tag">Cetak e-KTP</span>
+        <span class="tag">Perekaman KTP</span>
+      </div>
+    </div>
+
+    <div class="sep">· · ·</div>
+
+    <div class="comp">
+      <span class="comp-icon">👤</span>
+      <div class="comp-name">Pengguna Sistem</div>
+      <div class="comp-desc">Login via email &amp; password, dua peran tersedia</div>
+      <div class="tags">
+        <span class="tag">Admin</span>
+        <span class="tag">Operator</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow 1→2 -->
+  <div class="arrow-col">
+    <span class="arrow-label">Upload /<br/>Request</span>
+    <svg class="arrow-svg" viewBox="0 0 36 16" fill="none">
+      <path d="M1 8 H28" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <path d="M24 3 L35 8 L24 13" stroke="#334155" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- ─── LAYER 2 : APLIKASI ─── -->
+  <div class="layer-col layer-2">
+    <div class="layer-head">
+      <span class="layer-num-badge">Layer 02</span>
+      <span class="layer-title">Lapisan Aplikasi</span>
+    </div>
+
+    <div class="comp">
+      <span class="comp-icon">🔐</span>
+      <div class="comp-name">Autentikasi &amp; Middleware</div>
+      <div class="comp-desc">Validasi sesi, status aktif pengguna, dan izin akses fitur</div>
+      <div class="tags">
+        <span class="tag">Auth::attempt</span>
+        <span class="tag">CheckUserActive</span>
+        <span class="tag">can:permission</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">🗺️</span>
+      <div class="comp-name">Router</div>
+      <div class="comp-desc">Meneruskan request ke controller berdasarkan URL &amp; HTTP method</div>
+      <div class="tags">
+        <span class="tag">web.php</span>
+        <span class="tag">api.php</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">⚙️</span>
+      <div class="comp-name">Controller</div>
+      <div class="comp-desc">Logika bisnis utama: tampil data, import, manajemen pengguna</div>
+      <div class="tags">
+        <span class="tag">MainController</span>
+        <span class="tag">CalculateDataController</span>
+        <span class="tag">UserController</span>
+        <span class="tag">AuthController</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">🔧</span>
+      <div class="comp-name">Service &amp; Import Class</div>
+      <div class="comp-desc">Pemrosesan file Excel dan konsumsi API eksternal</div>
+      <div class="tags">
+        <span class="tag">ExternalApiService</span>
+        <span class="tag">KtpApiService</span>
+        <span class="tag">perekamanService</span>
+        <span class="tag">*Import.php</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow 2→3 -->
+  <div class="arrow-col">
+    <span class="arrow-label">Query /<br/>Store</span>
+    <svg class="arrow-svg" viewBox="0 0 36 16" fill="none">
+      <path d="M1 8 H28" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <path d="M24 3 L35 8 L24 13" stroke="#334155" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <svg class="arrow-svg" viewBox="0 0 36 16" fill="none" style="transform:scaleX(-1)">
+      <path d="M1 8 H28" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <path d="M24 3 L35 8 L24 13" stroke="#334155" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span class="arrow-label">Result</span>
+  </div>
+
+  <!-- ─── LAYER 3 : DATA ─── -->
+  <div class="layer-col layer-3">
+    <div class="layer-head">
+      <span class="layer-num-badge">Layer 03</span>
+      <span class="layer-title">Lapisan Data</span>
+    </div>
+
+    <div class="comp">
+      <span class="comp-icon">🗂️</span>
+      <div class="comp-name">Eloquent ORM</div>
+      <div class="comp-desc">Model sebagai jembatan antara logika aplikasi dan database</div>
+      <div class="tags">
+        <span class="tag">SoftDeletes</span>
+        <span class="tag">HasUuids</span>
+        <span class="tag">HasRoles</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">🛢️</span>
+      <div class="comp-name">MySQL Database</div>
+      <div class="comp-desc">62 tabel relasional, dikelompokkan per modul fitur aplikasi</div>
+      <div class="tags">
+        <span class="tag">Agregat DKB (19)</span>
+        <span class="tag">Kepemilikan (8)</span>
+        <span class="tag">Struktur Umur (16)</span>
+        <span class="tag">Pelayanan (2)</span>
+        <span class="tag">Sistem (17)</span>
+      </div>
+    </div>
+
+    <div class="sep">· · ·</div>
+
+    <div class="comp">
+      <span class="comp-icon">🗺️</span>
+      <div class="comp-name">Master Wilayah</div>
+      <div class="comp-desc">Referensi kecamatan &amp; kelurahan untuk JOIN data per wilayah</div>
+      <div class="tags">
+        <span class="tag">mstr_kecamatan</span>
+        <span class="tag">mstr_kelurahan</span>
+      </div>
+    </div>
+
+    <div class="sep">· · ·</div>
+
+    <div class="comp">
+      <span class="comp-icon">🛡️</span>
+      <div class="comp-name">RBAC — Spatie Permission</div>
+      <div class="comp-desc">Kontrol hak akses fitur berbasis peran pengguna</div>
+      <div class="tags">
+        <span class="tag">roles</span>
+        <span class="tag">permissions</span>
+        <span class="tag">model_has_roles</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- arrow 3→4 -->
+  <div class="arrow-col">
+    <span class="arrow-label">JSON /<br/>View</span>
+    <svg class="arrow-svg" viewBox="0 0 36 16" fill="none">
+      <path d="M1 8 H28" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <path d="M24 3 L35 8 L24 13" stroke="#334155" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- ─── LAYER 4 : PRESENTASI ─── -->
+  <div class="layer-col layer-4">
+    <div class="layer-head">
+      <span class="layer-num-badge">Layer 04</span>
+      <span class="layer-title">Lapisan Presentasi</span>
+    </div>
+
+    <div class="comp">
+      <span class="comp-icon">🖼️</span>
+      <div class="comp-name">Blade Template</div>
+      <div class="comp-desc">Server-side rendering HTML dengan layout master reusable</div>
+      <div class="tags">
+        <span class="tag">layout.master</span>
+        <span class="tag">@yield / @section</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">📈</span>
+      <div class="comp-name">Dashboard &amp; Visualisasi</div>
+      <div class="comp-desc">Grafik interaktif ringkasan data kependudukan Kota Samarinda</div>
+      <div class="tags">
+        <span class="tag">ApexCharts</span>
+        <span class="tag">Kelompok Umur</span>
+        <span class="tag">Kepemilikan Dok.</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">📋</span>
+      <div class="comp-name">Tabel Data Interaktif</div>
+      <div class="comp-desc">Data per kelurahan, kecamatan, dan keseluruhan kota</div>
+      <div class="tags">
+        <span class="tag">DataTables.js</span>
+        <span class="tag">AJAX fetch</span>
+        <span class="tag">Perkelurahan</span>
+        <span class="tag">Perkecamatan</span>
+      </div>
+    </div>
+
+    <div class="sep">↓</div>
+
+    <div class="comp">
+      <span class="comp-icon">💻</span>
+      <div class="comp-name">Antarmuka Pengguna</div>
+      <div class="comp-desc">Notifikasi, konfirmasi aksi, dan form input data</div>
+      <div class="tags">
+        <span class="tag">SweetAlert2</span>
+        <span class="tag">Bootstrap 5</span>
+        <span class="tag">jQuery AJAX</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .layers-wrap -->
+
+<!-- ════════════ FLOW BAR ════════════ -->
+<div class="flow-bar">
+  <div class="flow-title">Alur Data — Import Excel</div>
+  <div class="flow-row">
+    <span class="flow-chip fc-v">Admin / Operator</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">Upload file .xlsx</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">Middleware (Auth + RBAC)</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">ImportController + *Import.php</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-g">Eloquent menyimpan ke MySQL</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-y">SweetAlert2 notifikasi sukses</span>
+  </div>
+  <hr class="flow-divider"/>
+  <div class="flow-title">Alur Data — Tampil Data</div>
+  <div class="flow-row">
+    <span class="flow-chip fc-v">Pengguna memilih fitur</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">jQuery AJAX → CalculateDataController</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-g">Eloquent query MySQL + JOIN wilayah</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-y">Response JSON → DataTable / ApexChart</span>
+  </div>
+  <hr class="flow-divider"/>
+  <div class="flow-title">Alur Data — External API</div>
+  <div class="flow-row">
+    <span class="flow-chip fc-v">Request pelayanan</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">Service Class (ExternalApiService / KtpApiService)</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-b">Bearer Token / Basic Auth</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-g">API Eksternal Samarinda</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-chip fc-y">Render tabel pelayanan</span>
+  </div>
+</div>
+
+<div class="footer">
+  Rumah Data Dukcapil 2.0 &nbsp;·&nbsp; Laravel 10 &nbsp;·&nbsp; MySQL 8 &nbsp;·&nbsp;
+  Spatie Laravel Permission &nbsp;·&nbsp; Maatwebsite Excel 3.x &nbsp;·&nbsp; GuzzleHTTP 7<br/>
+  Dinas Kependudukan dan Pencatatan Sipil Kota Samarinda
+</div>
+
+</body>
+</html>

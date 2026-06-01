@@ -5,9 +5,11 @@ namespace App\Imports;
 use App\Models\StrukturUmur\Penduduk\StatusKawinUmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukStatusKawinUmurTunggalImport implements ToModel, WithHeadingRow
+class StrukturUmurPendudukStatusKawinUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -34,5 +36,15 @@ class StrukturUmurPendudukStatusKawinUmurTunggalImport implements ToModel, WithH
             'cerai_mati_lk' => $row['cerai_mati_lk'],
             'cerai_mati_pr' => $row['cerai_mati_pr'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
     }
 }

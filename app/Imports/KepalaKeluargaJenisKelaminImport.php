@@ -6,8 +6,10 @@ use App\Models\AgregatDKB\KepalaKeluarga\JenisKelamin;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class KepalaKeluargaJenisKelaminImport implements ToModel, WithHeadingRow
+class KepalaKeluargaJenisKelaminImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     protected $tahun;
     protected $semester;
@@ -29,5 +31,15 @@ class KepalaKeluargaJenisKelaminImport implements ToModel, WithHeadingRow
             'semester' => $this->semester,
             'tahun' => $this->tahun,
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
     }
 }
