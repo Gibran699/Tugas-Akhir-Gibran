@@ -3,6 +3,10 @@
 namespace App\Imports;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Imports\Concerns\ImportReconciliationTrait;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
 use App\Models\AgregatDKB\Penduduk\Agama;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -11,8 +15,9 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class PendudukAgamaImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
-{
+class PendudukAgamaImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, SkipsOnFailure, SkipsOnError, WithValidation{
+    use ImportReconciliationTrait;
+
     protected $tahun;
     protected $semester;
 

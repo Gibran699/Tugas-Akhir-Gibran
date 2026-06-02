@@ -3,6 +3,10 @@
 namespace App\Imports;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Imports\Concerns\ImportReconciliationTrait;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
 use App\Models\StrukturUmur\Penduduk\UmurTunggal;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -11,8 +15,9 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
-{
+class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, SkipsOnFailure, SkipsOnError, WithValidation{
+    use ImportReconciliationTrait;
+
     protected $tahun;
     protected $semester;
 
@@ -33,6 +38,17 @@ class StrukturUmurPendudukUmurTunggalImport implements ToModel, WithHeadingRow, 
             'pr' => $row['pr'],
             'jumlah' => $row['jumlah'],
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'kode_wilayah' => ['required'],
+            'umur'         => ['required', 'integer', 'min:0', 'max:150'],
+            'lk'           => ['required', 'integer', 'min:0'],
+            'pr'           => ['required', 'integer', 'min:0'],
+            'jumlah'       => ['required', 'integer', 'min:0'],
+        ];
     }
 
     public function chunkSize(): int

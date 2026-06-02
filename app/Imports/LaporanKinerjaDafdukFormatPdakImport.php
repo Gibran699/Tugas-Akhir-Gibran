@@ -3,6 +3,10 @@
 namespace App\Imports;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Imports\Concerns\ImportReconciliationTrait;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
 use App\Models\LaporanKinerjaFormatPdak\Dafduk;
 use Illuminate\Support\Str;
@@ -11,8 +15,9 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class LaporanKinerjaDafdukFormatPdakImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
-{
+class LaporanKinerjaDafdukFormatPdakImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, SkipsOnFailure, SkipsOnError, WithValidation{
+    use ImportReconciliationTrait;
+
     protected $tanggal_laporan;
 
     public function __construct($tanggal_laporan)

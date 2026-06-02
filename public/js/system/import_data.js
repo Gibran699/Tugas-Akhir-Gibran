@@ -44,13 +44,41 @@ function importData() {
             });
         },
         success: function(response) {
+            // ── Status: partial (ada baris yang gagal) ───────────────────────
+            if (response.status === 'partial') {
+                let failureHtml = '';
+                if (response.failures && response.failures.length > 0) {
+                    failureHtml += '<div style="text-align:left;max-height:200px;overflow-y:auto;margin-top:10px;font-size:12px;">';
+                    failureHtml += '<strong>Detail baris gagal (maks 20):</strong><ul style="margin-top:6px;padding-left:16px;">';
+                    response.failures.forEach(function(f) {
+                        const errMsg = Array.isArray(f.errors) ? f.errors.join(', ') : JSON.stringify(f.errors);
+                        failureHtml += `<li>Baris <strong>${f.row}</strong> [${f.attribute}]: ${errMsg}</li>`;
+                    });
+                    failureHtml += '</ul>';
+                    if (response.failure_count > 20) {
+                        failureHtml += `<p style="color:#9a3412;">… dan ${response.failure_count - 20} baris lainnya. Lihat log server untuk detail lengkap.</p>`;
+                    }
+                    failureHtml += '</div>';
+                }
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Import Sebagian Berhasil',
+                    html: `<p>${response.message}</p>` + failureHtml,
+                    confirmButtonText: 'OK',
+                    width: 600,
+                }).then(() => {
+                    window.location.reload();
+                });
+                return;
+            }
+
+            // ── Status: success (semua baris tersimpan) ──────────────────────
             Swal.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Berhasil',
                 text: response.message || 'Import Berhasil!',
             }).then(() => {
-                // $('#formImport').trigger('reset');
-                // $('#formImport')[0].reset();
                 window.location.reload();
             });
         },

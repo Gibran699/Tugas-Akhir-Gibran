@@ -101,7 +101,66 @@ class MainController extends Controller
 
             Excel::import($import, $file, null, $fileType);
 
-            return response()->json('Import berhasil', 200);
+            // ── Rekonsiliasi: hitung baris file vs baris tersimpan ──────────
+            // onFailure() tidak selalu dipanggil dengan WithBatchInserts, maka
+            // kita bandingkan jumlah baris data di file vs yang masuk ke DB.
+            $savedCount = $listFileModel::where('tahun', $tahun)->where('semester', $semester)->count();
+
+            // Hitung jumlah baris data di file (minus header)
+            $fileRowCount = 0;
+            if ($extension === 'csv') {
+                // Untuk CSV, hitung baris dengan SplFileInfo
+                $tempPath = $file->getRealPath();
+                $handle   = fopen($tempPath, 'r');
+                if ($handle) {
+                    $lineCount = 0;
+                    while (!feof($handle)) {
+                        $line = fgets($handle);
+                        if ($line !== false && trim($line) !== '') {
+                            $lineCount++;
+                        }
+                    }
+                    fclose($handle);
+                    $fileRowCount = max(0, $lineCount - 1); // minus header row
+                }
+            } else {
+                // Untuk xlsx/xls, gunakan method getImportFailureCount dari trait
+                // sebagai fallback — hitung dari failures array jika ada
+                $fileRowCount = $savedCount + count($import->getImportFailures());
+            }
+
+            $missedCount  = max(0, $fileRowCount - $savedCount);
+            $failureCount = count($import->getImportFailures());
+
+            if ($missedCount > 0 || $failureCount > 0) {
+                $totalMissed = max($missedCount, $failureCount);
+                $failureDetail = array_slice($import->getImportFailures(), 0, 20);
+
+                \Log::warning("Import Partial: {$savedCount} baris tersimpan, {$totalMissed} baris tidak tersimpan.", [
+                    'tahun'        => $tahun,
+                    'semester'     => $semester,
+                    'file_rows'    => $fileRowCount,
+                    'saved_count'  => $savedCount,
+                    'missed_count' => $totalMissed,
+                    'failures'     => $failureDetail,
+                ]);
+
+                return response()->json([
+                    'status'        => 'partial',
+                    'message'       => "Import sebagian berhasil: {$savedCount} baris tersimpan, {$totalMissed} baris tidak dapat disimpan (tipe data tidak valid atau baris kosong).",
+                    'saved_count'   => $savedCount,
+                    'file_count'    => $fileRowCount,
+                    'failure_count' => $totalMissed,
+                    'failures'      => $failureDetail,
+                ], 200);
+            }
+
+            return response()->json([
+                'status'      => 'success',
+                'message'     => "Import berhasil: {$savedCount} baris tersimpan.",
+                'saved_count' => $savedCount,
+            ], 200);
+
         } catch (\Exception $e) {
             // Log error untuk debugging
             \Log::error('Import Error: ' . $e->getMessage());
