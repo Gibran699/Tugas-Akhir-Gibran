@@ -49,6 +49,11 @@ trait ImportReconciliationTrait
     }
 
     /**
+     * Cache static untuk menyimpan aturan validasi dinamis agar tidak melakukan query schema berulang kali.
+     */
+    protected static array $dynamicRulesCache = [];
+
+    /**
      * Aturan validasi kolom numerik yang wajib ada di setiap baris.
      * Import class dapat meng-override method ini untuk menyesuaikan kolom yang divalidasi.
      * Dipanggil oleh concern WithValidation.
@@ -59,6 +64,10 @@ trait ImportReconciliationTrait
             return [
                 'kode_wilayah' => ['required'],
             ];
+        }
+
+        if (isset(self::$dynamicRulesCache[$this->modelClass])) {
+            return self::$dynamicRulesCache[$this->modelClass];
         }
 
         try {
@@ -98,6 +107,7 @@ trait ImportReconciliationTrait
                 }
             }
             
+            self::$dynamicRulesCache[$this->modelClass] = $rules;
             return $rules;
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning("Dynamic validation rules generation failed for model class {$this->modelClass}: " . $e->getMessage());
