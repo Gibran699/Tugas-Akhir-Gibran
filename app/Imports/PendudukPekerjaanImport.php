@@ -2,6 +2,8 @@
 
 namespace App\Imports;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Models\AgregatDKB\Penduduk\Pekerjaan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -9,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Illuminate\Support\Str;
 
-class PendudukPekerjaanImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
+class PendudukPekerjaanImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
 {
     protected $tahun;
     protected $semester;

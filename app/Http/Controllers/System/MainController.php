@@ -62,8 +62,6 @@ class MainController extends Controller
         }
     
         try {
-            DB::beginTransaction();
-
             // Menentukan tipe file
             $fileType = \Maatwebsite\Excel\Excel::XLSX; // Default
             $extension = strtolower($file->getClientOriginalExtension());
@@ -103,11 +101,8 @@ class MainController extends Controller
 
             Excel::import($import, $file, null, $fileType);
 
-            DB::commit();
             return response()->json('Import berhasil', 200);
         } catch (\Exception $e) {
-            DB::rollback();
-            
             // Log error untuk debugging
             \Log::error('Import Error: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());

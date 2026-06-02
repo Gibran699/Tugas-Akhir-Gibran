@@ -2,6 +2,8 @@
 
 namespace App\Imports;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Models\LaporanKinerjaFormatPdak\Dafduk;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -9,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class LaporanKinerjaDafdukFormatPdakImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
+class LaporanKinerjaDafdukFormatPdakImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue
 {
     protected $tanggal_laporan;
 
