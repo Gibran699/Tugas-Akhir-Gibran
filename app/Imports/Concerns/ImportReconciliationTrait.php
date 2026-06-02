@@ -7,6 +7,11 @@ use Maatwebsite\Excel\Validators\Failure;
 trait ImportReconciliationTrait
 {
     /**
+     * Nama class model untuk mendeteksi kolom secara dinamis.
+     */
+    public ?string $modelClass = null;
+
+    /**
      * Array penampung semua baris yang gagal (validasi maupun error DB).
      * Setiap elemen: ['row' => N, 'attribute' => '...', 'errors' => [...], 'values' => [...]]
      */
@@ -50,11 +55,56 @@ trait ImportReconciliationTrait
      */
     public function rules(): array
     {
-        // Default: validasi kode_wilayah tidak boleh kosong
-        // Import class yang punya kolom berbeda harus override method ini.
-        return [
-            'kode_wilayah' => ['required'],
-        ];
+        if (empty($this->modelClass)) {
+            return [
+                'kode_wilayah' => ['required'],
+            ];
+        }
+
+        try {
+            $model = new $this->modelClass;
+            $table = $model->getTable();
+            
+            // Dapatkan seluruh kolom dari table
+            $columns = \Illuminate\Support\Facades\Schema::getColumnListing($table);
+            
+            // Kolom audit / metadata yang tidak di-input langsung dari Excel
+            $exclude = [
+                'id',
+                'uuid',
+                'semester',
+                'tahun',
+                'tanggal_laporan',
+                'created_at',
+                'updated_at',
+                'deleted_at'
+            ];
+            
+            $rules = [];
+            foreach ($columns as $column) {
+                if (in_array($column, $exclude)) {
+                    continue;
+                }
+                
+                // Cek tipe data kolom di DB
+                $type = \Illuminate\Support\Facades\Schema::getColumnType($table, $column);
+                
+                if (in_array($type, ['integer', 'bigint', 'smallint', 'tinyint', 'mediumint'])) {
+                    // Seluruh kolom angka/kalkulasi kependudukan wajib bertipe integer dan minimal 0
+                    $rules[$column] = ['required', 'integer', 'min:0'];
+                } else {
+                    // Kolom string/keterangan wajib ada
+                    $rules[$column] = ['required'];
+                }
+            }
+            
+            return $rules;
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("Dynamic validation rules generation failed for model class {$this->modelClass}: " . $e->getMessage());
+            return [
+                'kode_wilayah' => ['required'],
+            ];
+        }
     }
 
     /**

@@ -84,16 +84,51 @@ function importData() {
         },
         error: function(xhr) {
             let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+            let failureHtml = '';
 
-            if (xhr.status === 409) {
+            if (xhr.status === 422) {
+                // validation failures!
+                const res = xhr.responseJSON;
+                errorMessage = res.message || 'Terdapat data yang tidak valid atau kosong.';
+                
+                if (res.failures && res.failures.length > 0) {
+                    failureHtml += '<div style="text-align:left;max-height:250px;overflow-y:auto;margin-top:10px;font-size:12.5px;border:1px solid #fecaca;background-color:#fff5f5;padding:10px;border-radius:6px;line-height:1.5;">';
+                    failureHtml += '<strong class="text-danger" style="display:block;margin-bottom:8px;font-size:13.5px;"><i class="fa fa-circle-exclamation me-1"></i>Daftar Baris yang Bermasalah:</strong>';
+                    failureHtml += '<ul style="margin:0;padding-left:18px;color:#991b1b;">';
+                    
+                    res.failures.forEach(function(f) {
+                        const errMsg = Array.isArray(f.errors) ? f.errors.join(', ') : JSON.stringify(f.errors);
+                        let valStr = '';
+                        if (f.values && f.attribute && f.values[f.attribute] !== undefined) {
+                            valStr = ` (Nilai: "${f.values[f.attribute]}")`;
+                        }
+                        
+                        if (f.attribute === 'system') {
+                            failureHtml += `<li style="margin-bottom:4px;">System Error: <span style="font-weight:bold;color:#b91c1c;">${errMsg}</span></li>`;
+                        } else {
+                            const rowLabel = f.row ? `Baris <strong>${f.row}</strong>` : 'Format berkas';
+                            failureHtml += `<li style="margin-bottom:4px;">${rowLabel} - Kolom <strong>${f.attribute}</strong>${valStr}: <span style="font-weight:bold;color:#b91c1c;">${errMsg}</span></li>`;
+                        }
+                    });
+                    
+                    failureHtml += '</ul>';
+                    if (res.failure_count > res.failures.length) {
+                        failureHtml += `<p style="color:#b45309;font-weight:bold;margin:8px 0 0 0;font-size:12px;">… dan ${res.failure_count - res.failures.length} baris lainnya bermasalah.</p>`;
+                    }
+                    failureHtml += '</div>';
+                }
+            } else if (xhr.status === 409) {
                 errorMessage = xhr.responseJSON?.data || xhr.responseJSON?.message || 'Data sudah ada.';
             } else if (xhr.status === 500) {
                 errorMessage = xhr.responseJSON?.data || xhr.responseJSON?.message || 'Terjadi kesalahan server.';
             }
+
             Swal.fire({
-                type: 'error',
-                title: 'Gagal',
-                text: errorMessage,
+                icon: 'error',
+                title: 'Import Gagal',
+                html: failureHtml ? `<p style="margin-bottom:10px;">${errorMessage}</p>` + failureHtml : errorMessage,
+                width: failureHtml ? 600 : undefined,
+                confirmButtonText: 'OK',
             });
         }
     });

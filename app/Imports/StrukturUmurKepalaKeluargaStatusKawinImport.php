@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Imports\Concerns\ImportReconciliationTrait;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Illuminate\Support\Str;
 
-class StrukturUmurKepalaKeluargaStatusKawinImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, SkipsEmptyRows, ShouldQueue, SkipsOnFailure, SkipsOnError, WithValidation{
+class StrukturUmurKepalaKeluargaStatusKawinImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, SkipsEmptyRows, SkipsOnFailure, SkipsOnError, WithValidation{
     use ImportReconciliationTrait;
 
     protected $tahun;
